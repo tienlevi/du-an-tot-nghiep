@@ -57,6 +57,15 @@ function App() {
         />
 
         <Route
+          path="/products"
+          element={
+            <>
+              <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <Chart />
+            </>
+          }
+        />
+        <Route
           path="/tables"
           element={
             <>
