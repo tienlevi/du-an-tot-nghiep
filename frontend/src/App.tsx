@@ -10,6 +10,9 @@ import ECommerce from './pages/Dashboard/Main';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import Tables from './pages/Tables';
+import ProductsAdd from './pages/Products/ProductsAdd';
+import ProductsList from './pages/Products/ProductsList';
+import ProductsEdit from './pages/Products/ProductsEdit';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -57,7 +60,34 @@ function App() {
             </>
           }
         />
-
+      {/* Products */}
+        <Route
+          path="/products/productslist"
+          element={
+            <>
+              <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <ProductsList />
+            </>
+          }
+        />
+        <Route
+          path="/products/productsadd"
+          element={
+            <>
+              <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <ProductsAdd />
+            </>
+          }
+        />
+        <Route
+          path="/products/productsedit"
+          element={
+            <>
+              <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <ProductsEdit />
+            </>
+          }
+        />
         <Route
           path="/tables"
           element={
