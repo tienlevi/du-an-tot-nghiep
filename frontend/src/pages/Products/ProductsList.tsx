@@ -1,8 +1,11 @@
+import DefaultLayout from '../../layout/DefaultLayout';
 
 const ProductsList = () => {
   return (
-    <div>ProductsList</div>
-  )
-}
+    <DefaultLayout>
+      <div>ProductsList</div>
+    </DefaultLayout>
+  );
+};
 
-export default ProductsList
+export default ProductsList;
