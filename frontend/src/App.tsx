@@ -36,7 +36,9 @@ function App() {
               <ECommerce />
             </>
           }
+          path="/admin"
         />
+
         <Route
           path="/calendar"
           element={
