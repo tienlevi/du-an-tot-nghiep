@@ -1,8 +1,15 @@
-export type Product = {
-  image: string;
+type Product = {
+  _id: string;
   name: string;
-  category: string;
+  slug: string;
+  category: string; // Assuming category stores ObjectId as a string
   price: number;
-  sold: number;
-  profit: number;
+  image?: string;
+  gallery?: string[];
+  description?: string;
+  discount?: number;
+  countInStock?: number;
+  featured?: boolean;
+  tags?: string[];
+  attributes?: string[]; // Assuming attributes store ObjectId as strings
 };

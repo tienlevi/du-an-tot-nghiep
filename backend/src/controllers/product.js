@@ -4,7 +4,6 @@ import Product from "../models/product";
 export const create = async (req, res) => {
   try {
     const product = await Product.create(req.body);
-
     return res.status(StatusCodes.CREATED).json(product);
   } catch (error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
@@ -12,13 +11,7 @@ export const create = async (req, res) => {
 };
 
 export const getAllProducts = async (req, res) => {
-  const {
-    _page = 1,
-    _limit = 10,
-    _sort = "createdAt",
-    _order = "asc",
-    _expand,
-  } = req.query;
+  const { _page = 1, _limit = 10, _sort = "createdAt", _order = "asc", _expand } = req.query;
   const options = {
     page: _page,
     limit: _limit,
@@ -26,10 +19,7 @@ export const getAllProducts = async (req, res) => {
   };
   const populateOptions = _expand ? [{ path: "category", select: "name" }] : [];
   try {
-    const result = await Product.paginate(
-      { categoryId: null },
-      { ...options, populate: populateOptions }
-    );
+    const result = await Product.paginate({ categoryId: null }, { ...options, populate: populateOptions });
     if (result.docs.length === 0) throw new Error("No products found");
     const response = {
       data: result.docs,
@@ -45,46 +35,52 @@ export const getAllProducts = async (req, res) => {
   }
 };
 
+
 export const getProductById = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
-    if (product.length === 0)
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: "Không tìm thấy sản phẩm nào!" });
+    if (!product)
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "Không tìm thấy sản phẩm nào!" });
     return res.status(StatusCodes.OK).json(product);
   } catch (error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
   }
 };
+
 export const deleteProductById = async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
-    return res.status(StatusCodes.OK).json(product);
+    if (!product) return res.status(StatusCodes.NOT_FOUND).json({ message: "Product not found" });
+    return res.status(StatusCodes.OK).json({ message: "Product deleted successfully" });
   } catch (error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
   }
 };
+
 export const updateProductById = async (req, res) => {
   try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
+    const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!product) return res.status(StatusCodes.NOT_FOUND).json({ message: "Product not found" });
     return res.status(StatusCodes.OK).json(product);
   } catch (error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
   }
 };
+
 
 export const related = async (req, res) => {
   try {
-    const product = await Product.find({
+    const products = await Product.find({
       category: req.params.categoryId,
       _id: { $ne: req.params.productId },
     });
-    return res.status(StatusCodes.OK).json(product);
-  } catch (error) {}
+    return res.status(StatusCodes.OK).json(products);
+  } catch (error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+  }
 };
+
 
 // iphone 13 product max => /product/iphone-13-product-max
 // GET /product/:slug
+  
