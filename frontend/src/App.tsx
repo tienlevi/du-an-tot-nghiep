@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import {
+  Outlet,
+  Route,
+  RouterProvider,
+  Routes,
+  useLocation,
+} from 'react-router-dom';
 import Loader from './common/Loader';
 import PageTitle from './components/PageTitle';
 import SignIn from './pages/Authentication/SignIn';
@@ -13,6 +19,48 @@ import Tables from './pages/Tables';
 import ProductsAdd from './pages/Products/ProductsAdd';
 import ProductsList from './pages/Products/ProductsList';
 import ProductsEdit from './pages/Products/ProductsEdit';
+// Client
+import Offer from './pages/Offer/Offer';
+import ProductDetails from './pages/ProductDetails/ProductDetails';
+import Payment from './pages/payment/Payment';
+import Cart from './pages/Cart/Cart';
+import Home from './pages/Home/Home';
+import Shop from './pages/Shop/Shop';
+import About from './pages/About/About';
+import Contact from './pages/Contact/Contact';
+import Journal from './pages/Journal/Journal';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import HeaderBottom from './components/home/Header/HeaderBottom';
+import SpecialCase from './components/SpecialCase/SpecialCase';
+import Footer from './components/home/Footer/Footer';
+import FooterBottom from './components/home/Footer/FooterBottom';
+import Header from './components/home/Header/Header';
+
+const Layout = () => {
+  return (
+    <div>
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+      <Header />
+      <HeaderBottom />
+      <SpecialCase />
+      <Outlet />
+      <Footer />
+      <FooterBottom />
+    </div>
+  );
+};
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -60,7 +108,7 @@ function App() {
             </>
           }
         />
-      {/* Products */}
+        {/* Products */}
         <Route
           path="/products/productslist"
           element={
@@ -134,6 +182,19 @@ function App() {
             </>
           }
         />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/journal" element={<Journal />} />
+          <Route path="/category/:category" element={<Offer />} />
+          <Route path="/product/:_id" element={<ProductDetails />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/paymentgateway" element={<Payment />} />
+        </Route>
+        <Route path="/signup" element={<SignUp />}></Route>
+        <Route path="/signin" element={<SignIn />}></Route>
       </Routes>
     </>
   );
