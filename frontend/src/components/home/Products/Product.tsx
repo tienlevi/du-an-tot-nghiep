@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 
 const Product = (props: any) => {
   const dispatch = useDispatch();
-  const _id = props.productName;
+  const _id = props.name;
   const idString = (_id: any) => {
     return String(_id).toLowerCase().split(' ').join('');
   };
@@ -55,7 +55,7 @@ const Product = (props: any) => {
                 dispatch(
                   addToCart({
                     _id: props._id,
-                    name: props.productName,
+                    name: props.name,
                     quantity: 1,
                     image: props.img,
                     badge: props.badge,
@@ -94,9 +94,7 @@ const Product = (props: any) => {
       </div>
       <div className="max-w-80 py-6 flex flex-col gap-1 border-[1px] border-t-0 px-4">
         <div className="flex items-center justify-between font-titleFont">
-          <h2 className="text-lg text-primeColor font-bold">
-            {props.productName}
-          </h2>
+          <h2 className="text-lg text-primeColor font-bold">{props.name}</h2>
           <p className="text-[#767676] text-[14px]">${props.price}</p>
         </div>
         <div>

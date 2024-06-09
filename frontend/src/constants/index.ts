@@ -37,7 +37,7 @@ import {
   ruban1,
   ruban2,
   ruban3,
-  ruban4
+  ruban4,
 } from '../assets/images/index';
 
 import './style.css';
@@ -76,7 +76,7 @@ export const SplOfferData: any = [
   {
     _id: '201',
     img: imprimante1,
-    productName: 'imprimante',
+    name: 'imprimante',
     price: '35.00',
     color: 'Blank and White',
     badge: true,
@@ -86,7 +86,7 @@ export const SplOfferData: any = [
   {
     _id: '202',
     img: imprimante2,
-    productName: 'imprimante',
+    name: 'imprimante',
     price: '180.00',
     color: 'Gray',
     badge: true,
@@ -96,7 +96,7 @@ export const SplOfferData: any = [
   {
     _id: '203',
     img: imprimante4,
-    productName: 'imprimante',
+    name: 'imprimante',
     price: '25.00',
     color: 'Mixed',
     badge: true,
@@ -106,7 +106,7 @@ export const SplOfferData: any = [
   {
     _id: '204',
     img: imprimante5,
-    productName: 'imprimante',
+    name: 'imprimante',
     price: '220.00',
     color: 'Black',
     badge: true,
@@ -116,7 +116,7 @@ export const SplOfferData: any = [
   {
     _id: '205',
     img: imprimante6,
-    productName: 'imprimante',
+    name: 'imprimante',
     price: '25.00',
     color: 'Mixed',
     badge: true,
@@ -126,7 +126,7 @@ export const SplOfferData: any = [
   {
     _id: '206',
     img: imprimante7,
-    productName: 'imprimante',
+    name: 'imprimante',
     price: '220.00',
     color: 'Black',
     badge: true,
@@ -136,7 +136,7 @@ export const SplOfferData: any = [
   {
     _id: '207',
     img: imprimante8,
-    productName: 'imprimante',
+    name: 'imprimante',
     price: '25.00',
     color: 'Mixed',
     badge: true,
@@ -146,7 +146,7 @@ export const SplOfferData: any = [
   {
     _id: '208',
     img: imprimante9,
-    productName: 'imprimante',
+    name: 'imprimante',
     price: '220.00',
     color: 'Black',
     badge: true,
@@ -156,7 +156,7 @@ export const SplOfferData: any = [
   {
     _id: '209',
     img: encre1,
-    productName: 'encre',
+    name: 'encre',
     price: '25.00',
     color: 'Mixed',
     badge: true,
@@ -166,7 +166,7 @@ export const SplOfferData: any = [
   {
     _id: '210',
     img: encre2,
-    productName: 'encre',
+    name: 'encre',
     price: '220.00',
     color: 'Black',
     badge: true,
@@ -176,7 +176,7 @@ export const SplOfferData: any = [
   {
     _id: '211',
     img: encre3,
-    productName: 'encre',
+    name: 'encre',
     price: '25.00',
     color: 'Mixed',
     badge: true,
@@ -186,7 +186,7 @@ export const SplOfferData: any = [
   {
     _id: '212',
     img: encre4,
-    productName: 'encre',
+    name: 'encre',
     price: '220.00',
     color: 'Black',
     badge: true,
@@ -196,7 +196,7 @@ export const SplOfferData: any = [
   {
     _id: '213',
     img: ruban1,
-    productName: 'Ruban',
+    name: 'Ruban',
     price: '25.00',
     color: 'Mixed',
     badge: true,
@@ -206,7 +206,7 @@ export const SplOfferData: any = [
   {
     _id: '214',
     img: ruban2,
-    productName: 'Ruban',
+    name: 'Ruban',
     price: '220.00',
     color: 'Black',
     badge: true,
@@ -216,7 +216,7 @@ export const SplOfferData: any = [
   {
     _id: '215',
     img: ruban3,
-    productName: 'Ruban',
+    name: 'Ruban',
     price: '25.00',
     color: 'Mixed',
     badge: true,
@@ -226,7 +226,7 @@ export const SplOfferData: any = [
   {
     _id: '216',
     img: ruban4,
-    productName: 'Ruban',
+    name: 'Ruban',
     price: '220.00',
     color: 'Black',
     badge: true,
@@ -236,7 +236,7 @@ export const SplOfferData: any = [
   {
     _id: '217',
     img: bac1,
-    productName: 'Bac de dechet',
+    name: 'Bac de dechet',
     price: '25.00',
     color: 'Mixed',
     badge: true,
@@ -246,7 +246,7 @@ export const SplOfferData: any = [
   {
     _id: '219',
     img: bac2,
-    productName: 'Bac de dechet',
+    name: 'Bac de dechet',
     price: '220.00',
     color: 'Black',
     badge: true,
@@ -256,7 +256,7 @@ export const SplOfferData: any = [
   {
     _id: '220',
     img: bac3,
-    productName: 'Bac de dechet',
+    name: 'Bac de dechet',
     price: '25.00',
     color: 'Mixed',
     badge: true,
@@ -266,7 +266,7 @@ export const SplOfferData: any = [
   {
     _id: '221',
     img: bac4,
-    productName: 'Bac de dechet',
+    name: 'Bac de dechet',
     price: '220.00',
     color: 'Black',
     badge: true,
@@ -282,7 +282,7 @@ export const paginationItems = [
   {
     _id: '201',
     img: IMPRIMANTE_PANTUM_CP2200DW,
-    productName: 'Imprimante PANTUM CP2200DW',
+    name: 'Imprimante PANTUM CP2200DW',
     price: '35.00',
     color: 'Blanc',
     badge: true,
@@ -308,7 +308,7 @@ export const paginationItems = [
   {
     _id: '202',
     img: IMPRIMANTE_PANTUM_BM5100FDW,
-    productName: 'IMPRIMANTE PANTUM BM5100FDW',
+    name: 'IMPRIMANTE PANTUM BM5100FDW',
     price: '450',
     color: 'Blanc',
     badge: true,
@@ -352,7 +352,7 @@ export const paginationItems = [
   {
     _id: '203',
     img: IMPRIMANTE_PANTUM_BP5100DN,
-    productName: 'IMPRIMANTE PANTUM BP5100DN',
+    name: 'IMPRIMANTE PANTUM BP5100DN',
     price: '450',
     color: 'Blanc',
     badge: true,
@@ -395,7 +395,7 @@ export const paginationItems = [
   {
     _id: '2005',
     img: IMPRIMANTE_PANTUM_M6609N,
-    productName: 'IMPRIMANTE PANTUM M6559N',
+    name: 'IMPRIMANTE PANTUM M6559N',
     price: '450',
     color: 'Blanc',
     badge: true,
@@ -438,7 +438,7 @@ export const paginationItems = [
   {
     _id: '20005',
     img: IMPRIMANTE_PANTUM_M6559N,
-    productName: 'IMPRIMANTE PANTUM M6559N',
+    name: 'IMPRIMANTE PANTUM M6559N',
     price: '450',
     color: 'Blanc',
     badge: true,
@@ -481,7 +481,7 @@ export const paginationItems = [
   {
     _id: '206',
     img: IMPRIMANTE_PANTUM_P3300DN,
-    productName: 'IMPRIMANTE PANTUM P3300DN',
+    name: 'IMPRIMANTE PANTUM P3300DN',
     price: '450',
     color: 'Blanc',
     badge: true,
@@ -535,7 +535,7 @@ export const paginationItems = [
   {
     _id: '207',
     img: IMPRIMANTE_PANTUM_P3300DW,
-    productName: 'IMPRIMANTE PANTUM P3300DW',
+    name: 'IMPRIMANTE PANTUM P3300DW',
     price: '450',
     color: 'Blanc',
     badge: true,
@@ -588,7 +588,7 @@ export const paginationItems = [
   {
     _id: '208',
     img: IMPRIMANTE_PANTUM_P2509W,
-    productName: 'IMPRIMANTE PANTUM P2509W',
+    name: 'IMPRIMANTE PANTUM P2509W',
     price: '450',
     color: 'Blanc',
     badge: true,
@@ -630,7 +630,7 @@ export const paginationItems = [
   {
     _id: '233',
     img: IMPRIMANTE_PANTUM_P2509,
-    productName: 'IMPRIMANTE PANTUM P2509',
+    name: 'IMPRIMANTE PANTUM P2509',
     price: '450',
     color: 'Blanc',
     badge: true,
@@ -643,7 +643,7 @@ export const paginationItems = [
   {
     _id: '220',
     img: bac3,
-    productName: 'Bac de dechet',
+    name: 'Bac de dechet',
     price: '25.00',
     color: 'Mixed',
     badge: true,
@@ -653,7 +653,7 @@ export const paginationItems = [
   {
     _id: '221',
     img: bac4,
-    productName: 'Bac de dechet',
+    name: 'Bac de dechet',
     price: '220.00',
     color: 'Black',
     badge: true,
@@ -663,7 +663,7 @@ export const paginationItems = [
   {
     _id: '215',
     img: ruban3,
-    productName: 'Ruban',
+    name: 'Ruban',
     price: '25.00',
     color: 'Mixed',
     badge: true,
@@ -673,7 +673,7 @@ export const paginationItems = [
   {
     _id: '216',
     img: ruban4,
-    productName: 'Ruban',
+    name: 'Ruban',
     price: '220.00',
     color: 'Black',
     badge: true,
@@ -683,7 +683,7 @@ export const paginationItems = [
   {
     _id: '209',
     img: encre1,
-    productName: 'encre',
+    name: 'encre',
     price: '25.00',
     color: 'Mixed',
     badge: true,
@@ -693,7 +693,7 @@ export const paginationItems = [
   {
     _id: '210',
     img: encre2,
-    productName: 'encre',
+    name: 'encre',
     price: '220.00',
     color: 'Black',
     badge: true,
@@ -704,7 +704,7 @@ export const paginationItems = [
   {
     _id: '211',
     img: encre3,
-    productName: 'encre',
+    name: 'encre',
     price: '25.00',
     color: 'Mixed',
     badge: true,
@@ -714,7 +714,7 @@ export const paginationItems = [
   {
     _id: '212',
     img: encre4,
-    productName: 'encre',
+    name: 'encre',
     price: '220.00',
     color: 'Black',
     badge: true,
@@ -724,7 +724,7 @@ export const paginationItems = [
   {
     _id: '213',
     img: ruban1,
-    productName: 'Ruban',
+    name: 'Ruban',
     price: '25.00',
     color: 'Mixed',
     badge: true,
@@ -734,7 +734,7 @@ export const paginationItems = [
   {
     _id: '214',
     img: ruban2,
-    productName: 'Ruban',
+    name: 'Ruban',
     price: '220.00',
     color: 'Black',
     badge: true,
@@ -745,7 +745,7 @@ export const paginationItems = [
   {
     _id: '217',
     img: bac1,
-    productName: 'Bac de dechet',
+    name: 'Bac de dechet',
     price: '25.00',
     color: 'Mixed',
     badge: true,
@@ -755,7 +755,7 @@ export const paginationItems = [
   {
     _id: '219',
     img: bac2,
-    productName: 'Bac de dechet',
+    name: 'Bac de dechet',
     price: '220.00',
     color: 'Black',
     badge: true,
@@ -768,8 +768,7 @@ export const paginationItems = [
   {
     _id: 'hp1',
     img: hp1,
-    productName:
-      "IMPRIMANTE HP JET D'ENCRE HP SMART TANK 516 COULEUR MFP 3EN1 A4 WIFI",
+    name: "IMPRIMANTE HP JET D'ENCRE HP SMART TANK 516 COULEUR MFP 3EN1 A4 WIFI",
     price: '450',
     color: 'Blanc',
     badge: true,
@@ -833,7 +832,7 @@ export const paginationItems = [
   {
     _id: 'hp2',
     img: hp2,
-    productName: 'IMPRIMANTE HP INK TANK WIRELESS 415 ALL-IN-ONE',
+    name: 'IMPRIMANTE HP INK TANK WIRELESS 415 ALL-IN-ONE',
     price: '450',
     color: 'Blanc',
     badge: true,
@@ -847,7 +846,7 @@ export const paginationItems = [
   {
     _id: 'hp3',
     img: hp3,
-    productName: 'IMPRIMANTE HP INK TANK WIRELESS 415 ALL-IN-ONE',
+    name: 'IMPRIMANTE HP INK TANK WIRELESS 415 ALL-IN-ONE',
     price: '450',
     color: 'Blanc',
     badge: true,
@@ -951,7 +950,7 @@ export const paginationItems = [
   {
     _id: 'ricoh1',
     img: ricoh1,
-    productName: 'IMPRIMANTE RICOH P501',
+    name: 'IMPRIMANTE RICOH P501',
     price: '450',
     color: 'Blanc',
     badge: true,
@@ -1055,7 +1054,7 @@ export const paginationItems = [
   {
     _id: 'ricoh2',
     img: ricoh2,
-    productName: 'IMPRIMANTE RICOH SP3710DN',
+    name: 'IMPRIMANTE RICOH SP3710DN',
     price: '450',
     color: 'Blanc',
     badge: true,
@@ -1158,7 +1157,7 @@ export const paginationItems = [
   {
     _id: 'ricoh3',
     img: ricoh3,
-    productName: 'IMPRIMANTE RICOH SP4520DN',
+    name: 'IMPRIMANTE RICOH SP4520DN',
     price: '450',
     color: 'Blanc',
     badge: true,
@@ -1261,7 +1260,7 @@ export const paginationItems = [
   {
     _id: 'ricoh4',
     img: ricoh4,
-    productName: 'IMPRIMANTE RICOH COULEUR LASER SPC840',
+    name: 'IMPRIMANTE RICOH COULEUR LASER SPC840',
     price: '450',
     color: 'Blanc',
     badge: true,
@@ -1364,7 +1363,7 @@ export const paginationItems = [
   {
     _id: 'ricoh5',
     img: ricoh5,
-    productName: 'IMPRIMANTE RICOH SP4510DN (407313)',
+    name: 'IMPRIMANTE RICOH SP4510DN (407313)',
     price: '450',
     color: 'Blanc',
     badge: true,
@@ -1470,7 +1469,7 @@ export const paginationItems = [
   {
     _id: 'espson1',
     img: espson1,
-    productName: 'IMPRIMANTE EPSON L3251 3EN1 A4 WIFI',
+    name: 'IMPRIMANTE EPSON L3251 3EN1 A4 WIFI',
     price: '450',
     color: 'Blanc',
     badge: true,
@@ -1574,7 +1573,7 @@ export const paginationItems = [
   {
     _id: 'espson2',
     img: espson2,
-    productName: "IMPRIMANTE EPSON JET D'ENCRE L3156 COULEUR A4  WIFI",
+    name: "IMPRIMANTE EPSON JET D'ENCRE L3156 COULEUR A4  WIFI",
     price: '450',
     color: 'Blanc',
     badge: true,

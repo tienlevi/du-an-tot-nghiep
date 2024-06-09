@@ -42,7 +42,7 @@ const HeaderBottom = () => {
 
   useEffect(() => {
     const filtered = paginationItems.filter((item) =>
-      item.productName.toLowerCase().includes(searchQuery.toLowerCase()),
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
     setFilteredProducts(filtered);
   }, [searchQuery]);
@@ -98,7 +98,10 @@ const HeaderBottom = () => {
               value={searchQuery}
               placeholder="Search your products here"
             />
-            <FaSearch className="w-5 h-5 cursor-pointer" onClick={handleSearchClick} />
+            <FaSearch
+              className="w-5 h-5 cursor-pointer"
+              onClick={handleSearchClick}
+            />
             {searchQuery && (
               <div
                 className={`w-full mx-auto h-96 bg-white top-16 absolute left-0 z-50 overflow-y-scroll shadow-2xl scrollbar-hide cursor-pointer`}
@@ -110,9 +113,7 @@ const HeaderBottom = () => {
                   >
                     <img className="w-24" src={item.img} alt="productImg" />
                     <div className="flex flex-col gap-1">
-                      <p className="font-semibold text-lg">
-                        {item.productName}
-                      </p>
+                      <p className="font-semibold text-lg">{item.name}</p>
                       <p className="text-xs">
                         {item.des.length > 100
                           ? `${item.des.slice(0, 100)}...`

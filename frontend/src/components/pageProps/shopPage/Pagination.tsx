@@ -27,7 +27,7 @@ function Items({ currentItems, selectedBrands, selectedCategories }: any) {
           <Product
             _id={item._id}
             img={item.img}
-            productName={item.productName}
+            name={item.name}
             price={item.price}
             color={item.color}
             badge={item.badge}

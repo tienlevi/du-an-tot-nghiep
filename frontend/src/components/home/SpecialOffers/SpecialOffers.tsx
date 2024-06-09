@@ -22,7 +22,7 @@ const SpecialOffers = () => {
             key={data._id}
             _id={data._id}
             img={data.img}
-            productName={data.productName}
+            name={data.name}
             price={data.price}
             color={data.color}
             badge={true}

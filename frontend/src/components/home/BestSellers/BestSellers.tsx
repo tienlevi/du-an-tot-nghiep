@@ -1,12 +1,12 @@
-import React from "react";
-import Heading from "../Products/Heading";
-import Product from "../Products/Product";
+import React from 'react';
+import Heading from '../Products/Heading';
+import Product from '../Products/Product';
 import {
   bestSellerOne,
   bestSellerTwo,
   bestSellerThree,
   bestSellerFour,
-} from "../../../assets/images/index";
+} from '../../../assets/images/index';
 
 const BestSellers = () => {
   return (
@@ -16,7 +16,7 @@ const BestSellers = () => {
         <Product
           _id="1011"
           img={bestSellerOne}
-          productName="Flower Base"
+          name="Flower Base"
           price="35.00"
           color="Blank and White"
           badge={true}
@@ -25,7 +25,7 @@ const BestSellers = () => {
         <Product
           _id="1012"
           img={bestSellerTwo}
-          productName="New Backpack"
+          name="New Backpack"
           price="180.00"
           color="Gray"
           badge={false}
@@ -34,7 +34,7 @@ const BestSellers = () => {
         <Product
           _id="1013"
           img={bestSellerThree}
-          productName="Household materials"
+          name="Household materials"
           price="25.00"
           color="Mixed"
           badge={true}
@@ -43,7 +43,7 @@ const BestSellers = () => {
         <Product
           _id="1014"
           img={bestSellerFour}
-          productName="Travel Bag"
+          name="Travel Bag"
           price="220.00"
           color="Black"
           badge={false}

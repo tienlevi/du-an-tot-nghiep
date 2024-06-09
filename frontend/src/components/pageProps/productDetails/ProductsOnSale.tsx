@@ -1,5 +1,5 @@
-import React from "react";
-import { SplOfferData } from "../../../constants";
+import React from 'react';
+import { SplOfferData } from '../../../constants';
 
 const ProductsOnSale = () => {
   return (
@@ -17,7 +17,7 @@ const ProductsOnSale = () => {
               <img className="w-24" src={item.img} alt={item.img} />
             </div>
             <div className="flex flex-col gap-2 font-titleFont">
-              <p className="text-base font-medium">{item.productName}</p>
+              <p className="text-base font-medium">{item.name}</p>
               <p className="text-sm font-semibold">${item.price}</p>
             </div>
           </div>

@@ -26,7 +26,7 @@ const ProductInfo = ({ productInfo }) => {
   const dispatch = useDispatch();
   return (
     <div className="flex flex-col gap-5">
-      <h2 className="text-4xl font-semibold">{productInfo.productName}</h2>
+      <h2 className="text-4xl font-semibold">{productInfo.name}</h2>
       <p className="text-2xl font-semibold">
         {productInfo.price} Dt
         <span className="text-xl font-semibold line-through ml-2">540</span>
@@ -96,7 +96,7 @@ const ProductInfo = ({ productInfo }) => {
           dispatch(
             addToCart({
               _id: productInfo.id,
-              name: productInfo.productName,
+              name: productInfo.name,
               quantity: 1,
               image: productInfo.img,
               badge: productInfo.badge,
