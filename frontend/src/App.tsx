@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import {
   Outlet,
   Route,
-  RouterProvider,
   Routes,
-  useLocation,
+  useLocation
 } from 'react-router-dom';
 import Loader from './common/Loader';
 import PageTitle from './components/PageTitle';
@@ -13,33 +12,34 @@ import SignUp from './pages/Authentication/SignUp';
 import Calendar from './pages/Calendar';
 import Chart from './pages/Chart';
 import ECommerce from './pages/Dashboard/Main';
+import ProductsAdd from './pages/Products/ProductsAdd';
+import ProductsEdit from './pages/Products/ProductsEdit';
+import ProductsList from './pages/Products/ProductsList';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import Tables from './pages/Tables';
-import ProductsAdd from './pages/Products/ProductsAdd';
-import ProductsList from './pages/Products/ProductsList';
-import ProductsEdit from './pages/Products/ProductsEdit';
 // Client
-import Offer from './pages/Offer/Offer';
-import ProductDetails from './pages/ProductDetails/ProductDetails';
-import Payment from './pages/payment/Payment';
-import Cart from './pages/Cart/Cart';
-import Home from './pages/Home/Home';
-import Shop from './pages/Shop/Shop';
-import About from './pages/About/About';
-import Contact from './pages/Contact/Contact';
-import Journal from './pages/Journal/Journal';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import HeaderBottom from './components/home/Header/HeaderBottom';
 import SpecialCase from './components/SpecialCase/SpecialCase';
 import Footer from './components/home/Footer/Footer';
 import FooterBottom from './components/home/Footer/FooterBottom';
 import Header from './components/home/Header/Header';
+import HeaderBottom from './components/home/Header/HeaderBottom';
+import About from './pages/About/About';
+import Cart from './pages/Cart/Cart';
+import Contact from './pages/Contact/Contact';
+import Home from './pages/Home/Home';
+import Journal from './pages/Journal/Journal';
+import Offer from './pages/Offer/Offer';
+import ProductDetails from './pages/ProductDetails/ProductDetails';
+import Shop from './pages/Shop/Shop';
+import Payment from './pages/payment/Payment';
+import Search from './pages/Search/Search';
 
 const Layout = () => {
   return (
-    <div>
+    <>
       <ToastContainer
         position="top-right"
         autoClose={1000}
@@ -58,7 +58,7 @@ const Layout = () => {
       <Outlet />
       <Footer />
       <FooterBottom />
-    </div>
+    </>
   );
 };
 
@@ -184,6 +184,7 @@ function App() {
         />
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
+          <Route path='/search' element={<Search />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
