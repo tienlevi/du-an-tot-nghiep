@@ -57,6 +57,13 @@ const Payment = () => {
                 placeholder="Any special instructions"
               />
             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Image</label>
+              <input
+                type="file"
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              />
+            </div>
             <button className="w-full h-10 bg-primeColor text-white text-lg mt-4 hover:bg-black duration-300">
               Pay Now
             </button>
