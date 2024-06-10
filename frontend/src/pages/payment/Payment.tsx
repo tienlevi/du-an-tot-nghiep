@@ -33,14 +33,6 @@ const Payment = () => {
                   placeholder="DD/MM/YY"
                 />
               </div>
-              <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-700">CVC</label>
-                <input
-                  type="text"
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                  placeholder="CVC"
-                />
-              </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">Address</label>
