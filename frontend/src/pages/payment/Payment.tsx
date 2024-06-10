@@ -64,7 +64,7 @@ const Payment = () => {
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
               />
             </div>
-            <button className="w-full h-10 bg-primeColor text-white text-lg mt-4 hover:bg-black duration-300">
+            <button className="w-full h-10 bg-blue-500 text-white text-lg mt-4 hover:bg-blue-700 duration-300">
               Pay Now
             </button>
           </form>
