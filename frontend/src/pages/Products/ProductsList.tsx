@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import DefaultLayout from '../../layout/DefaultLayout';
+import { Product } from '../../types/product';
 
 const ProductsList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -17,6 +18,25 @@ const ProductsList: React.FC = () => {
       console.error('Lỗi khi lấy danh sách sản phẩm:', error);
     }
   };
+  //hàm xóa sản phẩm
+  const handleDelete = async (productId: string) => {
+    const confirm = window.confirm('BẠN CÓ CHẮC CHẮN XÓA KHÔNG ?')
+    if (confirm) {
+      try {
+        const response = await fetch(`http://localhost:2202/api/v1/products/${productId}`, {
+          method: 'DELETE',
+        });
+        if (response.ok) {
+          setProducts(products.filter(product => product._id !== productId));
+        } else {
+          console.error('Lỗi khi xóa sản phẩm:', await response.json());
+        }
+      } catch (error) {
+        console.error('Lỗi khi xóa sản phẩm:', error);
+      }
+    }
+  };
+
 
   return (
     <DefaultLayout>
@@ -41,7 +61,7 @@ const ProductsList: React.FC = () => {
             </thead>
             <tbody>
               {products.map(product => (
-                <ProductItem key={product._id} product={product} />
+                <ProductItem key={product._id} product={product} onDelete={handleDelete} />
               ))}
             </tbody>
           </table>
@@ -51,7 +71,7 @@ const ProductsList: React.FC = () => {
   );
 };
 
-const ProductItem: React.FC<{ product: Product }> = ({ product }) => (
+const ProductItem: React.FC<{ product: Product; onDelete: (id: string) => void }> = ({ product, onDelete }) => (
   <tr className="border-b border-gray-300">
     <td className="p-3">{product.name}</td>
     <td className="p-3">{product.slug}</td>
@@ -65,7 +85,7 @@ const ProductItem: React.FC<{ product: Product }> = ({ product }) => (
     <td className="p-3">{product.attributes?.join(', ')}</td>
     <td className="p-3 flex justify-between">
       <button className="py-1 px-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-1">Edit</button>
-      <button className="py-1 px-2 bg-red-500 text-white rounded hover:bg-red-600 ml-1">Delete</button>
+      <button onClick={() => onDelete(product._id)} className="py-1 px-2 bg-red-500 text-white rounded hover:bg-red-600 ml-1">Delete</button>
     </td>
   </tr>
 );

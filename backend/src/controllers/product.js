@@ -46,7 +46,7 @@ export const getProductById = async (req, res) => {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
   }
 };
-
+//xóa sản phẩm
 export const deleteProductById = async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
