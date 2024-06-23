@@ -1,10 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  Outlet,
-  Route,
-  Routes,
-  useLocation
-} from 'react-router-dom';
+import { Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import Loader from './common/Loader';
 import PageTitle from './components/PageTitle';
 import SignIn from './pages/Authentication/SignIn';
@@ -36,6 +31,7 @@ import ProductDetails from './pages/ProductDetails/ProductDetails';
 import Shop from './pages/Shop/Shop';
 import Payment from './pages/payment/Payment';
 import Search from './pages/Search/Search';
+import Bill from './pages/Bill/Bill';
 
 const Layout = () => {
   return (
@@ -184,7 +180,7 @@ function App() {
         />
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path='/search' element={<Search />} />
+          <Route path="/search" element={<Search />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
@@ -193,6 +189,7 @@ function App() {
           <Route path="/product/:_id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/paymentgateway" element={<Payment />} />
+          <Route path="/bill" element={<Bill />} />
         </Route>
         <Route path="/signup" element={<SignUp />}></Route>
         <Route path="/signin" element={<SignIn />}></Route>
