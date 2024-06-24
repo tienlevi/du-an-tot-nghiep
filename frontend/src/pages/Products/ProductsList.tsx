@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { Product } from '../../types/product';
 
@@ -26,13 +27,17 @@ const ProductsList: React.FC = () => {
         const response = await fetch(`http://localhost:2202/api/v1/products/${productId}`, {
           method: 'DELETE',
         });
+        
         if (response.ok) {
           setProducts(products.filter(product => product._id !== productId));
+          alert('XÓA SẢN PHẨM THÀNH CÔNG')
         } else {
           console.error('Lỗi khi xóa sản phẩm:', await response.json());
+          alert('LỖI KHI XÓA SẢN PHẨM')
         }
       } catch (error) {
         console.error('Lỗi khi xóa sản phẩm:', error);
+       
       }
     }
   };
@@ -42,6 +47,7 @@ const ProductsList: React.FC = () => {
     <DefaultLayout>
       <div className="container mx-auto">
         <h2 className="text-3xl font-semibold mb-4">Danh sách sản phẩm</h2>
+        <Link to={'/products/productsadd'} className="bg-red-500 text-white py-2 px-4 rounded">Thêm Sản Phẩm</Link><br /><br />
         <div className="overflow-x-auto">
           <table className="w-full table-auto border-collapse border border-gray-300">
             <thead>

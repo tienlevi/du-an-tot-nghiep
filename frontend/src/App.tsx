@@ -48,6 +48,8 @@ const Layout = () => {
         pauseOnHover
         theme="colored"
       />
+      <ToastContainer/>
+     
       <Header />
       <HeaderBottom />
       <SpecialCase />
