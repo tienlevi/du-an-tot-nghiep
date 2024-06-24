@@ -6,6 +6,8 @@ import { Product } from '../../types/product';
 const ProductsList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
 
+  console.log(products);
+
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -21,33 +23,41 @@ const ProductsList: React.FC = () => {
   };
   //hàm xóa sản phẩm
   const handleDelete = async (productId: string) => {
-    const confirm = window.confirm('BẠN CÓ CHẮC CHẮN XÓA KHÔNG ?')
+    const confirm = window.confirm('BẠN CÓ CHẮC CHẮN XÓA KHÔNG ?');
     if (confirm) {
       try {
-        const response = await fetch(`http://localhost:2202/api/v1/products/${productId}`, {
-          method: 'DELETE',
-        });
-        
+        const response = await fetch(
+          `http://localhost:2202/api/v1/products/${productId}`,
+          {
+            method: 'DELETE',
+          },
+        );
+
         if (response.ok) {
-          setProducts(products.filter(product => product._id !== productId));
-          alert('XÓA SẢN PHẨM THÀNH CÔNG')
+          setProducts(products.filter((product) => product._id !== productId));
+          alert('XÓA SẢN PHẨM THÀNH CÔNG');
         } else {
           console.error('Lỗi khi xóa sản phẩm:', await response.json());
-          alert('LỖI KHI XÓA SẢN PHẨM')
+          alert('LỖI KHI XÓA SẢN PHẨM');
         }
       } catch (error) {
         console.error('Lỗi khi xóa sản phẩm:', error);
-       
       }
     }
   };
-
 
   return (
     <DefaultLayout>
       <div className="container mx-auto">
         <h2 className="text-3xl font-semibold mb-4">Danh sách sản phẩm</h2>
-        <Link to={'/products/productsadd'} className="bg-red-500 text-white py-2 px-4 rounded">Thêm Sản Phẩm</Link><br /><br />
+        <Link
+          to={'/products/productsadd'}
+          className="bg-red-500 text-white py-2 px-4 rounded"
+        >
+          Thêm Sản Phẩm
+        </Link>
+        <br />
+        <br />
         <div className="overflow-x-auto">
           <table className="w-full table-auto border-collapse border border-gray-300">
             <thead>
@@ -66,8 +76,12 @@ const ProductsList: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {products.map(product => (
-                <ProductItem key={product._id} product={product} onDelete={handleDelete} />
+              {products?.map((product) => (
+                <ProductItem
+                  key={product._id}
+                  product={product}
+                  onDelete={handleDelete}
+                />
               ))}
             </tbody>
           </table>
@@ -77,7 +91,10 @@ const ProductsList: React.FC = () => {
   );
 };
 
-const ProductItem: React.FC<{ product: Product; onDelete: (id: string) => void }> = ({ product, onDelete }) => (
+const ProductItem: React.FC<{
+  product: Product;
+  onDelete: (id: string) => void;
+}> = ({ product, onDelete }) => (
   <tr className="border-b border-gray-300">
     <td className="p-3">{product.name}</td>
     <td className="p-3">{product.slug}</td>
@@ -90,8 +107,15 @@ const ProductItem: React.FC<{ product: Product; onDelete: (id: string) => void }
     <td className="p-3">{product.tags?.join(', ')}</td>
     <td className="p-3">{product.attributes?.join(', ')}</td>
     <td className="p-3 flex justify-between">
-      <button className="py-1 px-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-1">Edit</button>
-      <button onClick={() => onDelete(product._id)} className="py-1 px-2 bg-red-500 text-white rounded hover:bg-red-600 ml-1">Delete</button>
+      <button className="py-1 px-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-1">
+        Edit
+      </button>
+      <button
+        onClick={() => onDelete(product._id)}
+        className="py-1 px-2 bg-red-500 text-white rounded hover:bg-red-600 ml-1"
+      >
+        Delete
+      </button>
     </td>
   </tr>
 );
