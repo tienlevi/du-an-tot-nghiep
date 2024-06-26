@@ -45,6 +45,7 @@ const ProductsAdd = () => {
       productData.attributes = productData.attributes.map((attr: string) => attr.replace(/['"\s]/g, ''));
 
       const response = await axios.post('http://localhost:2202/api/v1/products', productData);
+      console.log(response)
       setMessage('Product added successfully!');
       setProduct({
         name: '',
@@ -52,7 +53,7 @@ const ProductsAdd = () => {
         category: '',
         price: 0,
         image: '',
-        gallery: '', // Reset value to an empty string
+        gallery: '',
         description: '',
         discount: 0,
         countInStock: 0,
