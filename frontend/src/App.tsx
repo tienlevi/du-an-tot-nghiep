@@ -126,7 +126,7 @@ function App() {
           }
         />
         <Route
-          path="/products/productsedit"
+          path="/products/productsedit/:id"
           element={
             <>
               <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
