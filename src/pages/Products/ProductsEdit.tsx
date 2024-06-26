@@ -67,7 +67,7 @@ const ProductsEdit = () => {
       productData.attributes = productData.attributes.map((attr) => attr.replace(/['"\s]/g, ''));
 
       await axios.put(`http://localhost:2202/api/v1/products/${id}`, productData);
-      setMessage('Product updated successfully!');
+      alert('Update Success')
       navigate('/products/productslist');
     } catch (error) {
       if (axios.isAxiosError(error)) {
