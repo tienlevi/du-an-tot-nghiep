@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { useState } from 'react';
 import DefaultLayout from '../../layout/DefaultLayout';
+import { useNavigate } from 'react-router-dom';
 
 const ProductsAdd = () => {
+ 
   const [product, setProduct] = useState({
     name: '',
     slug: '',
@@ -17,8 +19,8 @@ const ProductsAdd = () => {
     tags: '', // Change initial value to an empty string
     attributes: '', // Change initial value to an empty string
   });
-
   const [message, setMessage] = useState('');
+  const navitage = useNavigate()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -29,19 +31,19 @@ const ProductsAdd = () => {
       setProduct({ ...product, [name]: value });
     }
   };
-
+  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // console.log('Submitting product data:', product);
+    
     try {
       const productData = {
         ...product,
-        gallery: product.gallery.split(',').map((item: string) => item.trim()), // Convert gallery string to array
-        tags: product.tags.split(',').map((item: string) => item.trim()), // Convert tags string to array
-        attributes: product.attributes.split(',').map((item: string) => item.trim()), // Convert attributes string to array
+        gallery: product.gallery.split(',').map((item: string) => item.trim()), 
+        tags: product.tags.split(',').map((item: string) => item.trim()), 
+        attributes: product.attributes.split(',').map((item: string) => item.trim()), 
       };
 
-      // Ensure attributes are valid ObjectId strings
+    
       productData.attributes = productData.attributes.map((attr: string) => attr.replace(/['"\s]/g, ''));
 
       const response = await axios.post('http://localhost:2202/api/v1/products', productData);
@@ -58,10 +60,12 @@ const ProductsAdd = () => {
         discount: 0,
         countInStock: 0,
         featured: false,
-        tags: '', // Reset value to an empty string
-        attributes: '', // Reset value to an empty string
+        tags: '', 
+        attributes: '', 
       });
-    
+      //chuyển hướng sau khi thêm sản phẩm sang danh sách sản phẩm
+      navitage('/products/productslist')
+      alert('THÊM SẢN PHẨM THÀNH CÔNG')
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setMessage(`Failed to add product: ${error.response?.data.message || error.message}`);
