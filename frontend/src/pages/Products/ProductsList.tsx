@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { Product } from '../../types/product';
+import { toast } from 'react-toastify';
 
 const ProductsList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -35,7 +36,7 @@ const ProductsList: React.FC = () => {
 
         if (response.ok) {
           setProducts(products.filter((product) => product._id !== productId));
-          alert('XÓA SẢN PHẨM THÀNH CÔNG');
+          toast.error('Xóa sản phẩm thành công');
         } else {
           console.error('Lỗi khi xóa sản phẩm:', await response.json());
           alert('LỖI KHI XÓA SẢN PHẨM');
@@ -107,8 +108,18 @@ const ProductItem: React.FC<{
     <td className="p-3">{product.tags?.join(', ')}</td>
     <td className="p-3">{product.attributes?.join(', ')}</td>
     <td className="p-3 flex justify-between">
-      <Link to={`/products/productsedit/${product._id}`} className="py-1 px-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-1">Edit</Link>
-      <button onClick={() => onDelete(product._id)} className="py-1 px-2 bg-red-500 text-white rounded hover:bg-red-600 ml-1">Delete</button>
+      <Link
+        to={`/products/productsedit/${product._id}`}
+        className="py-1 px-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-1"
+      >
+        Edit
+      </Link>
+      <button
+        onClick={() => onDelete(product._id)}
+        className="py-1 px-2 bg-red-500 text-white rounded hover:bg-red-600 ml-1"
+      >
+        Delete
+      </button>
     </td>
   </tr>
 );

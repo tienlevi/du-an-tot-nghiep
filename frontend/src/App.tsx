@@ -48,8 +48,8 @@ const Layout = () => {
         pauseOnHover
         theme="colored"
       />
-      <ToastContainer/>
-     
+      <ToastContainer />
+
       <Header />
       <HeaderBottom />
       <SpecialCase />
@@ -76,6 +76,18 @@ function App() {
     <Loader />
   ) : (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={4000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       <Routes>
         <Route
           index

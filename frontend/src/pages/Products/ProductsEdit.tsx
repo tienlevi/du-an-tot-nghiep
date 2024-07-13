@@ -2,9 +2,10 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import DefaultLayout from '../../layout/DefaultLayout';
+import { toast } from 'react-toastify';
 
 const ProductsEdit = () => {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const [product, setProduct] = useState({
     name: '',
     slug: '',
@@ -24,15 +25,17 @@ const ProductsEdit = () => {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      console.log("Products id :",id)
+      console.log('Products id :', id);
       try {
-        const response = await axios.get(`http://localhost:2202/api/v1/products/${id}`);
+        const response = await axios.get(
+          `http://localhost:2202/api/v1/products/${id}`,
+        );
         const fetchedProduct = response.data;
         setProduct({
           name: fetchedProduct.name,
           slug: fetchedProduct.slug,
           category: fetchedProduct.category,
-          price: fetchedProduct.price, 
+          price: fetchedProduct.price,
           image: fetchedProduct.image,
           gallery: fetchedProduct.gallery.join(', '), // Convert array to comma-separated string
           description: fetchedProduct.description,
@@ -50,12 +53,12 @@ const ProductsEdit = () => {
     fetchProduct();
   }, [id]);
 
-  const handleChange = (e:any) => {
+  const handleChange = (e: any) => {
     const { name, value, type, checked } = e.target;
     setProduct({ ...product, [name]: type === 'checkbox' ? checked : value });
   };
 
-  const handleSubmit = async (e:any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     try {
@@ -66,16 +69,25 @@ const ProductsEdit = () => {
         attributes: product.attributes.split(',').map((item) => item.trim()),
       };
 
-      productData.attributes = productData.attributes.map((attr) => attr.replace(/['"\s]/g, ''));
+      productData.attributes = productData.attributes.map((attr) =>
+        attr.replace(/['"\s]/g, ''),
+      );
 
-      const response = await axios.put(`http://localhost:2202/api/v1/products/${id}`, productData);
+      const response = await axios.put(
+        `http://localhost:2202/api/v1/products/${id}`,
+        productData,
+      );
       console.log(response.data);
       setMessage('Product updated successfully!');
-      alert('CẬP NHẬT SẢN PHẨM THÀNH CÔNG')
+      toast.success('CẬP NHẬT SẢN PHẨM THÀNH CÔNG');
       navigate('/products/productslist');
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        setMessage(`Failed to update product: ${error.response?.data.message || error.message}`);
+        setMessage(
+          `Failed to update product: ${
+            error.response?.data.message || error.message
+          }`,
+        );
       } else {
         setMessage('Failed to update product: An unexpected error occurred.');
       }
