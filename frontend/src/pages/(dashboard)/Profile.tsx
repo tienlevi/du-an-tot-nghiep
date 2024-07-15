@@ -1,4 +1,4 @@
-import DefaultLayout from './Layout/DefaultLayout';
+import DefaultLayout from './_components/Layout/DefaultLayout';
 import CoverOne from '@/assets/images/cover/cover-01.png';
 import userSix from '@/assets/images/user/user-06.png';
 import { Link } from 'react-router-dom';

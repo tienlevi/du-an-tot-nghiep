@@ -1,6 +1,6 @@
 import React from 'react';
 
-import DefaultLayout from '../Layout/DefaultLayout';
+import DefaultLayout from '../_components/Layout/DefaultLayout';
 
 const ECommerce: React.FC = () => {
   return (

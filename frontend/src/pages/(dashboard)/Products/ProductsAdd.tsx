@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState } from 'react';
-import DefaultLayout from '../Layout/DefaultLayout';
+import DefaultLayout from '../_components/Layout/DefaultLayout';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 

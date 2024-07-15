@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import DefaultLayout from '../Layout/DefaultLayout';
 import { Product } from '@/common/types/product';
 import { toast } from 'react-toastify';
+import DefaultLayout from '../_components/Layout/DefaultLayout';
 
 const ProductsList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);

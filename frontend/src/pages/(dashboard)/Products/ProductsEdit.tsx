@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import DefaultLayout from '../Layout/DefaultLayout';
+import DefaultLayout from '../_components/Layout/DefaultLayout';
 import { toast } from 'react-toastify';
 
 const ProductsEdit = () => {

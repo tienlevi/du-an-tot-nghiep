@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import LogoDark from '@/assets/images/logo/logo-dark.svg';
 import Logo from '@/assets/images/logo/logo.svg';
 import Breadcrumb from '../_components/Breadcrumbs/Breadcrumb';
-import DefaultLayout from '../Layout/DefaultLayout';
+import DefaultLayout from '../_components/Layout/DefaultLayout';
 
 const SignIn: React.FC = () => {
   return (

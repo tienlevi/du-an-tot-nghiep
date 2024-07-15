@@ -3,7 +3,7 @@ import Breadcrumb from './_components/Breadcrumbs/Breadcrumb';
 import ChartOne from './_components/Charts/ChartOne';
 import ChartThree from './_components/Charts/ChartThree';
 import ChartTwo from './_components/Charts/ChartTwo';
-import DefaultLayout from './Layout/DefaultLayout';
+import DefaultLayout from './_components/Layout/DefaultLayout';
 
 const Chart: React.FC = () => {
   return (
