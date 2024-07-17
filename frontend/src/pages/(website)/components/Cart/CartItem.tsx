@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 
-import { IconButton } from "@mui/material";
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useCart } from "../../context/CartContext";
+import { useCart } from '@/context/CartContext';
+import { IconButton } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const RemoveIcon = () => (
   <svg

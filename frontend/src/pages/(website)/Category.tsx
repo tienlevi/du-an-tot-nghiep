@@ -14,7 +14,7 @@ const Category = () => {
     i18n.t('categories.technology'),
   );
 
-  const handleMenuOpen = (event) => {
+  const handleMenuOpen = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -94,7 +94,12 @@ const Category = () => {
       </div>
       <div className="mt-6 flex justify-center gap-5 md:gap-20 items-center md:mx-12 ">
         <Link to="..">
-          <WhiteButton name={i18n.t('whiteButtons.backToHomePage')} />
+          <WhiteButton
+            name={i18n.t('whiteButtons.backToHomePage')}
+            onClick={function (...args: any[]) {
+              throw new Error('Function not implemented.');
+            }}
+          />
         </Link>
         <ViewAll name={i18n.t('redButtons.viewAllProducts')} />
       </div>

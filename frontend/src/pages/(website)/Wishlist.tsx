@@ -1,4 +1,4 @@
-import { useWishlist } from '../context/WishlistContext';
+import { useWishlist } from '../../context/WishlistContext';
 import { Link } from 'react-router-dom';
 import { Grid } from '@mui/material';
 import FlashSaleItem from './components/common/components/FlashSaleItem';
@@ -8,16 +8,16 @@ import WhiteButton from './components/common/components/WhiteButton';
 import { useState } from 'react';
 import { Snackbar } from '@mui/material';
 import { Alert } from '@mui/material';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../../context/CartContext';
 import { motion } from 'framer-motion'; // Import motion from Framer Motion for animations
 import i18n from './components/common/components/LangConfig';
 
 function Wishlist() {
-  const { wishlistItems } = useWishlist();
+  const { wishlistItems }: any = useWishlist();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [massage, setMassage] = useState('');
   const [severity, setSeverity] = useState('success');
-  const { moveAllToCart } = useCart();
+  const { moveAllToCart }: any = useCart();
   let relatedItems;
 
   const handleClick = () => {

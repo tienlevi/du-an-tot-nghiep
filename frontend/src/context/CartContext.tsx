@@ -1,24 +1,24 @@
-import PropTypes from "prop-types";
-import { createContext, useContext, useEffect, useState } from "react";
+import PropTypes from 'prop-types';
+import { createContext, useContext, useEffect, useState } from 'react';
 
-const CartContext = createContext();
+const CartContext = createContext({});
 
 export const useCart = () => useContext(CartContext);
 
-export const CartProvider = ({ children }) => {
+export const CartProvider = ({ children }: any) => {
   const [cartItems, setCartItems] = useState([]);
 
   // Initialize cart items from local storage on component mount
   useEffect(() => {
-    const savedCartItems = JSON.parse(localStorage.getItem("cartItems"));
+    const savedCartItems = JSON.parse(localStorage.getItem('cartItems'));
     if (savedCartItems) {
       setCartItems(savedCartItems);
     }
   }, []); // Add any dependencies that should trigger the effect
 
-  const addToCart = (item) => {
+  const addToCart = (item: any) => {
     const existingItemIndex = cartItems.findIndex(
-      (cartItem) => cartItem.id === item.id
+      (cartItem) => cartItem.id === item.id,
     );
 
     if (existingItemIndex !== -1) {
@@ -29,19 +29,19 @@ export const CartProvider = ({ children }) => {
         quantity: updatedCartItems[existingItemIndex].quantity + item.quantity,
       };
       setCartItems(updatedCartItems);
-      localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+      localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
     } else {
       // If item does not exist in cart, add it to cart
       const updatedCartItems = [...cartItems, { ...item, quantity: 1 }];
       setCartItems(updatedCartItems);
-      localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+      localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
     }
   };
 
   const removeFromCart = (itemId) => {
     const updatedCartItems = cartItems.filter((item) => item.id !== itemId);
     setCartItems(updatedCartItems);
-    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+    localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
   };
 
   const handleIncrease = (item) => {
@@ -51,7 +51,7 @@ export const CartProvider = ({ children }) => {
         item.quantity = 1;
       }
       const existingItemIndex = cartItems.findIndex(
-        (cartItem) => cartItem.id === item.id
+        (cartItem) => cartItem.id === item.id,
       );
 
       if (existingItemIndex !== -1) {
@@ -62,7 +62,7 @@ export const CartProvider = ({ children }) => {
         };
         item.quantity += 1;
         setCartItems(updatedCartItems);
-        localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
       }
     }
   };
@@ -74,7 +74,7 @@ export const CartProvider = ({ children }) => {
     } else if (item.quantity > 1) {
       item.quantity -= 1;
       const existingItemIndex = cartItems.findIndex(
-        (cartItem) => cartItem.id === item.id
+        (cartItem) => cartItem.id === item.id,
       );
 
       if (existingItemIndex !== -1) {
@@ -88,7 +88,7 @@ export const CartProvider = ({ children }) => {
           updatedCartItems.splice(existingItemIndex, 1); // Remove item from cart if quantity is 1
         }
         setCartItems(updatedCartItems);
-        localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
       }
     }
   };
@@ -103,7 +103,7 @@ export const CartProvider = ({ children }) => {
       ...itemsToMove.map((item) => ({ ...item, quantity: 1 })),
     ];
     setCartItems(updatedCartItems);
-    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+    localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
 
     return true;
   };
