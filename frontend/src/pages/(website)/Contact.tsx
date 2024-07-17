@@ -1,12 +1,12 @@
-import ActiveLastBreadcrumb from './components/common/components/Link';
+// import ActiveLastBreadcrumb from './components/common/components/Link';
 import RedButton from './components/common/components/RedButton';
 import i18n from './components/common/components/LangConfig';
 const Contact = () => {
   return (
     <div className="flex flex-col mx-4 xl:ml-36 mt-48 gap-20">
-      <ActiveLastBreadcrumb
+      {/* <ActiveLastBreadcrumb
         path={`${i18n.t('home')}/${i18n.t('footer.Contact')}`}
-      />
+      /> */}
       <div className="flex flex-col lg:flex-row gap-8">
         <div className="shadow  w-full lg:w-[340px] h-[457px] flex flex-col gap-8 py-10 px-8 rounded">
           <div className="flex flex-col gap-6">

@@ -3,7 +3,7 @@ import RelatedItems from './components/Product/RelatedItems';
 import ActiveLastBreadcrumb from './components/common/components/Link';
 import RedButton from './components/common/components/RedButton';
 import WishlistIcon from './components/common/components/WishlistIcon';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../../context/CartContext';
 import i18n from './components/common/components/LangConfig';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';

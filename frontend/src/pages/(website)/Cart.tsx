@@ -1,6 +1,6 @@
 import i18n from './components/common/components/LangConfig';
 /* eslint-disable react/prop-types */
-import { useCart } from '../context/CartContext';
+import { useCart } from '../../context/CartContext';
 import CartItem from './components/Cart/CartItem';
 import WhiteButton from './components/common/components/WhiteButton';
 import RedButton from './components/common/components/RedButton';

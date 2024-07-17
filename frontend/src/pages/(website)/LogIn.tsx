@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import { TextField } from '@mui/material';
 import { Button, Snackbar } from '@mui/material';
 import { Alert } from '@mui/material';
-// import SignImg from './SignImg.png';
+import SignImg from './SignImg.png';
 
-import i18n from './components/common/components/LangConfig.jsx';
+import i18n from './components/common/components/LangConfig.tsx';
 
 const LogIn = () => {
   const [email, setEmail] = useState('');
@@ -16,7 +16,7 @@ const LogIn = () => {
 
   return (
     <div className="relative flex max-lg:flex-col-reverse justify-center  md:justify-start items-center mb-36 gap-12 lg:mt-28 xl:gap-24 ">
-      {/* <img src={SignImg} alt="Sign Image" /> */}
+      <img src={SignImg} alt="Sign Image" />
       <div className="flex flex-col gap-6 md:gap-8 md:mx-10 items-center sm:items-start max-lg:mt-40 justify-center">
         <h1 className="text-xl md:text-4xl font-medium font-inter ">
           {i18n.t('loginPage.title')}
@@ -72,7 +72,7 @@ const LogIn = () => {
           <span>{i18n.t('loginPage.notHaveAccount')} </span>
           <Link
             to="/signUp"
-            className="ml-2 text-gray font-medium hover:underline"
+            className="ml-2 text-gray-600 font-medium hover:underline"
           >
             {i18n.t('signUpPage.title')}
           </Link>

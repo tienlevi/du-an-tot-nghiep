@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import ActiveLastBreadcrumb from './components/common/components/Link';
 import RedButton from './components/common/components/RedButton';
 import i18n from './components/common/components/LangConfig';
-import notFoundIcon from '../assets/notFound.png';
+// import notFoundIcon from '../../assets/notFound.png';
 import { Fab } from '@mui/material';
 
 const NotFound = () => {
@@ -51,11 +51,11 @@ const NotFound = () => {
           </h6>
         </div>
 
-        <img
+        {/* <img
           src={notFoundIcon}
           alt="notFoundIcon"
           //  className="w-40 h-40 mt-8"
-        />
+        /> */}
         <Link to="..">
           <RedButton name={i18n.t('redButtons.backToHomePage')} />
         </Link>

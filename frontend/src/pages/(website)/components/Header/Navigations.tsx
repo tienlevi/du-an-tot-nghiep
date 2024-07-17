@@ -28,6 +28,7 @@ const Navigations = () => {
     { path: '/allProducts', label: i18n.t('allProducts.redTitle') },
     { path: '/contact', label: i18n.t('contact') },
     { path: '/about', label: i18n.t('about') },
+    { path: '/login', label: i18n.t('login') },
   ];
 
   // Find the index of the current route
@@ -43,13 +44,6 @@ const Navigations = () => {
       return;
     }
     setDrawerOpen(open);
-  };
-  const handleLogout = async () => {
-    try {
-      await auth.signOut();
-    } catch (error) {
-      console.error('Error signing out: ', error.message);
-    }
   };
 
   return (
@@ -109,9 +103,6 @@ const Navigations = () => {
                   </ListItem>
                 ))}
                 {/* If the user is logged in, show the logout button */}
-                <ListItem button component={Link} to="/" onClick={handleLogout}>
-                  <ListItemText primary={i18n.t('logout')} />
-                </ListItem>
               </List>
 
               <footer className="text-center py-4">
@@ -157,9 +148,6 @@ const Navigations = () => {
             />
           ))}
           {/* If the user is logged in, show the logout button */}
-          <ListItem button component={Link} to="/" onClick={handleLogout}>
-            <ListItemText primary={i18n.t('logout')} />
-          </ListItem>
         </Tabs>
       )}
     </>
