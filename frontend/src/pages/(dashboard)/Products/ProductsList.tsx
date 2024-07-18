@@ -109,7 +109,7 @@ const ProductItem: React.FC<{
     <td className="p-3">{product.attributes?.join(', ')}</td>
     <td className="p-3 flex justify-between">
       <Link
-        to={`/products/productsedit/${product._id}`}
+        to={`/products/edit/${product._id}`}
         className="py-1 px-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-1"
       >
         Edit
