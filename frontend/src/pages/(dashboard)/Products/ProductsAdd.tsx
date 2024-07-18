@@ -72,7 +72,7 @@ const ProductsAdd = () => {
         attributes: '',
       });
       //chuyển hướng sau khi thêm sản phẩm sang danh sách sản phẩm
-      navitage('/products/productslist');
+      navitage('/products/list');
       toast.success('Thêm sản phẩm thành công');
     } catch (error) {
       if (axios.isAxiosError(error)) {

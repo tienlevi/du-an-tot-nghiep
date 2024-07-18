@@ -52,7 +52,7 @@ const ProductsList: React.FC = () => {
       <div className="container mx-auto">
         <h2 className="text-3xl font-semibold mb-4">Danh sách sản phẩm</h2>
         <Link
-          to={'/products/productsadd'}
+          to={'/products/add'}
           className="bg-red-500 text-white py-2 px-4 rounded"
         >
           Thêm Sản Phẩm
@@ -109,7 +109,7 @@ const ProductItem: React.FC<{
     <td className="p-3">{product.attributes?.join(', ')}</td>
     <td className="p-3 flex justify-between">
       <Link
-        to={`/products/productsedit/${product._id}`}
+        to={`/products/edit/${product._id}`}
         className="py-1 px-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-1"
       >
         Edit
