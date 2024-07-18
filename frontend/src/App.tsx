@@ -108,7 +108,7 @@ function App() {
         />
         {/* Products */}
         <Route
-          path="/products/productslist"
+          path="/products/list"
           element={
             <>
               <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
@@ -117,7 +117,7 @@ function App() {
           }
         />
         <Route
-          path="/products/productsadd"
+          path="/products/add"
           element={
             <>
               <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
@@ -126,7 +126,7 @@ function App() {
           }
         />
         <Route
-          path="/products/productsedit"
+          path="/products/edit"
           element={
             <>
               <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
