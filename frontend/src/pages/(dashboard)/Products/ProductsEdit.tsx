@@ -80,7 +80,7 @@ const ProductsEdit = () => {
       console.log(response.data);
       setMessage('Product updated successfully!');
       toast.success('CẬP NHẬT SẢN PHẨM THÀNH CÔNG');
-      navigate('/products/productslist');
+      navigate('/products/list');
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setMessage(
