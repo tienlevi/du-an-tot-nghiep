@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from '@/common/types/product';
+import { Category } from '@/common/types/category';
 import { toast } from 'react-toastify';
 import DefaultLayout from '../_components/Layout/DefaultLayout';
 
 const ProductsList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
-
-  console.log(products);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     fetchProducts();
+    fetchCategories();
   }, []);
 
   const fetchProducts = async () => {
@@ -22,7 +23,17 @@ const ProductsList: React.FC = () => {
       console.error('Lỗi khi lấy danh sách sản phẩm:', error);
     }
   };
-  //hàm xóa sản phẩm
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch('http://localhost:2202/api/v1/categories');
+      const data = await response.json();
+      setCategories(data.data);
+    } catch (error) {
+      console.error('Lỗi khi lấy danh sách danh mục:', error);
+    }
+  };
+
   const handleDelete = async (productId: string) => {
     const confirm = window.confirm('BẠN CÓ CHẮC CHẮN XÓA KHÔNG ?');
     if (confirm) {
@@ -45,6 +56,11 @@ const ProductsList: React.FC = () => {
         console.error('Lỗi khi xóa sản phẩm:', error);
       }
     }
+  };
+
+  const getCategoryName = (categoryId: string) => {
+    const category = categories.find((cat) => cat._id === categoryId);
+    return category ? category.name : 'Unknown';
   };
 
   return (
@@ -82,6 +98,7 @@ const ProductsList: React.FC = () => {
                   key={product._id}
                   product={product}
                   onDelete={handleDelete}
+                  getCategoryName={getCategoryName}
                 />
               ))}
             </tbody>
@@ -95,11 +112,12 @@ const ProductsList: React.FC = () => {
 const ProductItem: React.FC<{
   product: Product;
   onDelete: (id: string) => void;
-}> = ({ product, onDelete }) => (
+  getCategoryName: (categoryId: string) => string;
+}> = ({ product, onDelete, getCategoryName }) => (
   <tr className="border-b border-gray-300">
     <td className="p-3">{product.name}</td>
     <td className="p-3">{product.slug}</td>
-    <td className="p-3">{product.category}</td>
+    <td className="p-3">{getCategoryName(product.category)}</td>
     <td className="p-3">{product.price}</td>
     <td className="p-3">{product.description}</td>
     <td className="p-3">{product.discount}</td>

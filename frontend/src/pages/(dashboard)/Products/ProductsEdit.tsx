@@ -20,6 +20,7 @@ const ProductsEdit = () => {
     tags: '',
     attributes: '',
   });
+  const [categories, setCategories] = useState([]);
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
@@ -50,7 +51,17 @@ const ProductsEdit = () => {
       }
     };
 
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get('http://localhost:2202/api/v1/categories');
+        setCategories(response.data.data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
     fetchProduct();
+    fetchCategories();
   }, [id]);
 
   const handleChange = (e: any) => {
@@ -84,8 +95,7 @@ const ProductsEdit = () => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setMessage(
-          `Failed to update product: ${
-            error.response?.data.message || error.message
+          `Failed to update product: ${error.response?.data.message || error.message
           }`,
         );
       } else {
@@ -117,15 +127,20 @@ const ProductsEdit = () => {
             placeholder="Slug"
             className="w-full p-2 border border-gray-300 rounded"
           />
-          <input
-            type="text"
+          <select
             name="category"
             value={product.category}
             onChange={handleChange}
-            placeholder="Category"
             required
             className="w-full p-2 border border-gray-300 rounded"
-          />
+          >
+            <option value="" disabled style={{ color: 'gray' }}>Chọn danh mục</option>
+            {categories.map((category) => (
+              <option key={category._id} value={category._id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
           <input
             type="number"
             name="price"

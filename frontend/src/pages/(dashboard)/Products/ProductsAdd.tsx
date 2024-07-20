@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DefaultLayout from '../_components/Layout/DefaultLayout';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Category } from '@/common/types/category';
 
 const ProductsAdd = () => {
   const [product, setProduct] = useState({
@@ -11,19 +12,33 @@ const ProductsAdd = () => {
     category: '',
     price: 0,
     image: '',
-    gallery: '', // Change initial value to an empty string
+    gallery: '',
     description: '',
     discount: 0,
     countInStock: 0,
     featured: false,
-    tags: '', // Change initial value to an empty string
-    attributes: '', // Change initial value to an empty string
+    tags: '',
+    attributes: '',
   });
+  const [categories, setCategories] = useState<Category[]>([]);
   const [message, setMessage] = useState('');
-  const navitage = useNavigate();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get('http://localhost:2202/api/v1/categories');
+        setCategories(response.data.data);
+      } catch (error) {
+        console.error('Lỗi khi lấy danh sách danh mục:', error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
     const { name, value, type } = e.target;
     if (type === 'checkbox') {
@@ -71,14 +86,12 @@ const ProductsAdd = () => {
         tags: '',
         attributes: '',
       });
-      //chuyển hướng sau khi thêm sản phẩm sang danh sách sản phẩm
-      navitage('/products/list');
+      navigate('/products/list');
       toast.success('Thêm sản phẩm thành công');
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setMessage(
-          `Failed to add product: ${
-            error.response?.data.message || error.message
+          `Failed to add product: ${error.response?.data.message || error.message
           }`,
         );
       } else {
@@ -110,15 +123,20 @@ const ProductsAdd = () => {
             placeholder="Slug"
             className="w-full p-2 border border-gray-300 rounded"
           />
-          <input
-            type="text"
+          <select 
             name="category"
             value={product.category}
             onChange={handleChange}
-            placeholder="Category"
             required
             className="w-full p-2 border border-gray-300 rounded"
-          />
+          >
+            <option value=""></option>
+            {categories.map((category) => (
+              <option key={category._id} value={category._id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
           <input
             type="number"
             name="price"

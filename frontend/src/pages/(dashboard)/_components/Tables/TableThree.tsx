@@ -61,9 +61,6 @@ const TableThree: React.FC = () => {
     }
   };
 
-
-
-
   const handleEditCategory = async (categoryId: string) => {
     const category = categories.find(cat => cat._id === categoryId);
     const currentName = category ? category.name : '';
