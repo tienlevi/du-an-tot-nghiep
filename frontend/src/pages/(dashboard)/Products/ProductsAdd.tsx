@@ -123,20 +123,23 @@ const ProductsAdd = () => {
             placeholder="Slug"
             className="w-full p-2 border border-gray-300 rounded"
           />
-          <select 
+          <select
             name="category"
             value={product.category}
             onChange={handleChange}
             required
             className="w-full p-2 border border-gray-300 rounded"
           >
-            <option value=""></option>
+            <option value="" disabled className="text-gray-500">
+              Danh mục
+            </option>
             {categories.map((category) => (
               <option key={category._id} value={category._id}>
                 {category.name}
               </option>
             ))}
           </select>
+
           <input
             type="number"
             name="price"
