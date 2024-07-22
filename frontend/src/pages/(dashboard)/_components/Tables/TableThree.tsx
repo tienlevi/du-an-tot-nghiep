@@ -33,14 +33,15 @@ const TableThree: React.FC = () => {
 
   const handleAddCategory = async () => {
     const newName = prompt('Nhập tên danh mục mới:');
-    if (newName) {
+    const newSlug = prompt('Nhập slug cho danh mục mới:');
+    if (newName && newSlug) {
       try {
         const response = await fetch('http://localhost:2202/api/v1/categories', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ name: newName }),
+          body: JSON.stringify({ name: newName, slug: newSlug }),
         });
 
         const responseData = await response.json();
@@ -61,12 +62,15 @@ const TableThree: React.FC = () => {
     }
   };
 
+
   const handleEditCategory = async (categoryId: string) => {
     const category = categories.find(cat => cat._id === categoryId);
     const currentName = category ? category.name : '';
+    const currentSlug = category ? category.slug : '';
 
     const newName = prompt('Nhập tên mới cho danh mục:', currentName);
-    if (newName && newName !== currentName) {
+    const newSlug = prompt('Nhập slug mới cho danh mục:', currentSlug);
+    if (newName && newSlug && (newName !== currentName || newSlug !== currentSlug)) {
       try {
         const response = await fetch(
           `http://localhost:2202/api/v1/categories/${categoryId}`,
@@ -75,7 +79,7 @@ const TableThree: React.FC = () => {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ name: newName }),
+            body: JSON.stringify({ name: newName, slug: newSlug }),
           },
         );
 
@@ -83,7 +87,7 @@ const TableThree: React.FC = () => {
 
         if (response.ok) {
           setCategories(categories.map((category) =>
-            category._id === categoryId ? { ...category, name: newName } : category
+            category._id === categoryId ? { ...category, name: newName, slug: newSlug } : category
           ));
           toast.success('Sửa danh mục thành công');
         } else {
@@ -95,6 +99,7 @@ const TableThree: React.FC = () => {
       }
     }
   };
+
 
   const handleDeleteCategory = async (categoryId: string) => {
     const confirm = window.confirm('Bạn có muốn xóa không?');
@@ -135,10 +140,13 @@ const TableThree: React.FC = () => {
                 STT
               </th>
               <th className="min-w-[130px] py-4 font-medium text-black dark:text-white">
-                Name
+                Tên danh mục
+              </th>
+              <th className="min-w-[130px] py-4 font-medium text-black dark:text-white">
+                Mô tả
               </th>
               <th className="py-4 font-medium text-black dark:text-white">
-                Actions
+                Hành động
               </th>
             </tr>
           </thead>
@@ -153,6 +161,9 @@ const TableThree: React.FC = () => {
                   </td>
                   <td className="border-b border-[#eee] py-5 dark:border-strokedark">
                     <p className="text-black dark:text-white">{category?.name}</p>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 dark:border-strokedark">
+                    <p className="text-black dark:text-white">{category?.slug}</p>
                   </td>
                   <td className="border-b border-[#eee] py-5 dark:border-strokedark mr-10">
                     <button
@@ -172,7 +183,7 @@ const TableThree: React.FC = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={3} className="text-center py-5">
+                <td colSpan={4} className="text-center py-5">
                   Không có danh mục nào.
                 </td>
               </tr>
@@ -182,6 +193,7 @@ const TableThree: React.FC = () => {
       </div>
     </div>
   );
+
 };
 
 export default TableThree;

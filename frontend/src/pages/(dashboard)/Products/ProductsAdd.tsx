@@ -44,10 +44,15 @@ const ProductsAdd = () => {
     if (type === 'checkbox') {
       const { checked } = e.target as HTMLInputElement;
       setProduct({ ...product, [name]: checked });
+    } else if (name === 'category') {
+      const selectedCategory = categories.find(category => category._id === value);
+      const selectedSlug = selectedCategory ? selectedCategory.slug : '';
+      setProduct({ ...product, category: value, slug: selectedSlug });
     } else {
       setProduct({ ...product, [name]: value });
     }
   };
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
