@@ -3,23 +3,11 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import DefaultLayout from '../_components/Layout/DefaultLayout';
 import { toast } from 'react-toastify';
+import { Product } from '@/common/types/product';
 
 const ProductsEdit = () => {
   const { id } = useParams();
-  const [product, setProduct] = useState({
-    name: '',
-    slug: '',
-    category: '',
-    price: 0,
-    image: '',
-    gallery: '',
-    description: '',
-    discount: 0,
-    countInStock: 0,
-    featured: false,
-    tags: '',
-    attributes: '',
-  });
+  const [product, setProduct] = useState<Product[]>([]);
   const [categories, setCategories] = useState([]);
   const [message, setMessage] = useState('');
   const navigate = useNavigate();

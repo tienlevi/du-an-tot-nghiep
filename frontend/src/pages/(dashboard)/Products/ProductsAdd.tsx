@@ -4,22 +4,10 @@ import DefaultLayout from '../_components/Layout/DefaultLayout';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Category } from '@/common/types/category';
+import { Product } from '@/common/types/product';
 
 const ProductsAdd = () => {
-  const [product, setProduct] = useState({
-    name: '',
-    slug: '',
-    category: '',
-    price: 0,
-    image: '',
-    gallery: '',
-    description: '',
-    discount: 0,
-    countInStock: 0,
-    featured: false,
-    tags: '',
-    attributes: '',
-  });
+  const [product, setProduct] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
