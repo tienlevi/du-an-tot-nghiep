@@ -114,7 +114,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <NavLink
                         to={`/admin`}
                         className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname === '/' ||
-                            pathname.includes('dashboard')) &&
+                          pathname.includes('dashboard')) &&
                           'bg-graydark dark:bg-meta-4'
                           }`}
                       >
@@ -199,23 +199,23 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   return (
                     <React.Fragment>
                       <NavLink
-                        to="#"
+                        to="/products/list"
                         className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname === '/products' ||
-                            pathname.includes('products')) &&
+                          pathname.includes('products')) &&
                           'bg-graydark dark:bg-meta-4'
                           }`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          sidebarExpanded
-                            ? handleClick()
-                            : setSidebarExpanded(true);
-                        }}
+                      // onClick={(e) => {
+                      //   e.preventDefault();
+                      //   sidebarExpanded
+                      //     ? handleClick()
+                      //     : setSidebarExpanded(true);
+                      // }}
                       >
                         <BiSolidCategory />
                         Product
                       </NavLink>
                       {/* <!-- Dropdown Menu Start --> */}
-                      <div
+                      {/* <div
                         className={`translate transform overflow-hidden ${!open && 'hidden'
                           }`}
                       >
@@ -232,7 +232,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             </NavLink>
                           </li>
                         </ul>
-                      </div>
+                      </div> */}
                       {/* <!-- Dropdown Menu End --> */}
                     </React.Fragment>
                   );
