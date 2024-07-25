@@ -32,6 +32,7 @@
     "react-apexcharts": "^1.4.1",
     "react-content-loader": "^7.0.2",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.52.1",
     "react-hot-toast": "^2.4.1",
     "react-i18next": "^14.1.2",
     "react-icons": "^4.12.0",
