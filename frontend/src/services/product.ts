@@ -1,3 +1,4 @@
+import { Product } from '@/common/types/product';
 import instance from '@/config/axios';
 
 export const getProducts = async () => {
@@ -9,7 +10,7 @@ export const getProducts = async () => {
   }
 };
 
-export const getProductById = async (id: string) => {
+export const getProductById = async (id: number | string) => {
   try {
     const response = await instance.get(`/products/${id}`);
     return response.data;
@@ -18,16 +19,16 @@ export const getProductById = async (id: string) => {
   }
 };
 
-export const addProduct = async (data: any) => {
+export const addProduct = async (product: Product) => {
   try {
-    const response = await instance.post('/products', data);
+    const response = await instance.post('/products', product);
     return response.data;
   } catch (error) {
     console.error('Lỗi khi xóa sản phẩm:', error);
   }
 };
 
-export const deleteProduct = async (id: string) => {
+export const deleteProduct = async (id: number | string) => {
   try {
     const response = await instance.delete(`/products/${id}`);
     return response.data;
@@ -36,9 +37,9 @@ export const deleteProduct = async (id: string) => {
   }
 };
 
-export const editProduct = async (id: string, data: any) => {
+export const editProduct = async (id: number | string, product: Product) => {
   try {
-    const response = await instance.put(`/products/${id}`, data);
+    const response = await instance.put(`/products/${id}`, product);
     return response.data;
   } catch (error) {
     console.log(error);
