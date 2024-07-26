@@ -98,6 +98,14 @@ const ProductsList: React.FC = () => {
 
   const columns: TableColumnsType<Product> = [
     {
+      title: 'Ảnh',
+      dataIndex: 'image',
+      key: 'image',
+      render: (text, record) => (
+        <img src={record.image} alt={record.name} style={{ width: 50, height: 50 }} />
+      ),
+    },
+    {
       title: 'Tên',
       dataIndex: 'name',
       key: 'name',
@@ -121,14 +129,6 @@ const ProductsList: React.FC = () => {
       sorter: (a, b) => a.price - b.price,
       sortOrder: sortedInfo.columnKey === 'price' ? sortedInfo.order : null,
       ellipsis: true,
-    },
-    {
-      title: 'Ảnh',
-      dataIndex: 'image',
-      key: 'image',
-      render: (text, record) => (
-        <img src={record.image} alt={record.name} style={{ width: 50, height: 50 }} />
-      ),
     },
     {
       title: 'Mô tả',
