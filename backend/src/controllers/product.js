@@ -10,39 +10,48 @@ export const create = async (req, res) => {
   }
 };
 
-export const getAllProducts = async (req, res) => {
-  const {
-    _page = 1,
-    _limit = 10,
-    _sort = "createdAt",
-    _order = "asc",
-    _expand,
-  } = req.query;
-  const options = {
-    page: _page,
-    limit: _limit,
-    sort: { [_sort]: _order === "desc" ? -1 : 1 },
-  };
-  const populateOptions = _expand ? [{ path: "category", select: "name" }] : [];
+export const getProducts = async (req, res) => {
   try {
-    const result = await Product.paginate(
-      { categoryId: null },
-      { ...options, populate: populateOptions }
-    );
-    if (result.docs.length === 0) throw new Error("No products found");
-    const response = {
-      data: result.docs,
-      pagination: {
-        currentPage: result.page,
-        totalPages: result.totalPages,
-        totalItems: result.totalDocs,
-      },
-    };
-    return res.status(200).json(response);
+    const data = await Product.find(req.body);
+    return res.status(StatusCodes.OK).json(data);
   } catch (error) {
-    return res.status(400).json({ message: error.message });
+    console.log(error);
   }
 };
+
+// export const getAllProducts = async (req, res) => {
+//   const {
+//     _page = 1,
+//     _limit = 10,
+//     _sort = "createdAt",
+//     _order = "asc",
+//     _expand,
+//   } = req.query;
+//   const options = {
+//     page: _page,
+//     limit: _limit,
+//     sort: { [_sort]: _order === "desc" ? -1 : 1 },
+//   };
+//   const populateOptions = _expand ? [{ path: "category", select: "name" }] : [];
+//   try {
+//     const result = await Product.paginate(
+//       { categoryId: null },
+//       { ...options, populate: populateOptions }
+//     );
+//     if (result.docs.length === 0) throw new Error("No products found");
+//     const response = {
+//       data: result.docs,
+//       pagination: {
+//         currentPage: result.page,
+//         totalPages: result.totalPages,
+//         totalItems: result.totalDocs,
+//       },
+//     };
+//     return res.status(200).json(response);
+//   } catch (error) {
+//     return res.status(400).json({ message: error.message });
+//   }
+// };
 
 export const getProductById = async (req, res) => {
   try {

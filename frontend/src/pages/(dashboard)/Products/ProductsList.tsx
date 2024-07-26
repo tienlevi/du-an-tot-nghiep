@@ -1,28 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from '@/common/types/product';
+import { Category } from '@/common/types/category';
 import { toast } from 'react-toastify';
 import DefaultLayout from '../_components/Layout/DefaultLayout';
+import { getProducts } from '@/services/product';
 
 const ProductsList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
-  console.log(products);
+  const fetchProducts = async () => {
+    const response = await getProducts();
+    setProducts(response);
+  };
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch('http://localhost:2202/api/v1/categories');
+      const data = await response.json();
+      setCategories(data.data);
+    } catch (error) {
+      console.error('Lỗi khi lấy danh sách danh mục:', error);
+    }
+  };
 
   useEffect(() => {
     fetchProducts();
+    fetchCategories();
   }, []);
 
-  const fetchProducts = async () => {
-    try {
-      const response = await fetch('http://localhost:2202/api/v1/products');
-      const data = await response.json();
-      setProducts(data.data);
-    } catch (error) {
-      console.error('Lỗi khi lấy danh sách sản phẩm:', error);
-    }
-  };
-  //hàm xóa sản phẩm
   const handleDelete = async (productId: string) => {
     const confirm = window.confirm('BẠN CÓ CHẮC CHẮN XÓA KHÔNG ?');
     if (confirm) {
@@ -47,6 +53,11 @@ const ProductsList: React.FC = () => {
     }
   };
 
+  const getCategoryName = (categoryId: string) => {
+    const category = categories.find((cat: any) => cat._id === categoryId);
+    return category ? category.name : 'Unknown';
+  };
+
   return (
     <DefaultLayout>
       <div className="container mx-auto">
@@ -64,15 +75,12 @@ const ProductsList: React.FC = () => {
             <thead>
               <tr className="bg-gray-100 border-b border-gray-300">
                 <th className="p-3 text-left">Tên</th>
-                <th className="p-3 text-left">Slug</th>
-                <th className="p-3 text-left">Loại</th>
+                <th className="p-3 text-left">Danh mục</th>
                 <th className="p-3 text-left">Giá</th>
                 <th className="p-3 text-left">Mô tả</th>
                 <th className="p-3 text-left">Giảm giá</th>
                 <th className="p-3 text-left">Số lượng trong kho</th>
-                <th className="p-3 text-left">Đặc trưng</th>
-                <th className="p-3 text-left">Tags</th>
-                <th className="p-3 text-left">Thuộc tính</th>
+                <th className="p-3 text-left">Sản phẩm nổi bật</th>
                 <th className="p-3 text-left">Hành Động</th>
               </tr>
             </thead>
@@ -82,6 +90,7 @@ const ProductsList: React.FC = () => {
                   key={product._id}
                   product={product}
                   onDelete={handleDelete}
+                  getCategoryName={getCategoryName}
                 />
               ))}
             </tbody>
@@ -95,18 +104,16 @@ const ProductsList: React.FC = () => {
 const ProductItem: React.FC<{
   product: Product;
   onDelete: (id: string) => void;
-}> = ({ product, onDelete }) => (
+  getCategoryName: (categoryId: string) => string;
+}> = ({ product, onDelete, getCategoryName }) => (
   <tr className="border-b border-gray-300">
     <td className="p-3">{product.name}</td>
-    <td className="p-3">{product.slug}</td>
-    <td className="p-3">{product.category}</td>
+    <td className="p-3">{getCategoryName(product.category)}</td>
     <td className="p-3">{product.price}</td>
     <td className="p-3">{product.description}</td>
     <td className="p-3">{product.discount}</td>
     <td className="p-3">{product.countInStock}</td>
     <td className="p-3">{product.featured ? 'Có' : 'Không'}</td>
-    <td className="p-3">{product.tags?.join(', ')}</td>
-    <td className="p-3">{product.attributes?.join(', ')}</td>
     <td className="p-3 flex justify-between">
       <Link
         to={`/products/edit/${product._id}`}

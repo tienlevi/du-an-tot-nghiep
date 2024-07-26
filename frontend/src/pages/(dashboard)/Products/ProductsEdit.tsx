@@ -1,195 +1,152 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import DefaultLayout from '../_components/Layout/DefaultLayout';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Category } from '@/common/types/category';
+import { Product } from '@/common/types/product';
+import { addProduct, editProduct, getProductById } from '@/services/product';
+
+interface Inputs {
+  name: string;
+  price: number;
+  image: string;
+  description: string;
+  category: string;
+  discount: number;
+  countInStock: number;
+  featured: boolean;
+}
 
 const ProductsEdit = () => {
-  const { id } = useParams();
-  const [product, setProduct] = useState({
-    name: '',
-    slug: '',
-    category: '',
-    price: 0,
-    image: '',
-    gallery: '',
-    description: '',
-    discount: 0,
-    countInStock: 0,
-    featured: false,
-    tags: '',
-    attributes: '',
-  });
+  const { id }: any = useParams();
+  const [categories, setCategories] = useState<Category[]>([]);
   const [message, setMessage] = useState('');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<Inputs>();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      console.log('Products id :', id);
+    const getData = async () => {
+      const response = await getProductById(id);
+      reset(response);
+    };
+    getData();
+  }, []);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:2202/api/v1/products/${id}`,
+          'http://localhost:2202/api/v1/categories',
         );
-        const fetchedProduct = response.data;
-        setProduct({
-          name: fetchedProduct.name,
-          slug: fetchedProduct.slug,
-          category: fetchedProduct.category,
-          price: fetchedProduct.price,
-          image: fetchedProduct.image,
-          gallery: fetchedProduct.gallery.join(', '), // Convert array to comma-separated string
-          description: fetchedProduct.description,
-          discount: fetchedProduct.discount,
-          countInStock: fetchedProduct.countInStock,
-          featured: fetchedProduct.featured,
-          tags: fetchedProduct.tags.join(', '), // Convert array to comma-separated string
-          attributes: fetchedProduct.attributes.join(', '), // Convert array to comma-separated string
-        });
+        setCategories(response.data.data);
       } catch (error) {
-        console.error('Error fetching product:', error);
+        console.error('Lỗi khi lấy danh sách danh mục:', error);
       }
     };
 
-    fetchProduct();
-  }, [id]);
+    fetchCategories();
+  }, []);
 
-  const handleChange = (e: any) => {
-    const { name, value, type, checked } = e.target;
-    setProduct({ ...product, [name]: type === 'checkbox' ? checked : value });
-  };
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-
+  const onSubmit = async (data: any) => {
     try {
-      const productData = {
-        ...product,
-        gallery: product.gallery.split(',').map((item) => item.trim()),
-        tags: product.tags.split(',').map((item) => item.trim()),
-        attributes: product.attributes.split(',').map((item) => item.trim()),
-      };
-
-      productData.attributes = productData.attributes.map((attr) =>
-        attr.replace(/['"\s]/g, ''),
-      );
-
-      const response = await axios.put(
-        `http://localhost:2202/api/v1/products/${id}`,
-        productData,
-      );
-      console.log(response.data);
-      setMessage('Product updated successfully!');
-      toast.success('CẬP NHẬT SẢN PHẨM THÀNH CÔNG');
-      navigate('/products/productslist');
+      const response = await editProduct(id, data);
+      toast.success('Sửa sản phẩm thành công');
+      navigate('/products/list');
+      return response;
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        setMessage(
-          `Failed to update product: ${
-            error.response?.data.message || error.message
-          }`,
-        );
-      } else {
-        setMessage('Failed to update product: An unexpected error occurred.');
-      }
-      console.error('Error updating product:', error);
+      console.log(error);
     }
   };
 
   return (
     <DefaultLayout>
       <div className="max-w-lg mx-auto mt-8">
-        <h1 className="text-2xl font-bold mb-6">CẬP NHẬT SẢN PHẨM </h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <h1 className="text-2xl font-bold mb-6">Sửa Sản Phẩm</h1>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <input
             type="text"
-            name="name"
-            value={product.name}
-            onChange={handleChange}
+            {...register('name')}
             placeholder="Name"
             required
             className="w-full p-2 border border-gray-300 rounded"
           />
-          <input
+          {/* <input
             type="text"
             name="slug"
-            value={product.slug}
-            onChange={handleChange}
+            
             placeholder="Slug"
             className="w-full p-2 border border-gray-300 rounded"
-          />
-          <input
-            type="text"
-            name="category"
-            value={product.category}
-            onChange={handleChange}
-            placeholder="Category"
+          /> */}
+          <select
+            {...register('category')}
             required
             className="w-full p-2 border border-gray-300 rounded"
-          />
+          >
+            <option value="" disabled className="text-gray-500">
+              Danh mục
+            </option>
+            {categories.map((category) => (
+              <option key={category._id} value={category._id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+
           <input
             type="number"
-            name="price"
-            value={product.price}
-            onChange={handleChange}
+            {...register('price')}
             placeholder="Price"
             required
             className="w-full p-2 border border-gray-300 rounded"
           />
           <input
             type="text"
-            name="image"
-            value={product.image}
-            onChange={handleChange}
+            {...register('image')}
             placeholder="Image URL"
             className="w-full p-2 border border-gray-300 rounded"
           />
-          <input
+          {/* <input
             type="text"
             name="gallery"
             value={product.gallery}
             onChange={handleChange}
-            placeholder="Gallery (comma separated)"
+            placeholder="Gallery"
             className="w-full p-2 border border-gray-300 rounded"
-          />
+          /> */}
           <textarea
-            name="description"
-            value={product.description}
-            onChange={handleChange}
+            {...register('description')}
             placeholder="Description"
             className="w-full p-2 border border-gray-300 rounded"
           />
           <input
             type="number"
-            name="discount"
-            value={product.discount}
-            onChange={handleChange}
+            {...register('discount')}
             placeholder="Discount"
             className="w-full p-2 border border-gray-300 rounded"
           />
           <input
             type="number"
-            name="countInStock"
-            value={product.countInStock}
-            onChange={handleChange}
+            {...register('countInStock')}
             placeholder="Count in Stock"
             className="w-full p-2 border border-gray-300 rounded"
           />
           <div className="flex items-center">
-            <input
-              type="checkbox"
-              name="featured"
-              checked={product.featured}
-              onChange={handleChange}
-              className="mr-2"
-            />
+            <input type="checkbox" {...register('featured')} className="mr-2" />
             <span>Featured</span>
           </div>
-          <input
+          {/* <input
             type="text"
             name="tags"
             value={product.tags}
             onChange={handleChange}
-            placeholder="Tags (comma separated)"
+            placeholder="Tags"
             className="w-full p-2 border border-gray-300 rounded"
           />
           <input
@@ -197,14 +154,14 @@ const ProductsEdit = () => {
             name="attributes"
             value={product.attributes}
             onChange={handleChange}
-            placeholder="Attributes (comma separated)"
+            placeholder="Attributes"
             className="w-full p-2 border border-gray-300 rounded"
-          />
+          /> */}
           <button
             type="submit"
-            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+            className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
           >
-            Update Product
+            Edit Product
           </button>
         </form>
         {message && <p className="mt-4 text-green-500">{message}</p>}

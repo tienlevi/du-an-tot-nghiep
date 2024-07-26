@@ -1,21 +1,21 @@
-import { useState } from "react";
-import { CircularProgress, Select, MenuItem, Snackbar } from "@mui/material";
-import { Alert } from "@mui/material";
-import { useLang } from "../../context/LangContext.jsx";
+import { useState } from 'react';
+import { CircularProgress, Select, MenuItem, Snackbar } from '@mui/material';
+import { Alert } from '@mui/material';
+import { useLang } from '@/context/LangContext';
 
 function ChangeLang() {
-  const { lang, changeLanguage } = useLang();
+  const { lang, changeLanguage }: any = useLang();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState("en");
+  const [selectedLanguage, setSelectedLanguage] = useState('en');
   const [loading, setLoading] = useState(false);
 
   const styles = {
-    display: loading ? "none" : "block",
-    "& .MuiSelect-select": {
-      color: "white",
+    display: loading ? 'none' : 'block',
+    '& .MuiSelect-select': {
+      color: 'white',
     },
-    "@media (max-width: 768px)": {
-      fontSize: "12px",
+    '@media (max-width: 768px)': {
+      fontSize: '12px',
     },
   };
 
@@ -27,20 +27,20 @@ function ChangeLang() {
     setSelectedLanguage(selectedLang);
 
     setTimeout(() => {
-      window.location.href = "/";
+      window.location.href = '/';
       setLoading(false);
     }, 1000);
   };
 
   const handleMassage = () => {
-    if (selectedLanguage === "en") {
-      return "The page will be reloaded and the language will be changed to English!";
-    } else if (selectedLanguage === "gr") {
-      return "Die Seite wird neu geladen und die Sprache wird auf Deutsch geändert!";
-    } else if (selectedLanguage === "ar") {
-      return "سيتم إعادة تحميل الصفحة وتغيير اللغة للعربية!";
-    } else if (selectedLanguage === "es") {
-      return "¡La página se recargará y el idioma se cambiará a español!";
+    if (selectedLanguage === 'en') {
+      return 'The page will be reloaded and the language will be changed to English!';
+    } else if (selectedLanguage === 'gr') {
+      return 'Die Seite wird neu geladen und die Sprache wird auf Deutsch geändert!';
+    } else if (selectedLanguage === 'ar') {
+      return 'سيتم إعادة تحميل الصفحة وتغيير اللغة للعربية!';
+    } else if (selectedLanguage === 'es') {
+      return '¡La página se recargará y el idioma se cambiará a español!';
     }
   };
 
@@ -61,10 +61,10 @@ function ChangeLang() {
         <>
           <CircularProgress
             sx={{
-              color: "white",
-              width: "30px !important",
-              height: "30px !important",
-              my: "10px !important",
+              color: 'white',
+              width: '30px !important',
+              height: '30px !important',
+              my: '10px !important',
             }}
           />
           <Snackbar
@@ -72,7 +72,7 @@ function ChangeLang() {
             autoHideDuration={1000}
             onClose={() => setSnackbarOpen(false)}
           >
-            <Alert severity={"success"} sx={{ width: "100%" }}>
+            <Alert severity={'success'} sx={{ width: '100%' }}>
               {handleMassage()}
             </Alert>
           </Snackbar>

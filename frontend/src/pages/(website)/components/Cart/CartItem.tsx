@@ -66,15 +66,16 @@ const CartItem = ({ item }) => {
         <p className="text-gray-500">${item.price}</p>
       </div>
       <div className="flex items-center border-2 border-gray-300  rounded px-2 py-1  mr-2 gap-3">
+        <button
+          className=" rounded-full hover:bg-gray-200 text-gray-400 "
+          onClick={handleIncreaseFunc}
+        >
+          +
+        </button>
         <p className="text-gray-500">{quantity}</p>
 
-        <div className="flex flex-col items-center justify-center ">
-          <button
-            className="px-1 rounded-full hover:bg-gray-200 text-gray-400 "
-            onClick={handleIncreaseFunc}
-          >
-            +
-          </button>
+        <div className=" ">
+
           <button
             className="px-1 rounded-full hover:bg-gray-200 text-gray-400 "
             onClick={handleDecreaseFunc}

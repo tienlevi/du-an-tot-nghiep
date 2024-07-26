@@ -9,7 +9,7 @@ import productRouter from "./routers/product";
 import categoryRouter from "./routers/category";
 import cartRouter from "./routers/cart";
 import orderRouter from "./routers/order";
-import uploadRouter from "./routers/upload"
+import uploadRouter from "./routers/upload";
 const app = express();
 dotenv.config();
 // middleware

@@ -2,14 +2,14 @@ import { Router } from "express";
 import {
   create,
   deleteProductById,
-  getAllProducts,
   getProductById,
+  getProducts,
   related,
   updateProductById,
 } from "../controllers/product";
 
 const router = Router();
-router.get("/products", getAllProducts);
+router.get("/products", getProducts);
 router.get("/products/:id", getProductById);
 router.get("/products/:categoryId/related/:productId", related);
 router.delete("/products/:id", deleteProductById);
