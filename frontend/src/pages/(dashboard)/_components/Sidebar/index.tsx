@@ -231,6 +231,28 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               Product List
                             </NavLink>
                           </li>
+                          <li>
+                            <NavLink
+                              to="/products/productsadd"
+                              className={({ isActive }) =>
+                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                (isActive && '!text-white')
+                              }
+                            >
+                              Product Add
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink
+                              to="/products/productsedit"
+                              className={({ isActive }) =>
+                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                (isActive && '!text-white')
+                              }
+                            >
+                              Product Edit
+                            </NavLink>
+                          </li>
                         </ul>
                       </div> */}
                       {/* <!-- Dropdown Menu End --> */}
