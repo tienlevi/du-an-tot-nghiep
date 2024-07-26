@@ -36,7 +36,6 @@ function App() {
       <Router />
     </>
   );
-  //Thăng shtnagw sthansladasljkdhakjsdhj
 }
 
 export default App;
