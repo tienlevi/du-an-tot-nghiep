@@ -64,7 +64,7 @@ const ProductsAdd = () => {
           <input
             type="text"
             {...register('name')}
-            placeholder="Name"
+            placeholder="Tên Sản Phẩm"
             required
             className="w-full p-2 border border-gray-300 rounded"
           />
@@ -93,7 +93,7 @@ const ProductsAdd = () => {
           <input
             type="number"
             {...register('price')}
-            placeholder="Price"
+            placeholder="Gía"
             required
             className="w-full p-2 border border-gray-300 rounded"
           />
@@ -113,19 +113,19 @@ const ProductsAdd = () => {
           /> */}
           <textarea
             {...register('description')}
-            placeholder="Description"
+            placeholder="Mô Tả"
             className="w-full p-2 border border-gray-300 rounded"
           />
           <input
             type="number"
             {...register('discount')}
-            placeholder="Discount"
+            placeholder="Giảm Giá"
             className="w-full p-2 border border-gray-300 rounded"
           />
           <input
             type="number"
             {...register('countInStock')}
-            placeholder="Count in Stock"
+            placeholder="Số lượng trong kho"
             className="w-full p-2 border border-gray-300 rounded"
           />
           <div className="flex items-center">
@@ -152,7 +152,7 @@ const ProductsAdd = () => {
             type="submit"
             className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
           >
-            Add Product
+            Thêm Sản Phẩm
           </button>
         </form>
         {message && <p className="mt-4 text-green-500">{message}</p>}
