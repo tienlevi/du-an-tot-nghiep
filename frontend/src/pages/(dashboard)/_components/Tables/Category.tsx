@@ -33,7 +33,7 @@ const TableThree: React.FC = () => {
 
   const handleAddCategory = async () => {
     const newName = prompt('Nhập tên danh mục mới:');
-    const newSlug = prompt('Nhập slug cho danh mục mới:');
+    const newSlug = prompt('Nhập mô tả cho danh mục mới:');
     if (newName && newSlug) {
       try {
         const response = await fetch('http://localhost:2202/api/v1/categories', {
