@@ -196,15 +196,15 @@ const ProductsList: React.FC = () => {
   return (
     <DefaultLayout>
       <div className="container mx-auto">
-        <h2 className="text-3xl font-semibold mb-4">Danh sách sản phẩm</h2>
-        <Link
-          to={'/products/add'}
-          className="bg-red-500 text-white py-2 px-4 rounded"
-        >
-          Thêm Sản Phẩm
-        </Link>
-        <br />
-        <br />
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-3xl font-semibold">Danh sách sản phẩm</h2>
+          <Link
+            to={'/products/add'}
+            className="bg-red-500 text-white py-2 px-4 rounded"
+          >
+            Thêm Sản Phẩm
+          </Link>
+        </div>
         <Input
           placeholder="Tìm kiếm sản phẩm"
           value={searchQuery}
