@@ -116,7 +116,7 @@ const TableThree: React.FC = () => {
 
         if (response.ok) {
           setCategories(categories.filter((category) => category._id !== categoryId));
-          toast.error('Xóa danh mục thành công');
+          toast.success('Xóa danh mục thành công');
         } else {
           console.error('Lỗi khi xóa danh mục:', responseData);
           alert('Lỗi rồi');

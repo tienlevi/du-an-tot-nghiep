@@ -11,7 +11,7 @@ import { addProduct } from '@/services/product';
 interface Inputs {
   name: string;
   price: number;
-  image: string;
+  image: FileList;
   description: string;
   category: string;
   discount: number;
@@ -44,12 +44,21 @@ const ProductsAdd = () => {
     fetchCategories();
   }, []);
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: Inputs) => {
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('price', data.price.toString());
+    formData.append('image', data.image[0]); // Lấy file ảnh từ FileList
+    formData.append('description', data.description);
+    formData.append('category', data.category);
+    formData.append('discount', data.discount.toString());
+    formData.append('countInStock', data.countInStock.toString());
+    formData.append('featured', data.featured ? 'true' : 'false');
+
     try {
-      const response = await addProduct(data);
+      const response = await addProduct(formData);
       toast.success('Thêm sản phẩm thành công');
       navigate('/products/list');
-
       return response;
     } catch (error) {
       console.log(error);
@@ -68,13 +77,6 @@ const ProductsAdd = () => {
             required
             className="w-full p-2 border border-gray-300 rounded"
           />
-          {/* <input
-            type="text"
-            name="slug"
-            
-            placeholder="Slug"
-            className="w-full p-2 border border-gray-300 rounded"
-          /> */}
           <select
             {...register('category')}
             required
@@ -93,24 +95,20 @@ const ProductsAdd = () => {
           <input
             type="number"
             {...register('price')}
-            placeholder="Gía"
+            placeholder="Giá"
             required
             className="w-full p-2 border border-gray-300 rounded"
           />
+
+          {/* Thêm input cho việc upload ảnh */}
           <input
-            type="text"
-            {...register('image')}
-            placeholder="Image URL"
+            type="file"
+            {...register('image', { required: true })}
+            accept="image/*"
             className="w-full p-2 border border-gray-300 rounded"
           />
-          {/* <input
-            type="text"
-            name="gallery"
-            value={product.gallery}
-            onChange={handleChange}
-            placeholder="Gallery"
-            className="w-full p-2 border border-gray-300 rounded"
-          /> */}
+          {errors.image && <span className="text-red-500">Vui lòng chọn ảnh</span>}
+
           <textarea
             {...register('description')}
             placeholder="Mô Tả"
@@ -132,22 +130,7 @@ const ProductsAdd = () => {
             <input type="checkbox" {...register('featured')} className="mr-2" />
             <span>Featured</span>
           </div>
-          {/* <input
-            type="text"
-            name="tags"
-            value={product.tags}
-            onChange={handleChange}
-            placeholder="Tags"
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-          <input
-            type="text"
-            name="attributes"
-            value={product.attributes}
-            onChange={handleChange}
-            placeholder="Attributes"
-            className="w-full p-2 border border-gray-300 rounded"
-          /> */}
+
           <button
             type="submit"
             className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
