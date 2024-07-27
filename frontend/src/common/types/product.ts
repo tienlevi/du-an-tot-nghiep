@@ -4,7 +4,7 @@ export type Product = {
   slug: string;
   category: string; // Assuming category stores ObjectId as a string
   price: number;
-  img?: string;
+  image?: string;
   gallery?: string[];
   description?: string;
   discount?: number;
