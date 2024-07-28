@@ -45,6 +45,11 @@ const ProductsAdd = () => {
   }, []);
 
   const onSubmit = async (data: Inputs) => {
+    if (data.image.length === 0) {
+      toast.error('Vui lòng chọn ảnh');
+      return;
+    }
+
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('price', data.price.toString());
@@ -61,7 +66,8 @@ const ProductsAdd = () => {
       navigate('/products/list');
       return response;
     } catch (error) {
-      console.log(error);
+      console.error('Lỗi khi thêm sản phẩm:', error);
+      toast.error('Có lỗi xảy ra, vui lòng thử lại');
     }
   };
 
@@ -102,12 +108,14 @@ const ProductsAdd = () => {
 
           {/* Thêm input cho việc upload ảnh */}
           <input
-            type="file"
+            type="text"
             {...register('image', { required: true })}
             accept="image/*"
             className="w-full p-2 border border-gray-300 rounded"
           />
-          {errors.image && <span className="text-red-500">Vui lòng chọn ảnh</span>}
+          {errors.image && (
+            <span className="text-red-500">Vui lòng chọn ảnh</span>
+          )}
 
           <textarea
             {...register('description')}
