@@ -3,7 +3,7 @@ import instance from '@/config/axios';
 export const getCart = async () => {
   try {
     const response = await instance.get('/cart');
-    return response;
+    return response.data;
   } catch (error) {
     console.error('Lỗi khi lấy thông tin giỏ hàng:', error);
   }
@@ -15,7 +15,7 @@ export const addToCart = async (
 ) => {
   try {
     const response = await instance.post('/cart', { productId, quantity });
-    return response;
+    return response.data;
   } catch (error) {
     console.error('Lỗi khi thêm sản phẩm vào giỏ hàng:', error);
   }
@@ -27,7 +27,7 @@ export const updateCart = async (
 ) => {
   try {
     const response = await instance.put('/cart', { productId, quantity });
-    return response;
+    return response.data;
   } catch (error) {
     console.error('Lỗi khi cập nhật giỏ hàng:', error);
   }
