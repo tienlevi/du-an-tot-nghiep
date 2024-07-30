@@ -3,10 +3,11 @@ import Product from "../models/product";
 
 export const create = async (req, res) => {
   try {
-    const product = await Product.create(req.body);
-    return res.status(StatusCodes.CREATED).json(product);
+    const slug = req.body.name.toLowerCase().replace(/\s+/g, "-");
+    const product = await Product.create({ ...req.body, slug: slug });
+    return res.status(200).json(product);
   } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
   }
 };
 

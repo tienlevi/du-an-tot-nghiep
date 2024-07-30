@@ -49,16 +49,15 @@ const ProductsList: React.FC = () => {
     mutationKey: ['products'],
     mutationFn: async (id: string) => {
       if (confirm('Bạn có muốn xóa không ?')) {
-        const response = await deleteProduct(id);
-        return response;
+        try {
+          const response = await deleteProduct(id);
+          toast.success('Xóa thành công');
+          queryClient.invalidateQueries({ queryKey: ['products'] });
+          return response;
+        } catch (error) {
+          toast.error('Có lỗi xảy ra');
+        }
       }
-    },
-    onSuccess: () => {
-      toast.success('Xóa thành công');
-      queryClient.invalidateQueries({ queryKey: ['products'] });
-    },
-    onError: () => {
-      toast.error('Có lỗi xảy ra');
     },
   });
 

@@ -1,7 +1,7 @@
 export type Product = {
   _id?: string;
   name: string;
-  slug: string;
+  slug?: string;
   category: string; // Assuming category stores ObjectId as a string
   price: number;
   image?: string;

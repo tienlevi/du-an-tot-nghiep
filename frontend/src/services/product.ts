@@ -19,7 +19,7 @@ export const getProductById = async (id: number | string) => {
   }
 };
 
-export const addProduct = async (product: Product) => {
+export const addProduct = async (product: any) => {
   try {
     const response = await instance.post('/products', product);
     return response.data;
