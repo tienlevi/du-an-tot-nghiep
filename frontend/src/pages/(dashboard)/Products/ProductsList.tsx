@@ -105,7 +105,7 @@ const ProductsList: React.FC = () => {
       sorter: (a, b) => a.name.length - b.name.length,
       sortOrder: sortedInfo.columnKey === 'name' ? sortedInfo.order : null,
       ellipsis: true,
-      render: (text) => <span>{text}</span>, // giữ nguyên định dạng tên sản phẩm
+      render: (text) => <span>{text}</span>, 
     },
     {
       title: 'Danh mục',

@@ -37,6 +37,7 @@ const Category = () => {
   };
 
   return (
+
     <div className="w-full">
       <NavTitle title="Shop by Category" icons={true} />
       <div>
@@ -49,7 +50,8 @@ const Category = () => {
               <input
                 type="checkbox"
                 id={item._id}
-                checked={checkedCategorys.some((b) => b._id === item._id)}
+                checked={checkedCategorys?.some((b) => b._id === item._id)}
+
                 onChange={() => handleToggleCategory(item)}
               />
               {item.title}
