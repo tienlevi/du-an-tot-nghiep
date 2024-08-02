@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import DefaultLayout from '../_components/Layout/DefaultLayout';
@@ -6,7 +7,7 @@ import { toast } from 'react-toastify';
 import { Category } from '@/common/types/category';
 import { editProduct, getProductById } from '@/services/product';
 import { getCategories } from '@/services/category';
-import { useEffect } from 'react';
+import UploadCloundinary from '@/common/utils/cloudinary';
 
 interface Inputs {
   name: string;
@@ -21,6 +22,7 @@ interface Inputs {
 
 const ProductsEdit = () => {
   const { id }: any = useParams();
+  const element = useRef<HTMLInputElement>(null);
   const {
     register,
     handleSubmit,
@@ -42,10 +44,13 @@ const ProductsEdit = () => {
       return response;
     },
   });
+
   const { mutate } = useMutation({
     mutationKey: ['products'],
     mutationFn: async (data: any) => {
-      return await editProduct(id, data);
+      const fileImage = element.current?.files?.[0];
+      const image = await UploadCloundinary(fileImage);
+      return await editProduct(id, { ...data, image: image.secure_url });
     },
     onSuccess: (data: any) => {
       if (data) {
@@ -86,7 +91,7 @@ const ProductsEdit = () => {
             required
             className="w-full my-2 p-2 border border-gray-300 rounded"
           >
-            <option value="" selected={true} className="text-gray-500">
+            <option value="" className="text-gray-500">
               Danh mục
             </option>
             {categories?.data?.map((category: Category) => (
@@ -105,15 +110,9 @@ const ProductsEdit = () => {
           />
 
           {/* Thêm input cho việc upload ảnh */}
-          <input
-            type="text"
-            {...register('image', { required: true })}
-            className="w-full my-2 p-2 border border-gray-300 rounded"
-          />
-          {errors.image && (
-            <span className="text-red-500">Vui lòng chọn ảnh</span>
-          )}
-
+          <p>Ảnh</p>
+          <img src={product?.image} alt="" className="h-[450px]" />
+          <input ref={element} type="file" className="w-full my-2 p-2" />
           <textarea
             {...register('description')}
             placeholder="Mô Tả"
