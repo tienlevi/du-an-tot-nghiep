@@ -61,8 +61,8 @@ const ProductsEdit = () => {
       }
       return;
     },
-    onError: (error) => {
-      console.log(error);
+    onError: (error:any) => {
+      toast.error(error.message || 'Có lỗi xảy ra khi sửa sản phẩm');
     },
   });
 

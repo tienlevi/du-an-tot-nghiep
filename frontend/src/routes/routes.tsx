@@ -31,8 +31,10 @@ import ProductsEdit from '@/pages/(dashboard)/Products/ProductsEdit';
 import ProductsList from '@/pages/(dashboard)/Products/ProductsList';
 import Profile from '@/pages/(dashboard)/Profile';
 import Settings from '@/pages/(dashboard)/Settings';
-import Tables from '@/pages/(dashboard)/Tables';
 import PageTitle from '@/pages/(dashboard)/_components/PageTitle';
+import CategoryAdd from '@/pages/(dashboard)/Category/CategoryAdd';
+import CategoryEdit from '@/pages/(dashboard)/Category/CategoryEdit';
+import CategoryList from '@/pages/(dashboard)/Category/CategoryList';
 
 function DashboardRoute() {
   return (
@@ -88,7 +90,6 @@ function DashboardRoute() {
                   </>
                 }
               />
-              {/* Products */}
               <Route
                 path="/products/list"
                 element={
@@ -117,15 +118,35 @@ function DashboardRoute() {
                 }
               />
               <Route
-                path="/tables"
+                path="/category/list"
                 element={
                   <>
                     <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <Tables />
+                    <CategoryList />
                   </>
                 }
               />
               <Route
+                path="/category/add"
+                element={
+                  <>
+                    <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                    <CategoryAdd />
+                  </>
+                }
+              />
+              <Route
+                path="/category/edit/:id"
+                element={
+                  <>
+                    <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                    <CategoryEdit />
+                  </>
+                }
+              />
+
+              <Route
+
                 path="/settings"
                 element={
                   <>
