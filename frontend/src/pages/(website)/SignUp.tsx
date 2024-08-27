@@ -3,15 +3,35 @@ import { Link } from 'react-router-dom';
 import { TextField, Button, Snackbar } from '@mui/material';
 import { Alert } from '@mui/material';
 import SignImg from './SignImg.png';
+import instance from '@/config/axios';
 
 import i18n from './components/common/components/LangConfig';
 
 const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [open, setOpen] = useState(false);
+
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await instance.post('/auth/signup', {
+        email,
+        password
+      });
+      console.log(response.data);
+      setSuccess('Đăng ký thành công');
+      setError('');
+      setOpen(true);
+    } catch (error) {
+      console.error(error);
+      setError('Đăng ký thất bại');
+      setSuccess('');
+      setOpen(true);
+    }
+  };
 
   return (
     <div className="relative flex max-lg:flex-col-reverse justify-center  md:justify-start items-center mb-36 gap-12 lg:mt-28 xl:gap-24 ">
@@ -21,7 +41,7 @@ const SignUp = () => {
           {i18n.t('signUpPage.title')}
         </h1>
         <p>{i18n.t('signUpPage.enter')}</p>
-        <form className="flex flex-col gap-6 w-72 md:w-96">
+        <form className="flex flex-col gap-6 w-72 md:w-96" onSubmit={onSubmit}>
           <TextField
             label={i18n.t('signUpPage.email')}
             variant="standard"

@@ -1,12 +1,14 @@
+import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import DefaultLayout from '../_components/Layout/DefaultLayout';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Category } from '@/common/types/category';
-import { addProduct, editProduct } from '@/services/product';
+import { addProduct } from '@/services/product';
 import { getCategories } from '@/services/category';
-import { useEffect } from 'react';
+import UploadCloundinary from '@/common/utils/cloudinary';
+import usePreview from '@/common/hooks/usePreview';
 
 interface Inputs {
   name: string;
@@ -20,11 +22,12 @@ interface Inputs {
 }
 
 const ProductsAdd = () => {
+  const element = useRef<HTMLInputElement>(null);
+  const { file, handleChangeFile } = usePreview();
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm<Inputs>();
   const navigate = useNavigate();
   const { data: categories } = useQuery({
@@ -37,7 +40,9 @@ const ProductsAdd = () => {
   const { mutate } = useMutation({
     mutationKey: ['products'],
     mutationFn: async (data: any) => {
-      return await addProduct(data);
+      const fileImage = element.current?.files?.[0];
+      const image = await UploadCloundinary(fileImage);
+      return await addProduct({ ...data, image: image?.secure_url });
     },
     onSuccess: (data: any) => {
       if (data) {
@@ -93,14 +98,16 @@ const ProductsAdd = () => {
           />
 
           {/* Thêm input cho việc upload ảnh */}
-          <input
-            type="text"
-            {...register('image', { required: true })}
-            className="w-full my-2 p-2 border border-gray-300 rounded"
-          />
-          {errors.image && (
-            <span className="text-red-500">Vui lòng chọn ảnh</span>
+          <p>Ảnh</p>
+          {file !== undefined && (
+            <img src={file} alt="" className="h-[450px]" />
           )}
+          <input
+            ref={element}
+            type="file"
+            onChange={handleChangeFile}
+            className="w-full my-2 p-2"
+          />
 
           <textarea
             {...register('description')}

@@ -7,7 +7,7 @@ import About from '@/pages/(website)/About';
 import Account from '@/pages/(website)/Account';
 import AllProducts from '@/pages/(website)/AllProducts';
 import Cart from '@/pages/(website)/Cart';
-import Category from '@/pages/(website)/Category';
+// import Category from '@/pages/(website)/Category';
 import Checkout from '@/pages/(website)/Checkout';
 import ScrollToTop from '@/pages/(website)/components/common/components/ScrollToTop';
 import Contact from '@/pages/(website)/Contact';
