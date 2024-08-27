@@ -2,12 +2,13 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import DefaultLayout from '../_components/Layout/DefaultLayout';
-import { addCategory } from '@/services/category'; // Đảm bảo bạn đã định nghĩa hàm addCategory trong dịch vụ của mình
+import { addCategory } from '@/services/category';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
 interface Inputs {
     name: string;
+    image: string
 }
 
 const CategoryAdd: React.FC = () => {
@@ -28,8 +29,8 @@ const CategoryAdd: React.FC = () => {
         onSuccess: () => {
             queryClient.invalidateQueries(['categories']);
             toast.success('Danh mục đã được thêm thành công');
-            navigate('/categorylist')
-            reset(); // Đặt lại các trường của form
+            navigate('/category/list')
+            reset();
         },
         onError: (error: any) => {
             toast.error(error.message || 'Có lỗi xảy ra khi thêm danh mục');
@@ -53,6 +54,15 @@ const CategoryAdd: React.FC = () => {
                     />
                     {errors.name && (
                         <span className="text-red-500">{errors.name.message}</span>
+                    )}
+                    <input
+                        type="text"
+                        {...register('image', { required: true })}
+                        placeholder='ảnh danh mục'
+                        className="w-full my-2 p-2 border border-gray-300 rounded"
+                    />
+                    {errors.image && (
+                        <span className="text-red-500">Vui lòng chọn ảnh</span>
                     )}
                     <button
                         type="submit"

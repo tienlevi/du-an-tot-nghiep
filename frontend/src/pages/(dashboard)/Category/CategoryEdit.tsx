@@ -8,6 +8,7 @@ import DefaultLayout from '../_components/Layout/DefaultLayout';
 
 interface Inputs {
     name: string;
+    image: string
 }
 
 const CategoryEdit = () => {
@@ -24,7 +25,7 @@ const CategoryEdit = () => {
         queryKey: ['category', id],
         queryFn: async () => {
             const response = await getCategoryById(id);
-            return response;
+            return response.data;
         },
     });
 
@@ -66,6 +67,15 @@ const CategoryEdit = () => {
                         {...register('name', { required: 'Vui lòng nhập tên danh mục!' })}
                         className="w-full p-2 border border-gray-300 rounded"
                     />
+                    {/* Thêm input cho việc upload ảnh */}
+                    <input
+                        type="text"
+                        {...register('image', { required: true })}
+                        className="w-full my-2 p-2 border border-gray-300 rounded"
+                    />
+                    {errors.image && (
+                        <span className="text-red-500">Vui lòng chọn ảnh</span>
+                    )}
                     <button
                         type="submit"
                         className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"

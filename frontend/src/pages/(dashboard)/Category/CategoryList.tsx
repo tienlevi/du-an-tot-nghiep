@@ -12,7 +12,7 @@ const CategoryList: React.FC = () => {
         queryKey: ['categories'],
         queryFn: async () => {
             const response = await getCategories();
-            const res = await response.data; // Đảm bảo đúng định dạng dữ liệu trả về
+            const res = await response.data;
             return res
         },
     });
@@ -25,7 +25,7 @@ const CategoryList: React.FC = () => {
                 try {
                     const response = await deleteCategory(id);
                     toast.success('Xóa thành công');
-                    queryClient.invalidateQueries({ queryKey: ['edit_categories'] });
+                    queryClient.invalidateQueries({ queryKey: ['categories'] });
                     return response;
                 } catch (error) {
                     toast.error('Có lỗi xảy ra');
@@ -45,6 +45,18 @@ const CategoryList: React.FC = () => {
             title: 'Tên danh mục',
             dataIndex: 'name',
             key: 'name',
+        },
+        {
+            title: 'Ảnh',
+            dataIndex: 'image',
+            key: 'image',
+            render: (text, record) => (
+                <img
+                    src={record?.image}
+                    alt={record.name}
+                    style={{ width: 50, height: 50 }}
+                />
+            ),
         },
         {
             title: 'Hành Động',
