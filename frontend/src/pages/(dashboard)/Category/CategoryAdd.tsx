@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import DefaultLayout from '../_components/Layout/DefaultLayout';
-import { addCategory } from '@/services/category'; // Đảm bảo bạn đã định nghĩa hàm addCategory trong dịch vụ của mình
+import { addCategory } from '@/services/category';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import UploadCloundinary from '@/common/utils/cloudinary';
+import usePreview from '@/common/hooks/usePreview';
 
 interface Inputs {
     name: string;
+    image: string
 }
 
 const CategoryAdd: React.FC = () => {
+    const { file, handleChangeFile } = usePreview();
     const {
         register,
         handleSubmit,
@@ -18,18 +22,20 @@ const CategoryAdd: React.FC = () => {
         reset,
     } = useForm<Inputs>();
     const queryClient = useQueryClient();
-
+    const element = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
 
     const { mutate } = useMutation({
-        mutationFn: async (data: Inputs) => {
-            return await addCategory(data);
+        mutationFn: async (data: any) => {
+            const fileImage = element.current?.files?.[0];
+            const image = await UploadCloundinary(fileImage);
+            return await addCategory({ ...data, image: image?.secure_url });
         },
         onSuccess: () => {
             queryClient.invalidateQueries(['categories']);
             toast.success('Danh mục đã được thêm thành công');
-            navigate('/categorylist')
-            reset(); // Đặt lại các trường của form
+            navigate('/category/list')
+            reset();
         },
         onError: (error: any) => {
             toast.error(error.message || 'Có lỗi xảy ra khi thêm danh mục');
@@ -54,6 +60,16 @@ const CategoryAdd: React.FC = () => {
                     {errors.name && (
                         <span className="text-red-500">{errors.name.message}</span>
                     )}
+                    <p>Ảnh</p>
+                    {file !== undefined && (
+                        <img src={file} alt="" className="h-[450px]" />
+                    )}
+                    <input
+                        ref={element}
+                        type="file"
+                        onChange={handleChangeFile}
+                        className="w-full my-2 p-2"
+                    />
                     <button
                         type="submit"
                         className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"

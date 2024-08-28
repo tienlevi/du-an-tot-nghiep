@@ -1,20 +1,22 @@
 import slugify from "slugify";
 import Category from "../models/category";
 import Product from "../models/product";
-
 import { StatusCodes } from "http-status-codes";
 
+// Tạo danh mục mới
 export const create = async (req, res) => {
     try {
+        const { name, image } = req.body; 
 
-        if (!req.body.name) {
+        if (!name) {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: "Tên danh mục là bắt buộc!" });
         }
 
-        const slug = slugify(req.body.name, { lower: true });
+        const slug = slugify(name, { lower: true });
         const category = await Category.create({
-            name: req.body.name,
-            slug: slug,
+            name,
+            slug,
+            image 
         });
 
         return res.status(StatusCodes.CREATED).json(category);
@@ -23,7 +25,7 @@ export const create = async (req, res) => {
     }
 };
 
-
+// Lấy tất cả danh mục
 export const getAll = async (req, res) => {
     try {
         const categories = await Category.find({});
@@ -36,6 +38,7 @@ export const getAll = async (req, res) => {
     }
 };
 
+// Lấy danh mục theo ID
 export const getCategoryById = async (req, res) => {
     try {
         const category = await Category.findById(req.params.id);
@@ -53,6 +56,7 @@ export const getCategoryById = async (req, res) => {
     }
 };
 
+// Xóa danh mục theo ID
 export const deleteCategoryById = async (req, res) => {
     try {
         const category = await Category.findByIdAndDelete(req.params.id);
@@ -65,22 +69,28 @@ export const deleteCategoryById = async (req, res) => {
     }
 };
 
+// Cập nhật danh mục theo ID
 export const updateCategoryById = async (req, res) => {
     try {
-        if (!req.body.name) {
+        const { name, image } = req.body; 
+
+        if (!name) {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: "Tên danh mục là bắt buộc!" });
         }
 
-        const slug = slugify(req.body.name, { lower: true });
+        const slug = slugify(name, { lower: true });
         const category = await Category.findByIdAndUpdate(
             req.params.id,
-            { name: req.body.name, slug: slug },
+            { name, slug, image },
             { new: true }
         );
+
+        if (!category) {
+            return res.status(StatusCodes.NOT_FOUND).json({ message: "Danh mục không tìm thấy!" });
+        }
 
         return res.status(StatusCodes.OK).json(category);
     } catch (error) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
     }
 };
-

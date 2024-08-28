@@ -30,6 +30,7 @@ const ProductsEdit = () => {
     reset,
   } = useForm<Inputs>();
   const navigate = useNavigate();
+
   const { data: product }: any = useQuery({
     queryKey: ['product', id],
     queryFn: async () => {
@@ -61,7 +62,7 @@ const ProductsEdit = () => {
       }
       return;
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       toast.error(error.message || 'Có lỗi xảy ra khi sửa sản phẩm');
     },
   });
@@ -110,9 +111,11 @@ const ProductsEdit = () => {
           />
 
           {/* Thêm input cho việc upload ảnh */}
-          <p>Ảnh</p>
-          <img src={product?.image} alt="" className="h-[450px]" />
-          <input ref={element} type="file" className="w-full my-2 p-2" />
+          <div className="w-full p-2 border border-gray-300 rounded">
+            <p>Ảnh</p>
+            <img src={product?.image} alt="" className="" />
+            <input ref={element} type="file" className="w-full my-2 p-2" />
+          </div>
           <textarea
             {...register('description')}
             placeholder="Mô Tả"
