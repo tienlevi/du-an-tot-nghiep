@@ -74,7 +74,7 @@ export const signin = async (req, res) => {
   const isMatch = await bcryptjs.compare(password, user.password);
   if (!isMatch) {
     return res.status(StatusCodes.BAD_REQUEST).json({
-      messages: ["Mật khẩku không chính xác"],
+      messages: ["Mật khẩu không chính xác"],
     });
   }
   const token = jwt.sign({ userId: user._id }, "123456", {
