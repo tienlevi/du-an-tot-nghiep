@@ -1,10 +1,11 @@
 import { editCategory, getCategoryById } from '@/services/category';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import DefaultLayout from '../_components/Layout/DefaultLayout';
+import UploadCloundinary from '@/common/utils/cloudinary';
 
 interface Inputs {
     name: string;
@@ -13,6 +14,7 @@ interface Inputs {
 
 const CategoryEdit = () => {
     const { id }: any = useParams();
+    const element = useRef<HTMLInputElement>(null);
     const {
         register,
         handleSubmit,
@@ -25,14 +27,16 @@ const CategoryEdit = () => {
         queryKey: ['category', id],
         queryFn: async () => {
             const response = await getCategoryById(id);
-            return response.data;
+            return response;
         },
     });
 
     const { mutate } = useMutation({
         mutationKey: ['categories'],
         mutationFn: async (data: any) => {
-            return await editCategory(id, data);
+            const fileImage = element.current?.files?.[0];
+            const image = await UploadCloundinary(fileImage);
+            return await editCategory(id, { ...data, image: image.secure_url });
         },
         onSuccess: (data: any) => {
             if (data) {
@@ -67,15 +71,11 @@ const CategoryEdit = () => {
                         {...register('name', { required: 'Vui lòng nhập tên danh mục!' })}
                         className="w-full p-2 border border-gray-300 rounded"
                     />
-                    {/* Thêm input cho việc upload ảnh */}
-                    <input
-                        type="text"
-                        {...register('image', { required: true })}
-                        className="w-full my-2 p-2 border border-gray-300 rounded"
-                    />
-                    {errors.image && (
-                        <span className="text-red-500">Vui lòng chọn ảnh</span>
-                    )}
+                    <div className="w-full p-2 border border-gray-300 rounded">
+                        <p>Ảnh</p>
+                        <img src={category?.image} alt="" className="" />
+                        <input ref={element} type="file" className="w-full my-2 p-2" />
+                    </div>
                     <button
                         type="submit"
                         className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"

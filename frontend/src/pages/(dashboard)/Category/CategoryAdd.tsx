@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import DefaultLayout from '../_components/Layout/DefaultLayout';
 import { addCategory } from '@/services/category';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import UploadCloundinary from '@/common/utils/cloudinary';
+import usePreview from '@/common/hooks/usePreview';
 
 interface Inputs {
     name: string;
@@ -12,6 +14,7 @@ interface Inputs {
 }
 
 const CategoryAdd: React.FC = () => {
+    const { file, handleChangeFile } = usePreview();
     const {
         register,
         handleSubmit,
@@ -19,12 +22,14 @@ const CategoryAdd: React.FC = () => {
         reset,
     } = useForm<Inputs>();
     const queryClient = useQueryClient();
-
+    const element = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
 
     const { mutate } = useMutation({
-        mutationFn: async (data: Inputs) => {
-            return await addCategory(data);
+        mutationFn: async (data: any) => {
+            const fileImage = element.current?.files?.[0];
+            const image = await UploadCloundinary(fileImage);
+            return await addCategory({ ...data, image: image?.secure_url });
         },
         onSuccess: () => {
             queryClient.invalidateQueries(['categories']);
@@ -55,15 +60,16 @@ const CategoryAdd: React.FC = () => {
                     {errors.name && (
                         <span className="text-red-500">{errors.name.message}</span>
                     )}
-                    <input
-                        type="text"
-                        {...register('image', { required: true })}
-                        placeholder='ảnh danh mục'
-                        className="w-full my-2 p-2 border border-gray-300 rounded"
-                    />
-                    {errors.image && (
-                        <span className="text-red-500">Vui lòng chọn ảnh</span>
+                    <p>Ảnh</p>
+                    {file !== undefined && (
+                        <img src={file} alt="" className="h-[450px]" />
                     )}
+                    <input
+                        ref={element}
+                        type="file"
+                        onChange={handleChangeFile}
+                        className="w-full my-2 p-2"
+                    />
                     <button
                         type="submit"
                         className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
