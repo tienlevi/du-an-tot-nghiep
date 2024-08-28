@@ -30,7 +30,7 @@ import ProductsAdd from '@/pages/(dashboard)/Products/ProductsAdd';
 import ProductsEdit from '@/pages/(dashboard)/Products/ProductsEdit';
 import ProductsList from '@/pages/(dashboard)/Products/ProductsList';
 import Profile from '@/pages/(dashboard)/Profile';
-import Settings from '@/pages/(dashboard)/Settings';
+import Settings from '@/pages/(dashboard)/Order/Settings';
 import PageTitle from '@/pages/(dashboard)/_components/PageTitle';
 import CategoryAdd from '@/pages/(dashboard)/Category/CategoryAdd';
 import CategoryEdit from '@/pages/(dashboard)/Category/CategoryEdit';
