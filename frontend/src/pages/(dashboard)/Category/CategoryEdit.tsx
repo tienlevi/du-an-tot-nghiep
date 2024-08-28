@@ -9,7 +9,7 @@ import UploadCloundinary from '@/common/utils/cloudinary';
 
 interface Inputs {
     name: string;
-    image: string
+    image?: string;
 }
 
 const CategoryEdit = () => {
@@ -33,10 +33,16 @@ const CategoryEdit = () => {
 
     const { mutate } = useMutation({
         mutationKey: ['categories'],
-        mutationFn: async (data: any) => {
+        mutationFn: async (data: Inputs) => {
             const fileImage = element.current?.files?.[0];
-            const image = await UploadCloundinary(fileImage);
-            return await editCategory(id, { ...data, image: image.secure_url });
+            let imageUrl = category?.image; // Sử dụng ảnh hiện tại nếu không có ảnh mới
+
+            if (fileImage) {
+                const image = await UploadCloundinary(fileImage);
+                imageUrl = image.secure_url;
+            }
+
+            return await editCategory(id, { ...data, image: imageUrl });
         },
         onSuccess: (data: any) => {
             if (data) {
@@ -51,14 +57,17 @@ const CategoryEdit = () => {
         },
     });
 
-    const onSubmit = (data: any) => {
+    const onSubmit = (data: Inputs) => {
         mutate(data);
     };
 
     useEffect(() => {
-        reset(category);
-    }, [category]);
+        if (category) {
+            reset(category);
+        }
+    }, [category, reset]);
     console.log(category, 'i');
+
 
     return (
         <DefaultLayout>
@@ -73,7 +82,7 @@ const CategoryEdit = () => {
                     />
                     <div className="w-full p-2 border border-gray-300 rounded">
                         <p>Ảnh</p>
-                        <img src={category?.image} alt="" className="" />
+                        <img src={category?.category?.image} alt="" className="" />
                         <input ref={element} type="file" className="w-full my-2 p-2" />
                     </div>
                     <button

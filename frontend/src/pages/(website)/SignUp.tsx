@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { TextField, Button, Snackbar, Alert } from '@mui/material';
 import SignImg from './SignImg.png';
 import instance from '@/config/axios';
 import i18n from './components/common/components/LangConfig';
 
 const SignUp = () => {
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -23,14 +24,17 @@ const SignUp = () => {
     e.preventDefault();
     try {
       const response = await instance.post('/auth/signup', formData);
+
       console.log(response.data);
       setFeedback({ message: 'Đăng ký thành công', type: 'success' });
+
     } catch (error) {
       console.error(error);
       setFeedback({ message: 'Đăng ký thất bại', type: 'error' });
     } finally {
       setOpenSnackbar(true);
     }
+
   };
 
   const handleCloseSnackbar = () => {
@@ -48,7 +52,7 @@ const SignUp = () => {
         <form className="flex flex-col gap-6 w-72 md:w-96" onSubmit={handleSubmit}>
           <TextField
             name="name"
-            label={i18n.t('signUpPage.name')}
+            label={i18n.t('name')}
             variant="standard"
             value={formData.name}
             onChange={handleChange}
@@ -56,7 +60,7 @@ const SignUp = () => {
           />
           <TextField
             name="email"
-            label={i18n.t('signUpPage.email')}
+            label={i18n.t('email')}
             variant="standard"
             value={formData.email}
             onChange={handleChange}
@@ -65,7 +69,7 @@ const SignUp = () => {
           <TextField
             name="password"
             type="password"
-            label={i18n.t('signUpPage.password')}
+            label={i18n.t('password')}
             variant="standard"
             value={formData.password}
             onChange={handleChange}
@@ -74,7 +78,7 @@ const SignUp = () => {
           <TextField
             name="confirmPassword"
             type="password"
-            label={i18n.t('signUpPage.confirmPassword')}
+            label={i18n.t('confirmPassword')}
             variant="standard"
             value={formData.confirmPassword}
             onChange={handleChange}

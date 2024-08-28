@@ -80,7 +80,7 @@ const SignUp = () => {
             variant="contained"
             className="my-2"
           >
-            {i18n.t('signUpPage.createAccount')}
+            {i18n.t('Login')}
           </Button>
         </form>
 
@@ -147,10 +147,10 @@ const SignUp = () => {
         <p className="text-gray-600 mx-auto">
           {i18n.t('signUpPage.haveAccount')}
           <Link
-            to="/login"
-            className="ml-2 text-gray font-medium hover:underline"
+            to="/signup"
+            className="ml-2 font-medium  hover:underline"
           >
-            {i18n.t('signUpPage.login')}
+            {i18n.t('Sign Up')}
           </Link>
         </p>
       </div>
