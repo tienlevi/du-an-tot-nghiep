@@ -10,6 +10,15 @@ export const getProducts = async () => {
   }
 };
 
+export const getProductByLimit = async (limit: string | number) => {
+  try {
+    const response = await instance.get(`/products/result?limit=${limit}`);
+    return response.data;
+  } catch (error) {
+    console.error('Lỗi khi lấy danh sách sản phẩm:', error);
+  }
+};
+
 export const getProductById = async (id: number | string) => {
   try {
     const response = await instance.get(`/products/${id}`);

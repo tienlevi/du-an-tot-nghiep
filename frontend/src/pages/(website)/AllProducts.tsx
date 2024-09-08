@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Grid, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { ITEMS } from './components/common/functions/items';
-import FlashSaleItem from './components/common/components/FlashSaleItem';
+import FlashSaleItem from './components/common/components/ProductItem';
 import i18n from './components/common/components/LangConfig';
 import RedButton from './components/common/components/RedButton';
 import WhiteButton from './components/common/components/WhiteButton';

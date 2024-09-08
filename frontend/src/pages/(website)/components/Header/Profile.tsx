@@ -7,7 +7,6 @@ import { useState } from 'react';
 import { useWishlist } from '@/context/WishlistContext';
 import { Link } from 'react-router-dom';
 import i18n from '../common/components/LangConfig';
-import ReadmeComponent from '../Readme/ReadmeComp';
 import { useCart } from '@/context/CartContext';
 // import ThemeSwitcher from "./ThemeSwitcher";
 const Profile = () => {
@@ -285,7 +284,6 @@ const Profile = () => {
           </MenuItem>
         </Link>
       </Menu>
-      <ReadmeComponent />
 
       {/* <ThemeSwitcher /> */}
     </div>

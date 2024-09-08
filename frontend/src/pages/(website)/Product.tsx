@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
-import RelatedItems from './components/Product/RelatedItems';
 import ActiveLastBreadcrumb from './components/common/components/Link';
 import RedButton from './components/common/components/RedButton';
-import WishlistIcon from './components/common/components/WishlistIcon';
 import { useCart } from '../../context/CartContext';
 import i18n from './components/common/components/LangConfig';
 import { Link, useParams } from 'react-router-dom';
@@ -128,11 +126,7 @@ const Product = () => {
                   <div className="flex gap-10">
                     <p className="text-gray-800 text-xl md:text-2xl font-inter">
                       ${selectedProduct.price}.00
-                    </p>
-                    <RatingComp
-                      text={i18n.t('productPage.review')}
-                      item={selectedProduct}
-                    />{' '}
+                    </p>{' '}
                   </div>
                   <p className="text-gray-800 w-full md:w-[373px] text-xs md:text-sm">
                     {selectedProduct.details}
@@ -208,7 +202,6 @@ const Product = () => {
                       <RedButton name={i18n.t('redButtons.buyNow')} />
                     </Link>
                   )}
-                  <WishlistIcon selectedProduct={selectedProduct} />
                 </div>
                 <div className="border-2 border-gray-400 w-full h-44 flex flex-col py-6 mt-4 rounded">
                   <div className="flex flex-row gap-4 justify-start items-center ml-4 mb-4">
@@ -253,7 +246,6 @@ const Product = () => {
                 </div>
               </div>
             </div>
-            <RelatedItems selectedProduct={selectedProduct} />
           </div>
           <AnimatePresence>
             {isImageFullScreen && (

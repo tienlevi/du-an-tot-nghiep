@@ -1,7 +1,7 @@
 import { useWishlist } from '../../context/WishlistContext';
 import { Link } from 'react-router-dom';
 import { Grid } from '@mui/material';
-import FlashSaleItem from './components/common/components/FlashSaleItem';
+import FlashSaleItem from './components/common/components/ProductItem';
 import { ITEMS } from './components/common/functions/items';
 import RedTitle from './components/common/components/RedTitle';
 import WhiteButton from './components/common/components/WhiteButton';
