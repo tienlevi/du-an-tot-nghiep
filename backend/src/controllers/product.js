@@ -20,6 +20,16 @@ export const getProducts = async (req, res) => {
   }
 };
 
+export const getProductByLimit = async (req, res) => {
+  try {
+    const limit = req.query.limit;
+    const data = await Product.find(req.body).limit(limit);
+    return res.status(StatusCodes.OK).json(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 // export const getAllProducts = async (req, res) => {
 //   const {
 //     _page = 1,

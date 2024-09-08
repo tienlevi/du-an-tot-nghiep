@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Grid, Typography, Menu, MenuItem, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
-import FlashSaleItem from './components/common/components/FlashSaleItem';
+import FlashSaleItem from './components/common/components/ProductItem';
 import i18n from './components/common/components/LangConfig';
 import { ITEMS } from './components/common/functions/items';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
