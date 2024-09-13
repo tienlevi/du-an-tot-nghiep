@@ -1,13 +1,21 @@
 import { useState, useEffect } from 'react';
-import { Grid, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { ITEMS } from './components/common/functions/items';
-import FlashSaleItem from './components/common/components/ProductItem';
 import i18n from './components/common/components/LangConfig';
 import RedButton from './components/common/components/RedButton';
-import WhiteButton from './components/common/components/WhiteButton';
-import Loader from './components/common/components/Loader';
+import { useQuery } from '@tanstack/react-query';
+import { Product } from '@/common/types/product';
+import { getProductByLimit } from '@/services/product';
+
 const AllProducts = () => {
+  const { data } = useQuery<Product[]>({
+    queryKey: ['products'],
+    queryFn: async () => {
+      const response = await getProductByLimit();
+      return response;
+    },
+  });
   const [loading, setLoading] = useState(true);
   const [displayedItems, setDisplayedItems] = useState(10);
   const duplicatedItems = Array.from({ length: 2 }, () => ITEMS).flat();
@@ -38,7 +46,41 @@ const AllProducts = () => {
       <Typography variant="h3" align="center" gutterBottom>
         {i18n.t('allProducts.title')}
       </Typography>
-      <div className=" mx-auto"></div>
+      <div className="mx-auto">
+        <div className="mx-2 xl:mx-0 my-12">
+          <div className="relative mt-10 grid grid-cols-4 gap-2 md:gap-12 transition-transform duration-300 transform ">
+            {data?.map((item, index) => (
+              <div className="relative mx-2 ">
+                <div className="relative rounded flex items-center justify-center bg-zinc-100 w-[270px] h-80 md:h-60 transform transition-transform duration-300 hover:scale-105 focus:outline-none hover:-translate-y-2">
+                  {item.discount && (
+                    <div className="absolute top-0 left-0 bg-red-500 text-white py-1 px-3 m-2 rounded">
+                      -{item.discount}%
+                    </div>
+                  )}
+                  <Link to={{ pathname: `/allProducts` }}>
+                    <img
+                      loading="lazy"
+                      src={item.image}
+                      className="max-h-52  w-full object-contain"
+                    />
+                  </Link>
+                </div>
+                <div className="flex md:items-start items-center flex-col ">
+                  <h3 className="text-lg font-base mt-4">{item.name}</h3>
+                  <p className="text-red-500  text-sm font-semibold line-clamp-2">
+                    ${item.price}
+                    {item.discount && (
+                      <span className="ml-2 text-gray-500 text-sm font-semibold line-through">
+                        ${item.price + (item.price * item.discount) / 100}
+                      </span>
+                    )}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
       {displayedItems < totalItems && (
         <button
           onClick={handleLoadMore}
@@ -51,9 +93,9 @@ const AllProducts = () => {
         </button>
       )}
       <div className="mt-6 flex justify-around items-center md:mx-12">
-        <Link to="..">
+        {/* <Link to="..">
           <WhiteButton name={i18n.t('whiteButtons.backToHomePage')} />
-        </Link>
+        </Link> */}
         <Link to="/category">
           <RedButton name={i18n.t('redButtons.exploreByCategory')} />
         </Link>

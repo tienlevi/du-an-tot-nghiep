@@ -5,7 +5,7 @@ import { LangProvider } from '@/context/LangContext';
 import { WishlistProvider } from '@/context/WishlistContext';
 import About from '@/pages/(website)/About';
 import Account from '@/pages/(website)/Account';
-import AllProducts from '@/pages/(website)/Products';
+import Products from '@/pages/(website)/Products';
 import Cart from '@/pages/(website)/Cart';
 // import Category from '@/pages/(website)/Category';
 import Checkout from '@/pages/(website)/Checkout';
@@ -55,7 +55,7 @@ function DashboardRoute() {
                 <Route element={<Cart />} path="/cart" />
                 <Route element={<Checkout />} path="/checkout" />
                 <Route element={<Payment />} path="/payment" />
-                <Route element={<AllProducts />} path="/allproducts" />
+                <Route element={<Products />} path="/products" />
                 <Route element={<Product />} path="/allProducts/:title" />
                 {/* <Route element={<Category />} path="/category" /> */}
                 <Route element={<NotFound />} path="*" />
