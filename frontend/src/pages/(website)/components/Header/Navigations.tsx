@@ -25,7 +25,7 @@ const Navigations = () => {
   // Map routes to their corresponding labels
   const routes = [
     { path: '/', label: i18n.t('home') },
-    { path: '/allProducts', label: i18n.t('allProducts.redTitle') },
+    { path: '/products', label: i18n.t('allProducts.redTitle') },
     { path: '/contact', label: i18n.t('contact') },
     { path: '/about', label: i18n.t('about') },
     { path: '/login', label: i18n.t('login') },

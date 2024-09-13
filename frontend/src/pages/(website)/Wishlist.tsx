@@ -1,7 +1,7 @@
 import { useWishlist } from '../../context/WishlistContext';
 import { Link } from 'react-router-dom';
 import { Grid } from '@mui/material';
-import FlashSaleItem from './components/common/components/ProductItem';
+// import FlashSaleItem from './components/common/components/ProductItem';
 import { ITEMS } from './components/common/functions/items';
 import RedTitle from './components/common/components/RedTitle';
 import WhiteButton from './components/common/components/WhiteButton';
@@ -103,7 +103,7 @@ function Wishlist() {
               transition: { duration: 0.5 },
             }}
           >
-            {relatedItems.map((item, index) => (
+            {/* {relatedItems.map((item, index) => (
               <motion.div
                 key={item.title}
                 initial={{ opacity: 0 }}
@@ -119,7 +119,7 @@ function Wishlist() {
                   rates={item.rates}
                 />
               </motion.div>
-            ))}
+            ))} */}
           </motion.div>
         </div>
         {/* Motion */}
