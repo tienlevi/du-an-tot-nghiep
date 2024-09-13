@@ -38,26 +38,7 @@ const AllProducts = () => {
       <Typography variant="h3" align="center" gutterBottom>
         {i18n.t('allProducts.title')}
       </Typography>
-      <div className=" mx-auto">
-        <Grid container spacing={6} justifyContent="center" alignItems="center">
-          {loading
-            ? Array.from({ length: displayedItems }).map((_, index) => (
-                <Grid item key={index}>
-                  <Loader />
-                </Grid>
-              ))
-            : duplicatedItems.slice(0, displayedItems).map((item) => (
-                <Grid item key={item.id}>
-                  <FlashSaleItem
-                    item={item}
-                    totalItems={totalItems}
-                    stars={item.stars}
-                    rates={item.rates}
-                  />
-                </Grid>
-              ))}
-        </Grid>
-      </div>
+      <div className=" mx-auto"></div>
       {displayedItems < totalItems && (
         <button
           onClick={handleLoadMore}

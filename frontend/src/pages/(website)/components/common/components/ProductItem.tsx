@@ -24,7 +24,7 @@ const ProductItem = (item: Props) => {
           <img
             loading="lazy"
             src={item.image}
-            className="hover:animate-pulse  max-h-52  w-full object-contain"
+            className="max-h-52  w-full object-contain"
           />
         </Link>
       </div>

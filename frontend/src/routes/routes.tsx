@@ -5,7 +5,7 @@ import { LangProvider } from '@/context/LangContext';
 import { WishlistProvider } from '@/context/WishlistContext';
 import About from '@/pages/(website)/About';
 import Account from '@/pages/(website)/Account';
-import AllProducts from '@/pages/(website)/AllProducts';
+import AllProducts from '@/pages/(website)/Products';
 import Cart from '@/pages/(website)/Cart';
 // import Category from '@/pages/(website)/Category';
 import Checkout from '@/pages/(website)/Checkout';
@@ -146,7 +146,6 @@ function DashboardRoute() {
               />
 
               <Route
-
                 path="/settings"
                 element={
                   <>
