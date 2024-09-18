@@ -35,6 +35,7 @@ import PageTitle from '@/pages/(dashboard)/_components/PageTitle';
 import CategoryAdd from '@/pages/(dashboard)/Category/CategoryAdd';
 import CategoryEdit from '@/pages/(dashboard)/Category/CategoryEdit';
 import CategoryList from '@/pages/(dashboard)/Category/CategoryList';
+import SearchProducts from '@/pages/(website)/Search';
 
 function DashboardRoute() {
   return (
@@ -57,6 +58,7 @@ function DashboardRoute() {
                 <Route element={<Payment />} path="/payment" />
                 <Route element={<Products />} path="/products" />
                 <Route element={<Product />} path="/allProducts/:title" />
+                <Route element={<SearchProducts />} path="/search" />
                 {/* <Route element={<Category />} path="/category" /> */}
                 <Route element={<NotFound />} path="*" />
               </Route>
