@@ -81,7 +81,7 @@ export const signin = async (req, res) => {
     expiresIn: "7d",
   });
   return res.status(StatusCodes.OK).json({
-    message: "Đăng ký thành công",
+    message: "Đăng nhập thành công",
     user,
     token,
   });
