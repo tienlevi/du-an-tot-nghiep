@@ -10,7 +10,7 @@ export const getProducts = async () => {
   }
 };
 
-export const getProductByLimit = async (limit: string | number) => {
+export const getProductByLimit = async (limit?: string | number) => {
   try {
     const response = await instance.get(`/products/result?limit=${limit}`);
     return response.data;
