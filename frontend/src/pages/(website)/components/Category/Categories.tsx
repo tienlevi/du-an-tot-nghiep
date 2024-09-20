@@ -17,8 +17,8 @@ const CategoryList = () => {
 
   return (
     <div className={`grid grid-cols-${categories?.length} gap-4`}>
-      {categories?.map((category, index) => (
-        <Link to="category">
+      {categories?.map((category) => (
+        <Link to="category" key={category._id}>
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className=" w-full hover:animate-pulse flex gap-4 items-center justify-center flex-col bg-white  py-8 rounded-lg border border-gray-300 transition duration-300 hover:bg-cyan-400 hover:invert  hover:shadow-xl hover:-translate-y-2 "

@@ -1,19 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Typography } from '@mui/material';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ITEMS } from './components/common/functions/items';
 import i18n from './components/common/components/LangConfig';
 import RedButton from './components/common/components/RedButton';
 import { useQuery } from '@tanstack/react-query';
 import { Product } from '@/common/types/product';
-import { getProductByLimit } from '@/services/product';
+import { getProductByLimit, getProducts } from '@/services/product';
 // import instance from '@/config/axios';
 
 const SearchProducts = () => {
   const { data } = useQuery<Product[]>({
     queryKey: ['products'],
     queryFn: async () => {
-      const response = await getProductByLimit();
+      const response = await getProducts();
       return response;
     },
   });
@@ -23,28 +23,10 @@ const SearchProducts = () => {
   const totalItems = duplicatedItems.length;
 
   const search = new URLSearchParams(window.location.search);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [keywords, setKeywords] = useState<string>('');
-  const [error, setError] = useState<string | null>(null);
   const searchParams = search.get('keyword');
   const datakey = data?.filter((item: any) =>
     item.name.toLowerCase().includes(searchParams?.toLowerCase()),
   );
-  console.log(data);
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       const keyword = search.get('keyword') || '';
-  //       const { data } = await instance.get(`products?name_like=${keyword}`);
-  //       setProducts(data);
-  //       setKeywords(keyword);
-  //       setError(null);
-  //     } catch (err) {
-  //       setError('Không thể lấy dữ liệu sản phẩm');
-  //       console.error(err);
-  //     }
-  //   })();
-  // }, [search]);
 
   const handleLoadMore = () => {
     window.scrollTo({
@@ -58,14 +40,6 @@ const SearchProducts = () => {
     }, 2000);
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <div className=" mt-40 flex flex-col gap-5">
       <h1 className="text-2xl ml-48 mt-20">
@@ -77,7 +51,7 @@ const SearchProducts = () => {
       <div className="mx-auto">
         <div className="mx-2 xl:mx-0 my-12">
           <div className="relative mt-10 grid grid-cols-4 gap-2 md:gap-12 transition-transform duration-300 transform ">
-            {datakey?.map((item, index) => (
+            {datakey?.map((item) => (
               <div className="relative mx-2 ">
                 <div className="relative rounded flex items-center justify-center bg-zinc-100 w-[270px] h-80 md:h-60 transform transition-transform duration-300 hover:scale-105 focus:outline-none hover:-translate-y-2">
                   {item.discount && (

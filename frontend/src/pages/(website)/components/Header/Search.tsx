@@ -1,9 +1,8 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { styled, alpha } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
-import { useNavigate } from 'react-router-dom';
 import { CiSearch } from 'react-icons/ci';
-import { useForm } from 'react-hook-form';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -39,36 +38,31 @@ const Search = styled('div')(({ theme }) => ({
 }));
 
 const SearchAppBar = () => {
-  const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
-
   const [searchText, setSearchText] = useState('');
 
-  const onSubmit = (data) => {
-    const { keywords } = data;
-    navigate(`search?keyword=${keywords}`);
-  };
-
-  const handleInputChange = (event) => {
-    setSearchText(event.target.value);
-  };
+  const onSubmit = useCallback(
+    (e?: any) => {
+      e.preventDefault();
+      navigate(`/search?keyword=${searchText}`);
+      window.location.reload();
+    },
+    [searchText],
+  );
 
   return (
     <Search className="flex items-center justify-center w-48 min-[425px]:w-64 sm:max-[1200px]:w-96 min-[1200px]:w-60 min-[1450px]:w-96 ">
-      <form onSubmit={handleSubmit(onSubmit)} className="flex w-full">
+      <form onSubmit={onSubmit} className="flex w-full">
         <input
           type="text"
-          {...register('keywords')}
           value={searchText}
-          onChange={handleInputChange}
+          onChange={(e) => setSearchText(e.target.value)}
           className="outline-none placeholder-gray-400 flex-1"
           placeholder="Tìm kiếm"
         />
-        {searchText && (
-          <IconButton type="submit" aria-label="search" color="inherit">
-            <CiSearch className="w-5 h-auto md:w-8 md:h-8" />
-          </IconButton>
-        )}
+        <IconButton type="submit" aria-label="search" color="inherit">
+          <CiSearch className="w-5 h-auto md:w-8 md:h-8" />
+        </IconButton>
       </form>
     </Search>
   );

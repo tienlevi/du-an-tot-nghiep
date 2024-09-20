@@ -31,8 +31,8 @@ const ProductItem = ({ limitProduct }: Props) => {
           <Arrows />
         </div>
         <div className="relative mt-10 grid grid-cols-4 gap-2 md:gap-12 transition-transform duration-300 transform ">
-          {data?.map((item, index) => (
-            <div className="relative mx-2 ">
+          {data?.map((item) => (
+            <div key={item._id} className="relative mx-2 ">
               <div className="relative rounded flex items-center justify-center bg-zinc-100 w-[270px] h-80 md:h-60 transform transition-transform duration-300 hover:scale-105 focus:outline-none hover:-translate-y-2">
                 {item.discount && (
                   <div className="absolute top-0 left-0 bg-red-500 text-white py-1 px-3 m-2 rounded">
