@@ -26,77 +26,11 @@ const Account = () => {
             'accountPage.myAccount',
           )}`}
         />
-        <h1 className="text-sm md:mr-44">
-          {i18n.t('accountPage.welcome')}{' '}
-          <span className="text-red-600">
-            {firstName} {lastName}
-          </span>
-        </h1>
       </div>
-      <div className="flex flex-col md:flex-row gap-28">
-        <nav className="flex flex-col gap-4 text-gray-400">
-          <h1 className="text-black text-sm md:text-base  font-medium">
-            {i18n.t('accountPage.manageMyAccount')}
-          </h1>
-          <ul>
-            <li className="px-4 py-2">
-              <Link
-                to="/account"
-                className="hover:underline hover:underline-offset-8 ease-in-out duration-300 transform  focus:text-red-600"
-              >
-                {i18n.t('accountPage.myProfile')}
-              </Link>
-            </li>
-            <li className="px-4 py-2">
-              <Link
-                to="/account"
-                className="hover:underline hover:underline-offset-8 ease-in-out duration-300 transform  focus:text-red-600"
-              >
-                {i18n.t('accountPage.addressBook')}
-              </Link>
-            </li>
-            <li className="px-4 py-2">
-              <Link
-                to="/account"
-                className="hover:underline hover:underline-offset-8 ease-in-out duration-300 transform  focus:text-red-600"
-              >
-                {i18n.t('accountPage.myPaymentOptions')}
-              </Link>
-            </li>
-          </ul>
-          <h1 className="text-black text-sm md:text-base  font-medium">
-            {i18n.t('accountPage.myOrders')}
-          </h1>
-          <ul>
-            <li className="px-4 py-2">
-              <Link
-                to="/account"
-                className="hover:underline hover:underline-offset-8 ease-in-out duration-300 transform  focus:text-red-600"
-              >
-                {i18n.t('accountPage.myReturns')}
-              </Link>
-            </li>
-            <li className="px-4 py-2">
-              <Link
-                to="/account"
-                className="hover:underline hover:underline-offset-8 ease-in-out duration-300 transform  focus:text-red-600"
-              >
-                {i18n.t('accountPage.myCancelations')}
-              </Link>
-            </li>
-          </ul>
-          <h1 className="text-black text-sm md:text-base  font-medium">
-            <Link
-              to="/wishlist"
-              className="hover:underline hover:underline-offset-8 ease-in-out duration-300 transform "
-            >
-              {i18n.t('accountPage.myWishlist')}
-            </Link>
-          </h1>
-        </nav>
-        <div className="shadow  w-[full] flex flex-col py-10 md:px-20 px-5 rounded">
-          <div className="flex flex-col gap-6 md:w-[710px]">
-            <span className="text-xl font-medium text-red-600">
+      <div className="flex flex-col md:flex-row gap-28 justify-center">
+        <div className="w-[full] flex flex-col py-10 md:px-20 px-5 rounded ">
+          <div className="flex flex-col gap-6 md:w-[710px] justify-center">
+            <span className="text-xl font-medium text-red-600 justify-center text-center">
               {i18n.t('accountPage.editYourProfile')}
             </span>
             <div className="flex flex-col md:flex-row gap-6 md:gap-[50px] justify-between">
@@ -172,7 +106,7 @@ const Account = () => {
                 className=" rounded bg-gray-100 bg-opacity-100 px-4 py-3 text-gray-400 text-sm md:text-base  focus:border outline-none focus:border-gray-300  "
               />
             </div>
-            <div className="ml-auto flex items-center gap-8 text-sm md:text-base ">
+            <div className=" flex items-center gap-8 text-sm md:text-base justify-center text-center">
               {/* Cancel and save changes buttons */}
               <button
                 onClick={() => {

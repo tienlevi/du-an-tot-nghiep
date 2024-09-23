@@ -171,7 +171,7 @@ const SignUp = () => {
           {i18n.t('signUpPage.haveAccount')}
           <Link
             to="/login"
-            className="ml-2 text-gray font-medium hover:underline"
+            className="ml-2 text-gray-600 font-medium hover:underline "
           >
             {i18n.t('signUpPage.login')}
           </Link>
