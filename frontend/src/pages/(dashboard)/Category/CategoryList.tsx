@@ -1,22 +1,31 @@
+import { useState } from 'react';
 import { deleteCategory, getCategories } from '@/services/category';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button, Space, Table } from 'antd';
-import React from 'react';
+import { Button, Input, Space, Table } from 'antd';
+import type { TableColumnsType, TableProps } from 'antd';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import DefaultLayout from '../_components/Layout/DefaultLayout';
 
+type OnChange = NonNullable<TableProps<any>['onChange']>;
+type Filters = Parameters<OnChange>[1];
+type GetSingle<T> = T extends (infer U)[] ? U : never;
+type Sorts = GetSingle<Parameters<OnChange>[2]>;
+
 const CategoryList: React.FC = () => {
     const queryClient = useQueryClient();
+
     const { data: categories, isLoading } = useQuery({
         queryKey: ['categories'],
         queryFn: async () => {
             const response = await getCategories();
-            const res = await response.data;
-            return res
+            return response.data || response;
         },
     });
 
+    const [filteredInfo, setFilteredInfo] = useState<Filters>({});
+    const [sortedInfo, setSortedInfo] = useState<Sorts>({});
+    const [searchQuery, setSearchQuery] = useState<string>('');
 
     const { mutate } = useMutation({
         mutationKey: ['category'],
@@ -34,7 +43,22 @@ const CategoryList: React.FC = () => {
         },
     });
 
-    const columns = [
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(e.target.value);
+    };
+
+    const handleChange = (pagination: any, filters: Filters, sorter: Sorts) => {
+        setFilteredInfo(filters);
+        setSortedInfo(sorter);
+    };
+
+    const filteredCategories = Array.isArray(categories)
+        ? categories.filter((category: any) =>
+            category.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+        : [];
+
+    const columns: TableColumnsType<any> = [
         {
             title: 'STT',
             dataIndex: 'key',
@@ -45,6 +69,11 @@ const CategoryList: React.FC = () => {
             title: 'Tên danh mục',
             dataIndex: 'name',
             key: 'name',
+            filteredValue: filteredInfo.name || null,
+            onFilter: (value, record) => record.name.includes(value as string),
+            sorter: (a, b) => a.name.length - b.name.length,
+            sortOrder: sortedInfo.columnKey === 'name' ? sortedInfo.order : null,
+            ellipsis: true,
         },
         {
             title: 'Ảnh',
@@ -92,7 +121,19 @@ const CategoryList: React.FC = () => {
                         Thêm Danh Mục
                     </Link>
                 </div>
-                <Table columns={columns} dataSource={categories?.length > 0 ? categories : []} loading={isLoading} />
+                <Input
+                    placeholder="Tìm kiếm danh mục"
+                    value={searchQuery}
+                    onChange={handleSearch}
+                    className="mb-4"
+                />
+                <Table
+                    columns={columns}
+                    dataSource={filteredCategories}
+                    loading={isLoading}
+                    onChange={handleChange}
+                    rowKey="_id"
+                />
             </div>
         </DefaultLayout>
     );
