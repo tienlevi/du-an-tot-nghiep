@@ -55,7 +55,7 @@ const Cart = () => {
           <RedButton name={i18n.t('redButtons.applyCoupon')} />
         </div>
 
-        <div className="flex justify-between flex-col gap-6  border py-8 px-6 md:w-[470px]">
+        <div className="flex justify-between flex-col gap-6  border border-gray-900 rounded-md py-8 px-6 md:w-[470px]">
           <p className="text-xl font-semibold">{i18n.t('cart.cartTotal')}</p>
           <div className="flex justify-between mt-4 border-b">
             <p className="text-xl">{i18n.t('cart.total')}:</p>
@@ -69,7 +69,7 @@ const Cart = () => {
             <p className="text-xl">{i18n.t('cart.shipping')}:</p>
             <p className="text-xl">{i18n.t('cart.free')}</p>
           </div>{' '}
-          <div className="mx-10">
+          <div className="pl-[100px] justify-center items-center">
             <Link to="/checkout">
               <RedButton name={i18n.t('redButtons.processToCheckout')} />
             </Link>
