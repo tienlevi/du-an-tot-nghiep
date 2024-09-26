@@ -20,7 +20,9 @@ app.use(cors());
 app.use(morgan("tiny"));
 
 // connect db
-connectDB("mongodb://127.0.0.1:27017/DuAnTotNghiep");
+connectDB(
+  "mongodb+srv://admin:admin@duantotnghiep.gs5sb.mongodb.net/DuAnTotNghiep"
+);
 
 // routers
 app.use("/api/v1", authRouter);
