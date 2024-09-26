@@ -2,7 +2,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import morgan from "morgan";
-
 import { connectDB } from "./config/db";
 import authRouter from "./routers/auth";
 import productRouter from "./routers/product";
@@ -12,6 +11,8 @@ import orderRouter from "./routers/order";
 import uploadRouter from "./routers/upload";
 import favoritesRouter from "./routers/favorite";
 const app = express();
+const port = process.env.PORT || 4000;
+console.log(port);
 dotenv.config();
 // middleware
 app.use(express.json());
