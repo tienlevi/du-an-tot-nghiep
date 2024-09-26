@@ -14,6 +14,7 @@ export const create = async (req, res) => {
 export const getProducts = async (req, res) => {
   try {
     const data = await Product.find(req.body);
+    console.log(data);
     return res.status(StatusCodes.OK).json(data);
   } catch (error) {
     console.log(error);

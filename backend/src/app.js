@@ -20,7 +20,7 @@ app.use(cors());
 app.use(morgan("tiny"));
 
 // connect db
-connectDB("mongodb://localhost:27017/DuAnTotNghiep");
+connectDB("mongodb://127.0.0.1:27017/DuAnTotNghiep");
 
 // routers
 app.use("/api/v1", authRouter);
