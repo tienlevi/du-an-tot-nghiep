@@ -21,8 +21,6 @@ import Wishlist from '@/pages/(website)/Wishlist';
 import LayoutWebsite from '@/pages/(website)/Layout';
 
 // Dashboard
-import SignIn from '@/pages/(dashboard)/_components/Authentication/SignIn';
-import SignUp from '@/pages/(dashboard)/_components/Authentication/SignUp';
 import Calendar from '@/pages/(dashboard)/Calendar';
 import Chart from '@/pages/(dashboard)/Chart';
 import ECommerce from '@/pages/(dashboard)/Main';
@@ -152,25 +150,6 @@ function DashboardRoute() {
                   <>
                     <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
                     <Chart />
-                  </>
-                }
-              />
-
-              <Route
-                path="/auth/signin"
-                element={
-                  <>
-                    <PageTitle title="Signin | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <SignIn />
-                  </>
-                }
-              />
-              <Route
-                path="/auth/signup"
-                element={
-                  <>
-                    <PageTitle title="Signup | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <SignUp />
                   </>
                 }
               />
