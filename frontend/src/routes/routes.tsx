@@ -21,20 +21,17 @@ import Wishlist from '@/pages/(website)/Wishlist';
 import LayoutWebsite from '@/pages/(website)/Layout';
 
 // Dashboard
-import SignIn from '@/pages/(dashboard)/Authentication/SignIn';
-import SignUp from '@/pages/(dashboard)/Authentication/SignUp';
 import Calendar from '@/pages/(dashboard)/Calendar';
 import Chart from '@/pages/(dashboard)/Chart';
-import ECommerce from '@/pages/(dashboard)/Dashboard/Main';
-import ProductsAdd from '@/pages/(dashboard)/Products/ProductsAdd';
-import ProductsEdit from '@/pages/(dashboard)/Products/ProductsEdit';
-import ProductsList from '@/pages/(dashboard)/Products/ProductsList';
+import ECommerce from '@/pages/(dashboard)/Main';
+import ProductsAdd from '@/pages/(dashboard)/ProductsAdd';
+import ProductsEdit from '@/pages/(dashboard)/ProductsEdit';
+import ProductsList from '@/pages/(dashboard)/ProductsList';
 import Profile from '@/pages/(dashboard)/Profile';
-import Settings from '@/pages/(dashboard)/Order/Settings';
 import PageTitle from '@/pages/(dashboard)/_components/PageTitle';
-import CategoryAdd from '@/pages/(dashboard)/Category/CategoryAdd';
-import CategoryEdit from '@/pages/(dashboard)/Category/CategoryEdit';
-import CategoryList from '@/pages/(dashboard)/Category/CategoryList';
+import CategoryAdd from '@/pages/(dashboard)/CategoryAdd';
+import CategoryEdit from '@/pages/(dashboard)/CategoryEdit';
+import CategoryList from '@/pages/(dashboard)/CategoryList';
 import SearchProducts from '@/pages/(website)/Search';
 import UserList from '@/pages/(dashboard)/User/UserList';
 import UserAdd from '@/pages/(dashboard)/User/UserAdd';
@@ -147,34 +144,7 @@ function DashboardRoute() {
                   </>
                 }
               />
-              <Route
-                path="/user/profile/list"
-                element={
-                  <>
-                    <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <UserList />
-                  </>
-                }
-              />
-              <Route
-                path="/user/profile/add"
-                element={
-                  <>
-                    <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <UserAdd />
-                  </>
-                }
-              />
 
-              <Route
-                path="/user/profile/edit/:id"
-                element={
-                  <>
-                    <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <UserEdit />
-                  </>
-                }
-              />
               <Route
                 path="/settings"
                 element={
@@ -193,6 +163,7 @@ function DashboardRoute() {
                   </>
                 }
               />
+
               <Route
                 path="/auth/signin"
                 element={

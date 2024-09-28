@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Product } from '@/common/types/product';
-import { Category } from '@/common/types/category';
+import { Product } from '@/types/product';
+import { Category } from '@/types/category';
 import { toast } from 'react-toastify';
-import DefaultLayout from '../_components/Layout/DefaultLayout';
+import DefaultLayout from './_components/Layout/DefaultLayout';
 import { deleteProduct, getProducts } from '@/services/product';
 import { Button, Input, Select, Space, Table } from 'antd';
 import type { TableColumnsType, TableProps } from 'antd';
@@ -105,7 +105,7 @@ const ProductsList: React.FC = () => {
       sorter: (a, b) => a.name.length - b.name.length,
       sortOrder: sortedInfo.columnKey === 'name' ? sortedInfo.order : null,
       ellipsis: true,
-      render: (text) => <span>{text}</span>, 
+      render: (text) => <span>{text}</span>,
     },
     {
       title: 'Danh mục',

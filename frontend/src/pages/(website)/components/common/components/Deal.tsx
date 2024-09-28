@@ -3,21 +3,21 @@ import calculateTimeLeft from '../functions/calculateTimeLeft';
 import i18n from './LangConfig';
 
 const Deal = () => {
-  const dealEndTime = new Date('2024-12-31T23:59:59'); // Ví dụ thời gian trong tương lai
-  const [timeLeft, setTimeLeft] = useState<any>(calculateTimeLeft(dealEndTime));
+  // const dealEndTime = new Date('2024-12-31T23:59:59'); // Ví dụ thời gian trong tương lai
+  // const [timeLeft, setTimeLeft] = useState<any>(calculateTimeLeft(dealEndTime));
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const updatedTimeLeft = calculateTimeLeft(dealEndTime);
-      console.log(updatedTimeLeft);  // In ra timeLeft để kiểm tra
-      setTimeLeft(updatedTimeLeft);
-    }, 1000);
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     const updatedTimeLeft = calculateTimeLeft(dealEndTime);
+  //     console.log(updatedTimeLeft);  // In ra timeLeft để kiểm tra
+  //     setTimeLeft(updatedTimeLeft);
+  //   }, 1000);
 
-    return () => clearInterval(timer);
-  }, [dealEndTime]);
+  //   return () => clearInterval(timer);
+  // }, [dealEndTime]);
 
   // Render fallback nếu `timeLeft` không tồn tại hoặc là null
-  if (!timeLeft || !timeLeft.days) return <div>Countdown finished</div>;
+  // if (!timeLeft || !timeLeft.days) return <div>Countdown finished</div>;
 
   return (
     <div className="flex gap-10 md:my-10 mt-10 items-center justify-center flex-col-reverse md:flex-row min-h-[500px] bg-black text-white">
@@ -32,7 +32,7 @@ const Deal = () => {
               key={index}
               className="flex flex-col items-center justify-center py-3 bg-white rounded-full"
             >
-              <span>{timeLeft[unit]}</span> {/* Hiển thị giá trị timeLeft */}
+              {/* <span>{timeLeft[unit]}</span>  */}
               <span className="font-light text-xs w-[62px] text-center">
                 {i18n.t(`deal.${unit}`)}
               </span>

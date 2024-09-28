@@ -1,14 +1,14 @@
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import DefaultLayout from '../_components/Layout/DefaultLayout';
+import DefaultLayout from './_components/Layout/DefaultLayout';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Category } from '@/common/types/category';
+import { Category } from '@/types/category';
 import { addProduct } from '@/services/product';
 import { getCategories } from '@/services/category';
-import UploadCloundinary from '@/common/utils/cloudinary';
-import usePreview from '@/common/hooks/usePreview';
+import UploadCloundinary from '@/utils/cloudinary';
+import usePreview from '@/hooks/usePreview';
 
 interface Inputs {
   name: string;

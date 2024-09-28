@@ -10,11 +10,14 @@ export const getCart = async () => {
 };
 
 export const addToCart = async (
-  productId: number | string,
-  quantity: number,
+  userId: string,
+  products: { productId: string; quantity: number }[],
 ) => {
   try {
-    const response = await instance.post('/cart', { productId, quantity });
+    const response = await instance.post('/carts/add-to-cart', {
+      userId,
+      products,
+    });
     return response.data;
   } catch (error) {
     console.error('Lỗi khi thêm sản phẩm vào giỏ hàng:', error);

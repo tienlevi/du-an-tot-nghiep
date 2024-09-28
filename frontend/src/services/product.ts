@@ -1,4 +1,4 @@
-import { Product } from '@/common/types/product';
+import { Product } from '@/types/product';
 import instance from '@/config/axios';
 
 export const getProducts = async () => {

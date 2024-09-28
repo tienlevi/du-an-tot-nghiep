@@ -2,7 +2,7 @@ import Arrows from '../common/components/Arrows';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getCategories } from '@/services/category';
-import { Category } from '@/common/types/category';
+import { Category } from '@/types/category';
 import RedTitle from '../common/components/RedTitle';
 import i18n from '../common/components/LangConfig';
 

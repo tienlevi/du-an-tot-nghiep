@@ -5,7 +5,7 @@ import { ITEMS } from './components/common/functions/items';
 import i18n from './components/common/components/LangConfig';
 import RedButton from './components/common/components/RedButton';
 import { useQuery } from '@tanstack/react-query';
-import { Product } from '@/common/types/product';
+import { Product } from '@/types/product';
 import { getProductByLimit, getProducts } from '@/services/product';
 // import instance from '@/config/axios';
 
