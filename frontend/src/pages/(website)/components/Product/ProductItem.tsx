@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { getProductByLimit } from '@/services/product';
-import { Product } from '@/common/types/product';
+import { Product } from '@/types/product';
 import { FaCartShopping } from 'react-icons/fa6';
 import RedTitle from '../common/components/RedTitle';
 import Arrows from '../common/components/Arrows';

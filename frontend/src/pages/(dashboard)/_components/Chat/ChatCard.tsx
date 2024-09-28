@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Chat } from '@/common/types/chat';
+import { Chat } from '@/types/chat';
 import UserOne from '@/assets/images/user/user-01.png';
 import UserTwo from '@/assets/images/user/user-02.png';
 import UserThree from '@/assets/images/user/user-03.png';

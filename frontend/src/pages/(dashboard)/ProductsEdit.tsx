@@ -3,10 +3,10 @@ import { useForm } from 'react-hook-form';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Category } from '@/common/types/category';
+import { Category } from '@/types/category';
 import { editProduct, getProductById } from '@/services/product';
 import { getCategories } from '@/services/category';
-import UploadCloundinary from '@/common/utils/cloudinary';
+import UploadCloundinary from '@/utils/cloudinary';
 import DefaultLayout from './_components/Layout/DefaultLayout';
 
 interface Inputs {

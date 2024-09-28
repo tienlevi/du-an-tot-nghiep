@@ -1,4 +1,4 @@
-import Loader from '@/common/Loader';
+import Loader from '@/utils/Loader';
 import Router from '@/routes/routes';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';

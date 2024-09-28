@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import DefaultLayout from './_components/Layout/DefaultLayout';
-import UploadCloundinary from '@/common/utils/cloudinary';
+import UploadCloundinary from '@/utils/cloudinary';
 
 interface Inputs {
   name: string;

@@ -1,4 +1,4 @@
-import { Category } from '@/common/types/category';
+import { Category } from '@/types/category';
 import instance from '@/config/axios';
 
 export const getCategories = async () => {

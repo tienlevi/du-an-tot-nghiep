@@ -5,8 +5,8 @@ import DefaultLayout from './_components/Layout/DefaultLayout';
 import { addCategory } from '@/services/category';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import UploadCloundinary from '@/common/utils/cloudinary';
-import usePreview from '@/common/hooks/usePreview';
+import UploadCloundinary from '@/utils/cloudinary';
+import usePreview from '@/hooks/usePreview';
 
 interface Inputs {
   name: string;

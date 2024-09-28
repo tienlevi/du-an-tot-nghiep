@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Product } from '@/common/types/product';
-import { Category } from '@/common/types/category';
+import { Product } from '@/types/product';
+import { Category } from '@/types/category';
 import { toast } from 'react-toastify';
 import DefaultLayout from './_components/Layout/DefaultLayout';
 import { deleteProduct, getProducts } from '@/services/product';
