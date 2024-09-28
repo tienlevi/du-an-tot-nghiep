@@ -6,13 +6,13 @@ import i18n from './components/common/components/LangConfig';
 import RedButton from './components/common/components/RedButton';
 import { useQuery } from '@tanstack/react-query';
 import { Product } from '@/common/types/product';
-import { getProductByLimit } from '@/services/product';
+import { getProductByLimit, getProducts } from '@/services/product';
 
 const AllProducts = () => {
   const { data } = useQuery<Product[]>({
     queryKey: ['products'],
     queryFn: async () => {
-      const response = await getProductByLimit();
+      const response = await getProducts();
       return response;
     },
   });

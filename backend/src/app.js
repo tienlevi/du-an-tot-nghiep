@@ -11,8 +11,7 @@ import orderRouter from "./routers/order";
 import uploadRouter from "./routers/upload";
 import favoritesRouter from "./routers/favorite";
 const app = express();
-const port = process.env.PORT || 4000;
-console.log(port);
+
 dotenv.config();
 // middleware
 app.use(express.json());
