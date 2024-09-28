@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from '@/common/types/product';
 import { Category } from '@/common/types/category';
 import { toast } from 'react-toastify';
 import DefaultLayout from '../_components/Layout/DefaultLayout';
-import { getProducts } from '@/services/product';
+import { deleteProduct, getProducts } from '@/services/product';
 import { Button, Input, Select, Space, Table } from 'antd';
 import type { TableColumnsType, TableProps } from 'antd';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getCategories } from '@/services/category';
 
 const { Option } = Select;
 
@@ -23,56 +25,41 @@ interface DataType {
 }
 
 const ProductsList: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const queryClient = useQueryClient();
+  const { data: products } = useQuery({
+    queryKey: ['products'],
+    queryFn: async () => {
+      const response = await getProducts();
+      return response;
+    },
+  });
+  const { data: categories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => {
+      const response = await getCategories();
+      return response;
+    },
+  });
   const [filteredInfo, setFilteredInfo] = useState<Filters>({});
   const [sortedInfo, setSortedInfo] = useState<Sorts>({});
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
 
-  const fetchProducts = async () => {
-    const response = await getProducts();
-    setProducts(response);
-  };
-
-  const fetchCategories = async () => {
-    try {
-      const response = await fetch('http://localhost:2202/api/v1/categories');
-      const data = await response.json();
-      setCategories(data.data);
-    } catch (error) {
-      console.error('Lỗi khi lấy danh sách danh mục:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchProducts();
-    fetchCategories();
-  }, []);
-
-  const handleDelete = async (productId: string) => {
-    const confirm = window.confirm('BẠN CÓ CHẮC CHẮN XÓA KHÔNG ?');
-    if (confirm) {
-      try {
-        const response = await fetch(
-          `http://localhost:2202/api/v1/products/${productId}`,
-          {
-            method: 'DELETE',
-          },
-        );
-
-        if (response.ok) {
-          setProducts(products.filter((product) => product._id !== productId));
-          toast.success('Xóa sản phẩm thành công');
-        } else {
-          console.error('Lỗi khi xóa sản phẩm:', await response.json());
-          alert('LỖI KHI XÓA SẢN PHẨM');
+  const { mutate } = useMutation({
+    mutationKey: ['products'],
+    mutationFn: async (id: string) => {
+      if (confirm('Bạn có muốn xóa không ?')) {
+        try {
+          const response = await deleteProduct(id);
+          toast.success('Xóa thành công');
+          queryClient.invalidateQueries({ queryKey: ['products'] });
+          return response;
+        } catch (error) {
+          toast.error('Có lỗi xảy ra');
         }
-      } catch (error) {
-        console.error('Lỗi khi xóa sản phẩm:', error);
       }
-    }
-  };
+    },
+  });
 
   const handleChange: OnChange = (pagination, filters, sorter) => {
     console.log('Various parameters', pagination, filters, sorter);
@@ -96,13 +83,17 @@ const ProductsList: React.FC = () => {
     });
   };
 
-  const columns: TableColumnsType<Product> = [
+  const columns: TableColumnsType = [
     {
       title: 'Ảnh',
       dataIndex: 'image',
       key: 'image',
       render: (text, record) => (
-        <img src={record.image} alt={record.name} style={{ width: 50, height: 50 }} />
+        <img
+          src={record?.image}
+          alt={record.name}
+          style={{ width: 50, height: 50 }}
+        />
       ),
     },
     {
@@ -114,13 +105,18 @@ const ProductsList: React.FC = () => {
       sorter: (a, b) => a.name.length - b.name.length,
       sortOrder: sortedInfo.columnKey === 'name' ? sortedInfo.order : null,
       ellipsis: true,
-      render: (text) => <span>{text}</span>, // giữ nguyên định dạng tên sản phẩm
+      render: (text) => <span>{text}</span>, 
     },
     {
       title: 'Danh mục',
       dataIndex: 'category',
       key: 'category',
-      render: (text, record) => getCategoryName(record.category),
+      render: (text, record) => {
+        return categories?.data?.map(
+          (item: Category) =>
+            item._id === text && <div key={item._id}>{item.name}</div>,
+        );
+      },
     },
     {
       title: 'Giá',
@@ -163,7 +159,7 @@ const ProductsList: React.FC = () => {
             Edit
           </Link>
           <Button
-            onClick={() => handleDelete(record._id)}
+            onClick={() => mutate(record._id!)}
             className="py-1 px-2 bg-red-500 text-white rounded hover:bg-red-600"
           >
             Delete
@@ -173,11 +169,6 @@ const ProductsList: React.FC = () => {
     },
   ];
 
-  const getCategoryName = (categoryId: string) => {
-    const category = categories?.find((cat: any) => cat._id === categoryId);
-    return category ? category.name : 'Unknown';
-  };
-
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
@@ -186,7 +177,7 @@ const ProductsList: React.FC = () => {
     setSelectedCategory(value);
   };
 
-  const filteredProducts = products.filter(product => {
+  const filteredProducts = products?.filter((product: Product) => {
     return (
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (selectedCategory ? product.category === selectedCategory : true)
@@ -218,7 +209,7 @@ const ProductsList: React.FC = () => {
           className="mb-4"
           allowClear
         >
-          {categories.map((category) => (
+          {categories?.data?.map((category: Category) => (
             <Option key={category._id} value={category._id}>
               {category.name}
             </Option>

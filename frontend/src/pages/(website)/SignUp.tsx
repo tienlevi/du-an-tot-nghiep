@@ -1,40 +1,87 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { TextField, Button, Snackbar } from '@mui/material';
-import { Alert } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import { TextField, Button, Snackbar, Alert } from '@mui/material';
 import SignImg from './SignImg.png';
-
+import instance from '@/config/axios';
 import i18n from './components/common/components/LangConfig';
 
 const SignUp = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
-  const [open, setOpen] = useState(false);
+
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const [feedback, setFeedback] = useState({ message: '', type: '' });
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const response = await instance.post('/auth/signup', formData);
+
+      console.log(response.data);
+      setFeedback({ message: 'Đăng ký thành công', type: 'success' });
+
+    } catch (error) {
+      console.error(error);
+      setFeedback({ message: 'Đăng ký thất bại', type: 'error' });
+    } finally {
+      setOpenSnackbar(true);
+    }
+
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
 
   return (
-    <div className="relative flex max-lg:flex-col-reverse justify-center  md:justify-start items-center mb-36 gap-12 lg:mt-28 xl:gap-24 ">
+    <div className="relative flex max-lg:flex-col-reverse justify-center md:justify-start items-center mb-36 gap-12 lg:mt-28 xl:gap-24">
       <img src={SignImg} alt="Sign Image" />
       <div className="flex flex-col gap-6 md:gap-8 md:mx-10 items-center sm:items-start max-lg:mt-40 justify-center">
-        <h1 className="text-4xl font-medium font-inter ">
+        <h1 className="text-4xl font-medium font-inter">
           {i18n.t('signUpPage.title')}
         </h1>
         <p>{i18n.t('signUpPage.enter')}</p>
-        <form className="flex flex-col gap-6 w-72 md:w-96">
+        <form className="flex flex-col gap-6 w-72 md:w-96" onSubmit={handleSubmit}>
           <TextField
-            label={i18n.t('signUpPage.email')}
+            name="name"
+            label={i18n.t('name')}
             variant="standard"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={formData.name}
+            onChange={handleChange}
             required
           />
           <TextField
-            type="password"
-            label={i18n.t('signUpPage.password')}
+            name="email"
+            label={i18n.t('email')}
             variant="standard"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            name="password"
+            type="password"
+            label={i18n.t('password')}
+            variant="standard"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            name="confirmPassword"
+            type="password"
+            label={i18n.t('confirmPassword')}
+            variant="standard"
+            value={formData.confirmPassword}
+            onChange={handleChange}
             required
           />
           <Button
@@ -51,11 +98,9 @@ const SignUp = () => {
               marginTop: '1rem',
               ':hover': {
                 bgcolor: 'hsla(0, 68%, 56%, 1)',
-                fontWeight: '500',
               },
             }}
             variant="contained"
-            color="primary"
             className="my-2"
           >
             {i18n.t('signUpPage.createAccount')}
@@ -78,7 +123,6 @@ const SignUp = () => {
               ':hover': {
                 bgcolor: 'hsla(0, 0%, 0%, 1)',
                 color: 'white',
-                fontWeight: '500',
               },
             }}
           >
@@ -119,15 +163,15 @@ const SignUp = () => {
                 </clipPath>
               </defs>
             </svg>
-            <span> {i18n.t('signUpPage.withGoogle')}</span>
+            <span>{i18n.t('signUpPage.withGoogle')}</span>
           </Button>
         </div>
 
         <p className="text-gray-600 mx-auto">
-          {i18n.t('signUpPage.haveAccount')}{' '}
+          {i18n.t('signUpPage.haveAccount')}
           <Link
             to="/login"
-            className="ml-2 text-gray font-medium hover:underline"
+            className="ml-2 text-gray-600 font-medium hover:underline "
           >
             {i18n.t('signUpPage.login')}
           </Link>
@@ -135,29 +179,20 @@ const SignUp = () => {
       </div>
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={open}
+        open={openSnackbar}
         autoHideDuration={2000}
-        onClose={() => setOpen(false)}
+        onClose={handleCloseSnackbar}
       >
-        {success ? (
-          <Alert
-            onClose={() => setOpen(false)}
-            severity="success"
-            sx={{ width: '100%' }}
-          >
-            {success}
-          </Alert>
-        ) : (
-          <Alert
-            onClose={() => setOpen(false)}
-            severity="error"
-            sx={{ width: '100%' }}
-          >
-            {error}
-          </Alert>
-        )}
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={feedback.type}
+          sx={{ width: '100%' }}
+        >
+          {feedback.message}
+        </Alert>
       </Snackbar>
     </div>
   );
 };
+
 export default SignUp;

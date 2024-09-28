@@ -88,7 +88,7 @@ const Payment = () => {
         <Link href="/">
           <RedButton
             name={i18n.t('redButtons.placeOrder')}
-            // onClick={handlePayment}
+          // onClick={handlePayment}
           />
         </Link>
       </form>

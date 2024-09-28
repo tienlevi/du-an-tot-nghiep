@@ -11,7 +11,7 @@ const Banner = () => {
       imgSrc: 'https://shopgame-clone.vercel.app/Asset/Image/Slide/image2.jpg',
       text: 'Enhance Your Printing Experience',
       Subtext:
-        'Explore our premium printers and consumables for exceptional results',
+        'Explore emium printers and consumables for exceptional results',
       buttonLink: '/offer',
       buttonText: 'Shop Now',
     },

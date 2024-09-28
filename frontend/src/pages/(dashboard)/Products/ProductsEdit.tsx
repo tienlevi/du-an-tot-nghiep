@@ -1,17 +1,18 @@
-import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import DefaultLayout from '../_components/Layout/DefaultLayout';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Category } from '@/common/types/category';
-import { Product } from '@/common/types/product';
-import { addProduct, editProduct, getProductById } from '@/services/product';
+import { editProduct, getProductById } from '@/services/product';
+import { getCategories } from '@/services/category';
+import UploadCloundinary from '@/common/utils/cloudinary';
 
 interface Inputs {
   name: string;
   price: number;
-  image: FileList; // Thay đổi kiểu dữ liệu thành FileList
+  image: string;
   description: string;
   category: string;
   discount: number;
@@ -21,8 +22,7 @@ interface Inputs {
 
 const ProductsEdit = () => {
   const { id }: any = useParams();
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [message, setMessage] = useState('');
+  const element = useRef<HTMLInputElement>(null);
   const {
     register,
     handleSubmit,
@@ -31,71 +31,71 @@ const ProductsEdit = () => {
   } = useForm<Inputs>();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const getData = async () => {
+  const { data: product }: any = useQuery({
+    queryKey: ['product', id],
+    queryFn: async () => {
       const response = await getProductById(id);
-      reset(response);
-    };
-    getData();
-  }, [id, reset]);
+      return response;
+    },
+  });
+  const { data: categories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => {
+      const response = await getCategories();
+      return response;
+    },
+  });
+
+  const { mutate } = useMutation({
+    mutationKey: ['products'],
+    mutationFn: async (data: any) => {
+      const fileImage = element.current?.files?.[0];
+      const image = await UploadCloundinary(fileImage);
+      return await editProduct(id, { ...data, image: image.secure_url });
+    },
+    onSuccess: (data: any) => {
+      if (data) {
+        toast.success('Sửa sản phẩm thành công');
+        navigate('/products/list');
+      } else {
+        toast.error('Sửa sản phẩm thất bại');
+      }
+      return;
+    },
+    onError: (error: any) => {
+      toast.error(error.message || 'Có lỗi xảy ra khi sửa sản phẩm');
+    },
+  });
+
+  const onSubmit = (data: any) => {
+    mutate(data);
+  };
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(
-          'http://localhost:2202/api/v1/categories',
-        );
-        setCategories(response.data.data);
-      } catch (error) {
-        console.error('Lỗi khi lấy danh sách danh mục:', error);
-      }
-    };
-
-    fetchCategories();
-  }, []);
-
-  const onSubmit = async (data: Inputs) => {
-    const formData = new FormData();
-    formData.append('name', data.name);
-    formData.append('price', data.price.toString());
-    formData.append('image', data.image[0]); // Lấy file ảnh từ FileList
-    formData.append('description', data.description);
-    formData.append('category', data.category);
-    formData.append('discount', data.discount.toString());
-    formData.append('countInStock', data.countInStock.toString());
-    formData.append('featured', data.featured ? 'true' : 'false');
-
-    try {
-      const response = await editProduct(id, formData);
-      toast.success('Sửa sản phẩm thành công');
-      navigate('/products/list');
-      return response;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    reset(product);
+  }, [product]);
 
   return (
     <DefaultLayout>
       <div className="max-w-lg mx-auto mt-8">
-        <h1 className="text-2xl font-bold mb-6">Sửa Sản Phẩm</h1>
+        <h1 className="text-2xl font-bold mb-6">Sửa sản Phẩm</h1>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <input
             type="text"
             {...register('name')}
             placeholder="Tên Sản Phẩm"
             required
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full my-2 p-2 border border-gray-300 rounded"
           />
           <select
             {...register('category')}
             required
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full my-2 p-2 border border-gray-300 rounded"
           >
-            <option value="" disabled className="text-gray-500">
+            <option value="" className="text-gray-500">
               Danh mục
             </option>
-            {categories.map((category) => (
+            {categories?.data?.map((category: Category) => (
               <option key={category._id} value={category._id}>
                 {category.name}
               </option>
@@ -107,40 +107,36 @@ const ProductsEdit = () => {
             {...register('price')}
             placeholder="Giá"
             required
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full my-2 p-2 border border-gray-300 rounded"
           />
 
-          {/* Thay đổi input cho ảnh */}
-          <input
-            type="file"
-            {...register('image', { required: true })}
-            accept="image/*"
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-          {errors.image && <span className="text-red-500">Vui lòng chọn ảnh</span>}
-
+          {/* Thêm input cho việc upload ảnh */}
+          <div className="w-full p-2 border border-gray-300 rounded">
+            <p>Ảnh</p>
+            <img src={product?.image} alt="" className="" />
+            <input ref={element} type="file" className="w-full my-2 p-2" />
+          </div>
           <textarea
             {...register('description')}
             placeholder="Mô Tả"
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full my-2 p-2 border border-gray-300 rounded"
           />
           <input
             type="number"
             {...register('discount')}
             placeholder="Giảm Giá"
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full my-2 p-2 border border-gray-300 rounded"
           />
           <input
             type="number"
             {...register('countInStock')}
             placeholder="Số lượng trong kho"
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full my-2 p-2 border border-gray-300 rounded"
           />
-          <div className="flex items-center">
+          <div className="flex my-2 items-center">
             <input type="checkbox" {...register('featured')} className="mr-2" />
             <span>Featured</span>
           </div>
-
           <button
             type="submit"
             className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
@@ -148,7 +144,6 @@ const ProductsEdit = () => {
             Sửa Sản Phẩm
           </button>
         </form>
-        {message && <p className="mt-4 text-green-500">{message}</p>}
       </div>
     </DefaultLayout>
   );

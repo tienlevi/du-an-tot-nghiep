@@ -5,9 +5,9 @@ import { LangProvider } from '@/context/LangContext';
 import { WishlistProvider } from '@/context/WishlistContext';
 import About from '@/pages/(website)/About';
 import Account from '@/pages/(website)/Account';
-import AllProducts from '@/pages/(website)/AllProducts';
+import Products from '@/pages/(website)/Products';
 import Cart from '@/pages/(website)/Cart';
-import Category from '@/pages/(website)/Category';
+// import Category from '@/pages/(website)/Category';
 import Checkout from '@/pages/(website)/Checkout';
 import ScrollToTop from '@/pages/(website)/components/common/components/ScrollToTop';
 import Contact from '@/pages/(website)/Contact';
@@ -30,9 +30,12 @@ import ProductsAdd from '@/pages/(dashboard)/Products/ProductsAdd';
 import ProductsEdit from '@/pages/(dashboard)/Products/ProductsEdit';
 import ProductsList from '@/pages/(dashboard)/Products/ProductsList';
 import Profile from '@/pages/(dashboard)/Profile';
-import Settings from '@/pages/(dashboard)/Settings';
-import Tables from '@/pages/(dashboard)/Tables';
+import Settings from '@/pages/(dashboard)/Order/Settings';
 import PageTitle from '@/pages/(dashboard)/_components/PageTitle';
+import CategoryAdd from '@/pages/(dashboard)/Category/CategoryAdd';
+import CategoryEdit from '@/pages/(dashboard)/Category/CategoryEdit';
+import CategoryList from '@/pages/(dashboard)/Category/CategoryList';
+import SearchProducts from '@/pages/(website)/Search';
 
 function DashboardRoute() {
   return (
@@ -53,9 +56,10 @@ function DashboardRoute() {
                 <Route element={<Cart />} path="/cart" />
                 <Route element={<Checkout />} path="/checkout" />
                 <Route element={<Payment />} path="/payment" />
-                <Route element={<AllProducts />} path="/allproducts" />
+                <Route element={<Products />} path="/products" />
                 <Route element={<Product />} path="/allProducts/:title" />
-                <Route element={<Category />} path="/category" />
+                <Route element={<SearchProducts />} path="/search" />
+                {/* <Route element={<Category />} path="/category" /> */}
                 <Route element={<NotFound />} path="*" />
               </Route>
 
@@ -88,7 +92,6 @@ function DashboardRoute() {
                   </>
                 }
               />
-              {/* Products */}
               <Route
                 path="/products/list"
                 element={
@@ -117,14 +120,33 @@ function DashboardRoute() {
                 }
               />
               <Route
-                path="/tables"
+                path="/category/list"
                 element={
                   <>
                     <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <Tables />
+                    <CategoryList />
                   </>
                 }
               />
+              <Route
+                path="/category/add"
+                element={
+                  <>
+                    <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                    <CategoryAdd />
+                  </>
+                }
+              />
+              <Route
+                path="/category/edit/:id"
+                element={
+                  <>
+                    <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                    <CategoryEdit />
+                  </>
+                }
+              />
+
               <Route
                 path="/settings"
                 element={

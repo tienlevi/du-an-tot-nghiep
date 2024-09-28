@@ -19,33 +19,37 @@ export const getCartByUserId = async (req, res) => {
 };
 // Thêm sản phẩm vào giỏ hàng
 export const addItemToCart = async (req, res) => {
-  const { userId } = req.body;
-  const { products } = req.body;
+  const { userId, products } = req.body;
   try {
-    // kiểm tra giỏ hàng có tồn tại chưa? dựa theo UserId
     let cart = await Cart.findOne({ userId });
-    // nếu giỏ hàng không tồn tại thì chúng ta tạo mới
     if (!cart) {
       cart = new Cart({ userId, products: [] });
     }
-    const existProductIndex = cart.products.findIndex(
-      (item) => item.productId.toString() == products.productId
-    );
+    for (const product of products) {
+      if (!product.productId) {
+        return res
+          .status(StatusCodes.BAD_REQUEST)
+          .json({ error: "productId is required for each product" });
+      }
 
-    // kiểm tra xem sản có tồn tại trong giỏ hàng không?
-    if (existProductIndex !== -1) {
-      // nếu mà sản phẩm tồn tại trong giỏ hàng thì chúng ta cập nhật số lượng
-      cart.products[existProductIndex].quantity += quantity.quantity;
-    } else {
-      // nếu sản phẩm chưa có trong giỏ hàng thì chúng ta thêm mới
-      cart.products.push({ ...products });
+      const existProductIndex = cart.products.findIndex(
+        (item) => item.productId.toString() === product.productId
+      );
+      if (existProductIndex !== -1) {
+        // Nếu sản phẩm đã tồn tại trong giỏ hàng, cập nhật số lượng
+        cart.products[existProductIndex].quantity += 1;
+      } else {
+        // Nếu sản phẩm chưa có trong giỏ hàng, thêm mới
+        const newProduct = { productId: product.productId, quantity: 1 };
+        cart.products.push(newProduct);
+      }
     }
     await cart.save();
     return res.status(StatusCodes.OK).json({ cart });
   } catch (error) {
-    // trả về client lỗi
+    console.log({ error });
     return res
-      .status(StatusCodes.BAD_REQUEST)
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ error: "Internal Server Error" });
   }
 };
@@ -116,7 +120,7 @@ export const increaseProductQuantity = async (req, res) => {
 
     product.quantity++;
 
-    await cart.save();
+    // await cart.save();
     res.status(200).json(cart);
   } catch (error) {
     res.status(500).json({ message: error.message });

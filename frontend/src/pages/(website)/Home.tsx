@@ -1,22 +1,15 @@
-import Row1 from './components/Home/Row1';
-import Deal from './components/Home/Deal';
-import FlashSale from './components/Home/FlashSale';
-import BestSelling from './components/Home/BestSelling';
-import Categories from './components/Home/Categories';
+import Categories from './components/Category/Categories';
+import Deal from './components/common/components/Deal';
 import Services from './components/common/components/Services';
-import AllProducts from './components/Home/AllProducts';
-import Featured from './components/Home/Featured';
-import { ITEMS } from './components/common/functions/items';
+import SlideShow from './components/common/components/slideShow';
+import ProductItem from './components/Product/ProductItem';
 const Home = () => {
   return (
     <div dir="ltr" className="flex flex-col xl:mx-32 mt-28 gap-3">
-      <Row1 />
-      <FlashSale />
-      <Categories />
-      <BestSelling items={ITEMS} />
+      <SlideShow/>
+      <ProductItem limitProduct={4} />
       <Deal />
-      <AllProducts items={ITEMS} />
-      <Featured />
+      <Categories />
       <Services />
     </div>
   );

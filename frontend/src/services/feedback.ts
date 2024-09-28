@@ -9,7 +9,7 @@ export const addReview = async (
       `/products/${productId}/reviews`,
       reviewData,
     );
-    return response;
+    return response.data;
   } catch (error) {
     console.error('Lỗi khi thêm đánh giá:', error);
   }
@@ -18,7 +18,7 @@ export const addReview = async (
 export const getReviewsByProductId = async (productId: number | string) => {
   try {
     const response = await instance.get(`/products/${productId}/reviews`);
-    return response;
+    return response.data;
   } catch (error) {
     console.error('Lỗi khi lấy đánh giá của sản phẩm:', error);
   }
@@ -32,7 +32,7 @@ export const deleteReview = async (
     const response = await instance.delete(
       `/products/${productId}/reviews/${reviewId}`,
     );
-    return response;
+    return response.data;
   } catch (error) {
     console.error('Lỗi khi xóa đánh giá:', error);
   }

@@ -1,12 +1,15 @@
-import { useState } from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
-import { useNavigate } from 'react-router-dom';
-import { CiSearch } from 'react-icons/ci';
-import { useForm } from 'react-hook-form';
+import { useState, useEffect } from "react";
+import { styled, alpha } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
+import { Link } from "react-router-dom";
+import { ITEMS } from "../common/functions/items";
+import { CiSearch } from "react-icons/ci";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import i18n from "../common/components/LangConfig";
 
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
   backgroundColor: alpha(theme.palette.grey[300], 0.3),
   '&:hover': {
     backgroundColor: alpha(theme.palette.grey[300], 0.6),
@@ -39,37 +42,39 @@ const Search = styled('div')(({ theme }) => ({
 }));
 
 const SearchAppBar = () => {
-  const { register, handleSubmit } = useForm();
-  const navigate = useNavigate();
+  const [searchText, setSearchText] = useState("");
 
-  const [searchText, setSearchText] = useState('');
-
-  const onSubmit = (data) => {
-    const { keywords } = data;
-    navigate(`search?keyword=${keywords}`);
-  };
-
-  const handleInputChange = (event) => {
-    setSearchText(event.target.value);
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      setSearchText(searchText.trim());
+    }
   };
 
   return (
     <Search className="flex items-center justify-center w-48 min-[425px]:w-64 sm:max-[1200px]:w-96 min-[1200px]:w-60 min-[1450px]:w-96 ">
-      <form onSubmit={handleSubmit(onSubmit)} className="flex w-full">
-        <input
-          type="text"
-          {...register('keywords')}
-          value={searchText}
-          onChange={handleInputChange}
-          className="outline-none placeholder-gray-400 flex-1"
-          placeholder="Tìm kiếm"
-        />
-        {searchText && (
-          <IconButton type="submit" aria-label="search" color="inherit">
-            <CiSearch className="w-5 h-auto md:w-8 md:h-8" />
-          </IconButton>
+      <Autocomplete
+        freeSolo
+        disableClearable
+        disableListWrap
+        openOnFocus
+        options={ITEMS.map((item) => item.title)}
+        value={searchText}
+        onChange={(event, newValue) => setSearchText(newValue)}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            placeholder={i18n.t("search")}
+            onKeyDown={handleKeyDown}
+          />
         )}
-      </form>
+      />
+      {searchText && (
+        <IconButton aria-label="search" color="inherit">
+          <Link to={`/allProducts/${searchText}`}>
+            <CiSearch className="w-5 h-auto md:w-8 md:h-8" />
+          </Link>
+        </IconButton>
+      )}
     </Search>
   );
 };

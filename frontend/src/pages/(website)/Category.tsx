@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Grid, Typography, Menu, MenuItem, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
-import FlashSaleItem from './components/common/components/FlashSaleItem';
+// import FlashSaleItem from './components/common/components/ProductItem';
 import i18n from './components/common/components/LangConfig';
 import { ITEMS } from './components/common/functions/items';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -22,7 +22,7 @@ const Category = () => {
     setAnchorEl(null);
   };
 
-  const handleCategorySelect = (category) => {
+  const handleCategorySelect = (category: any) => {
     setSelectedCategory(category);
     setAnchorEl(null);
   };
@@ -81,13 +81,13 @@ const Category = () => {
         <Grid container spacing={3} justifyContent="center" alignItems="center">
           {filteredItems.map((item, index) => (
             <Grid item key={item.id}>
-              <FlashSaleItem
+              {/* <FlashSaleItem
                 item={item}
                 index={index}
                 totalItems={filteredItems.length}
                 stars={item.stars}
                 rates={item.rates}
-              />
+              /> */}
             </Grid>
           ))}
         </Grid>

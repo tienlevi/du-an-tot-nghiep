@@ -3,6 +3,7 @@ import {
   create,
   deleteProductById,
   getProductById,
+  getProductByLimit,
   getProducts,
   related,
   updateProductById,
@@ -10,6 +11,7 @@ import {
 
 const router = Router();
 router.get("/products", getProducts);
+router.get("/products/result", getProductByLimit);
 router.get("/products/:id", getProductById);
 router.get("/products/:categoryId/related/:productId", related);
 router.delete("/products/:id", deleteProductById);

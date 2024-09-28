@@ -3,16 +3,27 @@ import Product from "../models/product";
 
 export const create = async (req, res) => {
   try {
-    const product = await Product.create(req.body);
-    return res.status(StatusCodes.CREATED).json(product);
+    const slug = req.body.name.toLowerCase().replace(/\s+/g, "-");
+    const product = await Product.create({ ...req.body, slug: slug });
+    return res.status(200).json(product);
   } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
   }
 };
 
 export const getProducts = async (req, res) => {
   try {
     const data = await Product.find(req.body);
+    return res.status(StatusCodes.OK).json(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getProductByLimit = async (req, res) => {
+  try {
+    const limit = req.query.limit;
+    const data = await Product.find(req.body).limit(limit);
     return res.status(StatusCodes.OK).json(data);
   } catch (error) {
     console.log(error);

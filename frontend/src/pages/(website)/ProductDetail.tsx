@@ -1,10 +1,12 @@
-import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { useCart } from '../../context/CartContext';
-import i18n from './components/common/components/LangConfig';
 import ActiveLastBreadcrumb from './components/common/components/Link';
 import RedButton from './components/common/components/RedButton';
+import { useCart } from '../../context/CartContext';
+import i18n from './components/common/components/LangConfig';
+import { Link, useParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
+import RatingComp from './components/common/components/Rating';
 import { ITEMS } from './components/common/functions/items';
 import NotFound from './NotFound';
 const Product = () => {
@@ -53,7 +55,7 @@ const Product = () => {
   };
 
   // Function to handle size selection
-  const handleSizeSelect = (size:any) => {
+  const handleSizeSelect = (size) => {
     setSelectedSize(size);
   };
   const [isImageFullScreen, setIsImageFullScreen] = useState(false);
