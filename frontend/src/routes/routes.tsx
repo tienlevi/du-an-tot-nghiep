@@ -5,37 +5,35 @@ import { LangProvider } from '@/context/LangContext';
 import { WishlistProvider } from '@/context/WishlistContext';
 import About from '@/pages/(website)/About';
 import Account from '@/pages/(website)/Account';
-import Products from '@/pages/(website)/Products';
 import Cart from '@/pages/(website)/Cart';
+import Products from '@/pages/(website)/Products';
 // import Category from '@/pages/(website)/Category';
 import Checkout from '@/pages/(website)/Checkout';
 import ScrollToTop from '@/pages/(website)/components/common/components/ScrollToTop';
 import Contact from '@/pages/(website)/Contact';
 import Home from '@/pages/(website)/Home';
+import LayoutWebsite from '@/pages/(website)/Layout';
 import LogIn from '@/pages/(website)/LogIn';
 import NotFound from '@/pages/(website)/NotFound';
 import Payment from '@/pages/(website)/Payment';
 import Product from '@/pages/(website)/Product';
 import SignUpWebsite from '@/pages/(website)/SignUp';
 import Wishlist from '@/pages/(website)/Wishlist';
-import LayoutWebsite from '@/pages/(website)/Layout';
 
 // Dashboard
+import PageTitle from '@/pages/(dashboard)/_components/PageTitle';
 import Calendar from '@/pages/(dashboard)/Calendar';
+import CategoryAdd from '@/pages/(dashboard)/CategoryAdd';
+import CategoryEdit from '@/pages/(dashboard)/CategoryEdit';
+import CategoryList from '@/pages/(dashboard)/CategoryList';
 import Chart from '@/pages/(dashboard)/Chart';
 import ECommerce from '@/pages/(dashboard)/Main';
 import ProductsAdd from '@/pages/(dashboard)/ProductsAdd';
 import ProductsEdit from '@/pages/(dashboard)/ProductsEdit';
 import ProductsList from '@/pages/(dashboard)/ProductsList';
 import Profile from '@/pages/(dashboard)/Profile';
-import PageTitle from '@/pages/(dashboard)/_components/PageTitle';
-import CategoryAdd from '@/pages/(dashboard)/CategoryAdd';
-import CategoryEdit from '@/pages/(dashboard)/CategoryEdit';
-import CategoryList from '@/pages/(dashboard)/CategoryList';
-import SearchProducts from '@/pages/(website)/Search';
 import UserList from '@/pages/(dashboard)/User/UserList';
-import UserAdd from '@/pages/(dashboard)/User/UserAdd';
-import UserEdit from '@/pages/(dashboard)/User/UserEdit';
+import SearchProducts from '@/pages/(website)/Search';
 
 function DashboardRoute() {
   return (
@@ -144,13 +142,12 @@ function DashboardRoute() {
                   </>
                 }
               />
-
               <Route
-                path="/settings"
+                path="/user/profile/list"
                 element={
                   <>
-                    <PageTitle title="Settings | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <Settings />
+                    <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                    <UserList />
                   </>
                 }
               />
@@ -160,25 +157,6 @@ function DashboardRoute() {
                   <>
                     <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
                     <Chart />
-                  </>
-                }
-              />
-
-              <Route
-                path="/auth/signin"
-                element={
-                  <>
-                    <PageTitle title="Signin | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <SignIn />
-                  </>
-                }
-              />
-              <Route
-                path="/auth/signup"
-                element={
-                  <>
-                    <PageTitle title="Signup | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <SignUp />
                   </>
                 }
               />
