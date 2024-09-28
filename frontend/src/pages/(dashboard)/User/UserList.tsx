@@ -1,17 +1,16 @@
+import {
+  getUserProfile,
+  lockUserAccount,
+  unLockUserAccount
+} from '@/services/userProfile';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { TableColumnsType } from 'antd';
 import { Button, Input, Space, Table } from 'antd';
-import { Link } from 'react-router-dom';
-import DefaultLayout from '../Layout/DefaultLayout';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-  deleteUserProfile,
-  lockUserAccount,
-  unLockUserAccount,
-  getUserProfile,
-} from '@/services/userProfile';
-import { toast } from 'react-toastify';
-import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import DefaultLayout from '../_components/Layout/DefaultLayout';
 
 const UserList = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -33,22 +32,6 @@ const UserList = () => {
   useEffect(() => {
     setUserList(users || []);
   }, [users]);
-
-  const { mutate: deleteUser } = useMutation({
-    mutationKey: ['users'],
-    mutationFn: async (id: string) => {
-      if (confirm('Bạn có muốn xóa không?')) {
-        try {
-          const response = await deleteUserProfile(id);
-          toast.success('Xóa thành công');
-          setUserList(userList.filter((user) => user._id !== id));
-          return response;
-        } catch (error) {
-          toast.error('Có lỗi xảy ra');
-        }
-      }
-    },
-  });
 
   const { mutate: lockUser } = useMutation({
     mutationKey: ['lockUser'],
@@ -134,18 +117,6 @@ const UserList = () => {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <Link
-            to={`/user/profile/edit/${record._id}`}
-            className="py-1 px-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            Edit
-          </Link>
-          <Button
-            onClick={() => deleteUser(record._id!)}
-            className="py-1 px-2 bg-red-500 text-white rounded hover:bg-red-600"
-          >
-            Delete
-          </Button>
           {record.isLocked ? (
             <Button
               onClick={() => unlockUser(record._id!)}

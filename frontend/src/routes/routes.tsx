@@ -36,9 +36,9 @@ import CategoryAdd from '@/pages/(dashboard)/Category/CategoryAdd';
 import CategoryEdit from '@/pages/(dashboard)/Category/CategoryEdit';
 import CategoryList from '@/pages/(dashboard)/Category/CategoryList';
 import SearchProducts from '@/pages/(website)/Search';
-import UserList from '@/pages/(dashboard)/_components/User/UserList';
-import UserAdd from '@/pages/(dashboard)/_components/User/UserAdd';
-import UserEdit from '@/pages/(dashboard)/_components/User/UserEdit';
+import UserList from '@/pages/(dashboard)/User/UserList';
+import UserAdd from '@/pages/(dashboard)/User/UserAdd';
+import UserEdit from '@/pages/(dashboard)/User/UserEdit';
 
 function DashboardRoute() {
   return (

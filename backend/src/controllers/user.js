@@ -11,16 +11,6 @@ export const getUserProfile = async (req, res) => {
   }
 };
 
-// Function to delete a user profile
-export const deleteUserProfile = async (req, res) => {
-  try {
-    const data = await User.findByIdAndDelete(req.params.id);
-    return res.status(StatusCodes.OK).json(data);
-  } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
-  }
-};
-
 // Function to lock a user account
 export const lockUserAccount = async (req, res) => {
   try {

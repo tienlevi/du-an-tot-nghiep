@@ -10,24 +10,6 @@ export const getUserProfile = async () => {
   }
 };
 
-export const deleteUserProfile = async (id: number | string) => {
-  try {
-    const response = await instance.delete(`/user/profile/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error('Lỗi khi xóa hồ sơ người dùng:', error);
-  }
-};
-
-export const updateUserProfile = async (profileData: any) => {
-  try {
-    const response = await instance.put('/user/profile', profileData);
-    return response.data;
-  } catch (error) {
-    console.error('Lỗi khi cập nhật hồ sơ người dùng:', error);
-  }
-};
-
 export const getUserAddresses = async () => {
   try {
     const response = await instance.get('/user/addresses');
