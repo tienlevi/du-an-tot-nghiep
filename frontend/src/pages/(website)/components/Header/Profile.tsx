@@ -1,15 +1,23 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaCartShopping, FaUser, FaHeart } from 'react-icons/fa6';
 const Profile = () => {
   const [open, setOpen] = useState(false);
-
+  const [user, setUser] = useState<any>(null);
   const handleClick = () => {
     setOpen(!open);
   };
+
+  const logOut = () => {
+    localStorage.removeItem('user');
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    const value = JSON.parse(localStorage.getItem('user')!);
+    setUser(value);
+  }, []);
 
   return (
     <div className="flex justify-between md:justify-around items-center md:gap-4 md:ml-4 ">
@@ -26,10 +34,14 @@ const Profile = () => {
         className={`absolute top-full p-2 bg-[rgba(31,31,31,0.5)] ${open ? 'block' : 'hidden'} z-20`}
       >
         <div className="flex flex-col">
+          <div className="text-[18px] p-4 text-white">Hello {user?.name}</div>
           <Link className="text-[18px] p-4 text-white" to={`/account`}>
             My Account
           </Link>
-          <div className="text-[18px] p-4 text-white cursor-pointer">
+          <div
+            className="text-[18px] p-4 text-white cursor-pointer"
+            onClick={logOut}
+          >
             Log out
           </div>
         </div>
