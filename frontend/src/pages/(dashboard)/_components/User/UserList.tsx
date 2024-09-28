@@ -1,0 +1,204 @@
+import type { TableColumnsType } from 'antd';
+import { Button, Input, Space, Table } from 'antd';
+import { Link } from 'react-router-dom';
+import DefaultLayout from '../Layout/DefaultLayout';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  deleteUserProfile,
+  lockUserAccount,
+  unLockUserAccount,
+  getUserProfile,
+} from '@/services/userProfile';
+import { toast } from 'react-toastify';
+import { useState, useEffect } from 'react';
+import { format } from 'date-fns';
+
+const UserList = () => {
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const queryClient = useQueryClient();
+
+  // Fetch user profiles
+  const { data: users, isLoading } = useQuery({
+    queryKey: ['users'],
+    queryFn: async () => {
+      const response = await getUserProfile();
+      return response;
+    },
+  });
+
+  // State to manage the list of users for dynamic updates
+  const [userList, setUserList] = useState(users || []);
+
+  // Update state when users data changes
+  useEffect(() => {
+    setUserList(users || []);
+  }, [users]);
+
+  const { mutate: deleteUser } = useMutation({
+    mutationKey: ['users'],
+    mutationFn: async (id: string) => {
+      if (confirm('Bạn có muốn xóa không?')) {
+        try {
+          const response = await deleteUserProfile(id);
+          toast.success('Xóa thành công');
+          setUserList(userList.filter((user) => user._id !== id));
+          return response;
+        } catch (error) {
+          toast.error('Có lỗi xảy ra');
+        }
+      }
+    },
+  });
+
+  const { mutate: lockUser } = useMutation({
+    mutationKey: ['lockUser'],
+    mutationFn: async (id: string) => {
+      try {
+        const response = await lockUserAccount(id);
+        toast.success('Tài khoản đã bị khóa');
+        // Update user status locally to 'locked'
+        setUserList(
+          userList.map((user) =>
+            user._id === id ? { ...user, isLocked: true } : user,
+          ),
+        );
+        return response;
+      } catch (error) {
+        toast.error('Có lỗi xảy ra khi khóa tài khoản');
+      }
+    },
+  });
+
+  const { mutate: unlockUser } = useMutation({
+    mutationKey: ['unlockUser'],
+    mutationFn: async (id: string) => {
+      try {
+        const response = await unLockUserAccount(id);
+        toast.success('Tài khoản đã được mở khóa');
+        // Update user status locally to 'active'
+        setUserList(
+          userList.map((user) =>
+            user._id === id ? { ...user, isLocked: false } : user,
+          ),
+        );
+        return response;
+      } catch (error) {
+        toast.error('Có lỗi xảy ra khi mở khóa tài khoản');
+      }
+    },
+  });
+
+  const columns: TableColumnsType = [
+    {
+      title: 'User ID',
+      dataIndex: '_id',
+      key: '_id',
+      render: (text) => <span>{text}</span>,
+    },
+    {
+      title: 'Username',
+      dataIndex: 'name',
+      key: 'name',
+      render: (text) => <span>{text}</span>,
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+      render: (text) => <span>{text}</span>,
+    },
+    {
+      title: 'Role',
+      dataIndex: 'role',
+      key: 'role',
+      render: (text) => <span>{text}</span>,
+    },
+    {
+      title: 'Status',
+      dataIndex: 'isLocked',
+      key: 'isLocked',
+      render: (isLocked) => (
+        <span>{isLocked ? 'Đã khóa' : 'Đang hoạt động'}</span>
+      ),
+    },
+    {
+      title: 'Date Created',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      render: (text) => (
+        <span>{format(new Date(text), 'dd/MM/yyyy HH:mm')}</span>
+      ),
+    },
+    {
+      title: 'Hành Động',
+      key: 'action',
+      render: (_, record) => (
+        <Space size="middle">
+          <Link
+            to={`/user/profile/edit/${record._id}`}
+            className="py-1 px-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Edit
+          </Link>
+          <Button
+            onClick={() => deleteUser(record._id!)}
+            className="py-1 px-2 bg-red-500 text-white rounded hover:bg-red-600"
+          >
+            Delete
+          </Button>
+          {record.isLocked ? (
+            <Button
+              onClick={() => unlockUser(record._id!)}
+              className="py-1 px-2 bg-green-500 text-white rounded hover:bg-green-600"
+            >
+              Mở Khóa Tài Khoản
+            </Button>
+          ) : (
+            <Button
+              onClick={() => lockUser(record._id!)}
+              className="py-1 px-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+            >
+              Khóa Tài Khoản
+            </Button>
+          )}
+        </Space>
+      ),
+    },
+  ];
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  return (
+    <div>
+      <DefaultLayout>
+        <div className="container mx-auto">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-3xl font-semibold">Danh sách người dùng</h2>
+            <Link
+              to={'/user/profile/add'}
+              className="bg-red-500 text-white py-2 px-4 rounded"
+            >
+              Thêm người dùng mới
+            </Link>
+          </div>
+          <Input
+            placeholder="Tìm kiếm người dùng"
+            value={searchQuery}
+            onChange={handleSearch}
+            className="mb-4"
+          />
+          <Table
+            columns={columns}
+            dataSource={userList}
+            rowKey="_id"
+            loading={isLoading}
+          />
+        </div>
+      </DefaultLayout>
+    </div>
+  );
+};
+
+export default UserList;

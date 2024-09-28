@@ -36,6 +36,9 @@ import CategoryAdd from '@/pages/(dashboard)/Category/CategoryAdd';
 import CategoryEdit from '@/pages/(dashboard)/Category/CategoryEdit';
 import CategoryList from '@/pages/(dashboard)/Category/CategoryList';
 import SearchProducts from '@/pages/(website)/Search';
+import UserList from '@/pages/(dashboard)/_components/User/UserList';
+import UserAdd from '@/pages/(dashboard)/_components/User/UserAdd';
+import UserEdit from '@/pages/(dashboard)/_components/User/UserEdit';
 
 function DashboardRoute() {
   return (
@@ -62,7 +65,6 @@ function DashboardRoute() {
                 {/* <Route element={<Category />} path="/category" /> */}
                 <Route element={<NotFound />} path="*" />
               </Route>
-
               <Route
                 index
                 element={
@@ -73,7 +75,6 @@ function DashboardRoute() {
                 }
                 path="/admin"
               />
-
               <Route
                 path="/calendar"
                 element={
@@ -146,7 +147,34 @@ function DashboardRoute() {
                   </>
                 }
               />
+              <Route
+                path="/user/profile/list"
+                element={
+                  <>
+                    <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                    <UserList />
+                  </>
+                }
+              />
+              <Route
+                path="/user/profile/add"
+                element={
+                  <>
+                    <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                    <UserAdd />
+                  </>
+                }
+              />
 
+              <Route
+                path="/user/profile/edit/:id"
+                element={
+                  <>
+                    <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                    <UserEdit />
+                  </>
+                }
+              />
               <Route
                 path="/settings"
                 element={
@@ -165,7 +193,6 @@ function DashboardRoute() {
                   </>
                 }
               />
-
               <Route
                 path="/auth/signin"
                 element={
