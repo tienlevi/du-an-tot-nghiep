@@ -1,11 +1,11 @@
 import { Router } from "express";
 import {
-    addItemToCart,
-    decreaseProductQuantity,
-    getCartByUserId,
-    increaseProductQuantity,
-    removeFromCart,
-    updateProductQuantity,
+  addItemToCart,
+  decreaseProductQuantity,
+  getCartByUserId,
+  increaseProductQuantity,
+  removeFromCart,
+  updateProductQuantity,
 } from "../controllers/cart";
 
 const router = Router();

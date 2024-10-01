@@ -1,8 +1,8 @@
 import instance from '@/config/axios';
 
-export const getCart = async () => {
+export const getCart = async (userId: string) => {
   try {
-    const response = await instance.get('/cart');
+    const response = await instance.get(`/carts/${userId}`);
     return response.data;
   } catch (error) {
     console.error('Lỗi khi lấy thông tin giỏ hàng:', error);
@@ -11,7 +11,7 @@ export const getCart = async () => {
 
 export const addToCart = async (
   userId: string,
-  products: { productId: string; quantity: number }[],
+  products: { productId: string; product: object; quantity: number }[],
 ) => {
   try {
     const response = await instance.post('/carts/add-to-cart', {

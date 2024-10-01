@@ -21,7 +21,7 @@ const SignUp = () => {
     e.preventDefault();
     try {
       const response = await instance.post('/auth/signin', formData);
-      console.log(response.data);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
       setFeedback({ message: 'Đăng nhập thành công', type: 'success' });
     } catch (error) {
       console.error(error);
@@ -43,7 +43,10 @@ const SignUp = () => {
           {i18n.t('signUpPage.title')}
         </h1>
         <p>{i18n.t('signUpPage.enter')}</p>
-        <form className="flex flex-col gap-6 w-72 md:w-96" onSubmit={handleSubmit}>
+        <form
+          className="flex flex-col gap-6 w-72 md:w-96"
+          onSubmit={handleSubmit}
+        >
           <TextField
             name="email"
             label={i18n.t('signUpPage.email')}
@@ -146,10 +149,7 @@ const SignUp = () => {
 
         <p className="text-gray-600 mx-auto">
           {i18n.t('signUpPage.haveAccount')}
-          <Link
-            to="/signup"
-            className="ml-2 font-medium  hover:underline"
-          >
+          <Link to="/signup" className="ml-2 font-medium  hover:underline">
             {i18n.t('Sign Up')}
           </Link>
         </p>
