@@ -36,10 +36,12 @@ export const updateCart = async (
   }
 };
 
-export const removeFromCart = async (productId: number | string) => {
+export const removeFromCart = async (productId: string, userId: string) => {
   try {
-    const response = await instance.delete(`/cart/${productId}`);
-    return response;
+    const response = await instance.post(
+      `/carts/remove-cart/${productId}/${userId}`,
+    );
+    return response.data;
   } catch (error) {
     console.error('Lỗi khi xóa sản phẩm khỏi giỏ hàng:', error);
   }

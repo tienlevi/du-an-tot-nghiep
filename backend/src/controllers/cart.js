@@ -3,14 +3,14 @@ import Cart from "../models/cart";
 
 // Lấy danh sách sản phẩm thuộc 1 user
 export const getCartByUserId = async (req, res) => {
-  const { userId } = req.params;
-  if (!userId || userId.length !== 24) {
-    return res.status(401).json({ error: "Id" });
-  }
+  const { id } = req.params;
+
   try {
-    const cart = await Cart.findOne({ userId });
-    console.log(cart);
-    return res.status(StatusCodes.OK).json(cart);
+    const cart = await Cart.findOne({ userId: id });
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found." });
+    }
+    return res.status(200).json(cart);
   } catch (error) {
     console.log(error);
   }
@@ -58,7 +58,7 @@ export const addItemToCart = async (req, res) => {
 // Xóa sản phẩm trong giỏ hàng thuộc 1 user
 
 export const removeFromCart = async (req, res) => {
-  const { userId, productId } = req.body;
+  const { userId } = req.params;
   try {
     let cart = await Cart.findOne({ userId });
     if (!cart) {
@@ -68,7 +68,8 @@ export const removeFromCart = async (req, res) => {
     }
     cart.products = cart.products.filter(
       (product) =>
-        product.productId && product.productId.toString() !== productId
+        product.productId &&
+        product.productId.toString() !== req.params.productId
     );
 
     await cart.save();

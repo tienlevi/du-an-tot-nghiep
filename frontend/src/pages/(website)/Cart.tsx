@@ -1,29 +1,52 @@
+import { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import i18n from './components/common/components/LangConfig';
 /* eslint-disable react/prop-types */
-import { useCart } from '../../context/CartContext';
-import CartItem from './components/Cart/CartItem';
 import WhiteButton from './components/common/components/WhiteButton';
 import RedButton from './components/common/components/RedButton';
 import ActiveLastBreadcrumb from './components/common/components/Link';
-import { Link } from 'react-router-dom';
 import useAuth from '@/hooks/useAuth';
-import { useQuery } from '@tanstack/react-query';
-import { getCart } from '@/services/cart';
-import { IconButton } from '@mui/material';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getCart, removeFromCart } from '@/services/cart';
+import type { CartTypes } from '@/types/cart';
 import { Product } from '@/types/product';
+import { getProducts } from '@/services/product';
 
 const Cart = () => {
   const { user } = useAuth();
-
-  const { data } = useQuery({
-    queryKey: ['cart'],
+  const queryClient = useQueryClient();
+  const { data: cart } = useQuery<CartTypes>({
+    queryKey: ['cart', user?._id],
     queryFn: async () => {
       return await getCart(user?._id as string);
     },
   });
+  const { data: products } = useQuery<Product[]>({
+    queryKey: ['products'],
+    queryFn: async () => {
+      return await getProducts();
+    },
+  });
 
-  console.log(data);
-  console.log(user?._id);
+  const cartItems = products?.filter((product) => {
+    return cart?.products.some((item) => item.productId === product._id);
+  });
+  const total = useMemo(() => {
+    const result = cartItems?.reduce((price, product) => {
+      return price + product.price;
+    }, 0);
+    return result;
+  }, [cartItems]);
+
+  const { mutate } = useMutation({
+    mutationKey: ['cart'],
+    mutationFn: async (id: string) => {
+      return await removeFromCart(id, user?._id!);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
+    },
+  });
 
   return (
     <div className="max-w-screen-lg mx-auto mt-48 flex flex-col gap-10">
@@ -36,27 +59,29 @@ const Cart = () => {
           {i18n.t('cart.header.subtotal')}
         </h2>
       </div>
-      {data?.products?.map((item: Product) => (
+      {cartItems?.map((item: Product) => (
         <div
-          key={item._id}
+          key={item?._id}
           className=" flex flex-row justify-between items-center py-2 md:py-6 px-2 md:pr-12 md:pl-4 shadow rounded gap-4 md:gap-16  "
         >
           <div className="flex items-center md:gap-4">
             <div className="flex w-28">
-              <IconButton className="absolute -top-4">X</IconButton>
-              <Link to={{ pathname: `/allProducts/${item.name}` }}>
+              <button className=" -top-4" onClick={() => mutate(item._id!)}>
+                Xóa giỏ hàng
+              </button>
+              <Link to={{ pathname: `/allProducts/${item?.name}` }}>
                 <img
                   loading="lazy"
-                  src={item.image}
-                  alt={item.name}
+                  src={item?.image}
+                  alt={item?.name}
                   className="w-16 h-16"
                 />
               </Link>
             </div>
-            <p className="hidden lg:flex text-xs md:text-base ">{item.name}</p>
+            <p className="hidden lg:flex text-xs md:text-base ">{item?.name}</p>
           </div>
           <div className="flex items-center ">
-            <p className="text-gray-500">${item.price}</p>
+            <p className="text-gray-500">${item?.price}</p>
           </div>
           <div className="flex items-center border-2 border-gray-300  rounded px-2 py-1  mr-2 gap-3">
             <button className=" rounded-full hover:bg-gray-200 text-gray-400 ">
@@ -74,7 +99,7 @@ const Cart = () => {
             {/* <p className="text-gray-500">${item.price * quantity}</p> */}
           </div>
         </div>
-      ))}{' '}
+      ))}
       {/* Buttons for returning to shop, applying coupon, and proceeding to checkout */}
       <div className="flex justify-between items-center mt-2">
         <Link to="..">
@@ -97,11 +122,7 @@ const Cart = () => {
           <p className="text-xl font-semibold">{i18n.t('cart.cartTotal')}</p>
           <div className="flex justify-between mt-4 border-b">
             <p className="text-xl">{i18n.t('cart.total')}:</p>
-            {/* <p className="text-xl">${subtotal}</p> */}
-          </div>
-          <div className="flex justify-between mt-4 border-b">
-            <p className="text-xl">{i18n.t('cart.subtotal')}:</p>
-            {/* <p className="text-xl">${total}</p> */}
+            <p className="text-xl">${total}</p>
           </div>
           <div className="flex justify-between mt-4 border-b">
             <p className="text-xl">{i18n.t('cart.shipping')}:</p>
