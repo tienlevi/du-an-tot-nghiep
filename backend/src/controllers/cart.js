@@ -3,19 +3,17 @@ import Cart from "../models/cart";
 
 // Lấy danh sách sản phẩm thuộc 1 user
 export const getCartByUserId = async (req, res) => {
-  const { userId } = req.params;
+  const { id } = req.params;
+
   try {
-    const cart = await Cart.findOne({ userId }).populate("products.productId");
-    const cartData = {
-      products: cart.products.map((item) => ({
-        productId: item.productId._id,
-        name: item.productId.name,
-        price: item.productId.price,
-        quantity: item.quantity,
-      })),
-    };
-    return res.status(StatusCodes.OK).json(cartData);
-  } catch (error) {}
+    const cart = await Cart.findOne({ userId: id });
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found." });
+    }
+    return res.status(200).json(cart);
+  } catch (error) {
+    console.log(error);
+  }
 };
 // Thêm sản phẩm vào giỏ hàng
 export const addItemToCart = async (req, res) => {
@@ -40,7 +38,11 @@ export const addItemToCart = async (req, res) => {
         cart.products[existProductIndex].quantity += 1;
       } else {
         // Nếu sản phẩm chưa có trong giỏ hàng, thêm mới
-        const newProduct = { productId: product.productId, quantity: 1 };
+        const newProduct = {
+          productId: product.productId,
+          product: product,
+          quantity: 1,
+        };
         cart.products.push(newProduct);
       }
     }
@@ -56,7 +58,7 @@ export const addItemToCart = async (req, res) => {
 // Xóa sản phẩm trong giỏ hàng thuộc 1 user
 
 export const removeFromCart = async (req, res) => {
-  const { userId, productId } = req.body;
+  const { userId } = req.params;
   try {
     let cart = await Cart.findOne({ userId });
     if (!cart) {
@@ -66,7 +68,8 @@ export const removeFromCart = async (req, res) => {
     }
     cart.products = cart.products.filter(
       (product) =>
-        product.productId && product.productId.toString() !== productId
+        product.productId &&
+        product.productId.toString() !== req.params.productId
     );
 
     await cart.save();
