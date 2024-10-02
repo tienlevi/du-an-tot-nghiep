@@ -7,9 +7,9 @@ import RedTitle from '../common/components/RedTitle';
 import Arrows from '../common/components/Arrows';
 import ViewAll from '../common/components/ViewAll';
 import i18n from '../common/components/LangConfig';
-import { useEffect, useState } from 'react';
 import { addToCart } from '@/services/cart';
 import { toast } from 'react-toastify';
+import useAuth from '@/hooks/useAuth';
 
 interface Props {
   limitProduct: number;
@@ -23,18 +23,12 @@ const ProductItem = ({ limitProduct }: Props) => {
       return response;
     },
   });
-  const [user, setUser] = useState<any>(null);
-  console.log(user);
-
-  useEffect(() => {
-    const value = JSON.parse(localStorage.getItem('user')!);
-    setUser(value);
-  }, []);
+  const { user } = useAuth();
 
   const { mutate } = useMutation({
     mutationKey: ['products'],
     mutationFn: async (products: any) => {
-      await addToCart(user._id, products);
+      await addToCart(user?._id!, products);
     },
     onSuccess: () => {
       toast.success('Thêm giỏ hàng thành công');
@@ -72,7 +66,9 @@ const ProductItem = ({ limitProduct }: Props) => {
                 <div className="absolute top-10 left-0">
                   <div
                     onClick={() => {
-                      mutate([{ productId: item._id, quantity: 1 }]);
+                      mutate([
+                        { productId: item._id, product: item, quantity: 1 },
+                      ]);
                     }}
                     className="bg-red-500 text-white p-3 m-2 rounded cursor-pointer hover:bg-white hover:text-black duration-300"
                   >
