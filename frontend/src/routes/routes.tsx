@@ -36,6 +36,7 @@ import CategoryAdd from '@/pages/(dashboard)/Category/CategoryAdd';
 import CategoryEdit from '@/pages/(dashboard)/Category/CategoryEdit';
 import CategoryList from '@/pages/(dashboard)/Category/CategoryList';
 import SearchProducts from '@/pages/(website)/Search';
+import Category from '@/pages/(website)/Category';
 
 function DashboardRoute() {
   return (
@@ -59,7 +60,7 @@ function DashboardRoute() {
                 <Route element={<Products />} path="/products" />
                 <Route element={<Product />} path="/allProducts/:title" />
                 <Route element={<SearchProducts />} path="/search" />
-                {/* <Route element={<Category />} path="/category" /> */}
+                 <Route element={<Category />} path="/category" /> 
                 <Route element={<NotFound />} path="*" />
               </Route>
 
