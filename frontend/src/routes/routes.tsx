@@ -33,7 +33,10 @@ import CategoryAdd from '@/pages/(dashboard)/CategoryAdd';
 import CategoryEdit from '@/pages/(dashboard)/CategoryEdit';
 import CategoryList from '@/pages/(dashboard)/CategoryList';
 import SearchProducts from '@/pages/(website)/Search';
-import Category from '@/pages/(website)/Category';
+import UserList from '@/pages/(dashboard)/User/UserList';
+import UserAdd from '@/pages/(dashboard)/User/UserAdd';
+import UserEdit from '@/pages/(dashboard)/User/UserEdit';
+
 
 function DashboardRoute() {
   return (
@@ -57,7 +60,7 @@ function DashboardRoute() {
                 <Route element={<Products />} path="/products" />
                 <Route element={<Product />} path="/allProducts/:title" />
                 <Route element={<SearchProducts />} path="/search" />
-                 <Route element={<Category />} path="/category" /> 
+                 {/* <Route element={<Category />} path="/category" />  */}
                 <Route element={<NotFound />} path="*" />
               </Route>
               <Route
