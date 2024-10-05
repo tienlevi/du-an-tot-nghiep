@@ -19,8 +19,8 @@ router.post("/carts/update", updateProductQuantity);
 // Xóa item trong giỏ hàng
 router.post("/carts/remove-cart/:productId/:userId", removeFromCart);
 // Tăng số lượng của sản phẩm trong giỏ hàng
-router.post("/carts/increase", increaseProductQuantity);
+router.post("/carts/increase/:productId/:userId", increaseProductQuantity);
 // Giảm số lượng của sản phẩm trong giỏ hàng
-router.post("/carts/decrease", decreaseProductQuantity);
+router.post("/carts/decrease/:productId/:userId", decreaseProductQuantity);
 
 export default router;
