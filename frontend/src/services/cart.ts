@@ -46,3 +46,31 @@ export const removeFromCart = async (productId: string, userId: string) => {
     console.error('Lỗi khi xóa sản phẩm khỏi giỏ hàng:', error);
   }
 };
+
+export const increaseQuatityCart = async (
+  productId: string,
+  userId: string,
+) => {
+  try {
+    const response = await instance.post(
+      `/carts/increase/${productId}/${userId}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const decreaseQuatityCart = async (
+  productId: string,
+  userId: string,
+) => {
+  try {
+    const response = await instance.post(
+      `/carts/decrease/${productId}/${userId}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
