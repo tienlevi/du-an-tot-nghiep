@@ -1,6 +1,5 @@
 import { Router } from "express";
 import {
-  deleteUserProfile,
   getUserProfile,
   lockUserAccount,
   unLockUserAccount,
