@@ -33,9 +33,6 @@ import CategoryAdd from '@/pages/(dashboard)/CategoryAdd';
 import CategoryEdit from '@/pages/(dashboard)/CategoryEdit';
 import CategoryList from '@/pages/(dashboard)/CategoryList';
 import SearchProducts from '@/pages/(website)/Search';
-import UserList from '@/pages/(dashboard)/User/UserList';
-import UserAdd from '@/pages/(dashboard)/User/UserAdd';
-import UserEdit from '@/pages/(dashboard)/User/UserEdit';
 
 function DashboardRoute() {
   return (
@@ -146,39 +143,11 @@ function DashboardRoute() {
               />
 
               <Route
-                path="/settings"
-                element={
-                  <>
-                    <PageTitle title="Settings | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <Settings />
-                  </>
-                }
-              />
-              <Route
                 path="/chart"
                 element={
                   <>
                     <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
                     <Chart />
-                  </>
-                }
-              />
-
-              <Route
-                path="/auth/signin"
-                element={
-                  <>
-                    <PageTitle title="Signin | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <SignIn />
-                  </>
-                }
-              />
-              <Route
-                path="/auth/signup"
-                element={
-                  <>
-                    <PageTitle title="Signup | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <SignUp />
                   </>
                 }
               />
