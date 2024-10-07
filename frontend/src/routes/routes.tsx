@@ -17,26 +17,21 @@ import LogIn from '@/pages/(website)/LogIn';
 import NotFound from '@/pages/(website)/NotFound';
 import Payment from '@/pages/(website)/Payment';
 import Product from '@/pages/(website)/Product';
+import SearchProducts from '@/pages/(website)/Search';
 import SignUpWebsite from '@/pages/(website)/SignUp';
 import Wishlist from '@/pages/(website)/Wishlist';
-import SearchProducts from '@/pages/(website)/Search';
 
 // dashboard
 import PageTitle from '@/pages/(dashboard)/_components/PageTitle';
-import ECommerce from '@/pages/(dashboard)/Main';
 import Calendar from '@/pages/(dashboard)/Calendar';
-import Profile from '@/pages/(dashboard)/Profile';
-import ProductsList from '@/pages/(dashboard)/ProductsList';
-import ProductsAdd from '@/pages/(dashboard)/ProductsAdd';
-import ProductsEdit from '@/pages/(dashboard)/ProductsEdit';
-import CategoryList from '@/pages/(dashboard)/CategoryList';
 import CategoryAdd from '@/pages/(dashboard)/CategoryAdd';
 import CategoryEdit from '@/pages/(dashboard)/CategoryEdit';
 import CategoryList from '@/pages/(dashboard)/CategoryList';
-import SearchProducts from '@/pages/(website)/Search';
-import UserList from '@/pages/(dashboard)/User/UserList';
-import UserAdd from '@/pages/(dashboard)/User/UserAdd';
-import UserEdit from '@/pages/(dashboard)/User/UserEdit';
+import ECommerce from '@/pages/(dashboard)/Main';
+import ProductsAdd from '@/pages/(dashboard)/ProductsAdd';
+import ProductsEdit from '@/pages/(dashboard)/ProductsEdit';
+import ProductsList from '@/pages/(dashboard)/ProductsList';
+import Profile from '@/pages/(dashboard)/Profile';
 
 function DashboardRoute() {
   return (
@@ -60,7 +55,7 @@ function DashboardRoute() {
                 <Route element={<Products />} path="/products" />
                 <Route element={<Product />} path="/allProducts/:title" />
                 <Route element={<SearchProducts />} path="/search" />
-                 {/* <Route element={<Category />} path="/category" />  */}
+                {/* <Route element={<Category />} path="/category" />  */}
                 <Route element={<NotFound />} path="*" />
               </Route>
               <Route
@@ -142,25 +137,6 @@ function DashboardRoute() {
                   <>
                     <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
                     <CategoryEdit />
-                  </>
-                }
-              />
-
-              <Route
-                path="/settings"
-                element={
-                  <>
-                    <PageTitle title="Settings | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <Settings />
-                  </>
-                }
-              />
-              <Route
-                path="/chart"
-                element={
-                  <>
-                    <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <Chart />
                   </>
                 }
               />
