@@ -32,10 +32,11 @@ import ProductsEdit from '@/pages/(dashboard)/ProductsEdit';
 import CategoryList from '@/pages/(dashboard)/CategoryList';
 import CategoryAdd from '@/pages/(dashboard)/CategoryAdd';
 import CategoryEdit from '@/pages/(dashboard)/CategoryEdit';
+import CategoryList from '@/pages/(dashboard)/CategoryList';
+import SearchProducts from '@/pages/(website)/Search';
 import UserList from '@/pages/(dashboard)/User/UserList';
-import Chart from '@/pages/(dashboard)/Chart';
-
-// Dashboard
+import UserAdd from '@/pages/(dashboard)/User/UserAdd';
+import UserEdit from '@/pages/(dashboard)/User/UserEdit';
 
 function DashboardRoute() {
   return (
@@ -59,7 +60,7 @@ function DashboardRoute() {
                 <Route element={<Products />} path="/products" />
                 <Route element={<Product />} path="/allProducts/:title" />
                 <Route element={<SearchProducts />} path="/search" />
-                {/* <Route element={<Category />} path="/category" /> */}
+                 {/* <Route element={<Category />} path="/category" />  */}
                 <Route element={<NotFound />} path="*" />
               </Route>
               <Route
@@ -144,12 +145,13 @@ function DashboardRoute() {
                   </>
                 }
               />
+
               <Route
-                path="/user/profile/list"
+                path="/settings"
                 element={
                   <>
-                    <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <UserList />
+                    <PageTitle title="Settings | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                    <Settings />
                   </>
                 }
               />
