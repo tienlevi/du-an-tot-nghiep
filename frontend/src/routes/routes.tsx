@@ -20,6 +20,8 @@ import Product from '@/pages/(website)/Product';
 import SignUpWebsite from '@/pages/(website)/SignUp';
 import Wishlist from '@/pages/(website)/Wishlist';
 import SearchProducts from '@/pages/(website)/Search';
+
+// dashboard
 import PageTitle from '@/pages/(dashboard)/_components/PageTitle';
 import ECommerce from '@/pages/(dashboard)/Main';
 import Calendar from '@/pages/(dashboard)/Calendar';
