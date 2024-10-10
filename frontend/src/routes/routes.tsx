@@ -33,10 +33,13 @@ import CategoryAdd from '@/pages/(dashboard)/CategoryAdd';
 import CategoryEdit from '@/pages/(dashboard)/CategoryEdit';
 import CategoryList from '@/pages/(dashboard)/CategoryList';
 import SearchProducts from '@/pages/(website)/Search';
-import UserList from '@/pages/(dashboard)/User/UserList';
-import UserAdd from '@/pages/(dashboard)/User/UserAdd';
-import UserEdit from '@/pages/(dashboard)/User/UserEdit';
+// import UserList from '@/pages/(dashboard)/User/UserList';
+// import UserAdd from '@/pages/(dashboard)/User/UserAdd';
+// import UserEdit from '@/pages/(dashboard)/User/UserEdit';
 import Category from '@/pages/(website)/Category';
+import { CiSettings } from 'react-icons/ci';
+import SignUp from '@/pages/(website)/SignUp';
+// import CategorySearch from '@/pages/(website)/components/CategorySearch/CategorySearch';
 
 function DashboardRoute() {
   return (
@@ -60,7 +63,10 @@ function DashboardRoute() {
                 <Route element={<Products />} path="/products" />
                 <Route element={<Product />} path="/allProducts/:title" />
                 <Route element={<SearchProducts />} path="/search" />
-                 <Route element={<Category />} path="/category" /> 
+                <Route path="/category/:id" element={<Category />} />
+
+                
+
                 <Route element={<NotFound />} path="*" />
               </Route>
               <Route
@@ -151,7 +157,7 @@ function DashboardRoute() {
                 element={
                   <>
                     <PageTitle title="Settings | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <Settings />
+                    <CiSettings />
                   </>
                 }
               />
@@ -170,7 +176,7 @@ function DashboardRoute() {
                 element={
                   <>
                     <PageTitle title="Signin | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <SignIn />
+                    <LogIn />
                   </>
                 }
               />

@@ -21,7 +21,7 @@ app.use(morgan("tiny"));
 
 // connect db
 connectDB(
-  "mongodb+srv://admin:admin@duantotnghiep.gs5sb.mongodb.net/DuAnTotNghiep"
+  "mongodb://localhost:27017/DuAnTotNghiep"
 );
 
 // routers
