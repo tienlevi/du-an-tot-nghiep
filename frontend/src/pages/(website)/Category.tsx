@@ -67,7 +67,7 @@ const Category = () => {
 
       <div className="container mx-auto mt-10">
         <h1 className="text-3xl font-semibold mb-8">
-          Sản phẩm trong danh mục này
+        GetProductsByCategory
         </h1>
         <div className="grid grid-cols-3 gap-4">
           {products?.map((product:Product) => (
