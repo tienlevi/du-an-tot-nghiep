@@ -32,7 +32,7 @@ import ProductsAdd from '@/pages/(dashboard)/ProductsAdd';
 import ProductsEdit from '@/pages/(dashboard)/ProductsEdit';
 import ProductsList from '@/pages/(dashboard)/ProductsList';
 import Profile from '@/pages/(dashboard)/Profile';
-import OrderManagement from '@/pages/(dashboard)/ordermanagement';
+import UserList from '@/pages/(dashboard)/User/UserList';
 
 function DashboardRoute() {
   return (
@@ -142,11 +142,11 @@ function DashboardRoute() {
                 }
               />
               <Route
-                path="/ordermanagement"
+                path="/user/profile/list"
                 element={
                   <>
                     <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <OrderManagement />
+                    <UserList />
                   </>
                 }
               />
