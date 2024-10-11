@@ -1,14 +1,13 @@
 import {
   getUserProfile,
   lockUserAccount,
-  unLockUserAccount
+  unLockUserAccount,
 } from '@/services/userProfile';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { TableColumnsType } from 'antd';
 import { Button, Input, Space, Table } from 'antd';
 import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import DefaultLayout from '../_components/Layout/DefaultLayout';
 
@@ -147,12 +146,6 @@ const UserList = () => {
         <div className="container mx-auto">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-3xl font-semibold">Danh sách người dùng</h2>
-            <Link
-              to={'/user/profile/add'}
-              className="bg-red-500 text-white py-2 px-4 rounded"
-            >
-              Thêm người dùng mới
-            </Link>
           </div>
           <Input
             placeholder="Tìm kiếm người dùng"

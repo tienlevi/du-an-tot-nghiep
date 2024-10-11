@@ -6,7 +6,6 @@ import instance from '@/config/axios';
 import i18n from './components/common/components/LangConfig';
 
 const SignUp = () => {
-
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -16,6 +15,8 @@ const SignUp = () => {
   const [feedback, setFeedback] = useState({ message: '', type: '' });
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
+  const navigate = useNavigate(); // Thêm useNavigate ở đây
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -24,9 +25,14 @@ const SignUp = () => {
     e.preventDefault();
     try {
       const response = await instance.post('/auth/signup', formData);
-
       console.log(response.data);
+
       setFeedback({ message: 'Đăng ký thành công', type: 'success' });
+      
+    
+      setTimeout(() => {
+        navigate('/login');
+      }, 1000); 
 
     } catch (error) {
       console.error(error);
@@ -34,7 +40,6 @@ const SignUp = () => {
     } finally {
       setOpenSnackbar(true);
     }
-
   };
 
   const handleCloseSnackbar = () => {
@@ -126,7 +131,7 @@ const SignUp = () => {
               },
             }}
           >
-            {/* Google Icon SVG */}
+      
             <svg
               width="24"
               height="25"

@@ -15,7 +15,6 @@ import LayoutWebsite from '@/pages/(website)/Layout';
 import LogIn from '@/pages/(website)/LogIn';
 import NotFound from '@/pages/(website)/NotFound';
 import Payment from '@/pages/(website)/Payment';
-import Product from '@/pages/(website)/Product';
 import SearchProducts from '@/pages/(website)/Search';
 import SignUpWebsite from '@/pages/(website)/SignUp';
 import Wishlist from '@/pages/(website)/Wishlist';
@@ -31,6 +30,9 @@ import ProductsAdd from '@/pages/(dashboard)/ProductsAdd';
 import ProductsEdit from '@/pages/(dashboard)/ProductsEdit';
 import ProductsList from '@/pages/(dashboard)/ProductsList';
 import Profile from '@/pages/(dashboard)/Profile';
+import UserList from '@/pages/(dashboard)/User/UserList';
+import OrderManagement from '@/pages/(dashboard)/OrderManagement';
+import ProductDetail from '@/pages/(website)/ProductDetail';
 
 function DashboardRoute() {
   return (
@@ -51,7 +53,7 @@ function DashboardRoute() {
               <Route element={<Checkout />} path="/checkout" />
               <Route element={<Payment />} path="/payment" />
               <Route element={<Products />} path="/products" />
-              <Route element={<Product />} path="/allProducts/:title" />
+              <Route path="/product/:id" element={<ProductDetail />} />
               <Route element={<SearchProducts />} path="/search" />
               {/* <Route element={<Category />} path="/category" />  */}
               <Route element={<NotFound />} path="*" />
@@ -135,6 +137,24 @@ function DashboardRoute() {
                 <>
                   <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
                   <CategoryEdit />
+                </>
+              }
+            />
+            <Route
+              path="/user/profile/list"
+              element={
+                <>
+                  <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <UserList />
+                </>
+              }
+            />
+            <Route
+              path="/ordermanagement"
+              element={
+                <>
+                  <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <OrderManagement />
                 </>
               }
             />

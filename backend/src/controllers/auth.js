@@ -86,7 +86,7 @@ export const signin = async (req, res) => {
     token,
   });
 };
-// Hãy viết chot ôi hàm logout ở đây
+
 export const logout = async (req, res) => {
   return res.status(StatusCodes.OK).json({
     messages: ["Đăng xuất thành công"],
