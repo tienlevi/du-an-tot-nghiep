@@ -8,7 +8,6 @@ import WhiteButton from './components/common/components/WhiteButton';
 import { useState } from 'react';
 import { Snackbar } from '@mui/material';
 import { Alert } from '@mui/material';
-import { useCart } from '../../context/CartContext';
 import { motion } from 'framer-motion'; // Import motion from Framer Motion for animations
 import i18n from './components/common/components/LangConfig';
 
@@ -17,7 +16,6 @@ function Wishlist() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [massage, setMassage] = useState('');
   const [severity, setSeverity] = useState('success');
-  const { moveAllToCart }: any = useCart();
   let relatedItems;
 
   const handleClick = () => {
