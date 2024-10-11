@@ -75,7 +75,7 @@ const ProductItem = ({ limitProduct }: Props) => {
                     <FaCartShopping style={{ fontSize: 20 }} />
                   </div>
                 </div>
-                <Link to={{ pathname: `/allProducts` }}>
+                <Link to={{ pathname: `/product/${item._id}` }}>
                   <img
                     loading="lazy"
                     src={item.image}

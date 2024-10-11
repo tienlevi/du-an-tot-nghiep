@@ -9,13 +9,13 @@ import { AnimatePresence } from 'framer-motion';
 import RatingComp from './components/common/components/Rating';
 import { ITEMS } from './components/common/functions/items';
 import NotFound from './NotFound';
-const Product = () => {
+const ProductDetail = () => {
   const { handleIncrease, handleDecrease } = useCart();
   const [quantity, setQuantity] = useState(0);
   const [selectedSize, setSelectedSize] = useState(''); // State to track selected size
-  let { title } = useParams();
+  let { id } = useParams();
 
-  const selectedProduct = ITEMS.find((item) => item.title === title);
+  const selectedProduct = ITEMS.find((item) => item.id === id);
 
   useEffect(() => {
     if (selectedProduct) {
@@ -278,4 +278,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default ProductDetail;
