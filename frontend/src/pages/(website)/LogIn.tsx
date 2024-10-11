@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { TextField, Button, Snackbar, Alert } from '@mui/material';
 import SignImg from './SignImg.png';
 import instance from '@/config/axios';
@@ -13,6 +13,8 @@ const SignUp = () => {
   const [feedback, setFeedback] = useState({ message: '', type: '' });
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
+  const navigate = useNavigate(); // Thêm useNavigate ở đây
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -23,6 +25,12 @@ const SignUp = () => {
       const response = await instance.post('/auth/signin', formData);
       localStorage.setItem('user', JSON.stringify(response.data.user));
       setFeedback({ message: 'Đăng nhập thành công', type: 'success' });
+
+
+      setTimeout(() => {
+        navigate('/');
+      }, 1000);
+
     } catch (error) {
       console.error(error);
       setFeedback({ message: 'Đăng nhập thất bại', type: 'error' });
@@ -149,7 +157,7 @@ const SignUp = () => {
 
         <p className="text-gray-600 mx-auto">
           {i18n.t('signUpPage.haveAccount')}
-          <Link to="/signup" className="ml-2 font-medium  hover:underline">
+          <Link to="/signup" className="ml-2 font-medium hover:underline">
             {i18n.t('Sign Up')}
           </Link>
         </p>

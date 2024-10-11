@@ -3,21 +3,19 @@ import calculateTimeLeft from '../functions/calculateTimeLeft';
 import i18n from './LangConfig';
 
 const Deal = () => {
-  // const dealEndTime = new Date('2024-12-31T23:59:59'); // Ví dụ thời gian trong tương lai
-  // const [timeLeft, setTimeLeft] = useState<any>(calculateTimeLeft(dealEndTime));
+  const [timeLeft, setTimeLeft] = useState<any>(
+    calculateTimeLeft(new Date('2024-12-27T00:00:00')),
+  );
 
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     const updatedTimeLeft = calculateTimeLeft(dealEndTime);
-  //     console.log(updatedTimeLeft);  // In ra timeLeft để kiểm tra
-  //     setTimeLeft(updatedTimeLeft);
-  //   }, 1000);
+  useEffect(() => {
 
-  //   return () => clearInterval(timer);
-  // }, [dealEndTime]);
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft(new Date('2024-12-27T00:00:00')));
+    }, 1000);
 
-  // Render fallback nếu `timeLeft` không tồn tại hoặc là null
-  // if (!timeLeft || !timeLeft.days) return <div>Countdown finished</div>;
+
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <div className="flex gap-10 md:my-10 mt-10 items-center justify-center flex-col-reverse md:flex-row min-h-[500px] bg-black text-white">
@@ -27,17 +25,30 @@ const Deal = () => {
           {i18n.t('deal.title')}
         </h2>
         <div className="font-semibold text-base flex flex-row gap-6 text-black">
-          {['days', 'hours', 'minutes', 'seconds'].map((unit, index) => (
-            <div
-              key={index}
-              className="flex flex-col items-center justify-center py-3 bg-white rounded-full"
-            >
-              {/* <span>{timeLeft[unit]}</span>  */}
-              <span className="font-light text-xs w-[62px] text-center">
-                {i18n.t(`deal.${unit}`)}
-              </span>
-            </div>
-          ))}
+          <div className="flex flex-col items-center justify-center py-3 bg-white rounded-full">
+            <span>{timeLeft?.days || '00'}</span>
+            <span className="font-light text-xs w-[62px] text-center">
+              {i18n.t('deal.days')}
+            </span>
+          </div>
+          <div className="flex flex-col items-center justify-center py-3 bg-white rounded-full">
+            <span>{timeLeft?.hours || '00'}</span>
+            <span className="font-light text-xs w-[62px] text-center">
+              {i18n.t('deal.hours')}
+            </span>
+          </div>
+          <div className="flex flex-col items-center justify-center py-3 bg-white rounded-full">
+            <span>{timeLeft?.minutes || '00'}</span>
+            <span className="font-light text-xs w-[62px] text-center">
+              {i18n.t('deal.minutes')}
+            </span>
+          </div>
+          <div className="flex flex-col items-center justify-center py-3 bg-white rounded-full">
+            <span>{timeLeft?.seconds || '00'}</span>
+            <span className="font-light text-xs w-[62px] text-center">
+              {i18n.t('deal.seconds')}
+            </span>
+          </div>
         </div>
       </div>
     </div>
