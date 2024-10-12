@@ -1,67 +1,52 @@
 import mongoose from "mongoose";
 
 // Hàm để sinh orderNumber
-const generateOrderNumber = () => {
-    const timestamp = Date.now().toString();
-    const random = Math.floor(Math.random() * 1000)
-        .toString()
-        .padStart(3, "0");
-    return `${timestamp}-${random}`;
-};
+// const generateOrderNumber = () => {
+//   const timestamp = Date.now().toString();
+//   const random = Math.floor(Math.random() * 1000)
+//     .toString()
+//     .padStart(3, "0");
+//   return `${timestamp}-${random}`;
+// };
 
 const orderItemSchema = new mongoose.Schema({
-    _id: {
-        type: mongoose.Schema.Types.ObjectId,
-        auto: true,
-    },
-    name: {
-        type: String,
-        required: true,
-    },
-    price: {
-        type: Number,
-        required: true,
-    },
-    quantity: {
-        type: Number,
-        required: true,
-    },
+  name: { type: String },
+  price: { type: Number },
+  image: { type: String },
 });
 
-const orderSchema = new mongoose.Schema({
+const orderSchema = new mongoose.Schema(
+  {
+    orderId: { type: String },
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
     },
     items: [orderItemSchema],
-    orderNumber: {
-        type: String,
-        // required: true,
-        unique: true,
+    email: { type: String },
+    name: {
+      type: String,
+      // required: true,
     },
-    customerName: {
-        type: String,
-        // required: true,
-    },
+    address: { type: String },
     totalPrice: {
-        type: Number,
-        required: true,
+      type: Number,
+      required: true,
     },
+    phone: { type: String },
     status: {
-        type: String,
-        enum: ["pending", "confirmed", "shipped", "delivered"],
-        default: "pending",
+      type: String,
+      enum: ["pending", "confirmed", "shipped", "delivered"],
+      default: "pending",
     },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
-});
+  },
+  { timestamps: true, versionKey: false }
+);
 // Tạo pre-save hook để sinh orderNumber trước khi lưu vào cơ sở dữ liệu
-orderSchema.pre("save", function (next) {
-    if (!this.orderNumber) {
-        this.orderNumber = generateOrderNumber();
-    }
-    next();
-});
+// orderSchema.pre("save", function (next) {
+//   if (!this.orderNumber) {
+//     this.orderNumber = generateOrderNumber();
+//   }
+//   next();
+// });
 export default mongoose.model("Order", orderSchema);
