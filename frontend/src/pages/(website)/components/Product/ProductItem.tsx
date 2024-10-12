@@ -31,10 +31,8 @@ const ProductItem = ({ limitProduct }: Props) => {
       await addToCart(user?._id!, products);
     },
     onSuccess: () => {
-      toast.success('Thêm giỏ hàng thành công');
-    },
-    onError: () => {
       !user && toast.error('Hãy đăng nhập tài khoản để thêm giỏ hàng');
+      toast.success('Thêm giỏ hàng thành công');
     },
   });
 
@@ -51,38 +49,37 @@ const ProductItem = ({ limitProduct }: Props) => {
         <div className="relative mt-10 grid grid-cols-4 gap-2 md:gap-12 transition-transform duration-300 transform ">
           {data?.map((item) => (
             <div key={item._id} className="relative mx-2">
-              <div className="relative rounded flex items-center justify-center bg-zinc-100 w-[270px] h-80 md:h-60 transform transition-transform duration-300 hover:scale-105 focus:outline-none hover:-translate-y-2">
-                <div className="absolute top-0 left-0">
-                  {item.discount ? (
-                    <p className="bg-red-500 text-white py-1 px-3 m-2 rounded">
-                      -{item.discount}%
-                    </p>
-                  ) : (
-                    <p className="bg-red-500 text-white py-1 px-3 m-2 rounded">
-                      0%
-                    </p>
-                  )}
-                </div>
-                <div className="absolute top-10 left-0">
-                  <div
-                    onClick={() => {
-                      mutate([
-                        { productId: item._id, product: item, quantity: 1 },
-                      ]);
-                    }}
-                    className="bg-red-500 text-white p-3 m-2 rounded cursor-pointer hover:bg-white hover:text-black duration-300"
-                  >
-                    <FaCartShopping style={{ fontSize: 20 }} />
-                  </div>
-                </div>
-                <Link to={{ pathname: `/product/${item._id}` }}>
-                  <img
-                    loading="lazy"
-                    src={item.image}
-                    className="max-h-52  w-full object-contain"
-                  />
-                </Link>
+              <div className="absolute top-0 left-0 z-10">
+                {item.discount ? (
+                  <p className="bg-red-500 text-white py-1 px-3 m-2 rounded">
+                    -{item.discount}%
+                  </p>
+                ) : (
+                  <p className="bg-red-500 text-white py-1 px-3 m-2 rounded">
+                    0%
+                  </p>
+                )}
               </div>
+              <div className="absolute top-10 left-0 z-10">
+                <div
+                  onClick={() => {
+                    mutate([{ productId: item._id, quantity: 1 }]);
+                  }}
+                  className="bg-red-500 text-white p-3 m-2 rounded cursor-pointer hover:bg-white hover:text-black duration-300"
+                >
+                  <FaCartShopping style={{ fontSize: 20 }} />
+                </div>
+              </div>
+              <Link
+                to={`/product/${item._id}`}
+                className="relative rounded flex items-center justify-center bg-zinc-100 w-[270px] h-80 z-0 md:h-60 transform transition-transform duration-300 hover:scale-105 focus:outline-none hover:-translate-y-2"
+              >
+                <img
+                  loading="lazy"
+                  src={item.image}
+                  className="max-h-52  w-full object-contain"
+                />
+              </Link>
               <div className="flex md:items-start items-center flex-col ">
                 <h3 className="text-lg font-base mt-4">{item.name}</h3>
                 <p className="text-red-500  text-sm font-semibold line-clamp-2">
@@ -93,14 +90,6 @@ const ProductItem = ({ limitProduct }: Props) => {
                     </span>
                   )}
                 </p>
-                {/* <span>
-                 <div className="flex mt-2 text-gray-500 text-sm font-semibold gap-2 items-center ">
-                   <RatingComp
-                     text={i18n.t('productPage.review')}
-                     variant="primary"
-                   />
-                 </div>
-               </span> */}
               </div>
             </div>
           ))}
