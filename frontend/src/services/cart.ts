@@ -11,7 +11,7 @@ export const getCart = async (userId: string) => {
 
 export const addToCart = async (
   userId: string,
-  products: { productId: string; product: object; quantity: number }[],
+  products: { productId: string; quantity: number }[],
 ) => {
   try {
     const response = await instance.post('/carts/add-to-cart', {
@@ -44,5 +44,33 @@ export const removeFromCart = async (productId: string, userId: string) => {
     return response.data;
   } catch (error) {
     console.error('Lỗi khi xóa sản phẩm khỏi giỏ hàng:', error);
+  }
+};
+
+export const increaseQuatityCart = async (
+  productId: string,
+  userId: string,
+) => {
+  try {
+    const response = await instance.post(
+      `/carts/increase/${productId}/${userId}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const decreaseQuatityCart = async (
+  productId: string,
+  userId: string,
+) => {
+  try {
+    const response = await instance.post(
+      `/carts/decrease/${productId}/${userId}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
   }
 };
