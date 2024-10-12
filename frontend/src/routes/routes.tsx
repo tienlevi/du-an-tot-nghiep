@@ -1,6 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
 // website
-import { CartProvider } from '@/context/CartContext';
 import { LangProvider } from '@/context/LangContext';
 import { WishlistProvider } from '@/context/WishlistContext';
 import About from '@/pages/(website)/About';
@@ -16,7 +15,6 @@ import LayoutWebsite from '@/pages/(website)/Layout';
 import LogIn from '@/pages/(website)/LogIn';
 import NotFound from '@/pages/(website)/NotFound';
 import Payment from '@/pages/(website)/Payment';
-import Product from '@/pages/(website)/Product';
 import SearchProducts from '@/pages/(website)/Search';
 import SignUpWebsite from '@/pages/(website)/SignUp';
 import Wishlist from '@/pages/(website)/Wishlist';
@@ -33,126 +31,138 @@ import ProductsEdit from '@/pages/(dashboard)/ProductsEdit';
 import ProductsList from '@/pages/(dashboard)/ProductsList';
 import Profile from '@/pages/(dashboard)/Profile';
 import UserList from '@/pages/(dashboard)/User/UserList';
+import OrderManagement from '@/pages/(dashboard)/OrderManagement';
+import ProductDetail from '@/pages/(website)/ProductDetail';
 
 function DashboardRoute() {
   return (
     <>
       <ScrollToTop />
       <LangProvider>
-        <CartProvider>
-          <WishlistProvider>
-            <Routes>
-              <Route element={<LayoutWebsite />}>
-                <Route index element={<Home />} path="/" />
-                <Route element={<Contact />} path="/contact" />
-                <Route element={<Account />} path="/account" />
-                <Route element={<About />} path="/about" />
-                <Route element={<SignUpWebsite />} path="/signup" />
-                <Route element={<LogIn />} path="/login" />
-                <Route element={<Wishlist />} path="/wishlist" />
-                <Route element={<Cart />} path="/cart" />
-                <Route element={<Checkout />} path="/checkout" />
-                <Route element={<Payment />} path="/payment" />
-                <Route element={<Products />} path="/products" />
-                <Route element={<Product />} path="/products/:id" />
-                <Route element={<SearchProducts />} path="/search" />
-                {/* <Route element={<Category />} path="/category" />  */}
-                <Route element={<NotFound />} path="*" />
-              </Route>
-              <Route
-                index
-                element={
-                  <>
-                    <PageTitle title="eCommerce Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <ECommerce />
-                  </>
-                }
-                path="/admin"
-              />
-              <Route
-                path="/calendar"
-                element={
-                  <>
-                    <PageTitle title="Calendar | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <Calendar />
-                  </>
-                }
-              />
-              <Route
-                path="/profile"
-                element={
-                  <>
-                    <PageTitle title="Profile | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <Profile />
-                  </>
-                }
-              />
-              <Route
-                path="/products/list"
-                element={
-                  <>
-                    <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <ProductsList />
-                  </>
-                }
-              />
-              <Route
-                path="/products/add"
-                element={
-                  <>
-                    <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <ProductsAdd />
-                  </>
-                }
-              />
-              <Route
-                path="/products/edit/:id"
-                element={
-                  <>
-                    <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <ProductsEdit />
-                  </>
-                }
-              />
-              <Route
-                path="/category/list"
-                element={
-                  <>
-                    <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <CategoryList />
-                  </>
-                }
-              />
-              <Route
-                path="/category/add"
-                element={
-                  <>
-                    <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <CategoryAdd />
-                  </>
-                }
-              />
-              <Route
-                path="/category/edit/:id"
-                element={
-                  <>
-                    <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <CategoryEdit />
-                  </>
-                }
-              />
-              <Route
-                path="/user/profile/list"
-                element={
-                  <>
-                    <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <UserList />
-                  </>
-                }
-              />
-            </Routes>
-          </WishlistProvider>
-        </CartProvider>
+        <WishlistProvider>
+          <Routes>
+            {/* Website */}
+            <Route element={<LayoutWebsite />}>
+              <Route index element={<Home />} path="/" />
+              <Route element={<Contact />} path="/contact" />
+              <Route element={<Account />} path="/account" />
+              <Route element={<Account />} path="/account/edit" />
+              <Route element={<About />} path="/about" />
+              <Route element={<SignUpWebsite />} path="/signup" />
+              <Route element={<LogIn />} path="/login" />
+              <Route element={<Wishlist />} path="/wishlist" />
+              <Route element={<Cart />} path="/cart" />
+              <Route element={<Checkout />} path="/checkout" />
+              <Route element={<Payment />} path="/payment" />
+              <Route element={<Products />} path="/products" />
+              <Route path="/product/:id" element={<ProductDetail />} />
+              <Route element={<SearchProducts />} path="/search" />
+              {/* <Route element={<Category />} path="/category" />  */}
+              <Route element={<NotFound />} path="*" />
+            </Route>
+            {/* Dashboard */}
+            <Route
+              index
+              element={
+                <>
+                  <PageTitle title="eCommerce Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <ECommerce />
+                </>
+              }
+              path="/admin"
+            />
+            <Route
+              path="/calendar"
+              element={
+                <>
+                  <PageTitle title="Calendar | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <Calendar />
+                </>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <>
+                  <PageTitle title="Profile | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <Profile />
+                </>
+              }
+            />
+            <Route
+              path="/products/list"
+              element={
+                <>
+                  <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <ProductsList />
+                </>
+              }
+            />
+            <Route
+              path="/products/add"
+              element={
+                <>
+                  <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <ProductsAdd />
+                </>
+              }
+            />
+            <Route
+              path="/products/edit/:id"
+              element={
+                <>
+                  <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <ProductsEdit />
+                </>
+              }
+            />
+            <Route
+              path="/category/list"
+              element={
+                <>
+                  <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <CategoryList />
+                </>
+              }
+            />
+            <Route
+              path="/category/add"
+              element={
+                <>
+                  <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <CategoryAdd />
+                </>
+              }
+            />
+            <Route
+              path="/category/edit/:id"
+              element={
+                <>
+                  <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <CategoryEdit />
+                </>
+              }
+            />
+            <Route
+              path="/user/profile/list"
+              element={
+                <>
+                  <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <UserList />
+                </>
+              }
+            />
+            <Route
+              path="/ordermanagement"
+              element={
+                <>
+                  <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <OrderManagement />
+                </>
+              }
+            />
+          </Routes>
+        </WishlistProvider>
       </LangProvider>
     </>
   );

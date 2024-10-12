@@ -1,25 +1,17 @@
 import i18n from './components/common/components/LangConfig';
 import { useState, useEffect } from 'react';
-import { useCart } from '../../context/CartContext';
 import CheckoutCartItem from './components/Checkout/CheckoutCartItem';
 import RedButton from './components/common/components/RedButton';
 import ActiveLastBreadcrumb from './components/common/components/Link';
 import { Link } from 'react-router-dom';
 
 const Checkout = () => {
-  const { cartItems }: any = useCart();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
 
   // Calculate subtotal of all cart items
-  const subtotal = cartItems.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0,
-  );
-
-  const total = subtotal; // You can calculate total including shipping, taxes, etc.
 
   return (
     <div className="max-w-screen-lg mx-auto mt-36 md:mt-48 flex flex-col md:gap-10">
@@ -127,19 +119,10 @@ const Checkout = () => {
           </div>
 
           <div className="flex justify-between flex-col gap-4 md:gap-8  px-4 w-full md:w-[425px]">
-            {cartItems.map((item, index) => (
-              <CheckoutCartItem
-                key={item.title}
-                item={item}
-                index={index}
-                stars={item.stars}
-                rates={item.rates}
-              />
-            ))}
             <div className="flex flex-col gap-4">
               <div className="flex justify-between  border-b">
                 <p className="text-base">{i18n.t('cart.subtotal')}:</p>
-                <p className="text-base">${subtotal}</p>
+                <p className="text-base">${0}</p>
               </div>
             </div>
             <div className="flex flex-col gap-4">
@@ -151,7 +134,7 @@ const Checkout = () => {
             <div className="flex flex-col gap-4">
               <div className="flex justify-between  border-b">
                 <p className="text-base">{i18n.t('cart.total')}:</p>
-                <p className="text-base">${total}</p>
+                <p className="text-base">${0}</p>
               </div>
             </div>
             {/* Payment methods */}

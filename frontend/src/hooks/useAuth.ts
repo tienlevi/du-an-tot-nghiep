@@ -9,7 +9,12 @@ function useAuth() {
     setUser(value);
   }, []);
 
-  return { user, setUser };
+  const logOut = () => {
+    localStorage.removeItem('user');
+    window.location.reload();
+  };
+
+  return { user, setUser, logOut };
 }
 
 export default useAuth;
