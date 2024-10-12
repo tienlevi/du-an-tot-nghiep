@@ -35,13 +35,12 @@ export const addItemToCart = async (req, res) => {
       );
       if (existProductIndex !== -1) {
         // Nếu sản phẩm đã tồn tại trong giỏ hàng, cập nhật số lượng
-        cart.products[existProductIndex].quantity += 1;
+        cart.products[existProductIndex].quantity += product.quantity;
       } else {
         // Nếu sản phẩm chưa có trong giỏ hàng, thêm mới
         const newProduct = {
           productId: product.productId,
-          product: product,
-          quantity: 1,
+          quantity: product.quantity,
         };
         cart.products.push(newProduct);
       }

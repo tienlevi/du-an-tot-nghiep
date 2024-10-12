@@ -55,7 +55,7 @@ function DashboardRoute() {
               <Route element={<Checkout />} path="/checkout" />
               <Route element={<Payment />} path="/payment" />
               <Route element={<Products />} path="/products" />
-              <Route path="/product/:id" element={<ProductDetail />} />
+              <Route element={<ProductDetail />} path="/product/:id" />
               <Route element={<SearchProducts />} path="/search" />
               {/* <Route element={<Category />} path="/category" />  */}
               <Route element={<NotFound />} path="*" />

@@ -1,13 +1,11 @@
 import i18n from './components/common/components/LangConfig';
 import { useState, useEffect } from 'react';
-import CheckoutCartItem from './components/Checkout/CheckoutCartItem';
 import RedButton from './components/common/components/RedButton';
 import ActiveLastBreadcrumb from './components/common/components/Link';
 import { Link } from 'react-router-dom';
 
 const Checkout = () => {
   const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
 
