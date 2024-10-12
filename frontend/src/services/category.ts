@@ -14,6 +14,8 @@ export const getCategoryById = async (id: number | string) => {
   try {
     const response = await instance.get(`/categories/${id}`);
     return response.data;
+    // console.log(response.data);
+    
   } catch (error) {
     console.error('Lỗi khi lấy id danh mục:', error);
   }
@@ -43,5 +45,14 @@ export const editCategory = async (id: number | string, category: Category) => {
     return response.data;
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const getProductsByCategory = async (id: any) => {
+  try {
+    const response = await instance.get(`/categories/${id}/products`);
+    return response.data;    
+  } catch (error) {
+    console.error('Lỗi khi lấy sản phẩm theo danh mục:', error);
   }
 };

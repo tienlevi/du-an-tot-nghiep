@@ -1,20 +1,34 @@
+// Import statements remain the same
 import { useState } from 'react';
 import { Grid, Typography, Menu, MenuItem, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
-// import FlashSaleItem from './components/common/components/ProductItem';
+import { Link, useParams } from 'react-router-dom';
 import i18n from './components/common/components/LangConfig';
-import { ITEMS } from './components/common/functions/items';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ViewAll from './components/common/components/ViewAll';
 import WhiteButton from './components/common/components/WhiteButton';
+import { useQuery } from '@tanstack/react-query';
+import { getProductsByCategory } from '@/services/category';
+import ProductItem from './components/Product/ProductItem';
+import { Product } from '@/types/product';
+import GetProductsByCategory from './components/GetProductsByCategory/getProductsByCategory';
 
 const Category = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(
+  const { id } = useParams<{ id: string }>();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>(
     i18n.t('categories.technology'),
   );
 
-  const handleMenuOpen = (event: any) => {
+  // Fetch products by category
+  const { data: products } = useQuery({
+    queryKey: ['categoryProducts', id],
+    queryFn: () => getProductsByCategory(id),
+  });
+
+  console.log(products,'xxxx');
+  
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -22,13 +36,10 @@ const Category = () => {
     setAnchorEl(null);
   };
 
-  const handleCategorySelect = (category: any) => {
+  const handleCategorySelect = (category: string) => {
     setSelectedCategory(category);
     setAnchorEl(null);
   };
-
-  // Filter ITEMS based on the selected category
-  const filteredItems = ITEMS.filter((item) => item.type === selectedCategory);
 
   return (
     <div className="container mx-auto mt-40 flex flex-col gap-5">
@@ -52,52 +63,51 @@ const Category = () => {
         >
           {i18n.t('redButtons.chooseByCategory')}
         </Button>
+      </div>
 
-        <Menu
-          id="category-menu"
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleMenuClose}
-          className="mt-1 flex items-center justify-center mx-1"
-        >
-          {[
-            i18n.t('categories.general'),
-            i18n.t('categories.technology'),
-            i18n.t('categories.gaming'),
-            i18n.t('categories.clothes'),
-            i18n.t('categories.newArrival'),
-          ].map((category) => (
-            <MenuItem
-              className="w-36"
-              key={category}
-              onClick={() => handleCategorySelect(category)}
-            >
-              <span className="text-xl mx-auto">{category}</span>
-            </MenuItem>
+      <div className="container mx-auto mt-10">
+        <h1 className="text-3xl font-semibold mb-8">
+        GetProductsByCategory
+        </h1>
+        <div className="grid grid-cols-3 gap-4">
+          {products?.map((product:Product) => (
+            // Pass product as a prop to ProductItem
+            <GetProductsByCategory key={product._id} product={product} />
           ))}
-        </Menu>
+        </div>
       </div>
-      <div className="relative mx-2 my-10 flex flex-row gap-2 md:gap-12 transition-transform duration-300 transform ">
-        <Grid container spacing={3} justifyContent="center" alignItems="center">
-          {filteredItems.map((item, index) => (
-            <Grid item key={item.id}>
-              {/* <FlashSaleItem
-                item={item}
-                index={index}
-                totalItems={filteredItems.length}
-                stars={item.stars}
-                rates={item.rates}
-              /> */}
-            </Grid>
-          ))}
-        </Grid>
-      </div>
-      <div className="mt-6 flex justify-center gap-5 md:gap-20 items-center md:mx-12 ">
+
+      <Menu
+        id="category-menu"
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+        className="mt-1 flex items-center justify-center mx-1"
+      >
+        {[
+          i18n.t('categories.general'),
+          i18n.t('categories.technology'),
+          i18n.t('categories.gaming'),
+          i18n.t('categories.clothes'),
+          i18n.t('categories.newArrival'),
+        ].map((category) => (
+          <MenuItem
+            className="w-36"
+            key={category}
+            onClick={() => handleCategorySelect(category)}
+          >
+            <span className="text-xl mx-auto">{category}</span>
+          </MenuItem>
+        ))}
+      </Menu>
+      
+      {/* You can remove the filteredItems grid if you are not using it anymore */}
+      <div className="mt-6 flex justify-center gap-5 md:gap-20 items-center md:mx-12">
         <Link to="..">
           <WhiteButton
             name={i18n.t('whiteButtons.backToHomePage')}
-            onClick={function (...args: any[]) {
-              throw new Error('Function not implemented.');
+            onClick={() => {
+              // TODO: Chức năng chưa được triển khai
             }}
           />
         </Link>
