@@ -13,8 +13,6 @@ const Checkout = () => {
 
   // Calculate subtotal of all cart items
 
-  const total = subtotal; // You can calculate total including shipping, taxes, etc.
-
   return (
     <div className="max-w-screen-lg mx-auto mt-36 md:mt-48 flex flex-col md:gap-10">
       <ActiveLastBreadcrumb
@@ -124,7 +122,7 @@ const Checkout = () => {
             <div className="flex flex-col gap-4">
               <div className="flex justify-between  border-b">
                 <p className="text-base">{i18n.t('cart.subtotal')}:</p>
-                <p className="text-base">${subtotal}</p>
+                <p className="text-base">${0}</p>
               </div>
             </div>
             <div className="flex flex-col gap-4">
@@ -136,7 +134,7 @@ const Checkout = () => {
             <div className="flex flex-col gap-4">
               <div className="flex justify-between  border-b">
                 <p className="text-base">{i18n.t('cart.total')}:</p>
-                <p className="text-base">${total}</p>
+                <p className="text-base">${0}</p>
               </div>
             </div>
             {/* Payment methods */}

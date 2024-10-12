@@ -41,10 +41,12 @@ function DashboardRoute() {
       <LangProvider>
         <WishlistProvider>
           <Routes>
+            {/* Website */}
             <Route element={<LayoutWebsite />}>
               <Route index element={<Home />} path="/" />
               <Route element={<Contact />} path="/contact" />
               <Route element={<Account />} path="/account" />
+              <Route element={<Account />} path="/account/edit" />
               <Route element={<About />} path="/about" />
               <Route element={<SignUpWebsite />} path="/signup" />
               <Route element={<LogIn />} path="/login" />
@@ -58,6 +60,7 @@ function DashboardRoute() {
               {/* <Route element={<Category />} path="/category" />  */}
               <Route element={<NotFound />} path="*" />
             </Route>
+            {/* Dashboard */}
             <Route
               index
               element={
