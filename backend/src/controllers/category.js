@@ -108,3 +108,19 @@ export const updateCategoryById = async (req, res) => {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
   }
 };
+
+// Tìm sản phẩm theo danh mục
+export const getProductsByCategory = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const products = await Product.find({ category: id });
+
+    if (products.length === 0) {
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "Không có sản phẩm nào trong danh mục này!" });
+    }
+
+    return res.status(StatusCodes.OK).json(products);
+  } catch (error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+  }
+};

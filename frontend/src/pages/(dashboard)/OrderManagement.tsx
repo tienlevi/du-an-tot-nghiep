@@ -15,21 +15,24 @@ type Filters = Parameters<OnChange>[1];
 type GetSingle<T> = T extends (infer U)[] ? U : never;
 type Sorts = GetSingle<Parameters<OnChange>[2]>;
 
+
 const OrderManagement: React.FC = () => {
     const queryClient = useQueryClient();
-    const userId = localStorage.getItem('userId');
-    const { data: orders=[],isLoading,isError } = useQuery({
-        queryKey: ['orders',userId],
+    const userId = localStorage.getItem('userId');  // Sửa lỗi ở đây
+    console.log('User ID from localStorage:', userId);
+
+    const { data: orders = [], isLoading, isError } = useQuery({
+        queryKey: ['orders', userId],
         queryFn: async () => {
             if (userId) {
-                const response = await getUserOrders(userId); // Gọi API với userId
+                const response = await getUserOrders(userId);
+                console.log('API response:', response);
                 return response;
             } else {
                 throw new Error("User ID is undefined");
             }
-            
         },
-        enabled: !!userId, 
+        enabled: !!userId,
     });
 
     const [filteredInfo, setFilteredInfo] = useState<Filters>({});

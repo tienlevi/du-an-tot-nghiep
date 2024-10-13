@@ -41,20 +41,22 @@ const AllProducts = () => {
               <p>Loading products...</p> // Hiển thị thông báo khi đang tải
             ) : (
               data?.slice(0, displayedItems).map((item) => (
-                <div key={item._id} className="relative mx-2">
+                <Link
+                  to={`/product/${item._id}`}
+                  key={item._id}
+                  className="relative mx-2"
+                >
                   <div className="relative rounded flex items-center justify-center bg-zinc-100 w-[270px] h-80 md:h-60 transition-transform duration-300 hover:scale-105">
                     {item.discount && (
                       <div className="absolute top-0 left-0 bg-red-500 text-white py-1 px-3 m-2 rounded">
                         -{item.discount}%
                       </div>
                     )}
-                    <Link to={{ pathname: `/allProducts` }}>
-                      <img
-                        loading="lazy"
-                        src={item.image}
-                        className="max-h-52 w-full object-contain"
-                      />
-                    </Link>
+                    <img
+                      loading="lazy"
+                      src={item.image}
+                      className="max-h-52 w-full object-contain"
+                    />
                   </div>
                   <div className="flex md:items-start items-center flex-col">
                     <h3 className="text-lg font-base mt-4">{item.name}</h3>
@@ -67,7 +69,7 @@ const AllProducts = () => {
                       )}
                     </p>
                   </div>
-                </div>
+                </Link>
               ))
             )}
           </div>
