@@ -17,12 +17,19 @@ type Sorts = GetSingle<Parameters<OnChange>[2]>;
 
 const OrderManagement: React.FC = () => {
     const queryClient = useQueryClient();
-    const { data: orders } = useQuery({
-        queryKey: ['orders'],
+    const userId = localStorage.getItem('userId');
+    const { data: orders=[],isLoading,isError } = useQuery({
+        queryKey: ['orders',userId],
         queryFn: async () => {
-            const response = await getUserOrders();
-            return response;
+            if (userId) {
+                const response = await getUserOrders(userId); // Gọi API với userId
+                return response;
+            } else {
+                throw new Error("User ID is undefined");
+            }
+            
         },
+        enabled: !!userId, 
     });
 
     const [filteredInfo, setFilteredInfo] = useState<Filters>({});

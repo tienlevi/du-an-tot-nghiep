@@ -36,12 +36,10 @@ const orderSchema = new mongoose.Schema({
     items: [orderItemSchema],
     orderNumber: {
         type: String,
-        // required: true,
         unique: true,
     },
     customerName: {
         type: String,
-        // required: true,
     },
     totalPrice: {
         type: Number,
@@ -49,14 +47,15 @@ const orderSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ["pending", "confirmed", "shipped", "delivered"],
-        default: "pending",
+        enum: ["Đang chờ xử lý", "Đã xác nhận", "Đã giao hàng", "Đã giao", "Đã hủy", "Đã xử lý"], // Thêm trạng thái mới
+        default: "Đang chờ xử lý", // Trạng thái mặc định
     },
     createdAt: {
         type: Date,
         default: Date.now,
     },
 });
+
 // Tạo pre-save hook để sinh orderNumber trước khi lưu vào cơ sở dữ liệu
 orderSchema.pre("save", function (next) {
     if (!this.orderNumber) {
@@ -64,4 +63,5 @@ orderSchema.pre("save", function (next) {
     }
     next();
 });
+
 export default mongoose.model("Order", orderSchema);
