@@ -15,18 +15,15 @@ type Filters = Parameters<OnChange>[1];
 type GetSingle<T> = T extends (infer U)[] ? U : never;
 type Sorts = GetSingle<Parameters<OnChange>[2]>;
 
-
 const OrderManagement: React.FC = () => {
     const queryClient = useQueryClient();
-    const userId = localStorage.getItem('userId');  // Sửa lỗi ở đây
-    console.log('User ID from localStorage:', userId);
+    const userId = localStorage.getItem('userId');
 
     const { data: orders = [], isLoading, isError } = useQuery({
         queryKey: ['orders', userId],
         queryFn: async () => {
             if (userId) {
                 const response = await getUserOrders(userId);
-                console.log('API response:', response);
                 return response;
             } else {
                 throw new Error("User ID is undefined");
@@ -38,17 +35,16 @@ const OrderManagement: React.FC = () => {
     const [filteredInfo, setFilteredInfo] = useState<Filters>({});
     const [sortedInfo, setSortedInfo] = useState<Sorts>({});
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const [selectedStatus, setSelectedStatus] = useState<string>('');
+    const [selectedStatus, setSelectedStatus] = useState<string | undefined>(undefined);
 
     const { mutate } = useMutation({
         mutationKey: ['orders'],
         mutationFn: async (id: string) => {
             if (confirm('Bạn có muốn hủy đơn hàng này không?')) {
                 try {
-                    const response = await cancelOrder(id);
+                    await cancelOrder(id);
                     toast.success('Đơn hàng đã được hủy thành công');
-                    queryClient.invalidateQueries({ queryKey: ['orders'] });
-                    return response;
+                    queryClient.invalidateQueries({ queryKey: ['orders', userId] });
                 } catch (error) {
                     toast.error('Có lỗi xảy ra khi hủy đơn hàng');
                 }
@@ -177,6 +173,8 @@ const OrderManagement: React.FC = () => {
                     dataSource={filteredOrders}
                     onChange={handleChange}
                     rowKey="_id"
+                    loading={isLoading}
+                    pagination={{ pageSize: 10 }}
                 />
             </div>
         </DefaultLayout>
