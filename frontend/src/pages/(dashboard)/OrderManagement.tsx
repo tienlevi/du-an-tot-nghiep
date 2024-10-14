@@ -18,19 +18,30 @@ type Sorts = GetSingle<Parameters<OnChange>[2]>;
 const OrderManagement: React.FC = () => {
     const queryClient = useQueryClient();
     const userId = localStorage.getItem('userId');
-
     const { data: orders = [], isLoading, isError } = useQuery({
         queryKey: ['orders', userId],
         queryFn: async () => {
             if (userId) {
+                console.log("Calling API with userId:", userId);
                 const response = await getUserOrders(userId);
-                return response;
+                console.log("Response from API:", response);
+                return response.data; // Điều chỉnh nếu cần
             } else {
+                console.error("User ID is undefined");
                 throw new Error("User ID is undefined");
             }
         },
         enabled: !!userId,
     });
+
+    // Kiểm tra lỗi
+    if (isError) {
+        console.error("Error fetching orders:");
+    }
+
+    // Kiểm tra dữ liệu đã nhận
+    console.log(orders);
+
 
     const [filteredInfo, setFilteredInfo] = useState<Filters>({});
     const [sortedInfo, setSortedInfo] = useState<Sorts>({});
@@ -60,22 +71,21 @@ const OrderManagement: React.FC = () => {
     const columns: TableColumnsType<Order> = [
         {
             title: 'ID Đơn Hàng',
-            dataIndex: '_id',
-            key: '_id',
+            dataIndex: 'orderId',
+            key: 'orderId',
         },
         {
             title: 'Ảnh Sản Phẩm',
-            dataIndex: 'productImage',
+            dataIndex: 'items',
             key: 'productImage',
-            render: (productImage) => (
-                <img src={productImage} alt="Product" style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
+            render: (items) => (
+                <img src={items[0]?.image} alt="Product" style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
             ),
         },
         {
             title: 'Tên Người Nhận',
-            dataIndex: 'shippingAddress',
-            key: 'shippingAddress',
-            render: (shippingAddress) => <span>{shippingAddress?.name}</span>,
+            dataIndex: 'name',
+            key: 'name',
         },
         {
             title: 'Ngày Đặt',
@@ -97,10 +107,10 @@ const OrderManagement: React.FC = () => {
             dataIndex: 'status',
             key: 'status',
             filters: [
-                { text: 'Chờ Xử Lý', value: 'pending' },
-                { text: 'Đã Xử Lý', value: 'processed' },
-                { text: 'Đã Giao Hàng', value: 'delivered' },
-                { text: 'Đã Hủy', value: 'cancelled' },
+                { text: 'Chờ Xử Lý', value: 'chờ xử lý' },
+                { text: 'Đã Xác Nhận', value: 'đã xác nhận' },
+                { text: 'Đang Giao', value: 'đang giao' },
+                { text: 'Đã Giao', value: 'đã giao' },
             ],
             filteredValue: filteredInfo.status || null,
             onFilter: (value, record) => record.status.includes(value as string),
@@ -139,7 +149,7 @@ const OrderManagement: React.FC = () => {
 
     const filteredOrders = orders?.filter((order: Order) => {
         return (
-            order.shippingAddress.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+            order.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
             (selectedStatus ? order.status === selectedStatus : true)
         );
     });
@@ -163,10 +173,10 @@ const OrderManagement: React.FC = () => {
                     className="mb-4"
                     allowClear
                 >
-                    <Option value="pending">Chờ Xử Lý</Option>
-                    <Option value="processed">Đã Xử Lý</Option>
-                    <Option value="delivered">Đã Giao Hàng</Option>
-                    <Option value="cancelled">Đã Hủy</Option>
+                    <Option value="chờ xử lý">Chờ Xử Lý</Option>
+                    <Option value="đã xác nhận">Đã Xác Nhận</Option>
+                    <Option value="đang giao">Đang Giao</Option>
+                    <Option value="đã giao">Đã Giao</Option>
                 </Select>
                 <Table
                     columns={columns}

@@ -26,12 +26,14 @@ export const getOrderById = async (id: number | string) => {
 export const getUserOrders = async (userId: number | string) => {
   try {
     const response = await instance.get(`/orders/user/${userId}`);
+    console.log("Dữ liệu trả về từ API:", response.data); // Log dữ liệu trả về
     return response.data || [];
   } catch (error) {
     console.error('Lỗi khi lấy danh sách đơn hàng của người dùng:', error);
     return [];
   }
 };
+
 
 // Hủy đơn hàng
 export const cancelOrder = async (id: number | string) => {
