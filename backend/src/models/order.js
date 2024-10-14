@@ -1,52 +1,55 @@
 import mongoose from "mongoose";
 
-// Hàm để sinh orderNumber
-// const generateOrderNumber = () => {
-//   const timestamp = Date.now().toString();
-//   const random = Math.floor(Math.random() * 1000)
-//     .toString()
-//     .padStart(3, "0");
-//   return `${timestamp}-${random}`;
-// };
+// Hàm để sinh orderId
+const generateOrderId = () => {
+  const timestamp = Date.now().toString();
+  const random = Math.floor(Math.random() * 1000)
+    .toString()
+    .padStart(3, "0");
+  return `${timestamp}-${random}`;
+};
 
 const orderItemSchema = new mongoose.Schema({
-  name: { type: String },
-  price: { type: Number },
+  name: { type: String, required: true },
+  price: { type: Number, required: true },
   image: { type: String },
 });
 
 const orderSchema = new mongoose.Schema(
   {
-    orderId: { type: String },
+    orderId: { type: String, unique: true },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
+      ref: "User", // Nếu bạn có một schema User để liên kết
     },
-    items: [orderItemSchema],
-    email: { type: String },
-    name: {
-      type: String,
-      // required: true,
+    items: {
+      type: [orderItemSchema],
+      required: true,
     },
-    address: { type: String },
+    email: { type: String, required: true }, // Yêu cầu email
+    name: { type: String, required: true },
+    address: { type: String, required: true }, // Yêu cầu địa chỉ
     totalPrice: {
       type: Number,
       required: true,
     },
-    phone: { type: String },
+    phone: { type: String, required: true }, // Yêu cầu số điện thoại
     status: {
       type: String,
-      enum: ["pending", "confirmed", "shipped", "delivered"],
-      default: "pending",
+      enum: ["chờ xử lý", "đã xác nhận", "đang giao", "đã giao"],
+      default: "chờ xử lý",
     },
   },
   { timestamps: true, versionKey: false }
 );
-// Tạo pre-save hook để sinh orderNumber trước khi lưu vào cơ sở dữ liệu
-// orderSchema.pre("save", function (next) {
-//   if (!this.orderNumber) {
-//     this.orderNumber = generateOrderNumber();
-//   }
-//   next();
-// });
+
+// Tạo pre-save hook để sinh orderId trước khi lưu vào cơ sở dữ liệu
+orderSchema.pre("save", function (next) {
+  if (!this.orderId) {
+    this.orderId = generateOrderId();
+  }
+  next();
+});
+
 export default mongoose.model("Order", orderSchema);
