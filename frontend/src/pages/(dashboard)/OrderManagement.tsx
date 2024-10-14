@@ -40,35 +40,16 @@ const OrderManagement: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [selectedStatus, setSelectedStatus] = useState<string | undefined>(undefined);
 
-    const { mutate: cancelMutate } = useMutation({
-        mutationKey: ['orders'],
-        mutationFn: async (id: string) => {
-            if (confirm('Bạn có muốn hủy đơn hàng này không?')) {
-                try {
-                    const response = await cancelOrder(id); // Gọi API để hủy đơn hàng
-                    toast.success('Đơn hàng đã được hủy thành công');
-                    queryClient.invalidateQueries({ queryKey: ['orders'] }); // Làm mới danh sách đơn hàng
-                } catch (error) {
-                    console.error("Error canceling order", error); // Log lỗi
-                    toast.error('Có lỗi xảy ra khi hủy đơn hàng');
-                }
-            }
-        },
-    });
 
     const { mutate: updateStatusMutate } = useMutation({
         mutationKey: ['orders', 'updateStatus'],
-        mutationFn: async ({ id, status }: { id: string, status: string }) => {
-            try {
-                const response = await updateOrderStatus(id, status); // Gọi API để cập nhật trạng thái
-                toast.success('Trạng thái đơn hàng đã được cập nhật thành công');
-                queryClient.invalidateQueries({ queryKey: ['orders'] }); // Làm mới danh sách đơn hàng
-            } catch (error) {
-                console.error("Error updating order status", error); // Log lỗi
-                toast.error('Có lỗi xảy ra khi cập nhật trạng thái');
-            }
+        mutationFn: async ({ id, status }) => {
+            const response = await updateOrderStatus(id, status); // Gọi API để cập nhật trạng thái
+            toast.success('Trạng thái đơn hàng đã được cập nhật thành công');
+            queryClient.invalidateQueries({ queryKey: ['orders'] }); // Làm mới danh sách đơn hàng
         },
     });
+
 
 
 
@@ -126,7 +107,7 @@ const OrderManagement: React.FC = () => {
             ellipsis: true,
             render: (text, record) => (
                 <Select
-                    defaultValue={text}
+                    value={text}
                     onChange={(status) => updateStatusMutate({ id: record._id, status })}
                     style={{ width: 120 }}
                 >
@@ -137,6 +118,7 @@ const OrderManagement: React.FC = () => {
                 </Select>
             )
         },
+
         {
             title: 'Hành Động',
             key: 'action',
@@ -148,13 +130,7 @@ const OrderManagement: React.FC = () => {
                     >
                         <EyeOutlined className="mr-1" /> {/* Biểu tượng con mắt */}
                     </Link>
-                    <Button
-                        onClick={() => cancelMutate(record._id!)}
-                        className="py-1 px-2 bg-red-500 text-white rounded hover:bg-red-600 flex items-center"
-                        disabled={record.status === 'cancelled'}
-                    >
-                        <DeleteOutlined className="mr-1" /> {/* Biểu tượng thùng rác */}
-                    </Button>
+
                 </Space>
             ),
         }

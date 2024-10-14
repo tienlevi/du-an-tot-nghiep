@@ -45,28 +45,17 @@ export const getAllOrders = async () => {
     return [];
   }
 };
-
-// Hủy đơn hàng
-export const cancelOrder = async (id: number | string) => {
-  try {
-    const response = await instance.delete(`/orders/${id}/cancel`); // Cập nhật endpoint
-    console.log('Kết quả hủy đơn hàng:', response.data);
-    return response.data;
-  } catch (error) {
-    console.error('Lỗi khi hủy đơn hàng:', error);
-    throw new Error('Không thể hủy đơn hàng. Vui lòng thử lại sau.');
-  }
-};
-
 // Cập nhật trạng thái đơn hàng
 export const updateOrderStatus = async (id: number | string, status: string) => {
   try {
+    console.log('Cập nhật trạng thái cho đơn hàng:', id, 'với trạng thái:', status); // Log thông tin
     const response = await instance.put(`/orders/${id}/status`, { status });
     console.log('Kết quả cập nhật trạng thái:', response.data); // Log kết quả
     return response.data;
   } catch (error) {
-    console.error('Lỗi khi cập nhật trạng thái đơn hàng:', error);
+    console.error('Lỗi khi cập nhật trạng thái đơn hàng:', error); // Log lỗi
     throw new Error('Không thể cập nhật trạng thái đơn hàng. Vui lòng thử lại sau.');
   }
 };
+
 
