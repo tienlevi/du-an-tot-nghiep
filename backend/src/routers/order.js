@@ -4,7 +4,7 @@ import {
     getOrders,
     getOrderById,
     updateOrderStatus,
-    cancelOrder,
+
 } from "../controllers/orders";
 
 const router = Router();
@@ -17,6 +17,6 @@ router.get("/orders/:userId/:orderId", getOrderById);
 router.put("/orders/:orderId/status", updateOrderStatus);
 
 // Thêm route hủy đơn hàng
-router.delete("/orders/:orderId/cancel", cancelOrder);
+
 
 export default router;

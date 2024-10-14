@@ -72,85 +72,50 @@ export const updateOrder = async (req, res) => {
   }
 };
 
-// Cập nhật trạng thái đơn hàng
-// Cập nhật trạng thái đơn hàng
+
+
 export const updateOrderStatus = async (req, res) => {
-  try {
-    const { orderId } = req.params;
-    const { status } = req.body;
+    const { orderId } = req.params; // Lấy orderId từ params
+    const { status } = req.body; // Lấy status từ body
 
-    const validStatus = [
-      "chờ xử lý",
-      "đã xác nhận",
-      "đang giao",
-      "đã giao",
-      "đã hủy",
-    ];
-
-    if (!validStatus.includes(status)) {
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ error: "Trạng thái không hợp lệ" });
+    // Kiểm tra xem status có nằm trong danh sách trạng thái hợp lệ hay không
+    const validStatuses = ["chờ xử lý", "đã xác nhận", "đang giao", "đã giao"];
+    if (!validStatuses.includes(status)) {
+        return res.status(400).json({ message: "Trạng thái không hợp lệ." });
     }
 
-    const order = await Order.findOne({ _id: orderId });
-    if (!order) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ error: "Không tìm thấy đơn hàng" });
+    try {
+        // Tìm đơn hàng hiện tại để kiểm tra trạng thái
+        const currentOrder = await Order.findById(orderId);
+        if (!currentOrder) {
+            return res.status(404).json({ message: "Đơn hàng không tìm thấy." });
+        }
+
+        // Ngăn không cho cập nhật trạng thái nếu đơn hàng đã giao
+        if (currentOrder.status === "đã giao") {
+            return res.status(400).json({ message: "Không thể cập nhật trạng thái của đơn hàng đã giao." });
+        }
+
+        // Kiểm tra trạng thái hiện tại và ngăn chặn chuyển về "chờ xử lý"
+        if (currentOrder.status === "đang giao" && status === "chờ xử lý") {
+            return res.status(400).json({ message: "Không thể chuyển trạng thái từ 'đang giao' về 'chờ xử lý'." });
+        }
+
+        // Tìm và cập nhật trạng thái đơn hàng
+        const updatedOrder = await Order.findByIdAndUpdate(
+            orderId,
+            { status },
+            { new: true, runValidators: true } // new: true để trả về tài liệu đã cập nhật
+        );
+
+        // Trả về đơn hàng đã cập nhật
+        return res.status(200).json(updatedOrder);
+    } catch (error) {
+        console.error("Error updating order status:", error);
+        return res.status(500).json({ message: "Có lỗi xảy ra khi cập nhật trạng thái đơn hàng.", error: error.message });
     }
-
-    // Nếu trạng thái là "đã giao" hoặc "đã hủy", không cho phép cập nhật
-    if (order.status === "đã giao" || order.status === "đã hủy") {
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ error: "Không thể cập nhật trạng thái của đơn hàng này" });
-    }
-
-    // Cập nhật trạng thái
-    order.status = status;
-    await order.save();
-
-    return res
-      .status(StatusCodes.OK)
-      .json({ message: "Trạng thái đơn hàng đã được cập nhật thành công" });
-  } catch (error) {
-    return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: error.message });
-  }
 };
 
-// Hủy đơn hàng
-// Hủy đơn hàng
-export const cancelOrder = async (req, res) => {
-  try {
-    const { orderId } = req.params;
-    
-    const order = await Order.findById(orderId);
-    if (!order) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ error: "Không tìm thấy đơn hàng" });
-    }
-    
-    if (order.status === "đã giao" || order.status === "đã hủy") {
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ error: "Không thể hủy đơn hàng" });
-    }
 
-    // Cập nhật trạng thái đơn hàng thành đã hủy
-    order.status = "đã hủy";
-    await order.save();
 
-    return res
-      .status(StatusCodes.OK)
-      .json({ message: "Đơn hàng đã được hủy thành công" });
-  } catch (error) {
-    return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: error.message });
-  }
-};
 
