@@ -8,6 +8,8 @@ import useAuth from '@/hooks/useAuth';
 
 const Login = () => {
   const { user } = useAuth();
+  console.log(user);
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -44,7 +46,7 @@ const Login = () => {
   };
 
   useEffect(() => {
-    user !== null && navigate('/');
+    user === null && navigate('/');
   }, []);
 
   return (

@@ -1,17 +1,11 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import EditProfile from './components/Profile/EditProfile';
 import Info from './components/Profile/Info';
 import useAuth from '@/hooks/useAuth';
-import { useEffect, useLayoutEffect } from 'react';
 
 const Account = () => {
   const location = useLocation();
-  const navigate = useNavigate();
-  const { user, logOut } = useAuth();
-
-  useLayoutEffect(() => {
-    user === null && navigate('/');
-  }, [user]);
+  const { logOut } = useAuth();
 
   return (
     <div className="flex flex-col mx-4 md:ml-36 mt-48 gap-20 justify-center md:justify-between ">

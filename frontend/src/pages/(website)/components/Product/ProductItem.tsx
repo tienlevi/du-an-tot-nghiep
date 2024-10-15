@@ -31,9 +31,13 @@ const ProductItem = ({ limitProduct }: Props) => {
       await addToCart(user?._id!, products);
     },
     onSuccess: () => {
-      !user && toast.error('Hãy đăng nhập tài khoản để thêm giỏ hàng');
-      toast.success('Thêm giỏ hàng thành công');
+      if (user === null) {
+        toast.error('Hãy đăng nhập tài khoản để thêm giỏ hàng');
+      } else {
+        toast.success('Thêm giỏ hàng thành công');
+      }
     },
+    onError: () => {},
   });
 
   return (
