@@ -1,20 +1,14 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { cancelOrder, getAllOrders, updateOrderStatus, } from '@/services/order'; // Sửa API để lấy và cập nhật trạng thái đơn hàng
-import { Button, Input, Select, Space, Table } from 'antd';
-import type { TableColumnsType, TableProps } from 'antd';
+import {getAllOrders, updateOrderStatus } from '@/services/order';
+import { Input, Select, Space, Table } from 'antd';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import DefaultLayout from './_components/Layout/DefaultLayout';
 import { Order } from '@/types/order';
-import { EyeOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EyeOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
-
-type OnChange = NonNullable<TableProps<Order>['onChange']>;
-type Filters = Parameters<OnChange>[1];
-type GetSingle<T> = T extends (infer U)[] ? U : never;
-type Sorts = GetSingle<Parameters<OnChange>[2]>;
 
 // Component OrderManagement
 const OrderManagement: React.FC = () => {
@@ -23,42 +17,26 @@ const OrderManagement: React.FC = () => {
     // Fetch orders
     const { data: orders = [], isLoading, isError } = useQuery({
         queryKey: ['orders'],
-        queryFn: async () => {
-            const response = await getAllOrders(); // Sử dụng API lấy tất cả đơn hàng
-            return response; // Trả về data trực tiếp từ response
-        },
+        queryFn: getAllOrders, // Gọi API lấy tất cả đơn hàng
     });
 
     if (isError) {
-        console.error("Error fetching orders");
         toast.error("Có lỗi xảy ra khi lấy danh sách đơn hàng.");
     }
 
     // State quản lý lọc và tìm kiếm
-    const [filteredInfo, setFilteredInfo] = useState<Filters>({});
-    const [sortedInfo, setSortedInfo] = useState<Sorts>({});
-    const [searchQuery, setSearchQuery] = useState<string>('');
-    const [selectedStatus, setSelectedStatus] = useState<string | undefined>(undefined);
-
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedStatus, setSelectedStatus] = useState<string | undefined>();
 
     const { mutate: updateStatusMutate } = useMutation({
-        mutationKey: ['orders', 'updateStatus'],
         mutationFn: async ({ id, status }) => {
-            const response = await updateOrderStatus(id, status); // Gọi API để cập nhật trạng thái
+            await updateOrderStatus(id, status); 
             toast.success('Trạng thái đơn hàng đã được cập nhật thành công');
-            queryClient.invalidateQueries({ queryKey: ['orders'] }); // Làm mới danh sách đơn hàng
+            queryClient.invalidateQueries({ queryKey: ['orders'] });
         },
     });
 
-
-
-
-    const handleChange: OnChange = (pagination, filters, sorter) => {
-        setFilteredInfo(filters);
-        setSortedInfo(sorter as Sorts);
-    };
-
-    const columns: TableColumnsType<Order> = [
+    const columns = [
         {
             title: 'ID Đơn Hàng',
             dataIndex: '_id',
@@ -82,15 +60,12 @@ const OrderManagement: React.FC = () => {
             dataIndex: 'createdAt',
             key: 'createdAt',
             sorter: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-            sortOrder: sortedInfo.columnKey === 'createdAt' ? sortedInfo.order : null,
-            ellipsis: true,
         },
         {
             title: 'Tổng Tiền',
             dataIndex: 'totalPrice',
             key: 'totalPrice',
             sorter: (a, b) => a.totalPrice - b.totalPrice,
-            sortOrder: sortedInfo.columnKey === 'totalPrice' ? sortedInfo.order : null,
         },
         {
             title: 'Trạng Thái',
@@ -102,9 +77,7 @@ const OrderManagement: React.FC = () => {
                 { text: 'Đang Giao', value: 'đang giao' },
                 { text: 'Đã Giao', value: 'đã giao' },
             ],
-            filteredValue: filteredInfo.status || null,
             onFilter: (value, record) => record.status.includes(value as string),
-            ellipsis: true,
             render: (text, record) => (
                 <Select
                     value={text}
@@ -118,7 +91,6 @@ const OrderManagement: React.FC = () => {
                 </Select>
             )
         },
-
         {
             title: 'Hành Động',
             key: 'action',
@@ -128,9 +100,8 @@ const OrderManagement: React.FC = () => {
                         to={`/orders/${record._id}`}
                         className="py-2 px-3 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center"
                     >
-                        <EyeOutlined className="mr-1" /> {/* Biểu tượng con mắt */}
+                        <EyeOutlined className="mr-1" />
                     </Link>
-
                 </Space>
             ),
         }
@@ -144,7 +115,7 @@ const OrderManagement: React.FC = () => {
         setSelectedStatus(value);
     };
 
-    const filteredOrders = orders?.filter((order: Order) => {
+    const filteredOrders = orders.filter((order: Order) => {
         return (
             order.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
             (selectedStatus ? order.status === selectedStatus : true)
@@ -179,7 +150,6 @@ const OrderManagement: React.FC = () => {
                 <Table
                     columns={columns}
                     dataSource={filteredOrders}
-                    onChange={handleChange}
                     rowKey="_id"
                     loading={isLoading}
                     pagination={{ pageSize: 10 }}
