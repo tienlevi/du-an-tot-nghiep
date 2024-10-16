@@ -11,7 +11,7 @@ export const getCart = async (userId: string) => {
 
 export const addToCart = async (
   userId: string,
-  products: { productId: string; product: object; quantity: number }[],
+  products: { productId: string; quantity: number }[],
 ) => {
   try {
     const response = await instance.post('/carts/add-to-cart', {

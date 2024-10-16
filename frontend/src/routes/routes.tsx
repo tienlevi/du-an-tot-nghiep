@@ -34,6 +34,7 @@ import Profile from '@/pages/(dashboard)/Profile';
 import UserList from '@/pages/(dashboard)/User/UserList';
 import OrderManagement from '@/pages/(dashboard)/OrderManagement';
 import ProductDetail from '@/pages/(website)/ProductDetail';
+import ProtectRoute from '@/auth/ProtectRoute';
 
 
 function DashboardRoute() {
@@ -47,8 +48,10 @@ function DashboardRoute() {
             <Route element={<LayoutWebsite />}>
               <Route index element={<Home />} path="/" />
               <Route element={<Contact />} path="/contact" />
-              <Route element={<Account />} path="/account" />
-              <Route element={<Account />} path="/account/edit" />
+              <Route element={<ProtectRoute />}>
+                <Route element={<Account />} path="/account" />
+                <Route element={<Account />} path="/account/edit" />
+              </Route>
               <Route element={<About />} path="/about" />
               <Route element={<SignUpWebsite />} path="/signup" />
               <Route element={<LogIn />} path="/login" />
@@ -58,7 +61,7 @@ function DashboardRoute() {
               <Route element={<Payment />} path="/payment" />
               <Route element={<Invoice />} path="/invoice" />
               <Route element={<Products />} path="/products" />
-              <Route path="/product/:id" element={<ProductDetail />} />
+              <Route element={<ProductDetail />} path="/product/:id" />
               <Route element={<SearchProducts />} path="/search" />
               {/* <Route element={<Category />} path="/category" />  */}
               <Route element={<NotFound />} path="*" />
