@@ -85,7 +85,7 @@ const Payment = () => {
           />
         </div>
         {/* Place Order button */}
-        <Link href="/">
+        <Link href="/invoice">
           <RedButton
             name={i18n.t('redButtons.placeOrder')}
           // onClick={handlePayment}
