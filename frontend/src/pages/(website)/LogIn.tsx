@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { TextField, Button, Snackbar, Alert } from '@mui/material';
 import SignImg from './SignImg.png';
 import instance from '@/config/axios';
@@ -12,6 +12,7 @@ const SignUp = () => {
   });
   const [feedback, setFeedback] = useState({ message: '', type: '' });
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const navigate = useNavigate()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -23,6 +24,7 @@ const SignUp = () => {
       const response = await instance.post('/auth/signin', formData);
       console.log(response.data);
       setFeedback({ message: 'Đăng nhập thành công', type: 'success' });
+      navigate(`/`)
     } catch (error) {
       console.error(error);
       setFeedback({ message: 'Đăng nhập thất bại', type: 'error' });

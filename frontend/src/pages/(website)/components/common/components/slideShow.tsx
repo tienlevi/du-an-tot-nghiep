@@ -32,7 +32,7 @@ const SlideShow = () => {
     return (
         <div className="relative w-full h-screen overflow-hidden">
             {/* Container to display the image */}
-            <div className="w-full h-[80%] object-cover">
+            <div className="w-full h-full object-cover">
                 <img
                     src={images[currentIndex]}
                     alt={`Slide ${currentIndex + 1}`}
