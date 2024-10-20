@@ -36,7 +36,6 @@ import OrderManagement from '@/pages/(dashboard)/OrderManagement';
 import ProductDetail from '@/pages/(website)/ProductDetail';
 import ProtectRoute from '@/auth/ProtectRoute';
 
-
 function DashboardRoute() {
   return (
     <>
@@ -51,6 +50,7 @@ function DashboardRoute() {
               <Route element={<ProtectRoute />}>
                 <Route element={<Account />} path="/account" />
                 <Route element={<Account />} path="/account/edit" />
+                <Route element={<Account />} path="/account/order" />
               </Route>
               <Route element={<About />} path="/about" />
               <Route element={<SignUpWebsite />} path="/signup" />

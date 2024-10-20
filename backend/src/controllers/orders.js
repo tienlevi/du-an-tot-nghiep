@@ -52,6 +52,23 @@ export const getOrderById = async (req, res) => {
   }
 };
 
+export const getOrderByUserId = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const order = await Order.find({ userId });
+    if (!order) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ error: "Không tìm thấy đơn hàng" });
+    }
+    return res.status(StatusCodes.OK).json(order);
+  } catch (error) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: error.message });
+  }
+};
+
 // Cập nhật đơn hàng
 export const updateOrder = async (req, res) => {
   try {
@@ -91,17 +108,28 @@ export const updateOrderStatus = async (req, res) => {
 
     // Ngăn không cho cập nhật trạng thái nếu đơn hàng đã giao
     if (currentOrder.status === "đã giao") {
-      return res.status(400).json({ message: "Không thể cập nhật trạng thái của đơn hàng đã giao." });
+      return res.status(400).json({
+        message: "Không thể cập nhật trạng thái của đơn hàng đã giao.",
+      });
     }
 
     // Ngăn không cho chuyển từ "đang giao" về "đã xác nhận"
     if (currentOrder.status === "đang giao" && status === "đã xác nhận") {
-      return res.status(400).json({ message: "Không thể chuyển trạng thái từ 'đang giao' về 'đã xác nhận'." });
+      return res.status(400).json({
+        message: "Không thể chuyển trạng thái từ 'đang giao' về 'đã xác nhận'.",
+      });
     }
 
     // Ngăn không cho chuyển từ "đã xác nhận" hoặc "đang giao" về "chờ xử lý"
-    if ((currentOrder.status === "đã xác nhận" || currentOrder.status === "đang giao") && status === "chờ xử lý") {
-      return res.status(400).json({ message: "Không thể chuyển trạng thái từ 'đã xác nhận' hoặc 'đang giao' về 'chờ xử lý'." });
+    if (
+      (currentOrder.status === "đã xác nhận" ||
+        currentOrder.status === "đang giao") &&
+      status === "chờ xử lý"
+    ) {
+      return res.status(400).json({
+        message:
+          "Không thể chuyển trạng thái từ 'đã xác nhận' hoặc 'đang giao' về 'chờ xử lý'.",
+      });
     }
 
     // Tìm và cập nhật trạng thái đơn hàng
@@ -115,12 +143,9 @@ export const updateOrderStatus = async (req, res) => {
     return res.status(200).json(updatedOrder);
   } catch (error) {
     console.error("Error updating order status:", error);
-    return res.status(500).json({ message: "Có lỗi xảy ra khi cập nhật trạng thái đơn hàng.", error: error.message });
+    return res.status(500).json({
+      message: "Có lỗi xảy ra khi cập nhật trạng thái đơn hàng.",
+      error: error.message,
+    });
   }
 };
-
-
-
-
-
-

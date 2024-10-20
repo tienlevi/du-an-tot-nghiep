@@ -22,11 +22,21 @@ export const getOrderById = async (id: number | string) => {
   }
 };
 
+export const getOrderByUserId = async (userId: number | string) => {
+  try {
+    const response = await instance.get(`/orders/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Lỗi khi lấy thông tin đơn hàng:', error);
+    throw new Error('Không thể lấy thông tin đơn hàng. Vui lòng thử lại sau.');
+  }
+};
+
 // Lấy danh sách đơn hàng của người dùng
 export const getUserOrders = async (userId: number | string) => {
   try {
     const response = await instance.get(`/orders/user/${userId}`);
-    console.log("Dữ liệu trả về từ API:", response.data);
+    console.log('Dữ liệu trả về từ API:', response.data);
     return response.data || [];
   } catch (error) {
     console.error('Lỗi khi lấy danh sách đơn hàng của người dùng:', error);
@@ -38,7 +48,7 @@ export const getUserOrders = async (userId: number | string) => {
 export const getAllOrders = async () => {
   try {
     const response = await instance.get('/orders');
-    console.log("Dữ liệu trả về từ API (Tất cả đơn hàng):", response.data);
+    console.log('Dữ liệu trả về từ API (Tất cả đơn hàng):', response.data);
     return response.data || [];
   } catch (error: any) {
     console.error('Lỗi khi lấy danh sách tất cả đơn hàng:', error);
@@ -46,16 +56,24 @@ export const getAllOrders = async () => {
   }
 };
 // Cập nhật trạng thái đơn hàng
-export const updateOrderStatus = async (id: number | string, status: string) => {
+export const updateOrderStatus = async (
+  id: number | string,
+  status: string,
+) => {
   try {
-    console.log('Cập nhật trạng thái cho đơn hàng:', id, 'với trạng thái:', status); // Log thông tin
+    console.log(
+      'Cập nhật trạng thái cho đơn hàng:',
+      id,
+      'với trạng thái:',
+      status,
+    ); // Log thông tin
     const response = await instance.put(`/orders/${id}/status`, { status });
     console.log('Kết quả cập nhật trạng thái:', response.data); // Log kết quả
     return response.data;
   } catch (error) {
     console.error('Lỗi khi cập nhật trạng thái đơn hàng:', error); // Log lỗi
-    throw new Error('Không thể cập nhật trạng thái đơn hàng. Vui lòng thử lại sau.');
+    throw new Error(
+      'Không thể cập nhật trạng thái đơn hàng. Vui lòng thử lại sau.',
+    );
   }
 };
-
-
