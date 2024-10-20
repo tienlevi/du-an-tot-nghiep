@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import EditProfile from './components/Profile/EditProfile';
 import Info from './components/Profile/Info';
 import useAuth from '@/hooks/useAuth';
+import OrderProfile from './components/Profile/OrderProfile';
 
 const Account = () => {
   const location = useLocation();
@@ -29,6 +30,14 @@ const Account = () => {
                 Change Profile
               </Link>
             </li>
+            <li className="px-4 py-2">
+              <Link
+                to="/account/order"
+                className="hover:underline hover:underline-offset-8 ease-in-out duration-300 transform  focus:text-red-600"
+              >
+                Đơn hàng
+              </Link>
+            </li>
             <li
               className="px-4 py-2 cursor-pointer"
               onClick={() => {
@@ -40,7 +49,7 @@ const Account = () => {
           </ul>
         </nav>
         {location.pathname === '/account' && <Info />}
-
+        {location.pathname === '/account/order' && <OrderProfile />}
         {location.pathname === '/account/edit' && <EditProfile />}
       </div>
       {/* Snackbar for displaying success or error messages */}
