@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import {getAllOrders, updateOrderStatus } from '@/services/order';
+import { getAllOrders, updateOrderStatus } from '@/services/order';
 import { Input, Select, Space, Table } from 'antd';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import DefaultLayout from './_components/Layout/DefaultLayout';
@@ -10,27 +10,27 @@ import { EyeOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
-// Component OrderManagement
+
 const OrderManagement: React.FC = () => {
     const queryClient = useQueryClient();
 
-    // Fetch orders
+
     const { data: orders = [], isLoading, isError } = useQuery({
         queryKey: ['orders'],
-        queryFn: getAllOrders, // Gọi API lấy tất cả đơn hàng
+        queryFn: getAllOrders,
     });
 
     if (isError) {
         toast.error("Có lỗi xảy ra khi lấy danh sách đơn hàng.");
     }
 
-    // State quản lý lọc và tìm kiếm
+
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedStatus, setSelectedStatus] = useState<string | undefined>();
 
     const { mutate: updateStatusMutate } = useMutation({
         mutationFn: async ({ id, status }) => {
-            await updateOrderStatus(id, status); 
+            await updateOrderStatus(id, status);
             toast.success('Trạng thái đơn hàng đã được cập nhật thành công');
             queryClient.invalidateQueries({ queryKey: ['orders'] });
         },
@@ -97,7 +97,7 @@ const OrderManagement: React.FC = () => {
             render: (_, record) => (
                 <Space size="middle">
                     <Link
-                        to={`/orders/${record._id}`}
+                        to={`/orders/${record.userId}/${record._id}`}
                         className="py-2 px-3 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center"
                     >
                         <EyeOutlined className="mr-1" />

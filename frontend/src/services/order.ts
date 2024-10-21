@@ -12,15 +12,17 @@ export const createOrder = async (orderData: any) => {
 };
 
 // Lấy thông tin đơn hàng theo ID
-export const getOrderById = async (id: number | string) => {
+export const getOrderById = async (userId: string, orderId: string) => {
   try {
-    const response = await instance.get(`/orders/${id}`);
+    const response = await instance.get(`/orders/${userId}/${orderId}`);
     return response.data;
   } catch (error) {
     console.error('Lỗi khi lấy thông tin đơn hàng:', error);
-    throw new Error('Không thể lấy thông tin đơn hàng. Vui lòng thử lại sau.');
+    throw new Error(error.response?.data?.message || 'Không thể lấy thông tin đơn hàng. Vui lòng thử lại sau.');
   }
 };
+
+
 
 export const getOrderByUserId = async (userId: number | string) => {
   try {
