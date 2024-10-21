@@ -13,6 +13,7 @@ const orderItemSchema = new mongoose.Schema({
   name: { type: String, required: true },
   price: { type: Number, required: true },
   image: { type: String },
+  quantity: { type: Number },
 });
 
 const orderSchema = new mongoose.Schema(
@@ -32,6 +33,10 @@ const orderSchema = new mongoose.Schema(
     address: { type: String, required: true }, // Yêu cầu địa chỉ
     totalPrice: {
       type: Number,
+      required: true,
+    },
+    method: {
+      type: String,
       required: true,
     },
     phone: { type: String, required: true }, // Yêu cầu số điện thoại

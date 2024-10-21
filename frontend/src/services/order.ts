@@ -12,9 +12,9 @@ export const createOrder = async (orderData: any) => {
 };
 
 // Lấy thông tin đơn hàng theo ID
-export const getOrderById = async (id: number | string) => {
+export const getOrderById = async (userId: string, id: number | string) => {
   try {
-    const response = await instance.get(`/orders/${id}`);
+    const response = await instance.get(`/orders/${userId}/${id}`);
     return response.data;
   } catch (error) {
     console.error('Lỗi khi lấy thông tin đơn hàng:', error);
