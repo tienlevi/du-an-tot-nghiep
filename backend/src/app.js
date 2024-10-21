@@ -11,6 +11,7 @@ import orderRouter from "./routers/order";
 import uploadRouter from "./routers/upload";
 import favoritesRouter from "./routers/favorite";
 import userRouter from "./routers/user";
+import paymentRouter from "./routers/payment";
 const app = express();
 
 dotenv.config();
@@ -20,9 +21,7 @@ app.use(cors());
 app.use(morgan("tiny"));
 
 // connect db
-connectDB(
-  "mongodb://localhost:27017/DuAnTotNghiep"
-);
+connectDB("mongodb://localhost:27017/DuAnTotNghiep");
 
 // routers
 app.use("/api/v1", authRouter);
@@ -33,5 +32,6 @@ app.use("/api/v1", orderRouter);
 app.use("/api/v1", uploadRouter);
 app.use("/api/v1", favoritesRouter);
 app.use("/api/v1", userRouter);
+app.use("/api/v1", paymentRouter);
 
 export const viteNodeApp = app;

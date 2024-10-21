@@ -9,8 +9,6 @@ const Profile = () => {
     setOpen(!open);
   };
 
-  console.log(user);
-
   const logOut = () => {
     localStorage.removeItem('user');
     window.location.reload();
