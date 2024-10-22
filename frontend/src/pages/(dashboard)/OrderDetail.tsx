@@ -5,7 +5,7 @@ import { Spin } from 'antd';
 import { toast } from 'react-toastify';
 import DefaultLayout from './_components/Layout/DefaultLayout';
 import { getOrderById } from '@/services/order';
-import { GoogleMap, LoadScript,Marker } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 const OrderDetail: React.FC = () => {
   const { userId, orderId } = useParams<{ userId: string; orderId: string }>();
@@ -60,11 +60,13 @@ const OrderDetail: React.FC = () => {
           <div className="col-span-2 bg-gray-100 rounded-lg p-4 shadow-md">
             <h3 className="text-xl font-semibold mb-4">Bản đồ giao hàng</h3>
             <LoadScript googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY">
+
               <GoogleMap
                 mapContainerStyle={mapContainerStyle}
                 center={mapCenter}
                 zoom={12}
               >
+                {/* Thêm Marker nếu cần */}
                 <Marker position={mapCenter} />
               </GoogleMap>
             </LoadScript>
@@ -84,6 +86,7 @@ const OrderDetail: React.FC = () => {
                 {order.items?.map((item) => {
                   const price = Number(item.price);
                   const quantity = Number(item.quantity);
+                 
                   return (
                     <tr key={item.product} className="border-b">
                       <td className="p-4">
@@ -94,17 +97,25 @@ const OrderDetail: React.FC = () => {
                         />
                       </td>
                       <td className="p-4">{item.name}</td>
-                      <td className="p-4">{isNaN(quantity) ? '0' : quantity.toLocaleString()}</td>
-                      <td className="p-4">{isNaN(price) ? '0' : price.toLocaleString()} VND</td>
-                      <td className="p-4">{((price || 0) * (quantity || 0)).toLocaleString()} VND</td>
+                      <td className="p-4">{item.quantity}</td>
+
+
+                      <td className="p-4">{item.price} VND</td>
+                      <td className="p-4">
+                        {(isNaN(price) || isNaN(quantity) ? '0' : (price * quantity).toLocaleString())} VND
+                      </td>
+
+
                     </tr>
                   );
                 })}
+
                 <tr>
                   <td colSpan={4} className="text-right font-semibold p-4">Tổng cộng</td>
                   <td className="p-4 font-semibold">{Number(order.totalPrice)?.toLocaleString() || '0'} VND</td>
                 </tr>
               </tbody>
+
             </table>
           </div>
 
@@ -125,20 +136,23 @@ const OrderDetail: React.FC = () => {
             <div className="mt-6 space-y-2">
               <div>
                 <strong>Trạng thái đơn hàng:</strong>
-                <span className={`font-semibold ${order.status === 'Đã giao' ? 'text-green-600' : order.status === 'Đang xử lý' ? 'text-yellow-600' : 'text-red-600'}`}>
+                <span className={` ${order.status === 'Đã giao' ? 'text-green-600' : order.status === 'Đang xử lý' ? 'text-yellow-600' : 'text-red-600'}`}>
                   {order.status}
                 </span>
               </div>
 
-              <div><strong>Cửa hàng:</strong> {order.storeName}</div>
-              <div><strong>Người chuyển phát nhanh:</strong> {order.shipperName}</div>
+              <div><strong>Phương thức thanh toán:</strong> {order.method}</div>
+              <div><strong>Email :</strong> {order.email}</div>
               <div><strong>Điện thoại:</strong> {order.phone}</div>
               <div><strong>Khách hàng:</strong> {order.name}</div>
+              <div><strong>Địa chỉ:</strong> {order.address}</div>
               <div><strong>Đã tạo lúc:</strong> {new Date(order.createdAt).toLocaleString()}</div>
             </div>
           </div>
         </div>
+
       </div>
+
     </DefaultLayout>
   );
 };
