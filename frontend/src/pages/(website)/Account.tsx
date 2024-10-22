@@ -1,11 +1,7 @@
-import { Link, useLocation } from 'react-router-dom';
-import EditProfile from './components/Profile/EditProfile';
-import Info from './components/Profile/Info';
+import { Link, Outlet } from 'react-router-dom';
 import useAuth from '@/hooks/useAuth';
-import OrderProfile from './components/Profile/OrderProfile';
 
 const Account = () => {
-  const location = useLocation();
   const { logOut } = useAuth();
 
   return (
@@ -48,9 +44,7 @@ const Account = () => {
             </li>
           </ul>
         </nav>
-        {location.pathname === '/account' && <Info />}
-        {location.pathname === '/account/order' && <OrderProfile />}
-        {location.pathname === '/account/edit' && <EditProfile />}
+        <Outlet />
       </div>
       {/* Snackbar for displaying success or error messages */}
     </div>

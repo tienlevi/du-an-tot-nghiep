@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Input, Select, Space, Table, TableColumnType } from 'antd';
+import { Button, Input, Select, Space, Table, TableColumnType } from 'antd';
 import { toast } from 'react-toastify';
 import useAuth from '@/hooks/useAuth';
 import { getOrderByUserId, updateOrderStatus } from '@/services/order';
@@ -47,9 +47,9 @@ function OrderProfile() {
       key: '_id',
     },
     {
-      title: 'Ảnh Sản Phẩm',
+      title: 'Tên Sản Phẩm',
       dataIndex: 'items',
-      key: 'productImage',
+      key: 'name',
       render: (items) => {
         return (
           <p>
@@ -79,28 +79,11 @@ function OrderProfile() {
       sorter: (a: any, b: any) => a.totalPrice - b.totalPrice,
     },
     {
-      title: 'Trạng Thái',
-      dataIndex: 'status',
-      key: 'status',
-      filters: [
-        { text: 'Chờ Xử Lý', value: 'chờ xử lý' },
-        { text: 'Đã Xác Nhận', value: 'đã xác nhận' },
-        { text: 'Đang Giao', value: 'đang giao' },
-        { text: 'Đã Giao', value: 'đã giao' },
-      ],
-      onFilter: (value, record) => record.status.includes(value as string),
-      render: (text, record) => (
-        <Select
-          value={text}
-          onChange={(status) => updateStatusMutate({ id: record._id, status })}
-          style={{ width: 120 }}
-        >
-          <Select.Option value="chờ xử lý">Chờ Xử Lý</Select.Option>
-          <Select.Option value="đã xác nhận">Đã Xác Nhận</Select.Option>
-          <Select.Option value="đang giao">Đang Giao</Select.Option>
-          <Select.Option value="đã giao">Đã Giao</Select.Option>
-        </Select>
-      ),
+      title: 'Chi tiết đơn hàng',
+      dataIndex: 'detail',
+      key: 'detail',
+
+      render: (text, record) => <Button>Chi tiết</Button>,
     },
   ];
 
