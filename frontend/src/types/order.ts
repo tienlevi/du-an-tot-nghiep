@@ -10,4 +10,5 @@ export interface Order {
   method: string;
   phone: string;
   status: string;
+  quantity: string
 }

@@ -1,16 +1,15 @@
 // Import statements remain the same
-import { useState } from 'react';
-import { Grid, Typography, Menu, MenuItem, Button } from '@mui/material';
-import { Link, useParams } from 'react-router-dom';
-import i18n from './components/common/components/LangConfig';
+import { getProductsByCategory } from '@/services/category';
+import { Product } from '@/types/product';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { Button, Menu, MenuItem, Typography } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import GetProductsByCategory from './components/GetProductsByCategory/getProductsByCategory';
+import i18n from './components/common/components/LangConfig';
 import ViewAll from './components/common/components/ViewAll';
 import WhiteButton from './components/common/components/WhiteButton';
-import { useQuery } from '@tanstack/react-query';
-import { getProductsByCategory } from '@/services/category';
-import ProductItem from './components/Product/ProductItem';
-import { Product } from '@/types/product';
-import GetProductsByCategory from './components/GetProductsByCategory/getProductsByCategory';
 
 const Category = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,7 +18,7 @@ const Category = () => {
     i18n.t('categories.technology'),
   );
 
-  // Fetch products by category
+ 
   const { data: products } = useQuery({
     queryKey: ['categoryProducts', id],
     queryFn: () => getProductsByCategory(id),
@@ -71,7 +70,7 @@ const Category = () => {
         </h1>
         <div className="grid grid-cols-3 gap-4">
           {products?.map((product:Product) => (
-            // Pass product as a prop to ProductItem
+         
             <GetProductsByCategory key={product._id} product={product} />
           ))}
         </div>
@@ -101,13 +100,13 @@ const Category = () => {
         ))}
       </Menu>
       
-      {/* You can remove the filteredItems grid if you are not using it anymore */}
+  
       <div className="mt-6 flex justify-center gap-5 md:gap-20 items-center md:mx-12">
         <Link to="..">
           <WhiteButton
             name={i18n.t('whiteButtons.backToHomePage')}
             onClick={() => {
-              // TODO: Chức năng chưa được triển khai
+           
             }}
           />
         </Link>

@@ -37,6 +37,7 @@ import UserList from '@/pages/(dashboard)/User/UserList';
 import OrderManagement from '@/pages/(dashboard)/OrderManagement';
 import ProductDetail from '@/pages/(website)/ProductDetail';
 import ProtectRoute from '@/auth/ProtectRoute';
+import OrderDetail from '@/pages/(dashboard)/OrderDetail';
 
 function DashboardRoute() {
   return (
@@ -66,6 +67,7 @@ function DashboardRoute() {
               <Route element={<Products />} path="/products" />
               <Route element={<ProductDetail />} path="/product/:id" />
               <Route element={<SearchProducts />} path="/search" />
+              <Route path="/orders/:userId/:orderId" element={<OrderDetail />} />
               {/* <Route element={<Category />} path="/category" />  */}
               <Route element={<NotFound />} path="*" />
             </Route>

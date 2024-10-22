@@ -144,7 +144,7 @@ const Cart = () => {
           </div>
         </div>
       ))}
-      {/* Buttons for returning to shop, applying coupon, and proceeding to checkout */}
+    
       <div className="flex justify-between items-center mt-2">
         <Link to="..">
           <WhiteButton name={'Return to shop'} onClick={() => {}} />
