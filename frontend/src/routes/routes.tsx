@@ -18,6 +18,9 @@ import Invoice from '@/pages/(website)/Invoice';
 import SearchProducts from '@/pages/(website)/Search';
 import SignUpWebsite from '@/pages/(website)/SignUp';
 import Wishlist from '@/pages/(website)/Wishlist';
+import Info from '@/pages/(website)/components/Profile/Info';
+import OrderProfile from '@/pages/(website)/components/Profile/OrderProfile';
+import EditProfile from '@/pages/(website)/components/Profile/EditProfile';
 
 // dashboard
 import PageTitle from '@/pages/(dashboard)/_components/PageTitle';
@@ -47,9 +50,11 @@ function DashboardRoute() {
               <Route index element={<Home />} path="/" />
               <Route element={<Contact />} path="/contact" />
               <Route element={<ProtectRoute />}>
-                <Route element={<Account />} path="/account" />
-                <Route element={<Account />} path="/account/edit" />
-                <Route element={<Account />} path="/account/order" />
+                <Route element={<Account />}>
+                  <Route element={<Info />} path="/account" />
+                  <Route element={<OrderProfile />} path="/account/order" />
+                  <Route element={<EditProfile />} path="/account/edit" />
+                </Route>
               </Route>
               <Route element={<About />} path="/about" />
               <Route element={<SignUpWebsite />} path="/signup" />
