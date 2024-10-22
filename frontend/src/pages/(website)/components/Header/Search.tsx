@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
-import { Link } from 'react-router-dom';
-import { ITEMS } from '../common/functions/items';
-import { CiSearch } from 'react-icons/ci';
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import i18n from '../common/components/LangConfig';
+import { useState, useEffect } from "react";
+import { styled, alpha } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
+import { Link } from "react-router-dom";
+import { ITEMS } from "../common/functions/items";
+import { CiSearch } from "react-icons/ci";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import i18n from "../common/components/LangConfig";
 
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
   backgroundColor: alpha(theme.palette.grey[300], 0.3),
   '&:hover': {
     backgroundColor: alpha(theme.palette.grey[300], 0.6),
@@ -42,10 +42,10 @@ const Search = styled('div')(({ theme }) => ({
 }));
 
 const SearchAppBar = () => {
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
 
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       setSearchText(searchText.trim());
     }
   };
@@ -63,7 +63,7 @@ const SearchAppBar = () => {
         renderInput={(params) => (
           <TextField
             {...params}
-            placeholder={i18n.t('search')}
+            placeholder={i18n.t("search")}
             onKeyDown={handleKeyDown}
           />
         )}
@@ -74,7 +74,7 @@ const SearchAppBar = () => {
             <CiSearch className="w-5 h-auto md:w-8 md:h-8" />
           </Link>
         </IconButton>
-      )}
+      </form>
     </Search>
   );
 };

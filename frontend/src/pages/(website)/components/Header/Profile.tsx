@@ -23,7 +23,6 @@ const Profile = () => {
     <div className="flex justify-between md:justify-around items-center md:gap-4 md:ml-4 ">
       <Link to="/wishlist" className="px-2 cursor-pointer">
         <CiHeart className="" style={{ fontSize: 30 }} />
-
       </Link>
       <Link to="/cart" className="px-2 cursor-pointer">
         <CiShoppingCart style={{ fontSize: 30 }} />
@@ -35,9 +34,8 @@ const Profile = () => {
         className={`absolute top-full p-2 bg-[rgba(31,31,31,0.5)] ${open ? 'block' : 'hidden'} z-20`}
       >
         <div className="flex flex-col">
-          <div className="text-[18px] p-4 text-white">Hello {user?.name}</div>
           <Link className="text-[18px] p-4 text-white" to={`/account`}>
-            My Account
+            Hello {user?.name}
           </Link>
           <div
             className="text-[18px] p-4 text-white cursor-pointer"

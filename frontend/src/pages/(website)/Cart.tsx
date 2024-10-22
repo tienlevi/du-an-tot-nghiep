@@ -36,13 +36,6 @@ const Cart = () => {
     return cart?.products.some((item) => item.productId === product._id);
   });
 
-  const total = useMemo(() => {
-    const result = cartItems?.reduce((price, product) => {
-      return price + product.price;
-    }, 0);
-    return result;
-  }, [cartItems]);
-
   const carts = cartItems?.map((item) => {
     return {
       ...item,
@@ -50,6 +43,13 @@ const Cart = () => {
         ?.quantity,
     };
   });
+
+  const total = useMemo(() => {
+    const result = carts?.reduce((price, product) => {
+      return price + product.price * (product.quantity ?? 0);
+    }, 0);
+    return result;
+  }, [cartItems]);
 
   const { mutate } = useMutation({
     mutationKey: ['cart'],

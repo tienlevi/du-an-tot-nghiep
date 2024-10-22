@@ -1,67 +1,60 @@
 import mongoose from "mongoose";
 
-// Hàm để sinh orderNumber
-const generateOrderNumber = () => {
-    const timestamp = Date.now().toString();
-    const random = Math.floor(Math.random() * 1000)
-        .toString()
-        .padStart(3, "0");
-    return `${timestamp}-${random}`;
+// Hàm để sinh orderId
+const generateOrderId = () => {
+  const timestamp = Date.now().toString();
+  const random = Math.floor(Math.random() * 1000)
+    .toString()
+    .padStart(3, "0");
+  return `${timestamp}-${random}`;
 };
 
 const orderItemSchema = new mongoose.Schema({
-    _id: {
-        type: mongoose.Schema.Types.ObjectId,
-        auto: true,
-    },
-    name: {
-        type: String,
-        required: true,
-    },
-    price: {
-        type: Number,
-        required: true,
-    },
-    quantity: {
-        type: Number,
-        required: true,
-    },
+  name: { type: String, required: true },
+  price: { type: Number, required: true },
+  image: { type: String },
+  quantity: { type: Number },
 });
 
-const orderSchema = new mongoose.Schema({
+const orderSchema = new mongoose.Schema(
+  {
+    orderId: { type: String, unique: true },
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User", // Nếu bạn có một schema User để liên kết
     },
-    items: [orderItemSchema],
-    orderNumber: {
-        type: String,
-        // required: true,
-        unique: true,
+    items: {
+      type: [orderItemSchema],
+      required: true,
     },
-    customerName: {
-        type: String,
-        // required: true,
-    },
+    email: { type: String, required: true }, // Yêu cầu email
+    name: { type: String, required: true },
+    address: { type: String, required: true }, // Yêu cầu địa chỉ
     totalPrice: {
-        type: Number,
-        required: true,
+      type: Number,
+      required: true,
     },
+    method: {
+      type: String,
+      required: true,
+    },
+    phone: { type: String, required: true }, // Yêu cầu số điện thoại
     status: {
-        type: String,
-        enum: ["pending", "confirmed", "shipped", "delivered"],
-        default: "pending",
+      type: String,
+      enum: ["chờ xử lý", "đã xác nhận", "đang giao", "đã giao"],
+      default: "chờ xử lý",
     },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
-});
-// Tạo pre-save hook để sinh orderNumber trước khi lưu vào cơ sở dữ liệu
+  },
+  { timestamps: true, versionKey: false }
+);
+
+// Tạo pre-save hook để sinh orderId trước khi lưu vào cơ sở dữ liệu
 orderSchema.pre("save", function (next) {
-    if (!this.orderNumber) {
-        this.orderNumber = generateOrderNumber();
-    }
-    next();
+  if (!this.orderId) {
+    this.orderId = generateOrderId();
+  }
+  next();
 });
+
 export default mongoose.model("Order", orderSchema);

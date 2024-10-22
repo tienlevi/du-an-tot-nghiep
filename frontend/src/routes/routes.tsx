@@ -1,6 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
 // website
-import { CartProvider } from '@/context/CartContext';
 import { LangProvider } from '@/context/LangContext';
 import { WishlistProvider } from '@/context/WishlistContext';
 import About from '@/pages/(website)/About';
@@ -15,11 +14,13 @@ import Home from '@/pages/(website)/Home';
 import LayoutWebsite from '@/pages/(website)/Layout';
 import LogIn from '@/pages/(website)/LogIn';
 import NotFound from '@/pages/(website)/NotFound';
-import Payment from '@/pages/(website)/Payment';
-import Product from '@/pages/(website)/Product';
+import Invoice from '@/pages/(website)/Invoice';
 import SearchProducts from '@/pages/(website)/Search';
 import SignUpWebsite from '@/pages/(website)/SignUp';
 import Wishlist from '@/pages/(website)/Wishlist';
+import Info from '@/pages/(website)/components/Profile/Info';
+import OrderProfile from '@/pages/(website)/components/Profile/OrderProfile';
+import EditProfile from '@/pages/(website)/components/Profile/EditProfile';
 
 // dashboard
 import PageTitle from '@/pages/(dashboard)/_components/PageTitle';
@@ -33,7 +34,6 @@ import ProductsEdit from '@/pages/(dashboard)/ProductsEdit';
 import ProductsList from '@/pages/(dashboard)/ProductsList';
 import Profile from '@/pages/(dashboard)/Profile';
 import UserList from '@/pages/(dashboard)/User/UserList';
-import OrderManagement from '@/pages/(dashboard)/OrderManagement';
 
 function DashboardRoute() {
   return (
@@ -148,15 +148,6 @@ function DashboardRoute() {
                   <>
                     <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
                     <UserList />
-                  </>
-                }
-              />
-              <Route
-                path="/ordermanagement"
-                element={
-                  <>
-                    <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <OrderManagement />
                   </>
                 }
               />

@@ -1,13 +1,13 @@
 export interface Order {
-    _id: string;
-    customer: string;
-    totalPrice: number;
-    status: string;
-    items: Array<{
-      product: string;
-      quantity: number;
-      price: number;
-    }>;
-    createdAt: string;
-  }
-  
+  _id?: string;
+  orderId: string;
+  userId: string;
+  items: [];
+  email: string;
+  name: string;
+  address: string;
+  totalPrice: number;
+  method: string;
+  phone: string;
+  status: string;
+}
