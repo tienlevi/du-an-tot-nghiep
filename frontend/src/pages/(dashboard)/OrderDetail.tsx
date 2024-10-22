@@ -4,17 +4,22 @@ import { useQuery } from '@tanstack/react-query';
 import { Spin } from 'antd';
 import { toast } from 'react-toastify';
 import DefaultLayout from './_components/Layout/DefaultLayout';
+import { Order } from '@/types/order';
+
 import { getOrderById } from '@/services/order';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 const OrderDetail: React.FC = () => {
   const { userId, orderId } = useParams<{ userId: string; orderId: string }>();
 
-  const { data: order, isLoading, isError } = useQuery({
+  const { data, isLoading, isError } = useQuery<Order>({
     queryKey: ['order', userId, orderId],
-    queryFn: () => getOrderById(userId, orderId),
-    enabled: !!userId && !!orderId,
+    queryFn: async () => {
+      return await getOrderById(userId, orderId);
+    },
+    enabled: !!userId && !!orderId, // Đặt thuộc tính enabled ở đây
   });
+
 
   if (isLoading) {
     return (
@@ -35,7 +40,7 @@ const OrderDetail: React.FC = () => {
     );
   }
 
-  if (!order) {
+  if (!data) {
     return (
       <DefaultLayout>
         <div className="text-center">Không tìm thấy đơn hàng với ID: {orderId}</div>
@@ -43,23 +48,23 @@ const OrderDetail: React.FC = () => {
     );
   }
 
-  // Đặt vị trí cho bản đồ (ví dụ: tọa độ cố định hoặc từ thông tin đơn hàng)
-  const mapCenter = { lat: 10.762622, lng: 106.660172 }; // Hà Nội, Việt Nam
+
+  const mapCenter = { lat: 10.762622, lng: 106.660172 };
   const mapContainerStyle = {
     height: '400px',
     width: '100%',
   };
-
+  const totalAmount = data.items?.reduce((acc, item) => acc + (item.price * item.quantity), 0) || 0;
   return (
     <DefaultLayout>
       <div className="container mx-auto p-4 bg-white shadow-lg rounded-lg">
-        <h2 className="text-2xl font-semibold mb-6">Đơn hàng #{order._id}</h2>
+        <h2 className="text-2xl font-semibold mb-6">Đơn hàng #{data._id}</h2>
 
         <div className="grid grid-cols-3 gap-6">
           {/* Bản đồ giao hàng */}
           <div className="col-span-2 bg-gray-100 rounded-lg p-4 shadow-md">
             <h3 className="text-xl font-semibold mb-4">Bản đồ giao hàng</h3>
-            <LoadScript googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY">
+            <LoadScript googleMapsApiKey="khong biet lay key cho nao :)))">
 
               <GoogleMap
                 mapContainerStyle={mapContainerStyle}
@@ -72,6 +77,7 @@ const OrderDetail: React.FC = () => {
             </LoadScript>
 
             {/* Bảng sản phẩm */}
+
             <table className="w-full mt-6 text-left table-auto border-collapse">
               <thead>
                 <tr className="bg-gray-200">
@@ -83,12 +89,10 @@ const OrderDetail: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {order.items?.map((item) => {
-                  const price = Number(item.price);
-                  const quantity = Number(item.quantity);
-                 
+                {data.items?.map((item: any) => {
+                  console.log(item);
                   return (
-                    <tr key={item.product} className="border-b">
+                    <tr key={item._id} className="border-b">
                       <td className="p-4">
                         <img
                           src={item.image}
@@ -100,19 +104,18 @@ const OrderDetail: React.FC = () => {
                       <td className="p-4">{item.quantity}</td>
 
 
-                      <td className="p-4">{item.price} VND</td>
+                      <td className="p-4">{item.price} VNĐ</td>
                       <td className="p-4">
-                        {(isNaN(price) || isNaN(quantity) ? '0' : (price * quantity).toLocaleString())} VND
+                        {item.price * item.quantity} VNĐ
                       </td>
 
 
                     </tr>
                   );
                 })}
-
                 <tr>
                   <td colSpan={4} className="text-right font-semibold p-4">Tổng cộng</td>
-                  <td className="p-4 font-semibold">{Number(order.totalPrice)?.toLocaleString() || '0'} VND</td>
+                  <td className="p-4 font-semibold">{totalAmount.toLocaleString()} VNĐ</td>
                 </tr>
               </tbody>
 
@@ -123,7 +126,7 @@ const OrderDetail: React.FC = () => {
           <div className="bg-white rounded-lg p-4 shadow-md">
             <h3 className="text-xl font-semibold mb-4">Chi tiết giao hàng</h3>
             <ul className="space-y-4">
-              {order.statuses?.map((status, index) => (
+              {data.statuses?.map((status, index) => (
                 <li key={index} className="flex items-center">
                   <span className={`mr-3 w-3 h-3 rounded-full ${status.isCompleted ? 'bg-green-500' : 'bg-red-500'}`}></span>
                   <span>{status.label}</span>
@@ -136,17 +139,17 @@ const OrderDetail: React.FC = () => {
             <div className="mt-6 space-y-2">
               <div>
                 <strong>Trạng thái đơn hàng:</strong>
-                <span className={` ${order.status === 'Đã giao' ? 'text-green-600' : order.status === 'Đang xử lý' ? 'text-yellow-600' : 'text-red-600'}`}>
-                  {order.status}
+                <span className={` ${data.status === 'Đã giao' ? 'text-green-600' : data.status === 'Đang xử lý' ? 'text-yellow-600' : 'text-red-600'}`}>
+                  {data.status}
                 </span>
               </div>
 
-              <div><strong>Phương thức thanh toán:</strong> {order.method}</div>
-              <div><strong>Email :</strong> {order.email}</div>
-              <div><strong>Điện thoại:</strong> {order.phone}</div>
-              <div><strong>Khách hàng:</strong> {order.name}</div>
-              <div><strong>Địa chỉ:</strong> {order.address}</div>
-              <div><strong>Đã tạo lúc:</strong> {new Date(order.createdAt).toLocaleString()}</div>
+              <div><strong>Phương thức thanh toán:</strong> {data.method}</div>
+              <div><strong>Email :</strong> {data.email}</div>
+              <div><strong>Điện thoại:</strong> {data.phone}</div>
+              <div><strong>Khách hàng:</strong> {data.name}</div>
+              <div><strong>Địa chỉ:</strong> {data.address}</div>
+              <div><strong>Đã tạo lúc:</strong> {new Date(data.createdAt).toLocaleString()}</div>
             </div>
           </div>
         </div>
