@@ -1,3 +1,4 @@
+import { string } from "joi";
 import mongoose, { Schema } from "mongoose";
 const ValueAttributeSchema = new Schema(
     {
@@ -5,14 +6,17 @@ const ValueAttributeSchema = new Schema(
             type: String,
             required: true,
         },
-        price: {
-            type: Number,
-            required: true,
-        },
         quantity: {
             type: Number,
             required: true,
         },
+        sizes: { type: [String], required: true }, 
+        colors: [
+            {
+                name: { type: String, required: true },  
+                image: { type: String, required: true } 
+            }
+        ]
     },
     { timestamps: false, versionKey: false }
 );

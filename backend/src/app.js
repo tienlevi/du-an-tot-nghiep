@@ -11,6 +11,7 @@ import orderRouter from "./routers/order";
 import uploadRouter from "./routers/upload";
 import favoritesRouter from "./routers/favorite";
 import userRouter from "./routers/user";
+import attributeRouter from "./routers/attribute";
 const app = express();
 
 dotenv.config();
@@ -33,5 +34,6 @@ app.use("/api/v1", orderRouter);
 app.use("/api/v1", uploadRouter);
 app.use("/api/v1", favoritesRouter);
 app.use("/api/v1", userRouter);
+app.use("/api/v1",attributeRouter)
 
 export const viteNodeApp = app;

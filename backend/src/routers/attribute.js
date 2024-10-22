@@ -9,7 +9,7 @@ import {
 } from "../controllers/attribute";
 
 const router = Router();
-// Route để tạo mới một thuộc tính
+// Route để tạo mới một thuộc tính  
 router.post("/attributes", createAttribute);
 
 // Route để thêm giá trị cho thuộc tính đã tồn tại

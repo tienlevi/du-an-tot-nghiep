@@ -2,9 +2,13 @@ import Attribute, { ValueAttributeModel } from "../models/attribute";
 // Controller để tạo mới một thuộc tính
 export const createAttribute = async (req, res) => {
     try {
-        const { name } = req.body;
+        console.log(req.body)
+        const { name, quantity, sizes, colors } = req.body;
         const attribute = new Attribute({
             name,
+            quantity,
+            sizes,
+            colors
         });
         const newAttribute = await attribute.save();
         res.status(201).json(newAttribute);
@@ -71,19 +75,25 @@ export const deleteAttribute = async (req, res) => {
 // Controller để tạo mới một giá trị của thuộc tính
 export const createValueAttribute = async (req, res) => {
     try {
-        const { name, price, quantity } = req.body;
+        
+        const { name, quantity, sizes, colors } = req.body;
+
         const attribute = await Attribute.findById(req.params.id);
         if (!attribute) {
             return res.status(404).json({ message: "Attribute not found" });
         }
+
         const valueAttribute = new ValueAttributeModel({
             name,
-            price,
             quantity,
+            sizes,
+            colors
         });
+
         const newValueAttribute = await valueAttribute.save();
-        attribute.values.push(newValueAttribute);
+        attribute.values.push(newValueAttribute._id);  
         await attribute.save();
+
         res.status(201).json(newValueAttribute);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -116,14 +126,15 @@ export const getValueAttributeById = async (req, res) => {
 // Controller để cập nhật một giá trị của thuộc tính
 export const updateValueAttribute = async (req, res) => {
     try {
-        const { name, price, quantity } = req.body;
+        const { name, quantity, sizes, colors } = req.body;
         const value = await ValueAttributeModel.findById(req.params.id);
         if (!value) {
             return res.status(404).json({ message: "ValueAttribute not found" });
         }
         value.name = name;
-        value.price = price;
         value.quantity = quantity;
+        value.sizes = sizes; // Update sizes
+        value.colors = colors;
         const updatedValue = await value.save();
         res.json(updatedValue);
     } catch (error) {

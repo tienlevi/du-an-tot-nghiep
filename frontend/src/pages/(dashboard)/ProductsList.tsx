@@ -1,14 +1,17 @@
+import { getCategories } from '@/services/category';
+import { deleteProduct, getProducts } from '@/services/product';
+import { Category } from '@/types/category';
+import { Product } from '@/types/product';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { TableColumnsType, TableProps } from 'antd';
+import { Button, Input, Select, Space, Table } from 'antd';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Product } from '@/types/product';
-import { Category } from '@/types/category';
 import { toast } from 'react-toastify';
 import DefaultLayout from './_components/Layout/DefaultLayout';
-import { deleteProduct, getProducts } from '@/services/product';
-import { Button, Input, Select, Space, Table } from 'antd';
-import type { TableColumnsType, TableProps } from 'antd';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getCategories } from '@/services/category';
+import AttributeDisplay from './AttributeDisplay';
+
+
 
 const { Option } = Select;
 
@@ -18,10 +21,11 @@ type GetSingle<T> = T extends (infer U)[] ? U : never;
 type Sorts = GetSingle<Parameters<OnChange>[2]>;
 
 interface DataType {
-  key: string;
+  key?: string;
   name: string;
   age: number;
   address: string;
+  attribute: string;
 }
 
 const ProductsList: React.FC = () => {
@@ -132,6 +136,18 @@ const ProductsList: React.FC = () => {
       key: 'description',
     },
     {
+      title: 'Đặc điểm',
+      dataIndex: 'attribute', 
+      key: 'attribute',
+      render: (_, record) => {
+        return record.attribute ? (
+          <AttributeDisplay attribute={record.attribute} />
+        ) : (
+          'No attributes'
+        );
+      },
+    },
+    {
       title: 'Giảm giá',
       dataIndex: 'discount',
       key: 'discount',
@@ -215,11 +231,12 @@ const ProductsList: React.FC = () => {
             </Option>
           ))}
         </Select>
-        <Table
+        <Table<DataType>
           columns={columns}
-          dataSource={filteredProducts}
+          dataSource={filteredProducts} 
           onChange={handleChange}
           rowKey="_id"
+          pagination={{ pageSize: 10 }}
         />
       </div>
     </DefaultLayout>

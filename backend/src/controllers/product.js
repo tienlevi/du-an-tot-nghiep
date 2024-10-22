@@ -13,7 +13,7 @@ export const create = async (req, res) => {
 
 export const getProducts = async (req, res) => {
   try {
-    const data = await Product.find(req.body);
+    const data = await Product.find(req.body).populate('attribute');
     return res.status(StatusCodes.OK).json(data);
   } catch (error) {
     console.log(error);

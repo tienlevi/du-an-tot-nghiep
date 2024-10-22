@@ -14,6 +14,7 @@ const productSchema = new mongoose.Schema(
     image: { type: String },
     gallery: { type: [String], default: [] },
     description: { type: String },
+    attribute: { type: mongoose.Schema.Types.ObjectId, ref: 'Attribute' },
     discount: { type: Number, default: 0 },
     countInStock: { type: Number, default: 0 },
     featured: { type: Boolean, default: false },
