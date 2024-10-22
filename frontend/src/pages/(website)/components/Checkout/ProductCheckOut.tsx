@@ -1,5 +1,4 @@
-import { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { CartTypes } from '@/types/cart';
@@ -10,9 +9,11 @@ import useAuth from '@/hooks/useAuth';
 import RedButton from '../common/components/RedButton';
 import { createOrder } from '@/services/order';
 import { toast } from 'react-toastify';
+import { Payment } from '@/services/payment';
 
 function ProductCheckOut() {
-  const { handleSubmit } = useFormContext();
+  const { register, handleSubmit, watch } = useFormContext();
+  const methodValue = watch('method');
   const { user } = useAuth();
   const { data: cart } = useQuery<CartTypes>({
     queryKey: ['cart', user?._id],
@@ -31,13 +32,6 @@ function ProductCheckOut() {
     return cart?.products.some((item) => item.productId === product._id);
   });
 
-  const total = useMemo(() => {
-    const result = cartItems?.reduce((price, product) => {
-      return price + product.price;
-    }, 0);
-    return result;
-  }, [cartItems]);
-
   const carts = cartItems?.map((item) => {
     return {
       ...item,
@@ -46,22 +40,53 @@ function ProductCheckOut() {
     };
   });
 
+  const total = useMemo(() => {
+    const result = carts?.reduce((price, product) => {
+      return price + product.price * (product.quantity ?? 0);
+    }, 0);
+    return result;
+  }, [cartItems]);
+
   const items = carts?.map((item) => {
-    return { name: item.name, price: item.price, image: item.image };
+    return {
+      name: item.name,
+      price: item.price,
+      image: item.image,
+      quantity: item.quantity,
+    };
   });
 
   const { mutate } = useMutation({
     mutationKey: ['order'],
     mutationFn: async (data: object) => {
-      return await createOrder({ ...data, totalPrice: total, items: items });
+      const response = await createOrder({
+        ...data,
+        totalPrice: total,
+        items: carts,
+      });
+      console.log(response);
+
+      localStorage.setItem('OrderId', JSON.stringify(response.order._id));
     },
     onSuccess: () => {
       toast.success('Đặt hàng thành công');
     },
   });
 
+  const { mutate: paymentMethod } = useMutation({
+    mutationKey: ['order'],
+    mutationFn: async () => {
+      const response = await Payment(total!);
+      window.location.href = response?.payUrl;
+    },
+  });
+
   const onSubmit = (data: object) => {
-    console.log({ ...data, totalPrice: total, items: items });
+    if (methodValue === 'Thanh toán qua Momo') {
+      paymentMethod();
+    } else {
+      window.location.href = '/invoice';
+    }
     mutate({ ...data, totalPrice: total, items: items });
   };
 
@@ -76,14 +101,17 @@ function ProductCheckOut() {
                 {item.name}
               </p>
             </div>
-            <div>{item.price}$</div>
+            <div className="flex flex-col">
+              <p>{item.quantity}x</p>
+              <p>{item.price * (item?.quantity ?? 0)}$</p>
+            </div>
           </div>
         ))}
       </div>
       <div className="flex flex-col gap-4">
         <div className="flex justify-between  border-b">
           <p className="text-base">Sub Total:</p>
-          <p className="text-base">${total}</p>
+          <p className="text-base">{total} VND</p>
         </div>
       </div>
       <div className="flex flex-col gap-4">
@@ -95,7 +123,7 @@ function ProductCheckOut() {
       <div className="flex flex-col gap-4">
         <div className="flex justify-between  border-b">
           <p className="text-base">Total:</p>
-          <p className="text-base">${0}</p>
+          <p className="text-base">{total} VND</p>
         </div>
       </div>
       {/* Payment methods */}
@@ -105,14 +133,23 @@ function ProductCheckOut() {
         </div>
         <div className="flex justify-between">
           <label>
-            <input type="radio" name="paymentMethod" value="bank" />
-            Bank
+            <input
+              {...register('method')}
+              type="radio"
+              value="Thanh toán qua Momo"
+              checked={true}
+            />
+            Thanh toán qua Momo
           </label>
         </div>
         <div className="flex justify-between">
           <label>
-            <input type="radio" name="paymentMethod" value="cashOnDelivery" />
-            Cash
+            <input
+              {...register('method')}
+              type="radio"
+              value="Thanh toán khi nhận hàng"
+            />
+            Thanh toán khi nhận hàng
           </label>
         </div>
       </div>

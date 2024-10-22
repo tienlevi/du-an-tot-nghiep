@@ -14,7 +14,6 @@ import Home from '@/pages/(website)/Home';
 import LayoutWebsite from '@/pages/(website)/Layout';
 import LogIn from '@/pages/(website)/LogIn';
 import NotFound from '@/pages/(website)/NotFound';
-import Payment from '@/pages/(website)/Payment';
 import Invoice from '@/pages/(website)/Invoice';
 import SearchProducts from '@/pages/(website)/Search';
 import SignUpWebsite from '@/pages/(website)/SignUp';
@@ -59,7 +58,6 @@ function DashboardRoute() {
               <Route element={<Wishlist />} path="/wishlist" />
               <Route element={<Cart />} path="/cart" />
               <Route element={<Checkout />} path="/checkout" />
-              <Route element={<Payment />} path="/payment" />
               <Route element={<Invoice />} path="/invoice" />
               <Route element={<Products />} path="/products" />
               <Route element={<ProductDetail />} path="/product/:id" />
