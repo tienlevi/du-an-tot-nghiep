@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 import useAuth from '@/hooks/useAuth';
 const ProductDetail = () => {
   const { user } = useAuth();
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState('');
   const { id } = useParams();
   const { data } = useQuery<Product>({
@@ -33,9 +33,10 @@ const ProductDetail = () => {
   const { mutate } = useMutation({
     mutationKey: ['products'],
     mutationFn: async (products: any) => {
-      return await addToCart(user?._id!, products);
+      const response = await addToCart(user?._id!, products);
+      console.log(response);
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       !user && toast.error('Hãy đăng nhập tài khoản để thêm giỏ hàng');
       toast.success('Thêm giỏ hàng thành công');
     },

@@ -1,5 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import Cart from "../models/cart";
+import Product from "../models/product";
 
 // Lấy danh sách sản phẩm thuộc 1 user
 export const getCartByUserId = async (req, res) => {
@@ -23,19 +24,31 @@ export const addItemToCart = async (req, res) => {
     if (!cart) {
       cart = new Cart({ userId, products: [] });
     }
+
     for (const product of products) {
+      const productModel = await Product.findById(product.productId);
+
       if (!product.productId) {
         return res
           .status(StatusCodes.BAD_REQUEST)
           .json({ error: "productId is required for each product" });
       }
-
+      const existProductQuantity = cart.products.find(
+        (item) => item.productId.toString() === product.productId
+      );
       const existProductIndex = cart.products.findIndex(
         (item) => item.productId.toString() === product.productId
       );
       if (existProductIndex !== -1) {
         // Nếu sản phẩm đã tồn tại trong giỏ hàng, cập nhật số lượng
         cart.products[existProductIndex].quantity += product.quantity;
+        const totalQuantity = existProductQuantity.quantity + product.quantity;
+
+        if (totalQuantity >= productModel.countInStock) {
+          return res
+            .status(StatusCodes.BAD_REQUEST)
+            .json({ message: "Product quantity exceeds available stock" });
+        }
       } else {
         // Nếu sản phẩm chưa có trong giỏ hàng, thêm mới
         const newProduct = {
@@ -84,6 +97,7 @@ export const updateProductQuantity = async (req, res) => {
   const { userId, productId, quantity } = req.body;
   try {
     let cart = await Cart.findOne({ userId });
+
     if (!cart) {
       return res
         .status(StatusCodes.NOT_FOUND)
@@ -98,6 +112,7 @@ export const updateProductQuantity = async (req, res) => {
         .status(StatusCodes.NOT_FOUND)
         .json({ error: "Product not found" });
     }
+
     product.quantity = quantity;
     await cart.save();
     return res.status(StatusCodes.OK).json({ cart });
@@ -108,7 +123,7 @@ export const increaseProductQuantity = async (req, res) => {
   const { userId, productId } = req.params;
   try {
     let cart = await Cart.findOne({ userId });
-
+    const productQuantityLimit = await Product.findById(productId);
     if (!cart) {
       return res.status(404).json({ message: "Cart not found" });
     }
@@ -120,6 +135,11 @@ export const increaseProductQuantity = async (req, res) => {
       return res.status(404).json({ message: "Product not found in cart" });
     }
 
+    if (product.quantity >= productQuantityLimit.countInStock) {
+      return res
+        .status(400)
+        .json({ message: "Product quantity has reached its limit" });
+    }
     product.quantity++;
 
     await cart.save();
