@@ -42,9 +42,8 @@ export const addItemToCart = async (req, res) => {
       if (existProductIndex !== -1) {
         // Nếu sản phẩm đã tồn tại trong giỏ hàng, cập nhật số lượng
         cart.products[existProductIndex].quantity += product.quantity;
-        const totalQuantity = existProductQuantity.quantity + product.quantity;
 
-        if (totalQuantity >= productModel.countInStock) {
+        if (existProductQuantity.quantity > productModel.countInStock) {
           return res
             .status(StatusCodes.BAD_REQUEST)
             .json({ message: "Product quantity exceeds available stock" });

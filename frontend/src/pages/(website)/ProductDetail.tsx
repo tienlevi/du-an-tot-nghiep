@@ -34,11 +34,19 @@ const ProductDetail = () => {
     mutationKey: ['products'],
     mutationFn: async (products: any) => {
       const response = await addToCart(user?._id!, products);
-      console.log(response);
+      if (response.status === 400) {
+        toast.error('Số lượng sản phẩm đã đạt đến giới hạn');
+      }
+      return response;
     },
     onSuccess: (data) => {
-      !user && toast.error('Hãy đăng nhập tài khoản để thêm giỏ hàng');
-      toast.success('Thêm giỏ hàng thành công');
+      if (data.status === 400) {
+        return toast.error('Số lượng sản phẩm đã đạt đến giới hạn');
+      }
+      if (user === null || !user) {
+        return toast.error('Hãy đăng nhập tài khoản để thêm giỏ hàng');
+      }
+      return toast.success('Thêm giỏ hàng thành công');
     },
   });
 
