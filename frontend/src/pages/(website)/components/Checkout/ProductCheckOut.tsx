@@ -56,7 +56,7 @@ function ProductCheckOut() {
     };
   });
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationKey: ['order'],
     mutationFn: async (data: object) => {
       const response = await createOrder({
@@ -64,8 +64,6 @@ function ProductCheckOut() {
         totalPrice: total,
         items: carts,
       });
-      console.log(response);
-
       localStorage.setItem('OrderId', JSON.stringify(response.order._id));
     },
     onSuccess: () => {
@@ -163,7 +161,7 @@ function ProductCheckOut() {
         <RedButton name={'Apply'} />
       </div>
       <div className="mr-auto" onClick={handleSubmit(onSubmit)}>
-        <RedButton name={'Order'} />
+        <RedButton name={isPending ? 'Loading...' : 'Order'} />
       </div>
     </div>
   );
