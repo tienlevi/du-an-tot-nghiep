@@ -15,6 +15,7 @@ import {
 import type { CartTypes } from '@/types/cart';
 import { Product } from '@/types/product';
 import { getProducts } from '@/services/product';
+import { toast } from 'react-toastify';
 
 const Cart = () => {
   const { user } = useAuth();
@@ -39,8 +40,9 @@ const Cart = () => {
   const carts = cartItems?.map((item) => {
     return {
       ...item,
-      quantity: cart?.products.find((product) => product.productId === item._id)
-        ?.quantity,
+      quantity:
+        cart?.products.find((product) => product.productId === item._id)
+          ?.quantity ?? 0,
     };
   });
 
@@ -64,7 +66,11 @@ const Cart = () => {
   const { mutate: increaseQuantity } = useMutation({
     mutationKey: ['cart'],
     mutationFn: async (id: string) => {
-      return await increaseQuatityCart(id, user?._id!);
+      const response = await increaseQuatityCart(id, user?._id!);
+      if (response.status === 400) {
+        toast.error('Số lượng sản phẩm đã đạt đến giới hạn');
+      }
+      return response;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['cart'] });
@@ -144,7 +150,7 @@ const Cart = () => {
           </div>
         </div>
       ))}
-    
+
       <div className="flex justify-between items-center mt-2">
         <Link to="..">
           <WhiteButton name={'Return to shop'} onClick={() => {}} />
