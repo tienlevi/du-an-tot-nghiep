@@ -10,4 +10,6 @@ export interface Order {
   method: string;
   phone: string;
   status: string;
+  createdAt: string;
+  updatedAt: string;
 }
