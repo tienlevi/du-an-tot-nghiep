@@ -1,140 +1,106 @@
-import { useWishlist } from '../../context/WishlistContext';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Grid } from '@mui/material';
-// import FlashSaleItem from './components/common/components/ProductItem';
-import { ITEMS } from './components/common/functions/items';
-import RedTitle from './components/common/components/RedTitle';
-import WhiteButton from './components/common/components/WhiteButton';
-import { useState } from 'react';
-import { Snackbar } from '@mui/material';
-import { Alert } from '@mui/material';
-import { motion } from 'framer-motion'; // Import motion from Framer Motion for animations
 import i18n from './components/common/components/LangConfig';
+import WhiteButton from './components/common/components/WhiteButton';
+import ActiveLastBreadcrumb from './components/common/components/Link';
+import useAuth from '@/hooks/useAuth';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  getCart,
+  removeFromCart,
+} from '@/services/cart';
+import type { CartTypes } from '@/types/cart';
+import { Product } from '@/types/product';
+import { getProducts } from '@/services/product';
 
-function Wishlist() {
-  const { wishlistItems }: any = useWishlist();
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [massage, setMassage] = useState('');
-  const [severity, setSeverity] = useState('success');
-  let relatedItems;
+const Wishlist = () => {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const { data: cart } = useQuery<CartTypes>({
+    queryKey: ['cart', user?._id],
+    queryFn: async () => {
+      return await getCart(user?._id as string);
+    },
+  });
+  const { data: products } = useQuery<Product[]>({
+    queryKey: ['products'],
+    queryFn: async () => {
+      return await getProducts();
+    },
+  });
 
-  const handleClick = () => {
-    const state = moveAllToCart(wishlistItems);
-    if (wishlistItems.length === 0 || wishlistItems === null) {
-      setMassage(i18n.t('Snackbar.noItems'));
-      setSeverity('info');
-    } else {
-      if (state) {
-        setMassage(i18n.t('Snackbar.movedToCart'));
-        setSeverity('success');
-      } else {
-        setMassage(i18n.t('Snackbar.inCart'));
-        setSeverity('info');
-      }
-    }
-    setTimeout(() => {
-      setSnackbarOpen(true);
-    }, 500);
-  };
+  const cartItems = products?.filter((product) => {
+    return cart?.products.some((item) => item.productId === product._id);
+  });
 
-  const wishlistTypes = new Set(wishlistItems.map((item) => item.type));
-  const getRelatedItems = () => {
-    relatedItems = ITEMS.filter(
-      (item) =>
-        wishlistTypes.has(item.type) &&
-        !wishlistItems.some((wish) => wish.id === item.id),
-    ).slice(0, 5);
-    if (!relatedItems || !relatedItems.length) {
-      relatedItems = ITEMS.filter((item) => item.price > 1000).slice(0, 5);
-    }
-    return relatedItems;
-  };
-  getRelatedItems();
+  const carts = cartItems?.map((item) => {
+    return {
+      ...item,
+      quantity: cart?.products.find((product) => product.productId === item._id)
+        ?.quantity,
+    };
+  });
+
+  const { mutate } = useMutation({
+    mutationKey: ['cart'],
+    mutationFn: async (id: string) => {
+      return await removeFromCart(id, user?._id!);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
+    },
+  });
+
   return (
-    <div className="flex flex-col md:mx-32 mt-28">
-      <div className="mx-auto md:mx-2 my-20">
-        <div className="flex justify-around md:justify-between items-center md:mr-6 mb-12">
-          <h2 className="text-lg">
-            {i18n.t('wishlist.title')} ({wishlistItems.length})
-          </h2>
+    <div className="max-w-screen-lg mx-auto mt-48 flex flex-col gap-10">
+      <ActiveLastBreadcrumb path="Home/Wishlist" />
+      <div className="grid grid-cols-4 py-6 px-2 md:px-14 shadow rounded">
+      <h2 className="text-base w-full">Image</h2>
+      <h2 className="text-base w-full">Name</h2>
+        <h2 className="text-base w-full">{i18n.t('cart.header.price')}</h2>
+        <h2 className="text-base w-full">Thao Tác</h2>
 
-          <WhiteButton
-            name={i18n.t('whiteButtons.moveAllToBag')}
-            onClick={handleClick}
-            disabled={
-              wishlistItems.length === 0 ||
-              wishlistItems === null ||
-              snackbarOpen === true
-            }
-          />
-        </div>
-
-        <Grid container spacing={3} justifyContent="center" alignItems="center">
-          {wishlistItems.map((item, index) => (
-            <Grid item key={item.id} xs={0} sm={6} md={4} lg={3}>
-              <FlashSaleItem
-                item={item}
-                index={index}
-                totalItems={wishlistItems.length}
-                stars={item.stars}
-                rates={item.rates}
-                isInWishlistPage={true}
-              />
-            </Grid>
-          ))}
-        </Grid>
       </div>
-      <>
-        <div className="flex justify-between items-center md:mr-6 mx-4 ">
-          <RedTitle title={i18n.t('wishlist.justForYou')} color="black" />
-          <Link to="/allProducts">
-            <WhiteButton name={i18n.t('whiteButtons.seeAll')} />
-          </Link>
-        </div>
-        {/* Motion */}
-        <div className="relative  overflow-x-auto overflow-y-hidden flex justify-start items-center md:h-[400px] ">
-          <motion.div
-            className="flex gap-2 md:gap-12"
-            initial={{ opacity: 0, x: 0 }}
-            animate={{
-              opacity: 1,
-              transition: { duration: 0.5 },
-            }}
+      {carts?.map((item: Product) => (
+        <div
+          key={item?._id}
+          className="grid grid-cols-4 py-5 px-3 md:px-14 shadow rounded"
+        >
+          <div className="">
+            <img
+              loading="lazy"
+              src={item?.image}
+              alt={item?.name}
+              className="w-1/2 h-full"
+            />
+          </div>
+          <div className="flex items-center">
+            <Link
+              to={{ pathname: `/allProducts/${item?.name}` }}
+              className="flex items-center"
+            >
+              <p className="ml-2 text-xs md:text-base ">{item?.name}</p>
+            </Link>
+          </div>
+          <div className="flex items-center">
+            <p className="text-gray-500">${item?.price}</p>
+          </div>
+          <div
+            className="flex items-center cursor-pointer"
+            onClick={() => mutate(item._id!)}
           >
-            {/* {relatedItems.map((item, index) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5 }}
-                whileHover={{ scale: 1.1 }}
-              >
-                <FlashSaleItem
-                  item={item}
-                  index={index}
-                  totalItems={relatedItems.length}
-                  stars={item.stars}
-                  rates={item.rates}
-                />
-              </motion.div>
-            ))} */}
-          </motion.div>
+            Xóa Yêu Thích
+          </div>
         </div>
-        {/* Motion */}
-      </>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={() => setSnackbarOpen(false)}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        vertical="top"
-      >
-        <Alert severity={severity} sx={{ width: '100%' }}>
-          {massage}
-        </Alert>
-      </Snackbar>
+      ))}
+
+      <div className="flex justify-between items-center mt-2">
+        <Link to="..">
+          <WhiteButton name={'Return to shop'} onClick={() => { }} />
+        </Link>
+      </div>
     </div>
   );
-}
+};
 
-export default Wishlist;
+export default Cart;
