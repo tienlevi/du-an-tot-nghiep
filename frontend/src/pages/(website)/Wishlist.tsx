@@ -13,7 +13,7 @@ import type { CartTypes } from '@/types/cart';
 import { Product } from '@/types/product';
 import { getProducts } from '@/services/product';
 
-const Cart = () => {
+const Wishlist = () => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const { data: cart } = useQuery<CartTypes>({
