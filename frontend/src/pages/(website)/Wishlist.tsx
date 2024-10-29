@@ -5,10 +5,7 @@ import WhiteButton from './components/common/components/WhiteButton';
 import ActiveLastBreadcrumb from './components/common/components/Link';
 import useAuth from '@/hooks/useAuth';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-  getCart,
-  removeFromCart,
-} from '@/services/cart';
+import { getCart, removeFromCart } from '@/services/cart';
 import type { CartTypes } from '@/types/cart';
 import { Product } from '@/types/product';
 import { getProducts } from '@/services/product';
@@ -55,11 +52,10 @@ const Wishlist = () => {
     <div className="max-w-screen-lg mx-auto mt-48 flex flex-col gap-10">
       <ActiveLastBreadcrumb path="Home/Wishlist" />
       <div className="grid grid-cols-4 py-6 px-2 md:px-14 shadow rounded">
-      <h2 className="text-base w-full">Image</h2>
-      <h2 className="text-base w-full">Name</h2>
+        <h2 className="text-base w-full">Image</h2>
+        <h2 className="text-base w-full">Name</h2>
         <h2 className="text-base w-full">{i18n.t('cart.header.price')}</h2>
         <h2 className="text-base w-full">Thao Tác</h2>
-
       </div>
       {carts?.map((item: Product) => (
         <div
@@ -96,11 +92,11 @@ const Wishlist = () => {
 
       <div className="flex justify-between items-center mt-2">
         <Link to="..">
-          <WhiteButton name={'Return to shop'} onClick={() => { }} />
+          <WhiteButton name={'Return to shop'} onClick={() => {}} />
         </Link>
       </div>
     </div>
   );
 };
 
-export default Cart;
+export default Wishlist;
