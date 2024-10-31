@@ -69,7 +69,12 @@ const CategoryAdd: React.FC = () => {
             type="file"
             onChange={handleChangeFile}
             className="w-full my-2 p-2"
+            {...register('image', { required: 'Vui lòng chọn ảnh ' })}
+
           />
+          {errors.image && (
+            <span className="text-red-500 ">{errors.image.message}</span>
+          )} <br />
           <button
             type="submit"
             className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
