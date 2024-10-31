@@ -82,7 +82,15 @@ const CategoryEdit = () => {
           <div className="w-full p-2 border border-gray-300 rounded">
             <p>Ảnh</p>
             <img src={category?.category?.image} alt="" className="" />
-            <input ref={element} type="file" className="w-full my-2 p-2" />
+            <input ref={element} type="file" className="w-full my-2 p-2"
+              {...register('image', { required: 'Vui lòng chọn ảnh ' })}
+
+            />
+            {errors.image && (
+              <span className="text-red-500 ">{errors.image.message}</span>
+            )} <br />
+
+
           </div>
           <button
             type="submit"
