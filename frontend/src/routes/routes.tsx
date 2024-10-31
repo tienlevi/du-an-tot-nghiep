@@ -32,7 +32,6 @@ import ECommerce from '@/pages/(dashboard)/Main';
 import ProductsAdd from '@/pages/(dashboard)/ProductsAdd';
 import ProductsEdit from '@/pages/(dashboard)/ProductsEdit';
 import ProductsList from '@/pages/(dashboard)/ProductsList';
-import Profile from '@/pages/(dashboard)/Profile';
 import UserList from '@/pages/(dashboard)/User/UserList';
 import OrderManagement from '@/pages/(dashboard)/OrderManagement';
 import ProductDetail from '@/pages/(website)/ProductDetail';
@@ -67,7 +66,10 @@ function DashboardRoute() {
               <Route element={<Products />} path="/products" />
               <Route element={<ProductDetail />} path="/product/:id" />
               <Route element={<SearchProducts />} path="/search" />
-              <Route path="/orders/:userId/:orderId" element={<OrderDetail />} />
+              <Route
+                path="/orders/:userId/:orderId"
+                element={<OrderDetail />}
+              />
               {/* <Route element={<Category />} path="/category" />  */}
               <Route element={<NotFound />} path="*" />
             </Route>
@@ -81,24 +83,6 @@ function DashboardRoute() {
                 </>
               }
               path="/admin"
-            />
-            <Route
-              path="/calendar"
-              element={
-                <>
-                  <PageTitle title="Calendar | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                  <Calendar />
-                </>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <>
-                  <PageTitle title="Profile | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                  <Profile />
-                </>
-              }
             />
             <Route
               path="/products/list"
