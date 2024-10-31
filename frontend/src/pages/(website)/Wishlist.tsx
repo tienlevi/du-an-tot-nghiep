@@ -103,4 +103,4 @@ const Wishlist = () => {
   );
 };
 
-export default Cart;
+export default Wishlist;
