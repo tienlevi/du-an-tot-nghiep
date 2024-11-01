@@ -124,6 +124,9 @@ const ProductsList: React.FC = () => {
       key: 'price',
       sorter: (a, b) => a.price - b.price,
       sortOrder: sortedInfo.columnKey === 'price' ? sortedInfo.order : null,
+      render: (_, record) => {
+        return <>{record.price}đ</>;
+      },
       ellipsis: true,
     },
     {
@@ -216,7 +219,7 @@ const ProductsList: React.FC = () => {
           ))}
         </Select>
         <Table
-          columns={columns}
+          columns={columns as []}
           dataSource={filteredProducts}
           onChange={handleChange}
           rowKey="_id"
