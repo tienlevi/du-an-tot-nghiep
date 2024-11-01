@@ -68,6 +68,11 @@ const OrderManagement: React.FC = () => {
             sorter: (a, b) => a.totalPrice - b.totalPrice,
         },
         {
+            title: 'Phương Thức Thanh Toán',
+            dataIndex: 'method',
+            key: 'method',
+        },
+        {
             title: 'Trạng Thái',
             dataIndex: 'status',
             key: 'status',
@@ -106,6 +111,7 @@ const OrderManagement: React.FC = () => {
             ),
         }
     ];
+
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
