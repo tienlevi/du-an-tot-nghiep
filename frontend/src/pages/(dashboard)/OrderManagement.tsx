@@ -63,9 +63,23 @@ const OrderManagement: React.FC = () => {
         },
         {
             title: 'Tổng Tiền',
-            dataIndex: 'totalPrice',
+            dataIndex: 'items',
             key: 'totalPrice',
-            sorter: (a, b) => a.totalPrice - b.totalPrice,
+            sorter: (a, b) => {
+                const totalA = a.items.reduce((acc, item) => acc + item.quantity * item.price, 0);
+                const totalB = b.items.reduce((acc, item) => acc + item.quantity * item.price, 0);
+                return totalA - totalB;
+            },
+            render: (items) => {
+                const totalAmount = items.reduce((acc, item) => acc + item.quantity * item.price, 0);
+                return `${totalAmount.toLocaleString()} VNĐ`;
+            },
+        },
+
+        {
+            title: 'Phương Thức Thanh Toán',
+            dataIndex: 'method',
+            key: 'method',
         },
         {
             title: 'Trạng Thái',
@@ -106,6 +120,7 @@ const OrderManagement: React.FC = () => {
             ),
         }
     ];
+
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Spin } from 'antd';
@@ -11,15 +11,30 @@ import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 const OrderDetail: React.FC = () => {
   const { userId, orderId } = useParams<{ userId: string; orderId: string }>();
+  const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({ lat: 10.762622, lng: 106.660172 });
 
   const { data, isLoading, isError } = useQuery<Order>({
     queryKey: ['order', userId, orderId],
     queryFn: async () => {
       return await getOrderById(userId, orderId);
     },
-    enabled: !!userId && !!orderId, // Đặt thuộc tính enabled ở đây
+    enabled: !!userId && !!orderId,
   });
 
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setMapCenter({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      },
+      (error) => {
+        console.error("Error fetching location:", error);
+        toast.error("Không thể lấy vị trí hiện tại.");
+      }
+    );
+  }, []);
 
   if (isLoading) {
     return (
@@ -48,13 +63,12 @@ const OrderDetail: React.FC = () => {
     );
   }
 
-
-  const mapCenter = { lat: 10.762622, lng: 106.660172 };
   const mapContainerStyle = {
     height: '400px',
     width: '100%',
   };
   const totalAmount = data.items?.reduce((acc, item) => acc + (item.price * item.quantity), 0) || 0;
+
   return (
     <DefaultLayout>
       <div className="container mx-auto p-4 bg-white shadow-lg rounded-lg">
@@ -64,20 +78,17 @@ const OrderDetail: React.FC = () => {
           {/* Bản đồ giao hàng */}
           <div className="col-span-2 bg-gray-100 rounded-lg p-4 shadow-md">
             <h3 className="text-xl font-semibold mb-4">Bản đồ giao hàng</h3>
-            <LoadScript googleMapsApiKey="khong biet lay key cho nao :)))">
-
+            <LoadScript googleMapsApiKey="AIzaSyBNlXAgbSoM6_oMkcSyd8Er1cfTzAaKQm0">
               <GoogleMap
                 mapContainerStyle={mapContainerStyle}
                 center={mapCenter}
                 zoom={12}
               >
-                {/* Thêm Marker nếu cần */}
                 <Marker position={mapCenter} />
               </GoogleMap>
             </LoadScript>
 
             {/* Bảng sản phẩm */}
-
             <table className="w-full mt-6 text-left table-auto border-collapse">
               <thead>
                 <tr className="bg-gray-200">
@@ -89,36 +100,26 @@ const OrderDetail: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.items?.map((item: any) => {
-                  console.log(item);
-                  return (
-                    <tr key={item._id} className="border-b">
-                      <td className="p-4">
-                        <img
-                          src={item.image}
-                          alt={item.product}
-                          className="w-16 h-16 object-cover rounded"
-                        />
-                      </td>
-                      <td className="p-4">{item.name}</td>
-                      <td className="p-4">{item.quantity}</td>
-
-
-                      <td className="p-4">{item.price} VNĐ</td>
-                      <td className="p-4">
-                        {item.price * item.quantity} VNĐ
-                      </td>
-
-
-                    </tr>
-                  );
-                })}
+                {data.items?.map((item: any) => (
+                  <tr key={item._id} className="border-b">
+                    <td className="p-4">
+                      <img
+                        src={item.image}
+                        alt={item.product}
+                        className="w-16 h-16 object-cover rounded"
+                      />
+                    </td>
+                    <td className="p-4">{item.name}</td>
+                    <td className="p-4">{item.quantity}</td>
+                    <td className="p-4">{item.price} VNĐ</td>
+                    <td className="p-4">{item.price * item.quantity} VNĐ</td>
+                  </tr>
+                ))}
                 <tr>
                   <td colSpan={4} className="text-right font-semibold p-4">Tổng cộng</td>
                   <td className="p-4 font-semibold">{totalAmount.toLocaleString()} VNĐ</td>
                 </tr>
               </tbody>
-
             </table>
           </div>
 
@@ -143,7 +144,6 @@ const OrderDetail: React.FC = () => {
                   {data.status}
                 </span>
               </div>
-
               <div><strong>Phương thức thanh toán:</strong> {data.method}</div>
               <div><strong>Email :</strong> {data.email}</div>
               <div><strong>Điện thoại:</strong> {data.phone}</div>
@@ -153,9 +153,7 @@ const OrderDetail: React.FC = () => {
             </div>
           </div>
         </div>
-
       </div>
-
     </DefaultLayout>
   );
 };
