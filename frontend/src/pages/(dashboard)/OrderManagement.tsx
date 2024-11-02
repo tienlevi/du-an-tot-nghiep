@@ -42,14 +42,14 @@ const OrderManagement: React.FC = () => {
             dataIndex: '_id',
             key: '_id',
         },
-        {
-            title: 'Ảnh Sản Phẩm',
-            dataIndex: 'items',
-            key: 'productImage',
-            render: (items) => (
-                <img src={items[0]?.image} alt="Product" style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
-            ),
-        },
+        // {
+        //     title: 'Ảnh Sản Phẩm',
+        //     dataIndex: 'items',
+        //     key: 'productImage',
+        //     render: (items) => (
+        //         <img src={items[0]?.image} alt="Product" style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
+        //     ),
+        // },
         {
             title: 'Tên Người Nhận',
             dataIndex: 'name',
