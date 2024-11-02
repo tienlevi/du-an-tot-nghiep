@@ -18,9 +18,11 @@ export const getOrderById = async (userId: string, id: number | string) => {
     return response.data;
   } catch (error) {
     console.error('Lỗi khi lấy thông tin đơn hàng:', error);
-    throw new Error('Không thể lấy thông tin đơn hàng. Vui lòng thử lại sau.');
+    throw new Error(error.response?.data?.message || 'Không thể lấy thông tin đơn hàng. Vui lòng thử lại sau.');
   }
 };
+
+
 
 export const getOrderByUserId = async (userId: number | string) => {
   try {

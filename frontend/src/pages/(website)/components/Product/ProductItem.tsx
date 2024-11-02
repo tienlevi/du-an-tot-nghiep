@@ -28,14 +28,16 @@ const ProductItem = ({ limitProduct }: Props) => {
   const { mutate } = useMutation({
     mutationKey: ['products'],
     mutationFn: async (products: any) => {
-      await addToCart(user?._id!, products);
+      return await addToCart(user?._id!, products);
     },
-    onSuccess: () => {
-      if (user === null) {
-        toast.error('Hãy đăng nhập tài khoản để thêm giỏ hàng');
-      } else {
-        toast.success('Thêm giỏ hàng thành công');
+    onSuccess: (data) => {
+      if (data.status === 400) {
+        return toast.error('Số lượng sản phẩm đã đạt đến giới hạn');
       }
+      if (user === null) {
+        return toast.error('Hãy đăng nhập tài khoản để thêm giỏ hàng');
+      }
+      return toast.success('Thêm giỏ hàng thành công');
     },
     onError: () => {},
   });

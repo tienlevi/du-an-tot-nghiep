@@ -21,6 +21,7 @@ export const addToCart = async (
     return response.data;
   } catch (error) {
     console.error('Lỗi khi thêm sản phẩm vào giỏ hàng:', error);
+    return error;
   }
 };
 
@@ -58,6 +59,7 @@ export const increaseQuatityCart = async (
     return response.data;
   } catch (error) {
     console.log(error);
+    return error;
   }
 };
 

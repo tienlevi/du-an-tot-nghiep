@@ -1,15 +1,17 @@
 import Order from "../models/order";
 import Cart from "../models/cart";
 import { StatusCodes } from "http-status-codes";
+import sendEmail from "../middleware/sendEmail";
 
 // Tạo đơn hàng
 export const createOrder = async (req, res) => {
   try {
     const order = await Order.create(req.body);
+    const sender = await sendEmail(order.email);
     const cartId = await Cart.findOneAndDelete({ userId: req.body.userId });
     return res
       .status(StatusCodes.CREATED)
-      .json({ order: order, cartId: cartId });
+      .json({ order: order, cartId: cartId, sendEmailTo: sender });
   } catch (error) {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)

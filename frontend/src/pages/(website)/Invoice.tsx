@@ -2,22 +2,17 @@ import useAuth from '@/hooks/useAuth';
 import { getOrderById } from '@/services/order';
 import { Order } from '@/types/order';
 import { useQuery } from '@tanstack/react-query';
-import { useSearchParams } from 'react-router-dom';
 
 const Invoice = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
   const { user } = useAuth();
   const orderId = JSON.parse(localStorage.getItem('OrderId')!);
-  console.log(orderId);
-
   const { data } = useQuery<Order>({
     queryKey: ['order', orderId],
     queryFn: async () => {
       return await getOrderById(user?._id!, orderId!);
     },
   });
-
-  console.log(data);
+  const date = new Date(data?.createdAt!);
 
   return (
     <div className="bg-gray-100 min-h-screen py-12 px-6 sm:px-12">
@@ -115,7 +110,7 @@ const Invoice = () => {
                 Thuế (10%): <span className="font-semibold">0 ₫</span>
               </p>
               <p>
-                Phí vận chuyển: <span className="font-semibold">20.000 ₫</span>
+                Phí vận chuyển: <span className="font-semibold">0 ₫</span>
               </p>
               <p className="text-2xl font-bold text-gray-800">
                 Tổng thanh toán:{' '}
@@ -133,19 +128,16 @@ const Invoice = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-600">
             <div>
               <p>
-                <strong>Phương thức thanh toán:</strong> Thẻ tín dụng
+                <strong>Phương thức thanh toán:</strong> {data?.method}
               </p>
               <p>
-                <strong>Ngày đặt hàng:</strong> ../../2024
-              </p>
-              <p>
-                <strong>Ngày dự kiến giao hàng:</strong> ../../2024
+                <strong>Ngày đặt hàng:</strong> {date.toLocaleTimeString()}{' '}
+                {date.toLocaleDateString()}
               </p>
             </div>
             <div>
               <p>
-                <strong>Địa chỉ giao hàng:</strong> Trịnh Văn Bô - Nam Từ Liêm -
-                Hà Nội
+                <strong>Địa chỉ giao hàng:</strong> {data?.address}
               </p>
               <p>
                 <strong>Phương thức vận chuyển:</strong> Giao hàng nhanh

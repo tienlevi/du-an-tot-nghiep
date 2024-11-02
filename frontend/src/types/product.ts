@@ -1,5 +1,5 @@
 export type Product = {
-  quantity?: number;
+  quantity: number;
   _id?: string;
   name: string;
   // slug?: string;
@@ -12,5 +12,5 @@ export type Product = {
   countInStock?: number;
   featured?: boolean;
   tags?: string[];
-  attributes?: string[]; // Assuming attributes store ObjectId as strings
+  attributes?: { size: string[]; color: [{ name: string; image: string }] }; // Assuming attributes store ObjectId as strings
 };
