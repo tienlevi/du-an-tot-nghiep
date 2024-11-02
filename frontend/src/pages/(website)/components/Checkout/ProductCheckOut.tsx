@@ -64,10 +64,11 @@ function ProductCheckOut() {
         totalPrice: total,
         items: carts,
       });
-      localStorage.setItem('OrderId', JSON.stringify(response.order._id));
+      localStorage.setItem('OrderId', JSON.stringify(response?.order?._id!));
     },
     onSuccess: () => {
       toast.success('Đặt hàng thành công');
+      window.location.href = '/invoice';
     },
   });
 
@@ -82,8 +83,6 @@ function ProductCheckOut() {
   const onSubmit = (data: object) => {
     if (methodValue === 'Thanh toán qua Momo') {
       paymentMethod();
-    } else {
-      window.location.href = '/invoice';
     }
     mutate({ ...data, totalPrice: total, items: items });
   };
