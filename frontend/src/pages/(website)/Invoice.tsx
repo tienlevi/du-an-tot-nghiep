@@ -2,8 +2,10 @@ import useAuth from '@/hooks/useAuth';
 import { getOrderById } from '@/services/order';
 import { Order } from '@/types/order';
 import { useQuery } from '@tanstack/react-query';
+import { useLocation } from 'react-router-dom';
 
 const Invoice = () => {
+  const location = useLocation();
   const { user } = useAuth();
   const orderId = JSON.parse(localStorage.getItem('OrderId')!);
   const { data } = useQuery<Order>({
@@ -13,6 +15,8 @@ const Invoice = () => {
     },
   });
   const date = new Date(data?.createdAt!);
+
+  console.log(location);
 
   return (
     <div className="bg-gray-100 min-h-screen py-12 px-6 sm:px-12">
