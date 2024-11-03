@@ -17,3 +17,5 @@ src/
 
 - Lưu ý: Khi tạo file ở bên trong components khi import ở bên dashboard hoặc website thì tạo file trong folder
   /(dashboard)/components hoặc /(website)/components luôn nhé
+
+- Git conventional: feat(Tính năng mới), fix(sửa lỗi), chore(việc vặt), breakingChange(Thay đổi lớn) 
