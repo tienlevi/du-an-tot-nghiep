@@ -1,8 +1,7 @@
 import MainLayout from "@/layouts/Mainlayout/MainLayout"
-import Homepage from "@/pages/Client/HomePage/Homepage"
 import NotFound from "@/pages/Client/NotFound"
-import { Suspense } from "react"
 import { Navigate } from "react-router"
+import { HomePage, Suspense } from "./LazyRoutes"
 
 const PublicRoutes = [
     {
@@ -15,7 +14,7 @@ const PublicRoutes = [
                 path: '',
                 element: (
                     <Suspense>
-                        <Homepage/>
+                        <HomePage/>
                     </Suspense>
                 )
             }
