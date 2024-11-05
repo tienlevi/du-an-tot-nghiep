@@ -26,7 +26,7 @@ const CartDrawer = ({ children }: PropsType) => {
                         </div>
                     </>
                 }
-                width={'42vw'}
+                width={'35vw'}
                 placement='right'
                 closable={false}
                 onClose={onClose}
@@ -34,10 +34,10 @@ const CartDrawer = ({ children }: PropsType) => {
                 // className={`relative z-10 ${isPending ? 'cursor-not-allowed' : ''} duration-300`}
             >
                 {!products && (
-                    <div className='flex flex-col items-center'>
-                        <Empty description={false} />
+                    <div className='flex flex-col items-center justify-center min-h-[60vh]'>
+                        <img src="./cart-empty.png" alt="" />
                         <p className='text-center text-global text-xl font-medium leading-6'>Giỏ hàng hiện không có sản phẩm.</p>
-                        <button onClick={onClose} className='mt-12 h-[48px] rounded-md bg-[#222222] px-12 font-bold text-white'>
+                        <button onClick={onClose} className='mt-12 h-[48px] rounded-md  px-12 font-bold border-[1px] text-[#da291c] border-[#da291c]'>
                             Tiếp tục mua hàng
                         </button>
                     </div>

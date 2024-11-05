@@ -2,6 +2,7 @@ import MainLayout from "@/layouts/Mainlayout/MainLayout"
 import Homepage from "@/pages/Client/HomePage/Homepage"
 import NotFound from "@/pages/Client/NotFound"
 import { Suspense } from "react"
+import { Navigate } from "react-router"
 
 const PublicRoutes = [
     {
@@ -20,7 +21,8 @@ const PublicRoutes = [
             }
         ]
     },
-    {path: '*', element: <NotFound/>}
+    {path: '*', element: <Navigate to={'/404'}/>},
+    {path: '/404', element: <NotFound/>}
 ]
 
 export default PublicRoutes
