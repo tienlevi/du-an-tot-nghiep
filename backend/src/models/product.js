@@ -9,7 +9,7 @@ const productSchema = new mongoose.Schema(
       ref: "Category",
       required: true,
     },
-    costPrice: { type: Number, required: true, default: 0 },
+    price: { type: Number, required: true, default: 0 },
     variants: { type: [variantSchema], required: true },
     description: { type: String },
     tags: [
