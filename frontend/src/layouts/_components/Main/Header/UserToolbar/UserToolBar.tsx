@@ -1,4 +1,4 @@
-import CartDrawer from '@/components/CartDrawer/CartDrawer';
+import CartDrawer from '@/components/CartDrawer';
 import {
   HeartOutlined,
   ShoppingCartOutlined,
