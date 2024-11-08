@@ -20,8 +20,8 @@ export default function Banner() {
   };
   return (
     <div className="relative">
-      <div className="group">
-        <Carousel className='w-full h-[632px]' ref={ref} draggable infinite autoplay>
+      <div className="group ">
+        <Carousel className='w-full' ref={ref} draggable infinite autoplay>
           <Link to={'/'}>
             <img
               className="object-cover"
