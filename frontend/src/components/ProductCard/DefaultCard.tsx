@@ -3,7 +3,7 @@ import { HeartOutlined } from '@ant-design/icons';
 export default function DefaultCard() {
   const discount = 2;
   return (
-    <div className="h-[422px] group cursor-pointer">
+    <div className="h-[432px] group cursor-pointer">
       <div className="w-[310px] h-[310px] relative">
         <img
           className="object-contain "

@@ -1,6 +1,6 @@
 import Banner from '@/components/Banner';
-import DefaultCard from '@/components/ProductCard/DefaultCard';
 import ShopBenefits from '@/components/ShopBenefits';
+import ShowMoreList from '@/components/ShowMoreList';
 
 export default function Homepage() {
   return (
@@ -12,13 +12,7 @@ export default function Homepage() {
         </div>
       </div>
       <div className="mt-4 max-w-screen-default default:mx-auto mx-4">
-        <h3 className='text-xl text-global font-bold'>Sản phẩm nổi bật</h3>
-        <div className='flex justify-between mt-4'>
-          <DefaultCard />
-          <DefaultCard />
-          <DefaultCard />
-          <DefaultCard />
-        </div>
+        <ShowMoreList />
       </div>
     </>
   );
