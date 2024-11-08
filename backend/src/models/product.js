@@ -1,26 +1,30 @@
 import mongoose from "mongoose";
-// import mongoosePaginate from "mongoose-paginate-v2";
+
+const variantSchema = new mongoose.Schema({
+  color: { type: mongoose.Schema.Types.Mixed },
+  size: { type: mongoose.Schema.Types.Mixed },
+  stock: { type: Number },
+  sold: { type: Number, default: 0 },
+  image: { type: String },
+  imageUrlRef: { type: String },
+});
 
 const productSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String },
     category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
-      required: true,
+      type: mongoose.Schema.Types.Mixed,
     },
-    price: { type: Number, required: true, default: 0 },
-    variants: { type: [variantSchema], required: true },
+    price: { type: Number, default: 0 },
+    variants: [variantSchema],
     description: { type: String },
     tags: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Tag",
+        type: mongoose.Schema.Types.Mixed,
       },
     ],
   },
   { timestamps: true, versionKey: false }
 );
 
-// productSchema.plugin(mongoosePaginate);
-export default mongoose.model("products", productSchema);
+export default mongoose.model("Product", productSchema);
