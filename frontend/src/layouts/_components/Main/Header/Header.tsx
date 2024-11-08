@@ -15,7 +15,7 @@ export default function Header() {
         dir="ltr"
         className="sticky top-0 left-0 w-full z-50 bg-white shadow-md"
       >
-        <div className="flex items-center justify-between max-w-[1634px] py-1.5 mx-4 default:mx-auto">
+        <div className="flex items-center justify-between max-w-screen-default py-1.5 mx-4 default:mx-auto">
           <div className="flex gap-10 items-center">
             <div>
               <img src="./public/logo.png" className="w-[55px]" alt="" />
