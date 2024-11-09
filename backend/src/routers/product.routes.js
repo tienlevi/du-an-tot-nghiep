@@ -5,6 +5,8 @@ import upload from "../middleware/multerMiddleware.js";
 const productRoutes = Router();
 
 productRoutes.get("/all", productControllers.getAllProducts);
+productRoutes.get("/best-selling", productControllers.getBestSellingProducts);
+productRoutes.get("/discount-list", productControllers.getDiscountProducts);
 productRoutes.post(
   "/create",
   upload.fields([{ name: "variantImages", maxCount: 10 }]),

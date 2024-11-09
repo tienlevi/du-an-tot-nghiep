@@ -1,7 +1,4 @@
-import { de } from "date-fns/locale";
-import e from "express";
-import { toLower } from "lodash";
-import mongoose, { Query, Document } from "mongoose";
+import mongoose from "mongoose";
 
 class APIQuery {
   query;
@@ -15,14 +12,17 @@ class APIQuery {
     const queryObj = { ...this.queryString };
     const excludedFields = ["page", "sort", "limit", "fields", "search"];
     excludedFields.forEach((el) => delete queryObj[el]);
+    const queryArr = {};
+
     Object.keys(queryObj).forEach((el) => {
-      if (el.includes("raw")) {
-        delete queryObj[el];
-      }
-    });
-    Object.keys(queryObj).forEach((el) => {
-      if (String(queryObj[el]).includes(",")) {
+      if (String(queryObj[el]).includes(",") && !el.includes(".arr")) {
         queryObj[el] = { $in: queryObj[el].split(",") };
+      }
+      if (el.includes("-arr")) {
+        console.log(el, "el");
+        const key = el.split("-")[0];
+        queryObj[key] = { $in: queryObj[el].split(",") };
+        delete queryObj[el];
       }
     });
     let queryStr = JSON.stringify(queryObj);
@@ -61,7 +61,7 @@ class APIQuery {
         const search = this.queryString.search;
         this.query = this.query.find({ _id: search });
       } else {
-        const search = toLower(this.queryString.search);
+        const search = this.queryString.search.toLowerCase();
         this.query = this.query.find({
           name: { $regex: search, $options: "i" },
         });

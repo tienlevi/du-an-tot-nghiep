@@ -64,7 +64,7 @@ const getCurrentDateTime = () => {
     today.getMinutes().toString().padStart(2, "0") +
     ":" +
     today.getSeconds().toString().padStart(2, "0");
-  const dateTime = `${date} ${time}`;
+  const dateTime = `${date}-${time}`;
   return dateTime;
 };
 
@@ -85,4 +85,20 @@ export const uploadSingleFile = async (file, folder) => {
   const downloadURL = await getDownloadURL(snapshot.ref);
 
   return { downloadURL, urlRef };
+};
+
+export const removeUploadedFile = async (urlRef) => {
+  const storage = getStorage();
+
+  // Create a reference to the file to delete
+  const desertRef = ref(storage, urlRef);
+
+  deleteObject(desertRef)
+    .then(() => {
+      // File deleted successfully
+      console.log(`File deleted successfully`);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };

@@ -1,12 +1,27 @@
 import Product from "../models/product.js";
+import APIQuery from "../utils/APIQuery.js";
 import { uploadFiles } from "../utils/upload.js";
 
-export const getALlProducts = async () => {
-  return await Product.find();
+export const getAllProducts = async (query) => {
+  const features = new APIQuery(Product.find(), query);
+  features.filter().sort().limitFields().search().paginate();
+
+  const [products, totalDocs] = await Promise.all([
+    features.query,
+    features.count(),
+  ]);
+  return { products, totalDocs };
+};
+export const getBestSellingProducts = async () => {
+  const products = await Product.find().sort({ sold: -1 }).limit(10);
+  return products;
+};
+export const getDiscountProducts = async () => {
+  const products = await Product.find().sort({ sdiscountold: -1 }).limit(10);
+  return products;
 };
 
 export const createProduct = async (productData, files) => {
-  console.log(productData);
   let variationList;
 
   // @upload images
@@ -36,31 +51,56 @@ export const createProduct = async (productData, files) => {
   });
 
   await newProduct.save();
-  return await Product.create(productData);
+  return newProduct;
 };
 
-// @Patch: updateProduct
-export const updateProduct = async (req, res) => {
-  const product = await Product.findById(req.params.id);
+// @PUT: updateProduct
+export const updateProduct = async (productId, oldImageUrlRefs, files) => {
+  const product = await Product.findById(productId);
 
   if (!product)
     throw new NotFoundError(
-      `${ReasonPhrases.NOT_FOUND} product with id: ${req.params.id}`
+      `${ReasonPhrases.NOT_FOUND} product with id: ${productId}`
     );
 
-  product.set({ ...req.body });
-  await product.save();
+  // @upload images
+  if (files && files["variantImages"]) {
+    const { fileUrls, fileUrlRefs, originNames } = await uploadFiles(
+      files["variantImages"]
+    );
+    // @map new images to variants
+    variationList = fileUrls.map((item, i) => {
+      const variation = JSON.parse(productData.variantString).find((obj) => {
+        const originName = originNames[i];
+        const fileName = obj.imageUrlRef;
+        return fileName === originName;
+      });
+      if (variation) {
+        return { ...variation, image: item, imageUrlRef: fileUrlRefs[i] };
+      }
+    });
+  }
 
-  return res.status(StatusCodes.OK).json(
-    customResponse({
-      data: product,
-      success: true,
-      status: StatusCodes.OK,
-      message: ReasonPhrases.OK,
-    })
-  );
+  // @remove old images in firebase storage
+  if (oldImageUrlRefs || oldImageUrlRefs.length > 0) {
+    await Promise.all(
+      oldImageUrlRefs.map(async (ref) => {
+        await removeUploadedFile(ref);
+      })
+    );
+  }
+
+  // @update product
+  product.set({ ...req.body });
+  return await product.save();
 };
 
 export const getProductById = async (productId) => {
-  return await Product.findById(productId);
+  const product = await Product.findById(productId);
+  if (!product)
+    throw new NotFoundError(
+      `${ReasonPhrases.NOT_FOUND} product with id: ${productId}`
+    );
+
+  return product;
 };
