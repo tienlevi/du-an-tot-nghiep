@@ -36,6 +36,17 @@ export const getDiscountProducts = asyncHandler(async (req, res) => {
     })
   );
 });
+export const getProductById = asyncHandler(async (req, res) => {
+  const products = await productService.getProductById(req.params.id);
+  return res.status(StatusCodes.OK).json(
+    customResponse({
+      data: products,
+      success: true,
+      status: StatusCodes.OK,
+      message: ReasonPhrases.OK,
+    })
+  );
+});
 export const createProduct = asyncHandler(async (req, res) => {
   await productService.createProduct(req.body, req.files);
   return res.status(StatusCodes.OK).json(

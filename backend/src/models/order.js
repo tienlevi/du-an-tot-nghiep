@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
-import { ORDER_STATUS } from "../constants/orderStatus";
+import { ORDER_STATUS } from "../constants/orderStatus.js";
+import { PAYMENT_METHOD } from "../constants/paymentMethod.js";
+import { ROLE } from "../constants/role.js";
 
 const OrderItemSchema = new mongoose.Schema(
   {
@@ -82,8 +84,8 @@ const orderSchema = new mongoose.Schema(
       type: String,
       trim: true,
       required: true,
-      enum: ["cash", "card"],
-      default: "cash",
+      enum: Object.values(PAYMENT_METHOD),
+      default: PAYMENT_METHOD.CARD,
     },
     isPaid: {
       type: Boolean,
@@ -91,8 +93,8 @@ const orderSchema = new mongoose.Schema(
     },
     canceledBy: {
       type: String,
-      default: "user",
-      enum: ["user", "admin"],
+      default: ROLE.USER,
+      enum: Object.values(ROLE),
     },
     description: {
       type: String,
@@ -100,7 +102,7 @@ const orderSchema = new mongoose.Schema(
     orderStatus: {
       type: String,
       default: ORDER_STATUS.PENDING,
-      enum: [Object.values(ORDER_STATUS)],
+      enum: Object.values(ORDER_STATUS),
     },
   },
   {

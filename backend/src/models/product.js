@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 const variantSchema = new mongoose.Schema({
-  color: { type: mongoose.Schema.Types.ObjectId, ref: "Color" },
-  size: { type: mongoose.Schema.Types.ObjectId, ref: "Size" },
-  stock: { type: Number },
-  image: { type: String },
-  imageUrlRef: { type: String },
+  color: { type: mongoose.Schema.Types.ObjectId, ref: "Color", required: true },
+  size: { type: mongoose.Schema.Types.ObjectId, ref: "Size", required: true },
+  stock: { type: Number, required: true },
+  image: { type: String, required: true },
+  imageUrlRef: { type: String, required: true },
 });
 
 const productSchema = new mongoose.Schema(

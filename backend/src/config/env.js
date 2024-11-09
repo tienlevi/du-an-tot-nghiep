@@ -13,4 +13,12 @@ export const envConfig = {
     appId: process.env.FIREBASE_APP_ID,
     measurementId: process.env.FIREBASE_MEASUREMENT_ID,
   },
+  VN_PAY_CONFIG: {
+    vnpTmnCode: process.env.VNP_TMNCODE,
+    vnp_HashSecret: process.env.VNP_HASHSECRET,
+    vnp_Url: process.env.VNP_URL,
+    vnp_Api: process.env.VNP_API,
+    vnp_ReturnUrl: process.env.VNP_RETURNURL,
+    urlSuccess: process.env.VNP_RETURNURL,
+  },
 };

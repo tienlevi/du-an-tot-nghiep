@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcryptjs";
+import { ROLE } from "../constants/role";
 
 const userSchema = new Schema(
   {
@@ -20,8 +21,8 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["user", "admin"],
-      default: "user",
+      enum: Object.values(ROLE),
+      default: ROLE.USER,
     },
     avatar: {
       type: String,
