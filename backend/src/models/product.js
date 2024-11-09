@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
 const variantSchema = new mongoose.Schema({
-  color: { type: mongoose.Schema.Types.Mixed },
-  size: { type: mongoose.Schema.Types.Mixed },
+  color: { type: mongoose.Schema.Types.ObjectId, ref: "Color" },
+  size: { type: mongoose.Schema.Types.ObjectId, ref: "Size" },
   stock: { type: Number },
   image: { type: String },
   imageUrlRef: { type: String },
@@ -12,7 +12,8 @@ const productSchema = new mongoose.Schema(
   {
     name: { type: String },
     category: {
-      type: mongoose.Schema.Types.Mixed,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
     },
     discount: { type: Number, default: 0, min: 0, max: 99 },
     price: { type: Number, default: 0 },
@@ -21,7 +22,8 @@ const productSchema = new mongoose.Schema(
     sold: { type: Number, default: 0 },
     tags: [
       {
-        type: mongoose.Schema.Types.Mixed,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Tag",
       },
     ],
   },

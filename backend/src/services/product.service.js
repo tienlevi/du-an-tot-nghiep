@@ -1,6 +1,6 @@
 import Product from "../models/product.js";
 import APIQuery from "../utils/APIQuery.js";
-import { uploadFiles } from "../utils/upload.js";
+import { removeUploadedFile, uploadFiles } from "../utils/upload.js";
 
 export const getAllProducts = async (query) => {
   const features = new APIQuery(Product.find(), query);
@@ -55,9 +55,15 @@ export const createProduct = async (productData, files) => {
 };
 
 // @PUT: updateProduct
-export const updateProduct = async (productId, oldImageUrlRefs, files) => {
+export const updateProduct = async (
+  productId,
+  oldImageUrlRefs,
+  files,
+  variants,
+  productNew
+) => {
   const product = await Product.findById(productId);
-
+  let newVariants;
   if (!product)
     throw new NotFoundError(
       `${ReasonPhrases.NOT_FOUND} product with id: ${productId}`
@@ -69,14 +75,16 @@ export const updateProduct = async (productId, oldImageUrlRefs, files) => {
       files["variantImages"]
     );
     // @map new images to variants
-    variationList = fileUrls.map((item, i) => {
-      const variation = JSON.parse(productData.variantString).find((obj) => {
+    newVariants = fileUrls.map((item, i) => {
+      const variation = variants.find((obj) => {
         const originName = originNames[i];
         const fileName = obj.imageUrlRef;
         return fileName === originName;
       });
       if (variation) {
         return { ...variation, image: item, imageUrlRef: fileUrlRefs[i] };
+      } else {
+        return variants[i];
       }
     });
   }
@@ -89,9 +97,10 @@ export const updateProduct = async (productId, oldImageUrlRefs, files) => {
       })
     );
   }
+  const tags = productNew.tags ? productNew.tags.split(",") : product.tags;
 
   // @update product
-  product.set({ ...req.body });
+  product.set({ ...productNew, variants: newVariants, tags });
   return await product.save();
 };
 

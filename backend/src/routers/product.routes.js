@@ -7,6 +7,11 @@ const productRoutes = Router();
 productRoutes.get("/all", productControllers.getAllProducts);
 productRoutes.get("/best-selling", productControllers.getBestSellingProducts);
 productRoutes.get("/discount-list", productControllers.getDiscountProducts);
+productRoutes.put(
+  "/update/:id",
+  upload.fields([{ name: "variantImages", maxCount: 10 }]),
+  productControllers.updateProduct
+);
 productRoutes.post(
   "/create",
   upload.fields([{ name: "variantImages", maxCount: 10 }]),

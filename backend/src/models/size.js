@@ -11,4 +11,4 @@ const sizeSchema = new Schema(
   { timestamps: true, versionKey: false }
 );
 
-export default mongoose.model("Color", sizeSchema);
+export default mongoose.model("Size", sizeSchema);

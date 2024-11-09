@@ -3,13 +3,10 @@ import { ORDER_STATUS } from "../constants/orderStatus";
 
 const OrderItemSchema = new mongoose.Schema(
   {
-    product: {
-      type: String,
+    productId: {
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
-    },
-    variant: {
-      type: String,
-      required: true,
+      ref: "Product",
     },
     name: {
       type: String,
