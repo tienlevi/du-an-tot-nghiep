@@ -10,3 +10,6 @@
         @apply  bg-whiten font-Montserrat ;
     }
 }
+.ant-input-number input{
+    text-align: center !important;
+}
