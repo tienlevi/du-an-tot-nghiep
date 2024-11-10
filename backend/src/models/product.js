@@ -1,38 +1,33 @@
 import mongoose from "mongoose";
-// import mongoosePaginate from "mongoose-paginate-v2";
+
+const variantSchema = new mongoose.Schema({
+  color: { type: mongoose.Schema.Types.ObjectId, ref: "Color", required: true },
+  size: { type: mongoose.Schema.Types.ObjectId, ref: "Size", required: true },
+  stock: { type: Number, required: true },
+  image: { type: String, required: true },
+  imageUrlRef: { type: String, required: true },
+});
 
 const productSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
-    slug: { type: String, unique: true, default: "" },
+    name: { type: String },
     category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
-      required: true,
     },
-    price: { type: Number, required: true, default: 0 },
-    image: { type: String },
-    gallery: { type: [String], default: [] },
+    discount: { type: Number, default: 0, min: 0, max: 99 },
+    price: { type: Number, default: 0 },
+    variants: [variantSchema],
     description: { type: String },
-    discount: { type: Number, default: 0 },
-    countInStock: { type: Number, default: 0 },
-    featured: { type: Boolean, default: false },
-    tags: { type: [String], default: [] },
-    attributes: {
-      size: {
-        type: [String],
-        required: true,
+    sold: { type: Number, default: 0 },
+    tags: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Tag",
       },
-      color: [
-        {
-          name: { type: String, required: true },
-          image: { type: String, required: true },
-        },
-      ],
-    },
+    ],
   },
   { timestamps: true, versionKey: false }
 );
 
-// productSchema.plugin(mongoosePaginate);
-export default mongoose.model("products", productSchema);
+export default mongoose.model("Product", productSchema);
