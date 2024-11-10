@@ -2,8 +2,8 @@ import "dotenv/config";
 
 export const envConfig = {
   PORT: process.env.PORT || 5000,
-  JWT_SECRET: process.env.JWT_SECRET || "12345678",
-  DB_URI: process.env.DB_URI || "mongodb://localhost:27017/dev",
+  JWT_SECRET: process.env.JWT_SECRET || "12345678hehe",
+  DB_URL: process.env.DB_URL || "mongodb://localhost:27017/dev",
   FIREBASE: {
     apiKey: process.env.FIREBASE_API_KEY,
     authDomain: process.env.FIREBASE_AUTH_DOMAIN,

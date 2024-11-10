@@ -19,13 +19,13 @@ app.use(cors());
 app.use(morgan("tiny"));
 
 // connect db
-connectDB(envConfig.DB_URI);
+connectDB(envConfig.DB_URL);
 
 // routers
 app.use("/api", router);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-app.listen(5000, () => {
-  console.log("Server is running on port 5000");
+app.listen(envConfig.PORT, () => {
+  console.log("Server is running on port " + envConfig.PORT);
 });
