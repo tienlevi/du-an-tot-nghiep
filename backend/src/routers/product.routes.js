@@ -6,7 +6,7 @@ const productRoutes = Router();
 
 productRoutes.get("/all", productControllers.getAllProducts);
 productRoutes.get("/best-selling", productControllers.getBestSellingProducts);
-productRoutes.get("/discount-list", productControllers.getDiscountProducts);
+productRoutes.get("/discount", productControllers.getDiscountProducts);
 productRoutes.get("/:id", productControllers.getDiscountProducts);
 productRoutes.put(
   "/update/:id",

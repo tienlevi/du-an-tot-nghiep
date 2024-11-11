@@ -10,6 +10,7 @@ const OrderItemSchema = new mongoose.Schema(
       required: true,
       ref: "Product",
     },
+    variantId: mongoose.Schema.Types.ObjectId,
     name: {
       type: String,
       required: true,

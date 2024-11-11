@@ -3,6 +3,12 @@ import mongoose from "mongoose";
 const variantSchema = new mongoose.Schema({
   color: { type: mongoose.Schema.Types.ObjectId, ref: "Color", required: true },
   size: { type: mongoose.Schema.Types.ObjectId, ref: "Size", required: true },
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Category",
+    required: true,
+  },
+  tags: [{ type: mongoose.Schema.Types.ObjectId, ref: "Tag", required: true }],
   stock: { type: Number, required: true },
   image: { type: String, required: true },
   imageUrlRef: { type: String, required: true },

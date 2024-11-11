@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { categoryControllers } from "../controllers/index.js";
-import { authenicate } from "../middleware/authenticateMiddleware.js";
+import { authenticate } from "../middleware/authenticateMiddleware.js";
 import { authorsize } from "../middleware/authorizeMiddleware.js";
 import { ROLE } from "../constants/role.js";
 import {
@@ -16,7 +16,7 @@ router.get("/all", categoryControllers.getAllCategories);
 // @Post
 router.post(
   "/",
-  authenicate,
+  authenticate,
   authorsize(ROLE.ADMIN),
   [createCategoryValidation],
   categoryControllers.createCategory
@@ -25,7 +25,7 @@ router.post(
 // @Patch
 router.patch(
   "/:id",
-  authenicate,
+  authenticate,
   authorsize(ROLE.ADMIN),
   [updateCategoryValidation],
   categoryControllers.updateCategory
