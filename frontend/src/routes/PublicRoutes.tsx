@@ -2,6 +2,7 @@ import MainLayout from "@/layouts/Mainlayout/MainLayout"
 import NotFound from "@/pages/Client/NotFound"
 import { Navigate } from "react-router"
 import { HomePage, Suspense } from "./LazyRoutes"
+import AdminLayout from "@/layouts/AdminLayout"
 
 const PublicRoutes = [
     {
@@ -20,6 +21,7 @@ const PublicRoutes = [
             }
         ]
     },
+    {path: '/admin', element: <AdminLayout/>},
     {path: '*', element: <Navigate to={'/404'}/>},
     {path: '/404', element: <NotFound/>}
 ]
