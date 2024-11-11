@@ -6,14 +6,15 @@ import bcrypt from "bcryptjs";
 import _ from "lodash";
 import jwt from "jsonwebtoken";
 import { envConfig } from "../config/env.js";
-import { generateToken } from "./token.services.js";
+import { generateToken } from "./token.service.js";
 
 // @POST register
 export const register = async (req, res, next) => {
-  const foundeduser = User.findOne({ email: req.body.email }).lean();
-  if (!foundeduser) {
+  const foundedUser = User.findOne({ email: req.body.email }).lean();
+  if (foundedUser) {
     throw new DuplicateError("Email đã tồn tại!");
   }
+
   const user = await User.create(req.body);
 
   return res.status(StatusCodes.CREATED).json(
@@ -28,19 +29,19 @@ export const register = async (req, res, next) => {
 
 // @POST login
 export const login = async (req, res, next) => {
-  const foundeduser = await User.findOne({ email: req.body.email });
+  const foundedUser = await User.findOne({ email: req.body.email });
   const payload = {
-    userId: foundeduser._id,
-    role: foundeduser.role,
+    userId: foundedUser._id,
+    role: foundedUser.role,
   };
 
-  if (!foundeduser) {
+  if (!foundedUser) {
     throw new BadRequestError("Thông tin đăng nhập không chính xác");
   }
 
   const isCompared = await bcrypt.compare(
     req.body.password,
-    foundeduser.password
+    foundedUser.password
   );
 
   if (!isCompared) {
@@ -51,7 +52,7 @@ export const login = async (req, res, next) => {
 
   return res.status(StatusCodes.OK).json(
     customResponse({
-      data: { user: foundeduser, accessToken },
+      data: { user: foundedUser, accessToken },
       message: ReasonPhrases.OK,
       status: StatusCodes.OK,
       success: true,

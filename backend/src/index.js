@@ -18,6 +18,9 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan("tiny"));
 
+app.use(express.urlencoded({ extended: true }));
+
+
 // connect db
 connectDB(envConfig.DB_URL);
 
