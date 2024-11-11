@@ -17,7 +17,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           <ConfigProvider locale={vi}>
             <App />
           </ConfigProvider>
-          <ToastContainer position='bottom-center'/>
+          <ToastContainer position='bottom-center' autoClose={1500} hideProgressBar  draggable bodyClassName={'text-white font-medium'} toastClassName={'bg-global w-auto'} className={'w-auto max-w-[390px]'}/>
         </QueryProvider>
       </ReduxProvider>
     </BrowserRouter>
