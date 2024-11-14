@@ -2,11 +2,11 @@ import { Button, Flex, Table, Tooltip } from 'antd';
 import { TableProps } from 'antd/lib';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { MAIN_ROUTES } from '~/constants/router';
-import { useGetVariantDetail } from '~/hooks/products/Queries/useGetVariantDetail';
-import RateBtn from '~/pages/Clients/Account/MyOrders/Components/RateBtn';
-import { setReviewData } from '~/store/slice/rateProductSlice';
-import { Currency } from '~/utils';
+import { MAIN_ROUTES } from '@/constants/router';
+// import { useGetVariantDetail } from '@/hooks/products/Queries/useGetVariantDetail';
+// import RateBtn from '@/pages/Clients/Account/MyOrders/Components/RateBtn';
+import { setReviewData } from '@/store/slice/rateProductSlice';
+import { Currency } from '@/utils';
 
 interface DataType {
     key: number;
@@ -47,7 +47,13 @@ const TableDetailOrder = ({ orderItems, status }: Props) => {
             title: 'Ảnh Sản Phẩm',
             dataIndex: 'image',
             key: 'image',
-            render: (image) => <img src={image} alt='product' className='h-20 w-20 object-cover' />,
+            render: (image) => (
+                <img
+                    src={image}
+                    alt="product"
+                    className="h-20 w-20 object-cover"
+                />
+            ),
         },
         {
             title: 'Tên Sản Phẩm',
@@ -58,8 +64,8 @@ const TableDetailOrder = ({ orderItems, status }: Props) => {
                 // const { data } = useGetVariantDetail();
                 return (
                     <>
-                        <Flex justify='center' align='center'>
-                            <Tooltip title='Xem chi tiết sản phẩm'>
+                        <Flex justify="center" align="center">
+                            <Tooltip title="Xem chi tiết sản phẩm">
                                 <Link to={`/products/${record.productId}`}>
                                     <h3>{record.name}</h3>
                                 </Link>
@@ -69,24 +75,26 @@ const TableDetailOrder = ({ orderItems, status }: Props) => {
                 );
             },
         },
-        {
-            title: 'Loại sản phẩm',
-            dataIndex: 'variant',
-            key: 'variant',
-            render: (variant) => {
-                return (
-                    <>
-                        <div className='flex gap-2'>
-                            {variant.variantAttributes.map((item: any, i: number) => (
-                                <span key={i} className='text-xs'>
-                                    {item.value}
-                                </span>
-                            ))}
-                        </div>
-                    </>
-                );
-            },
-        },
+        // {
+        //     title: 'Loại sản phẩm',
+        //     dataIndex: 'variant',
+        //     key: 'variant',
+        //     render: (variant) => {
+        //         return (
+        //             <>
+        //                 <div className="flex gap-2">
+        //                     {variant.variantAttributes.map(
+        //                         (item: any, i: number) => (
+        //                             <span key={i} className="text-xs">
+        //                                 {item.value}
+        //                             </span>
+        //                         ),
+        //                     )}
+        //                 </div>
+        //             </>
+        //         );
+        //     },
+        // },
         {
             title: 'Giá Tiền',
             dataIndex: 'price',
@@ -103,7 +111,9 @@ const TableDetailOrder = ({ orderItems, status }: Props) => {
             title: 'Tổng Tiền',
             dataIndex: 'total',
             key: 'total',
-            render: (_, record) => <p>{Currency.format(record.price * record.quantity)}</p>,
+            render: (_, record) => (
+                <p>{Currency.format(record.price * record.quantity)}</p>
+            ),
         },
         ...(status === 'done'
             ? [
@@ -114,15 +124,15 @@ const TableDetailOrder = ({ orderItems, status }: Props) => {
                           console.log(record);
                           return (
                               <>
-                                  {!record.isReviewed && (
+                                  {/* {!record.isReviewed && (
                                       <RateBtn
                                           handleRate={handleRateProduct}
                                           productId={record.productId}
                                           orderId={id!}
                                       />
-                                  )}
+                                  )} */}
                                   {record.isReviewed && (
-                                      <Button type='default' disabled>
+                                      <Button type="default" disabled>
                                           Đã đánh giá
                                       </Button>
                                   )}
@@ -145,7 +155,14 @@ const TableDetailOrder = ({ orderItems, status }: Props) => {
         variant: item.variant,
     }));
 
-    return <Table className='mt-5 w-full' columns={columns} dataSource={data} pagination={false} />;
+    return (
+        <Table
+            className="mt-5 w-full"
+            columns={columns}
+            dataSource={data}
+            pagination={false}
+        />
+    );
 };
 
 export default TableDetailOrder;

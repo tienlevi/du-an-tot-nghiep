@@ -29,6 +29,22 @@ const PublicRoutes = [
                 ),
             },
             {
+                path: '/login',
+                element: (
+                    <Suspense>
+                        <LoginPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: '/register',
+                element: (
+                    <Suspense>
+                        <RegisterPage />
+                    </Suspense>
+                ),
+            },
+            {
                 path: 'products/:id',
                 element: (
                     <Suspense>
@@ -61,22 +77,6 @@ const PublicRoutes = [
                 ],
             },
         ],
-    },
-    {
-        path: '/login',
-        element: (
-            <Suspense>
-                <LoginPage />
-            </Suspense>
-        ),
-    },
-    {
-        path: '/register',
-        element: (
-            <Suspense>
-                <RegisterPage />
-            </Suspense>
-        ),
     },
 
     { path: '/admin', element: <AdminLayout /> },

@@ -9,7 +9,7 @@ const useOrderDetails = (id: string) => {
         queryFn: async () => {
             const response = await instance<any>({
                 method: 'GET',
-                url: `/orders/${id}`,
+                url: `/orders/details/${id}`,
             });
             return response && response.data && response.data.data;
         },

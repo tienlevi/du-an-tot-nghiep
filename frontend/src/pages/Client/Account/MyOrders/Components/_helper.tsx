@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { Button } from 'antd';
+import { Button, ConfigProvider } from 'antd';
 import { OrderStatus, PaymentMethod } from '@/constants/enum';
 import ActionLink from './ActionLink';
 import OrderStatusTag from '@/components/OrderStatusTag';
@@ -140,9 +140,20 @@ export const orderColumns = ({
             render: (value, record) => (
                 <>
                     <Link to={`${MAIN_ROUTES.MY_ORDERS}/${record._id}`}>
-                        <Button type="primary" className="mr-2">
-                            Xem chi tiết
-                        </Button>
+                        <ConfigProvider
+                            theme={{
+                                components: {
+                                    Button: {
+                                        defaultBg: '#da291c',
+                                        defaultColor: '#ffffff',
+                                        defaultHoverBorderColor: '#da291c',
+                                        defaultHoverColor: '#da291c',
+                                    },
+                                },
+                            }}
+                        >
+                            <Button className="mr-2">Xem chi tiết</Button>
+                        </ConfigProvider>
                     </Link>
                     {value === 'done' && (
                         <ActionLink status={value} orderId={record._id} />
