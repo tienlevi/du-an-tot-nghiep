@@ -8,7 +8,6 @@ import mongoose from "mongoose";
 // @Get cart by user
 export const getMyCart = async (req, res, next) => {
   const userId = req.userId;
-  console.log(userId, "userId");
   const cartUser = await Cart.findOne({
     userId: new mongoose.Types.ObjectId(userId),
   }).populate({
@@ -16,15 +15,18 @@ export const getMyCart = async (req, res, next) => {
   });
   if (!cartUser)
     throw new NotFoundError("Not found cart or cart is not exist.");
-  const checkStock = cartUser.items.filter((item) => {
-    const stock = item.product.variants.find(
-      (el) => el._id.toString() === item.variant.toString()
-    ).stock;
-    if (item.quantity > stock) {
-      item.quantity = stock;
-    }
-    return item;
-  });
+  console.log(cartUser);
+  const checkStock = cartUser.items
+    .filter((itemEl) => itemEl.product !== null)
+    .filter((item) => {
+      const stock = item.product.variants.find(
+        (el) => el._id.toString() === item.variant.toString()
+      ).stock;
+      if (item.quantity > stock) {
+        item.quantity = stock;
+      }
+      return item;
+    });
 
   cartUser.items = checkStock;
   await cartUser.save();

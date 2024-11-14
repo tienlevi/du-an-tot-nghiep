@@ -10,6 +10,7 @@ import customResponse from "../helpers/response.js";
 import { inventoryService } from "./index.js";
 import { ORDER_STATUS } from "../constants/orderStatus.js";
 import { ROLE } from "../constants/role.js";
+import mongoose from "mongoose";
 
 // @GET:  Get all orders
 export const getAllOrders = async (req, res, next) => {
@@ -45,25 +46,25 @@ export const getAllOrders = async (req, res, next) => {
 
 //@GET: Get all orders by user
 export const getAllOrdersByUser = async (req, res, next) => {
-  const userId = req.userId;
+  const userId = new mongoose.Types.ObjectId(req.userId);
   const page = req.query.page ? +req.query.page : 1;
-  req.query.limit = String(req.query.limit || 10);
+  req.query.limit = Number(req.query.limit || 10);
+  req.query.userId;
 
-  const features = new APIQuery(Order.find({ userId }), req.query);
+  const features = new APIQuery(Order.find({}), req.query);
   features.filter().sort().limitFields().search().paginate();
 
   const [orders, totalDocs] = await Promise.all([
     features.query,
     features.count(),
   ]);
-  const totalPages = Math.ceil(Number(totalDocs) / +req.query.limit);
+  const tets = await Order.find({ userId });
   return res.status(StatusCodes.OK).json(
     customResponse({
       data: {
         orders,
         page,
         totalDocs,
-        totalPages,
       },
       success: true,
       status: StatusCodes.OK,

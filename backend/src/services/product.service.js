@@ -3,7 +3,10 @@ import APIQuery from "../utils/APIQuery.js";
 import { removeUploadedFile, uploadFiles } from "../utils/upload.js";
 
 export const getAllProducts = async (query) => {
-  const features = new APIQuery(Product.find(), query);
+  const features = new APIQuery(
+    Product.find().populate("variants.color").populate("variants.size"),
+    query
+  );
   features.filter().sort().limitFields().search().paginate();
 
   const [products, totalDocs] = await Promise.all([

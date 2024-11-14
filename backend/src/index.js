@@ -7,6 +7,7 @@ import notFoundHandler from "./errors/notFoundHandler.js";
 import errorHandler from "./errors/errorHandle.js";
 import { envConfig } from "./config/env.js";
 import { initializeApp } from "firebase/app";
+import { handleInsertData } from "./data/index.js";
 
 const app = express();
 
@@ -23,6 +24,7 @@ connectDB(envConfig.DB_URL);
 
 // routers
 app.use("/api", router);
+app.use("/api/import-data", handleInsertData);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
