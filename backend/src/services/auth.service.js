@@ -50,7 +50,7 @@ export const login = async (req, res, next) => {
   }
 
   const accessToken = generateToken(payload, envConfig.JWT_SECRET, "1d");
-  console.log(accessToken);
+  
   return res.status(StatusCodes.OK).json(
     customResponse({
       data: { user: foundedUser, accessToken },

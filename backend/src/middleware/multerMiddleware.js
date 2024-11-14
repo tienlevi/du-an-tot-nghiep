@@ -6,7 +6,7 @@ const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {
-    if (!file.originalname.match(/\.(jpg|jpeg|png|webp)$/)) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png|webp|JPG|JPEG|PNG|WEBP)$/)) {
       return cb(
         new BadRequestError(
           "Chỉ chấp nhận nhưng file có đuôi là JPG, JPEG, và PNG!"

@@ -5,11 +5,10 @@ import customResponse from "../helpers/response.js";
 import User from "../models/user.js";
 import bcrypt from "bcryptjs";
 import { removeUploadedFile, uploadSingleFile } from "../utils/upload.js";
-import mongoose from "mongoose";
 
 // @Patch change password
 export const changePassword = async (req, res, next) => {
-  const { password } = req.body;
+  const { password, newPassword } = req.body;
   const user = await User.findOne({ _id: req.userId });
 
   const isMatch = await bcrypt.compare(password, user.password);
@@ -18,7 +17,7 @@ export const changePassword = async (req, res, next) => {
     throw new BadRequestError("Mật khẩu cũ không chính xác");
   }
 
-  user.password = password;
+  user.password = newPassword;
   await user.save();
 
   return res.status(StatusCodes.OK).json(
@@ -32,7 +31,7 @@ export const changePassword = async (req, res, next) => {
 };
 // @Patch forgot password
 export const forgotPassword = async (req, res, next) => {
-  const user = await User.findOne({ _id: req.userId });
+  const user = await User.findById(req.userId);
   user.password = req.body.password;
   await user.save();
 
@@ -46,12 +45,10 @@ export const forgotPassword = async (req, res, next) => {
   );
 };
 
-// @Get get user profile  
+// @Get get user profile
 export const getProfile = async (req, res, next) => {
-  const user = await User.findById(req.userId)
-    .select(["name", "email", "avatar", "role"])
-    .lean();
-    
+  const user = await User.findById(req.userId).lean();
+
   return res.status(StatusCodes.OK).json(
     customResponse({
       data: user,
@@ -72,7 +69,7 @@ export const updateProfile = async (req, res, next) => {
     );
     user.avatar = downloadURL;
     user.imageUrlRef = imageUrlRef;
-    
+
     if (user.imageUrlRef) {
       removeUploadedFile(user.imageUrlRef);
     }
