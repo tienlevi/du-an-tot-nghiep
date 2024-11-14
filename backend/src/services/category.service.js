@@ -1,8 +1,8 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { BadRequestError } from "../errors/customError.js";
 import customResponse from "../helpers/response.js";
-import APIQuery from "../utils/APIQuery.js";
 import category from "../models/category.js";
+import handleQuery from "../utils/handleQuery.js";
 
 // @Post create new category
 export const createNewCategory = async (req, res, next) => {
@@ -20,21 +20,12 @@ export const createNewCategory = async (req, res, next) => {
 
 // @Get get all categories
 export const getAllCategories = async (req, res, next) => {
-  const page = req.query.page ? +req.query.page : 1;
-  req.query.limit = String(req.query.limit || 10);
-
-  const features = new APIQuery(category.find({}), req.query);
-  features.filter().sort().limitFields().search().paginate();
-  const [categories, totalDocs] = await Promise.all([
-    features.query,
-    features.count(),
-  ]);
-  const totalPages = Math.ceil(totalDocs / +req.query.limit);
+  const { data, page, totalDocs, totalPages } = await handleQuery(req, Size);
 
   return res.status(StatusCodes.OK).json(
     customResponse({
       data: {
-        categories,
+        categories: data,
         page,
         totalDocs,
         totalPages,

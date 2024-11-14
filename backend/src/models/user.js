@@ -29,6 +29,7 @@ const userSchema = new Schema(
       type: String,
       default: "../upload/default-avatar.jpeg",
     },
+    imageUrlRef: { type: String },
   },
   { timestamps: true, versionKey: false }
 );

@@ -35,6 +35,9 @@ app.use(
 );
 app.use(morgan("tiny"));
 
+app.use(express.urlencoded({ extended: true }));
+
+
 // connect db
 connectDB(envConfig.DB_URL);
 

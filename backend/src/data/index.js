@@ -12,9 +12,8 @@ import Color from "../models/color.js";
 import User from "../models/user.js";
 import Order from "../models/order.js";
 import { getRandomIntegerBelow } from "../utils/getRandomIntegerBelow.js";
-import mongoose from "mongoose";
-import { generateToken } from "../services/token.services.js";
 import { envConfig } from "../config/env.js";
+import { generateToken } from "../services/token.service.js";
 export const handleInsertData = async (req, res) => {
   try {
     await Product.deleteMany({});
