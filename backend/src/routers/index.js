@@ -14,16 +14,16 @@ import userRouter from "./user.routes.js";
 
 const router = Router();
 
-router.use("/category", categoryRouter);
+router.use("/categories", categoryRouter);
 router.use("/auth", authRouter);
 router.use("/products", productRouter);
 router.use("/carts", cartRouter);
 router.use("/checkout", checkoutRouter);
 router.use("/orders", orderRouter);
-router.use("/size", sizeRouter);
-router.use("/color", colorRouter);
-router.use("/review", reviewRouter);
-router.use("/tag", tagRouter);
-router.use("/user", userRouter);
+router.use("/sizes", sizeRouter);
+router.use("/colors", colorRouter);
+router.use("/reviews", reviewRouter);
+router.use("/tags", tagRouter);
+router.use("/users", userRouter);
 
 export default router;
