@@ -16,11 +16,19 @@ export const getAllProducts = async (query) => {
   return { products, totalDocs };
 };
 export const getBestSellingProducts = async () => {
-  const products = await Product.find().sort({ sold: -1 }).limit(10);
+  const products = await Product.find()
+    .populate("variants.color")
+    .populate("variants.size")
+    .sort({ sold: -1 })
+    .limit(10);
   return products;
 };
 export const getDiscountProducts = async () => {
-  const products = await Product.find().sort({ sdiscountold: -1 }).limit(10);
+  const products = await Product.find()
+    .populate("variants.color")
+    .populate("variants.size")
+    .sort({ sdiscountold: -1 })
+    .limit(10);
   return products;
 };
 
@@ -108,7 +116,9 @@ export const updateProduct = async (
 };
 
 export const getProductById = async (productId) => {
-  const product = await Product.findById(productId);
+  const product = await Product.findById(productId)
+    .populate("variants.color")
+    .populate("variants.size");
   if (!product)
     throw new NotFoundError(
       `${ReasonPhrases.NOT_FOUND} product with id: ${productId}`
