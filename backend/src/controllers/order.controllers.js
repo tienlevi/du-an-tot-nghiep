@@ -7,3 +7,6 @@ export const createOrder = asyncHandler(async (req, res, next) => {
 export const getAllOrdersByUser = asyncHandler(async (req, res, next) => {
   return await orderServices.getAllOrdersByUser(req, res, next);
 });
+export const getDetailedOrder = asyncHandler(async (req, res, next) => {
+  return await orderServices.getDetailedOrder(req, res, next);
+});

@@ -83,29 +83,10 @@ export const getDetailedOrder = async (req, res, next) => {
       `${ReasonPhrases.NOT_FOUND} order with id: ${req.params.id}`
     );
   }
-  const addVariantResponse = async (product) => {
-    return Promise.all(
-      product.map(async (product) => {
-        const variant = await ProductVariation.findById(
-          product.productVariationId
-        ).select("variantAttributes");
-        return {
-          ...product,
-          variant,
-        };
-      })
-    );
-  };
-  const items = await addVariantResponse(order.items);
-  const result = _.omit(order, ["updatedAt"]);
-  const response = {
-    ...result,
-    items,
-  };
 
   return res.status(StatusCodes.OK).json(
     customResponse({
-      data: response,
+      data: order,
       success: true,
       status: StatusCodes.OK,
       message: ReasonPhrases.OK,
