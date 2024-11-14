@@ -74,7 +74,6 @@ export const getAllOrdersByUser = async (req, res, next) => {
 };
 
 //@GET: Get the detailed order
-
 export const getDetailedOrder = async (req, res, next) => {
   const order = await Order.findById(req.params.id).lean();
 

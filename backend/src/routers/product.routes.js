@@ -7,7 +7,7 @@ const productRoutes = Router();
 productRoutes.get("/all", productControllers.getAllProducts);
 productRoutes.get("/best-selling", productControllers.getBestSellingProducts);
 productRoutes.get("/discount", productControllers.getDiscountProducts);
-productRoutes.get("/:id", productControllers.getDiscountProducts);
+productRoutes.get("/:id", productControllers.getProductById);
 productRoutes.put(
   "/update/:id",
   upload.fields([{ name: "variantImages", maxCount: 10 }]),
