@@ -308,15 +308,20 @@ const ProductDetailsPage = () => {
                                                                           item,
                                                                       )
                                                             }
-                                                            className={`relative  mr-2 ${item.stock === 0 ? 'bg-opacity-60 border-opacity-60' : 'cursor-pointer'} w-8  h-8 rounded-lg ${selectedColor?._id === item._id ? `border-2 border-hover ` : 'border-[#eee9e9] border-2'}`}
-                                                            style={{
-                                                                backgroundColor: `${item.color.hex}`,
-                                                            }}
+                                                            className={`w-8  ${item.stock === 0 ? 'bg-opacity-60 border-opacity-60 cursor-not-allowed' : 'cursor-pointer'} relative h-8 flex justify-center items-center border-[1px] mr-2 bg-[#f5f5f5] rounded-md ${selectedColor?._id === item._id ? `border-[1.5px] border-hover/70` : 'border-[#eee9e9] border-[1px]'}`}
                                                         >
+                                                            <div
+                                                                className={` w-5  h-5 rounded-full ${item.stock === 0 && 'opacity-55'}`}
+                                                                style={{
+                                                                    backgroundColor: `${item.color.hex}`,
+                                                                }}
+                                                            >
+                                                                
+                                                            </div>
                                                             {item.stock ===
-                                                                0 && (
-                                                                <div className="absolute w-9 h-[2px] top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] bg-[#777777] rotate-45"></div>
-                                                            )}
+                                                                    0 && (
+                                                                    <div className="absolute w-10 h-[1px] top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] bg-[#777777] rotate-45"></div>
+                                                                )}
                                                         </div>
                                                     );
                                                 },
