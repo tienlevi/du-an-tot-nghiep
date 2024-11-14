@@ -35,6 +35,23 @@ const PublicRoutes = [
                     </Suspense>
                 ),
             },
+            {
+                path: '/login',
+                element: (
+                    <Suspense>
+                        <LoginPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: '/register',
+                element: (
+                    <Suspense>
+                        <RegisterPage />
+                    </Suspense>
+                ),
+            },
+
             // @Account
             {
                 path: 'account',
@@ -55,22 +72,6 @@ const PublicRoutes = [
                 ],
             },
         ],
-    },
-    {
-        path: '/login',
-        element: (
-            <Suspense>
-                <LoginPage />
-            </Suspense>
-        ),
-    },
-    {
-        path: '/register',
-        element: (
-            <Suspense>
-                <RegisterPage />
-            </Suspense>
-        ),
     },
 
     { path: '/admin', element: <AdminLayout /> },

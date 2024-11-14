@@ -2,6 +2,7 @@ export const QUERY_KEY = {
     CART: 'CART',
     VARIANT: 'variant',
     PRODUCTS: 'products',
+    HOT_PRODUCTS: 'HOT_PRODUCT',
     FILTER_BYCATE: 'products',
     PRODUCTS_LAZY: 'products_lazy',
     CATEGORIES: 'categories',
