@@ -27,6 +27,7 @@ export const handleInsertData = async (req, res) => {
       email: "tuan@gmail.com",
       name: "tuan",
       password: "11222212",
+      phone: "123456789",
     });
 
     const createdSizes = await Size.insertMany(sizes);

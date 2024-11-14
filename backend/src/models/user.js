@@ -20,6 +20,10 @@ const userSchema = new Schema(
       minlength: 3,
       maxlength: 30,
     },
+    phone: {
+      type: String,
+      default: "Chưa cập nhật",
+    },
     role: {
       type: String,
       enum: Object.values(ROLE),
