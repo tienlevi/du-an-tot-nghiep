@@ -180,7 +180,7 @@ export const cancelOrder = async (req, res, next) => {
 
 // @Set order status to confirmed
 export const confirmOrder = async (req, res, next) => {
-  if (!req.role || req.role !== "admin") {
+  if (!req.role || req.role !== ROLE.ADMIN) {
     throw new NotAcceptableError("Only admin can access.");
   }
 
@@ -209,7 +209,7 @@ export const confirmOrder = async (req, res, next) => {
 
 // @Set order status to shipping
 export const shippingOrder = async (req, res, next) => {
-  if (!req.role || req.role !== "admin") {
+  if (!req.role || req.role !== ROLE.ADMIN) {
     throw new NotAcceptableError("Only admin can access.");
   }
 
@@ -240,7 +240,7 @@ export const shippingOrder = async (req, res, next) => {
 
 // @ Set order status to delivered
 export const deliverOrder = async (req, res, next) => {
-  if (!req.role || req.role !== "admin") {
+  if (!req.role || req.role !== ROLE.ADMIN) {
     throw new NotAcceptableError("Only admin can access.");
   }
 

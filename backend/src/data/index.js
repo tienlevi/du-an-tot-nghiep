@@ -14,6 +14,7 @@ import Order from "../models/order.js";
 import { getRandomIntegerBelow } from "../utils/getRandomIntegerBelow.js";
 import { envConfig } from "../config/env.js";
 import { generateToken } from "../services/token.service.js";
+import { ROLE } from "../constants/role.js";
 export const handleInsertData = async (req, res) => {
   try {
     await Product.deleteMany({});
@@ -28,6 +29,7 @@ export const handleInsertData = async (req, res) => {
       name: "tuan",
       password: "11222212",
       phone: "123456789",
+      role: ROLE.ADMIN,
     });
 
     const createdSizes = await Size.insertMany(sizes);
