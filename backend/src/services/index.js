@@ -7,4 +7,6 @@ export * as categoryServices from "./category.service.js"
 export * as colorServices from "./color.service.js"
 export * as sizeServices from "./size.service.js"
 export * as reviewServices from "./review.service.js"
+export * as tagServices from "./tag.service.js"
+export * as userServices from "./user.service.js"
 

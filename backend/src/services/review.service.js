@@ -2,6 +2,7 @@ import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import customResponse from "../helpers/response.js";
 import Review from "../models/review.js";
 import handleQuery from "../utils/handleQuery.js";
+import { reviewData } from "../utils/function/QueryReview.js";
 
 // @Post create new review
 export const createNewReview = async (req, res, next) => {
@@ -17,9 +18,10 @@ export const createNewReview = async (req, res, next) => {
   );
 };
 
-// @Get get all reviews
-export const getAllReviews = async (req, res, next) => {
-  const { data, page, totalDocs, totalPages } = await handleQuery(req, Size);
+// @Get get all admin reviews
+export const getAllAdminReviews = async (req, res, next) => {
+  const { data, page, totalDocs, totalPages } = await handleQuery(req, Review);
+
   return res.status(StatusCodes.OK).json(
     customResponse({
       data: {
@@ -35,13 +37,46 @@ export const getAllReviews = async (req, res, next) => {
   );
 };
 
-// @Post create new review
-export const getReviewByProductId = async (req, res, next) => {
-  const reviews = await Review.findById(req.params.id);
-  
+// @Get get all reviews
+export const getAllReviewsByProductId = async (req, res, next) => {
+  const limit = req.query.limit ? req.query.limit : 5;
+  const reviews = await Review.find({ productId: req.body.id })
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .lean();
+
+  const { averageRating, reviewCount } = reviewData(reviews);
+
   return res.status(StatusCodes.OK).json(
     customResponse({
-      data: reviews,
+      data: {
+        reviews: reviews,
+        count: reviewCount,
+        rating: averageRating,
+      },
+      message: ReasonPhrases.OK,
+      status: StatusCodes.OK,
+      success: true,
+    })
+  );
+};
+
+// @Get get all review by productId
+export const getTopThreeReviewByProductId = async (req, res, next) => {
+  const reviews = await Review.find({ productId: req.params.id })
+    .sort({ createdAt: -1, rating: -1 })
+    .limit(3)
+    .lean();
+
+  const { averageRating, reviewCount } = reviewData(reviews);
+
+  return res.status(StatusCodes.OK).json(
+    customResponse({
+      data: {
+        reviews: reviews,
+        count: reviewCount,
+        rating: averageRating,
+      },
       message: ReasonPhrases.OK,
       status: StatusCodes.OK,
       success: true,

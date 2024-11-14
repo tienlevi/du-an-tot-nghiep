@@ -11,7 +11,6 @@ export const authenicate = (req, res, next) => {
   }
 
   const token = authHeader.split(" ")?.[1];
-
   jwt.verify(token, envConfig.JWT_SECRET, (err, decoded) => {
     if (err) {
       if (err.name === "TokenExpiredError") {
@@ -23,6 +22,7 @@ export const authenicate = (req, res, next) => {
       return next(new UnAuthenticatedError("Token verification failed."));
     }
     const { userId, role } = decoded;
+    
     req.userId = userId;
     req.role = role;
 

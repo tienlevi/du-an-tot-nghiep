@@ -10,7 +10,8 @@ import { generateToken } from "./token.service.js";
 
 // @POST register
 export const register = async (req, res, next) => {
-  const foundedUser = User.findOne({ email: req.body.email }).lean();
+  const foundedUser = await User.findOne({ email: req.body.email }).lean();
+  
   if (foundedUser) {
     throw new DuplicateError("Email đã tồn tại!");
   }
@@ -30,14 +31,16 @@ export const register = async (req, res, next) => {
 // @POST login
 export const login = async (req, res, next) => {
   const foundedUser = await User.findOne({ email: req.body.email });
-  const payload = {
-    userId: foundedUser._id,
-    role: foundedUser.role,
-  };
+ 
 
   if (!foundedUser) {
     throw new BadRequestError("Thông tin đăng nhập không chính xác");
   }
+
+  const payload = {
+    userId: foundedUser._id,
+    role: foundedUser.role,
+  };
 
   const isCompared = await bcrypt.compare(
     req.body.password,
@@ -49,7 +52,7 @@ export const login = async (req, res, next) => {
   }
 
   const accessToken = generateToken(payload, envConfig.JWT_SECRET, "1d");
-
+  console.log(accessToken)
   return res.status(StatusCodes.OK).json(
     customResponse({
       data: { user: foundedUser, accessToken },

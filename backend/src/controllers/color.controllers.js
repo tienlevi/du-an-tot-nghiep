@@ -11,7 +11,7 @@ export const getAllColors = asyncHandler(async (req, res, next) => {
   return colorServices.getAllColors(req, res, next);
 });
 
-// @Patch update category
+// @Patch update color
 export const updateColor = asyncHandler(async (req, res, next) => {
   return colorServices.updateColor(req, res, next);
 });

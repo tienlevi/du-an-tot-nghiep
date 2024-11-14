@@ -7,11 +7,17 @@ export const createReview = asyncHandler(async (req, res, next) => {
 });
 
 // @Get get all reviews
-export const getAllReviews = asyncHandler(async (req, res, next) => {
-  return reviewServices.getAllReviews(req, res, next);
+export const getAllAdminReviews = asyncHandler(async (req, res, next) => {
+  return reviewServices.getAllAdminReviews(req, res, next);
 });
 
-// @Get get review by product id
-export const getReviewByProductId = asyncHandler(async (req, res, next) => {
-  return reviewServices.getReviewByProductId(req, res, next);
+// @Get get top 3 review by product id
+export const getTopThreeReviewByProductId = asyncHandler(
+  async (req, res, next) => {
+    return reviewServices.getTopThreeReviewByProductId(req, res, next);
+  }
+);
+// @Get get all review by product id
+export const getAllReviewByProductId = asyncHandler(async (req, res, next) => {
+  return reviewServices.getAllReviewsByProductId(req, res, next);
 });
