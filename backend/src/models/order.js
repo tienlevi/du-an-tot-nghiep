@@ -17,6 +17,8 @@ const OrderItemSchema = new mongoose.Schema(
     },
     size: { type: String, required: true },
     color: { type: String, required: true },
+    category: { type: String, required: true },
+    tags: [{ type: String, required: true }],
     quantity: {
       type: Number,
       required: true,

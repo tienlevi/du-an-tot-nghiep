@@ -48,10 +48,10 @@ export const getProductById = asyncHandler(async (req, res) => {
   );
 });
 export const createProduct = asyncHandler(async (req, res) => {
-  await productService.createProduct(req.body, req.files);
+  const pro = await productService.createProduct(req.body, req.files);
   return res.status(StatusCodes.OK).json(
     customResponse({
-      data: null,
+      data: pro,
       success: true,
       status: StatusCodes.OK,
       message: ReasonPhrases.OK,
