@@ -81,6 +81,8 @@ export const handleInsertData = async (req, res) => {
         category: category._id,
         tags,
         variants: variantsWithIds,
+        discount: getRandomIntegerBelow(50),
+        price: 525000,
       };
     });
 
