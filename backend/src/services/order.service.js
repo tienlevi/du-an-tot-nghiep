@@ -189,6 +189,7 @@ export const confirmOrder = async (req, res, next) => {
   if (!foundedOrder) {
     throw new BadRequestError(`Not found order with id ${req.body.orderId}`);
   }
+  const productIds = foundedOrder.items.map((item) => item.productId);
 
   if (foundedOrder.orderStatus === ORDER_STATUS.PENDING) {
     foundedOrder.orderStatus = ORDER_STATUS.CONFIRMED;

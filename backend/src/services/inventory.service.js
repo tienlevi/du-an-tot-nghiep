@@ -16,6 +16,7 @@ export const updateStockOnCreateOrder = async (dataItems) => {
         }
         return variant;
       });
+      productTarget.sold += item.quantity;
       productTarget.variants = newVariants;
       await productTarget.save();
     })
@@ -38,6 +39,7 @@ export const updateStockOnCancelOrder = async (dataItems) => {
         }
         return variant;
       });
+      target.sold -= item.quantity;
       target.variants = newVariants;
       await target.save();
     })
