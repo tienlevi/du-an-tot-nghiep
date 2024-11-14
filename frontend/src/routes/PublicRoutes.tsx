@@ -1,9 +1,16 @@
 import MainLayout from '@/layouts/Mainlayout/MainLayout';
 import NotFound from '@/pages/Client/NotFound';
 import { Navigate } from 'react-router';
-import { HomePage, Suspense } from './LazyRoutes';
+import {
+    HomePage,
+    MyOrderDetailsPage,
+    MyOrdersPage,
+    ProfilePage,
+    Suspense,
+} from './LazyRoutes';
 import ProductDetailsPage from '@/pages/Client/ProductDetailsPage/Productdetails';
 import AdminLayout from '@/layouts/AdminLayout';
+import AccountLayout from '@/layouts/AccountLayout';
 
 const PublicRoutes = [
     {
@@ -19,12 +26,31 @@ const PublicRoutes = [
                 ),
             },
             {
-                path: 'products/id',
+                path: 'products/:id',
                 element: (
                     <Suspense>
                         <ProductDetailsPage />
                     </Suspense>
                 ),
+            },
+            // @Account
+            {
+                path: 'account',
+                element: (
+                    <Suspense>
+                        {/* <AuthProtected> */}
+                        <AccountLayout />
+                        {/* </AuthProtected> */}
+                    </Suspense>
+                ),
+                children: [
+                    { path: '', element: <ProfilePage /> },
+                    { path: 'my-orders', element: <MyOrdersPage /> },
+                    {
+                        path: 'my-orders/:id',
+                        element: <MyOrderDetailsPage />,
+                    },
+                ],
             },
         ],
     },
