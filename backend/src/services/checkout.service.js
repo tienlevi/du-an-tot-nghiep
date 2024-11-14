@@ -11,7 +11,7 @@ export const createPaymentUrlWithVNpay = async (req, res, next) => {
   const locale = "en";
   const totalPrice = req.body.totalPrice;
   const paymentMethod = PAYMENT_METHOD.CARD;
-  const datacache = { ...req.body, paymentMethod, totalPrice: totalPrice / 25 };
+  const datacache = { ...req.body, paymentMethod, totalPrice: totalPrice };
   const order = await Order.create(datacache);
 
   const vnpUrl = createVpnUrl({

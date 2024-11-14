@@ -10,12 +10,15 @@ const OrderItemSchema = new mongoose.Schema(
       required: true,
       ref: "Product",
     },
+    variantId: mongoose.Schema.Types.ObjectId,
     name: {
       type: String,
       required: true,
     },
     size: { type: String, required: true },
     color: { type: String, required: true },
+    category: { type: String, required: true },
+    tags: [{ type: String, required: true }],
     quantity: {
       type: Number,
       required: true,
@@ -48,7 +51,7 @@ const OrderItemSchema = new mongoose.Schema(
 
 const orderSchema = new mongoose.Schema(
   {
-    user: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
@@ -93,8 +96,8 @@ const orderSchema = new mongoose.Schema(
     },
     canceledBy: {
       type: String,
-      default: ROLE.USER,
-      enum: Object.values(ROLE),
+      default: "none",
+      enum: [...Object.values(ROLE), "none"],
     },
     description: {
       type: String,

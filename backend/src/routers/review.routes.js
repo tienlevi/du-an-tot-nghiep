@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { reviewControllers } from "../controllers/index.js";
-import { authenicate } from "../middleware/authenticateMiddleware.js";
+import { authenticate } from "../middleware/authenticateMiddleware.js";
 import { authorsize } from "../middleware/authorizeMiddleware.js";
 import { ROLE } from "../constants/role.js";
 
@@ -14,7 +14,7 @@ ReviewRouter.get("/all/:id", reviewControllers.getAllReviewByProductId);
 // Post
 ReviewRouter.post(
   "/",
-  authenicate,
+  authenticate,
   authorsize(ROLE.ADMIN),
   reviewControllers.createReview
 );

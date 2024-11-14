@@ -7,6 +7,7 @@ import notFoundHandler from "./errors/notFoundHandler.js";
 import errorHandler from "./errors/errorHandle.js";
 import { envConfig } from "./config/env.js";
 import { initializeApp } from "firebase/app";
+import { handleInsertData } from "./data/index.js";
 
 const app = express();
 
@@ -15,7 +16,23 @@ initializeApp(envConfig.FIREBASE);
 
 // middleware
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (
+        ["http://localhost:5173", "http://localhost:3000"].indexOf(origin) !==
+          -1 ||
+        !origin
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    optionsSuccessStatus: 200,
+  })
+);
 app.use(morgan("tiny"));
 
 app.use(express.urlencoded({ extended: true }));
@@ -26,6 +43,7 @@ connectDB(envConfig.DB_URL);
 
 // routers
 app.use("/api", router);
+app.use("/api/import-data", handleInsertData);
 app.use(notFoundHandler);
 app.use(errorHandler);
 

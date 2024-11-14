@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+const environment = process.env.NODE_ENV || "development";
 const variantSchema = new mongoose.Schema({
   color: { type: mongoose.Schema.Types.ObjectId, ref: "Color", required: true },
   size: { type: mongoose.Schema.Types.ObjectId, ref: "Size", required: true },

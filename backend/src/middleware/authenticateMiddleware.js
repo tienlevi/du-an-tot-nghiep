@@ -2,7 +2,7 @@ import { envConfig } from "../config/env.js";
 import { UnAuthenticatedError } from "../errors/customError.js";
 import jwt from "jsonwebtoken";
 
-export const authenicate = (req, res, next) => {
+export const authenticate = (req, res, next) => {
   const authHeader = req.headers.authorization || req.headers.Authorizations;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -22,8 +22,7 @@ export const authenicate = (req, res, next) => {
       return next(new UnAuthenticatedError("Token verification failed."));
     }
     const { userId, role } = decoded;
-
-
+    
     req.userId = userId;
     req.role = role;
 

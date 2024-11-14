@@ -4,7 +4,6 @@ import User from "../models/user.js";
 import customResponse from "../helpers/response.js";
 import bcrypt from "bcryptjs";
 import _ from "lodash";
-import jwt from "jsonwebtoken";
 import { envConfig } from "../config/env.js";
 import { generateToken } from "./token.service.js";
 
@@ -51,7 +50,7 @@ export const login = async (req, res, next) => {
   }
 
   const accessToken = generateToken(payload, envConfig.JWT_SECRET, "1d");
-
+  
   return res.status(StatusCodes.OK).json(
     customResponse({
       data: { user: foundedUser, accessToken },

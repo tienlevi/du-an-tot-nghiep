@@ -1,30 +1,30 @@
 import { Router } from "express";
 import { userControllers } from "../controllers/index.js";
-import { authenicate } from "../middleware/authenticateMiddleware.js";
+import { authenticate } from "../middleware/authenticateMiddleware.js";
 import upload from "../middleware/multerMiddleware.js";
 
 const userRouter = Router();
 
 // Get
-userRouter.get("/profile", authenicate, userControllers.getProfile);
+userRouter.get("/profile", authenticate, userControllers.getProfile);
 
 // Post
 
 // Patch
 userRouter.patch(
   "/changePassword",
-  authenicate,
+  authenticate,
   userControllers.changePassword
 );
 userRouter.patch(
   "/forgotPassword",
-  authenicate,
+  authenticate,
   userControllers.forgotPassword
 );
 
 userRouter.patch(
   "/",
-  authenicate,
+  authenticate,
   upload.fields([{ name: "avatar", maxCount: 1 }]),
   userControllers.updateProfile
 );

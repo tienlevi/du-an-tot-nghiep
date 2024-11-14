@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { tagControllers } from "../controllers/index.js";
-import { authenicate } from "../middleware/authenticateMiddleware.js";
+import { authenticate } from "../middleware/authenticateMiddleware.js";
 import { authorsize } from "../middleware/authorizeMiddleware.js";
 import { ROLE } from "../constants/role.js";
 
@@ -12,7 +12,7 @@ TagRouter.get("/:id", tagControllers.getTag);
 // Post
 TagRouter.post(
   "/",
-  authenicate,
+  authenticate,
   authorsize(ROLE.ADMIN),
   tagControllers.createTag
 );
@@ -20,7 +20,7 @@ TagRouter.post(
 // Patch
 TagRouter.patch(
   "/:id",
-  authenicate,
+  authenticate,
   authorsize(ROLE.ADMIN),
   tagControllers.updateTag
 );
