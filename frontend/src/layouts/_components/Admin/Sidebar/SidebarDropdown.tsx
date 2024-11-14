@@ -13,7 +13,7 @@ const SidebarDropdown = ({ item }: { item: IChildrenItem[] }) => {
                             to={menuItem.route}
                             className={({ isActive }) => {
                                 const classActive = isActive ? 'text-blue-700' : '';
-                                return `group flex items-center gap-2.5 rounded-md px-4 text-[12px] font-thin duration-300 ease-in-out hover:text-white ${classActive}`;
+                                return `group flex items-center gap-2.5 rounded-md px-4 text-[12px] text-white font-thin duration-300 ease-in-out hover:text-blue-700 ${classActive}`;
                             }}
                         >
                             {menuItem.label}

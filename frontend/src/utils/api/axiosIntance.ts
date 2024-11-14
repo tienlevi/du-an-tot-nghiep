@@ -1,15 +1,13 @@
 import axios from 'axios';
 import { getAccessToken, setAccessToken } from './apiHelper';
-import queryString from 'query-string';
-import { AUTH_ENDPOINT } from '~/constants/endpoint';
-import { IAxiosResponse } from '~/types/AxiosResponse';
-import { Params } from '~/types/Api';
+import { AUTH_ENDPOINT } from '@/constants/endpoint';
+import { IAxiosResponse } from '@/types/AxiosResponse';
+// import { Params } from '@/types/Api';
 
 const axiosOptions = {
     baseURL: import.meta.env.VITE_REACT_API_URL,
     // headers: getContentType(),
     withCredentials: true,
-    paramsSerializer: (params: Params) => queryString.stringify(params),
 };
 const instance = axios.create(axiosOptions);
 
@@ -23,7 +21,7 @@ instance.interceptors.request.use(
 
         return config;
     },
-    (error) => Promise.reject(error)
+    (error) => Promise.reject(error),
 );
 
 instance.interceptors.response.use(
@@ -31,13 +29,17 @@ instance.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
 
-        if (error.response.status === 401 && error.config && !originalRequest._isRetry) {
+        if (
+            error.response.status === 401 &&
+            error.config &&
+            !originalRequest._isRetry
+        ) {
             originalRequest._isRetry = true;
 
             try {
-                const { data } = await instance.post<IAxiosResponse<{ accessToken: string }>>(
-                    `${AUTH_ENDPOINT.REFRESH}`
-                );
+                const { data } = await instance.post<
+                    IAxiosResponse<{ accessToken: string }>
+                >(`${AUTH_ENDPOINT.REFRESH}`);
                 setAccessToken(data.data.accessToken);
                 originalRequest.headers.Authorization = `Bearer ${data.data.accessToken}`;
                 return instance.request(originalRequest);
@@ -46,7 +48,7 @@ instance.interceptors.response.use(
             }
         }
         throw error;
-    }
+    },
 );
 
 export default instance;

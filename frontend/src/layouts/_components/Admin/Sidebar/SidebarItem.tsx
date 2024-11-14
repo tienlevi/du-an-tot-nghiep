@@ -33,14 +33,14 @@ const SidebarItem: FC<ISidebarItem> = ({ item }) => {
             <li>
                 <span
                     onClick={handleClick}
-                    className={`${isItemActive ? 'bg-graydark dark:bg-meta-4' : ''} group relative flex gap-2.5 rounded-sm px-4 py-2 text-[13px] font-thin capitalize text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4`}
+                    className={`${isItemActive ? 'bg-graydark dark:bg-meta-4' : ''} group relative flex gap-2.5 rounded-sm px-4 py-2 text-[13px] font-medium capitalize text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4`}
                 >
                     <div className='flex w-full gap-2'>
                         {item.icon}
                         {item.children || !item.route ? (
                             item.label
                         ) : (
-                            <NavLink className='w-full' to={item.route}>
+                            <NavLink className='w-full ' to={item.route}>
                                 {item.label}
                             </NavLink>
                         )}

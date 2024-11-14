@@ -6,6 +6,8 @@ import {
     MyOrderDetailsPage,
     MyOrdersPage,
     ProfilePage,
+    LoginPage,
+    RegisterPage,
     Suspense,
 } from './LazyRoutes';
 import ProductDetailsPage from '@/pages/Client/ProductDetailsPage/Productdetails';
@@ -54,6 +56,23 @@ const PublicRoutes = [
             },
         ],
     },
+    {
+        path: '/login',
+        element: (
+            <Suspense>
+                <LoginPage />
+            </Suspense>
+        ),
+    },
+    {
+        path: '/register',
+        element: (
+            <Suspense>
+                <RegisterPage />
+            </Suspense>
+        ),
+    },
+
     { path: '/admin', element: <AdminLayout /> },
     { path: '*', element: <Navigate to={'/404'} /> },
     { path: '/404', element: <NotFound /> },

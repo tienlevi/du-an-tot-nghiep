@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { QUERY_KEY } from '@/constants/queryKey';
 import AuthService from '@/services/auth.service';
-import { logout } from '@/store/slice/authSlice';
+import { doLogout } from '@/store/slice/authSlice';
 import showMessage from '@/utils/ShowMessage';
 
 const useLogout = () => {
@@ -16,14 +16,14 @@ const useLogout = () => {
         });
         localStorage.removeItem('user');
         localStorage.removeItem('accessToken');
-        dispatch(logout());
+        dispatch(doLogout());
         navigator('/');
         showMessage('Logged out!', 'info');
         queryClient.removeQueries({ queryKey: [QUERY_KEY.USERS] });
         queryClient.resetQueries();
     };
     return useMutation({
-        mutationFn: () => AuthService.logout(),
+        mutationFn: () => AuthService.doLogout(),
         onSuccess: handleLogout,
     });
 };

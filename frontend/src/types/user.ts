@@ -1,9 +1,14 @@
-export interface User {
+export type IUser = {
   _id: string;
-  name?: string;
-  email?: string;
-  password?: string;
-  avatar?: string;
-  role?: string;
-  phone?:string;
-}
+  email: string;
+  name: string;
+  role: string;
+  avatar: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ILoginResponse = {
+  accessToken: string;
+  user: IUser;
+};
