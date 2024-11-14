@@ -16,7 +16,23 @@ initializeApp(envConfig.FIREBASE);
 
 // middleware
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (
+        ["http://localhost:5173", "http://localhost:3000"].indexOf(origin) !==
+          -1 ||
+        !origin
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    optionsSuccessStatus: 200,
+  })
+);
 app.use(morgan("tiny"));
 
 // connect db

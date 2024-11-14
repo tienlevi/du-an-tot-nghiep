@@ -10,8 +10,8 @@ import { generateToken } from "./token.services.js";
 
 // @POST register
 export const register = async (req, res, next) => {
-  const foundeduser = User.findOne({ email: req.body.email }).lean();
-  if (!foundeduser) {
+  const foundeduser = await User.findOne({ email: req.body.email }).lean();
+  if (foundeduser) {
     throw new DuplicateError("Email đã tồn tại!");
   }
   const user = await User.create(req.body);
