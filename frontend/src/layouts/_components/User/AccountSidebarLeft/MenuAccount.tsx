@@ -25,7 +25,7 @@ const MenuAccount = ({ isAdmin }: { isAdmin: boolean }) => {
 
                 <button
                     onClick={() => handleLogout.mutate()}
-                    className="mt-5 border p-2 transition-transform duration-200 ease-in-out hover:border-[#16bcdc] active:-translate-y-3"
+                    className="mt-5 border p-2 transition-transform duration-200 ease-in-out hover:border-[#da291c] active:-translate-y-3"
                 >
                     Đăng xuất
                 </button>

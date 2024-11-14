@@ -4,9 +4,9 @@ import TextArea from 'antd/es/input/TextArea';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import WrapperList from '~/components/_common/WrapperList';
-import useCancelOrder from '~/hooks/orders/Mutations/useCancelOrder';
-import showMessage from '~/utils/ShowMessage';
+import WrapperList from '@/components/_common/WrapperList';
+import useCancelOrder from '@/hooks/orders/Mutations/useCancelOrder';
+import showMessage from '@/utils/ShowMessage';
 
 const schemaFormCancelOrder = z.object({
     reason: z.string({ message: 'You need to tell us the reason!' }),
@@ -72,64 +72,85 @@ const PopupFormCancelOrder = ({ id }: { id: string }) => {
 
     return (
         <>
-            <Button onClick={showModal} type='primary' danger>
+            <Button onClick={showModal} type="primary" danger>
                 Hủy Đơn Hàng
             </Button>
-            <Modal open={isModalOpen} footer='' onCancel={handleCancel}>
-                <WrapperList classic className='m-0' title='Tại sao bạn muốn hủy đơn hàng này?'>
+            <Modal open={isModalOpen} footer="" onCancel={handleCancel}>
+                <WrapperList
+                    classic
+                    className="m-0"
+                    title="Tại sao bạn muốn hủy đơn hàng này?"
+                >
                     <Form
                         onFinish={handleSubmit(onSubmit)}
-                        className='w-full'
-                        name='layout-multiple-horizontal'
-                        layout='vertical'
+                        className="w-full"
+                        name="layout-multiple-horizontal"
+                        layout="vertical"
                     >
                         <Form.Item
                             validateStatus={errors.reason ? 'error' : ''}
                             help={errors.reason?.message}
-                            label='Lí do'
-                            name='horizontal'
+                            label="Lí do"
+                            name="horizontal"
                             required
                         >
                             <Controller
-                                name='reason'
+                                name="reason"
                                 control={control}
                                 render={({ field }) => (
-                                    <Radio.Group {...field} className='flex flex-col'>
-                                        <Radio value='Sản phẩm không giống như kì vọng'>
+                                    <Radio.Group
+                                        {...field}
+                                        className="flex flex-col"
+                                    >
+                                        <Radio value="Sản phẩm không giống như kì vọng">
                                             Sản phẩm không giống như kì vọng
                                         </Radio>
-                                        <Radio value='Không đủ tài chính để thanh toán đơn hàng'>
-                                            Không đủ tài chính để thanh toán đơn hàng
+                                        <Radio value="Không đủ tài chính để thanh toán đơn hàng">
+                                            Không đủ tài chính để thanh toán đơn
+                                            hàng
                                         </Radio>
-                                        <Radio value='Đổi ý không muốn mua sản phẩm này nữa'>
-                                            Đổi ý không muốn mua sản phẩm này nữa
+                                        <Radio value="Đổi ý không muốn mua sản phẩm này nữa">
+                                            Đổi ý không muốn mua sản phẩm này
+                                            nữa
                                         </Radio>
-                                        <Radio value='Không muốn tiết lộ'>Không muốn tiết lộ</Radio>
-                                        <Radio value='orther'>Khác:</Radio>
+                                        <Radio value="Không muốn tiết lộ">
+                                            Không muốn tiết lộ
+                                        </Radio>
+                                        <Radio value="orther">Khác:</Radio>
                                     </Radio.Group>
                                 )}
                             />
                         </Form.Item>
                         {visible && (
                             <Form.Item
-                                validateStatus={errors.description ? 'error' : ''}
+                                validateStatus={
+                                    errors.description ? 'error' : ''
+                                }
                                 help={errors.description?.message}
-                                label='Lí do khác'
+                                label="Lí do khác"
                             >
                                 <Controller
-                                    name='description'
+                                    name="description"
                                     control={control}
                                     render={({ field }) => (
-                                        <TextArea {...field} rows={5} placeholder='Điền lí do khác tại đây ...' />
+                                        <TextArea
+                                            {...field}
+                                            rows={5}
+                                            placeholder="Điền lí do khác tại đây ..."
+                                        />
                                     )}
                                 />
                             </Form.Item>
                         )}
-                        <Flex align='end' justify='end' gap='small'>
-                            <Button onClick={handleCancel} type='text'>
+                        <Flex align="end" justify="end" gap="small">
+                            <Button onClick={handleCancel} type="text">
                                 Thoát
                             </Button>
-                            <Button htmlType='submit' loading={isPending} type='primary'>
+                            <Button
+                                htmlType="submit"
+                                loading={isPending}
+                                type="primary"
+                            >
                                 Hủy Đơn Hàng
                             </Button>
                         </Flex>

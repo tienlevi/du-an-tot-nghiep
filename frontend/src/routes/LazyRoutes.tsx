@@ -13,6 +13,14 @@ export const RegisterPage = lazy(() => import('@/pages/Client/Auth/Register'));
 
 // @admin page
 export const DashboardPage = lazy(() => import('../pages/Admin/_dashboard_'));
+export const ProductsListAll = lazy(() => import('@/pages/Admin/_product_'));
+
+export const CreateProduct = lazy(
+    () => import('@/pages/Admin/_product_/CreateProduct'),
+);
+// export const UpdateProduct = lazy(
+//     () => import('@/pages/Admins/_product_/UpdateProduct'),
+// );
 
 // @suspense
 export const Suspense = ({ children }: { children: React.ReactNode }) => {

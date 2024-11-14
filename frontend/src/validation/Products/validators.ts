@@ -1,6 +1,9 @@
-import { IProductFiles, IProductVariation } from '~/types/Product';
+import { IProductFiles, IProductVariation } from '@/types/Product';
 import { errorMessage } from './Product';
-import { ACCEPT_FILE_TYPE, MAX_SIZE } from '~/pages/Admins/_product_/Helper/_helper_';
+import {
+    ACCEPT_FILE_TYPE,
+    MAX_SIZE,
+} from '@/pages/Admin/_product_/Helper/_helper_';
 
 /* eslint-disable */
 export const imagesValidator = async (_: any, images: IProductFiles) => {
@@ -14,7 +17,9 @@ export const imagesValidator = async (_: any, images: IProductFiles) => {
             if (file?.size >= MAX_SIZE) {
                 return errorMessage('Kích cỡ ảnh cần nhỏ hơn 5MB!');
             } else if (file?.type && !ACCEPT_FILE_TYPE.includes(file.type)) {
-                return errorMessage('Chỉ nhận những ảnh có đuôi png, jpg và jpeg!');
+                return errorMessage(
+                    'Chỉ nhận những ảnh có đuôi png, jpg và jpeg!',
+                );
             }
         }
     }
@@ -27,10 +32,17 @@ export const thumbnailValidator = async (_: any, thumbnail: IProductFiles) => {
         return errorMessage('Hãy chọn ảnh cho sản phẩm!');
     }
     if (thumbnail && thumbnail.fileList && thumbnail.fileList.length > 0) {
-        if (thumbnail && thumbnail.file.size && thumbnail?.file.size >= MAX_SIZE) {
+        if (
+            thumbnail &&
+            thumbnail.file.size &&
+            thumbnail?.file.size >= MAX_SIZE
+        ) {
             return errorMessage('Kích cỡ ảnh cần nhỏ hơn 5MB!');
         }
-        if (thumbnail?.file.type && !ACCEPT_FILE_TYPE.includes(thumbnail?.file.type)) {
+        if (
+            thumbnail?.file.type &&
+            !ACCEPT_FILE_TYPE.includes(thumbnail?.file.type)
+        ) {
             return errorMessage('Chỉ nhận những ảnh có đuôi png, jpg và jpeg!');
         }
     }
@@ -53,11 +65,16 @@ export const brandValidator = () => {
     return { required: true, message: 'Hãy chọn thương hiệu!' };
 };
 
-export const variationsValidator = async (_: any, variations: IProductVariation[]) => {
+export const variationsValidator = async (
+    _: any,
+    variations: IProductVariation[],
+) => {
     if (!variations || variations.length < 1) {
         return errorMessage('Hãy thêm ít nhất 1 biến thể cho sản phẩm!');
     }
-    const variationEmpty = variations.some((variation) => variation === undefined);
+    const variationEmpty = variations.some(
+        (variation) => variation === undefined,
+    );
     if (variationEmpty) {
         return errorMessage('Hãy thêm ít nhất 1 biến thể cho sản phẩm!');
     }
@@ -73,10 +90,17 @@ export const variationsThumbnailValidator = async (_: any, thumbnail: any) => {
         thumbnail.fileList.length > 0 &&
         (thumbnail.fileList[0] as any).originFileObj
     ) {
-        if (thumbnail && thumbnail.file.size && thumbnail.file.size >= MAX_SIZE) {
+        if (
+            thumbnail &&
+            thumbnail.file.size &&
+            thumbnail.file.size >= MAX_SIZE
+        ) {
             return errorMessage('File tải lên phải nhỏ hơn 5MB!');
         }
-        if (thumbnail?.file.type && !ACCEPT_FILE_TYPE.includes(thumbnail?.file.type)) {
+        if (
+            thumbnail?.file.type &&
+            !ACCEPT_FILE_TYPE.includes(thumbnail?.file.type)
+        ) {
             return errorMessage('png, jpg and jpeg!');
         }
     }
