@@ -83,7 +83,7 @@ const ProductDetailsPage = () => {
                 setSelectedSize(defaultVariant);
                 setSelectedImage({
                     index: 0,
-                    image: defaultColor.image
+                    image: defaultColor.image,
                 });
                 setSelectedColor(defaultColor);
             }
@@ -121,10 +121,10 @@ const ProductDetailsPage = () => {
             image: item.image,
         });
     };
-    const hasAvailableStock = variantsList?.some((variant) => 
-        variant.colors.some((color) => color.stock > 0)
-      );
-      
+    const hasAvailableStock = variantsList?.some((variant) =>
+        variant.colors.some((color) => color.stock > 0),
+    );
+
     return (
         data && (
             <div className="max-w-screen-default default:mx-auto mx-4">
@@ -265,7 +265,7 @@ const ProductDetailsPage = () => {
                                                     return (
                                                         <button
                                                             key={index}
-                                                            className={`relative mr-1 ${!hasStock ? 'text-[#777777]' :''} w-8 h-8 text-xs rounded-lg ${selectedSize?.size.name === item.size.name ? ' bg-hover text-white font-semibold' : 'border-[1px]'}`}
+                                                            className={`relative mr-1 ${!hasStock ? 'text-[#777777]' : ''} w-8 h-8 text-xs rounded-lg ${selectedSize?.size.name === item.size.name ? ' bg-hover text-white font-semibold' : 'border-[1px]'}`}
                                                             onClick={() =>
                                                                 handleChooseSize(
                                                                     item,
@@ -308,9 +308,9 @@ const ProductDetailsPage = () => {
                                                                           item,
                                                                       )
                                                             }
-                                                            className={`relative  mr-2 ${item.stock === 0 ? 'bg-opacity-60 border-opacity-60' : 'cursor-pointer'} w-8  h-8 rounded-lg ${selectedColor?._id === item._id ? `border-2 border-hover ` : 'border-global border-2'}`}
+                                                            className={`relative  mr-2 ${item.stock === 0 ? 'bg-opacity-60 border-opacity-60' : 'cursor-pointer'} w-8  h-8 rounded-lg ${selectedColor?._id === item._id ? `border-2 border-hover ` : 'border-[#eee9e9] border-2'}`}
                                                             style={{
-                                                                backgroundColor: `${item.color.hex}`
+                                                                backgroundColor: `${item.color.hex}`,
                                                             }}
                                                         >
                                                             {item.stock ===
@@ -353,7 +353,9 @@ const ProductDetailsPage = () => {
                                         }}
                                     >
                                         <Button
-                                            disabled={!variantsList || !selectedSize}
+                                            disabled={
+                                                !variantsList || !selectedSize
+                                            }
                                             block
                                             icon={
                                                 <ShoppingCartOutlined className="text-2xl" />
