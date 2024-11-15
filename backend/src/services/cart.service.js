@@ -10,26 +10,44 @@ export const getMyCart = async (req, res, next) => {
   const userId = req.userId;
   const cartUser = await Cart.findOne({
     userId: new mongoose.Types.ObjectId(userId),
-  }).populate({
-    path: "items.product",
-  });
+  })
+    .populate({
+      path: "items.product",
+      populate: [{ path: "variants.color" }, { path: "variants.size" }],
+    })
+    .lean();
   if (!cartUser)
     throw new NotFoundError("Not found cart or cart is not exist.");
-  console.log(cartUser);
   const checkStock = cartUser.items
     .filter((itemEl) => itemEl.product !== null)
-    .filter((item) => {
-      const stock = item.product.variants.find(
-        (el) => el._id.toString() === item.variant.toString()
-      ).stock;
-      if (item.quantity > stock) {
-        item.quantity = stock;
+    .map((item) => {
+      const variant = item.product.variants.find((el) => {
+        return el._id.equals(item.variant);
+      });
+      console.log(variant);
+      if (!variant) {
+        return null;
       }
-      return item;
-    });
+      if (item.quantity > variant.stock) {
+        item.quantity = variant.stock;
+      }
+      return {
+        ...item,
+        variantObj: {
+          ...variant,
+          color: variant.color.name,
+          size: variant.size.name,
+        },
+      };
+    })
+    .filter((el) => el !== null);
 
-  cartUser.items = checkStock;
-  await cartUser.save();
+  await Cart.findOneAndUpdate(
+    { userId: new mongoose.Types.ObjectId(userId) },
+    { items: checkStock },
+    { new: true }
+  );
+
   const itemsResponse = checkStock.map((item) => {
     const newItem = {
       productId: item.product._id,
@@ -40,6 +58,7 @@ export const getMyCart = async (req, res, next) => {
       image: item.product.variants[0].image,
       description: item.product.description,
       discount: item.product.discount,
+      ...item.variantObj,
     };
     return newItem;
   });
@@ -70,9 +89,7 @@ export const addToCart = async (req, res, next) => {
   if (!product) throw new BadRequestError(`Not found product`);
   if (quantity < 1) throw new BadRequestError(`Quantity must be at least 1`);
 
-  const item = product.variants.find(
-    (item) => item._id.toString() === variantId.toString()
-  );
+  const item = product.variants.find((item) => item._id.equals(variantId));
   if (!item) throw new BadRequestError(`Not found variant`);
 
   if (quantity > item.stock) quantity = item.stock;
@@ -82,8 +99,8 @@ export const addToCart = async (req, res, next) => {
       userId,
       items: [{ product: productId, variant: variantId, quantity }],
     });
-    updatedCart = await newCart.save();
-    return updatedCart;
+    await newCart.save();
+    return newCart;
   }
 
   if (currentCart && currentCart.items.length > 0) {
@@ -115,7 +132,7 @@ export const addToCart = async (req, res, next) => {
     );
   }
 
-  return null;
+  return updatedCart;
 };
 
 // @Remove one cart item
@@ -155,8 +172,9 @@ export const updateCartItemQuantity = async (req, res, next) => {
   });
   if (!product) throw new BadRequestError(`Not found product`);
 
-  if (req.body.quantity < 1)
-    throw new BadRequestError(`Quantity must be at least 1`);
+  if (req.body.quantity <= 0) {
+    req.body.quantity = 1;
+  }
   if (req.body.quantity > product.variants[0].stock)
     req.body.quantity = product.variants[0].stock;
 
