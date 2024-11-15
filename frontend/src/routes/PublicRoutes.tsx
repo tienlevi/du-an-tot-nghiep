@@ -10,6 +10,7 @@ import {
     RegisterPage,
     Suspense,
     ProductDetailPage,
+    ShippingPage,
 } from './LazyRoutes';
 import AdminLayout from '@/layouts/AdminLayout';
 import AccountLayout from '@/layouts/AccountLayout';
@@ -68,6 +69,16 @@ const PublicRoutes = [
                     </Suspense>
                 ),
             },
+            // @CheckOut
+            {
+                path: `${MAIN_ROUTES.SHIPPING}`,
+                element: (
+                    <Suspense>
+                        <ShippingPage/>
+                    </Suspense>
+                ),
+            },
+
 
             // @Account
             {

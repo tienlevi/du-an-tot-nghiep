@@ -11,7 +11,7 @@ export const MyOrderDetailsPage = lazy(
 );
 export const LoginPage = lazy(() => import('@/pages/Client/Auth/Login'));
 export const RegisterPage = lazy(() => import('@/pages/Client/Auth/Register'));
-
+export const ShippingPage = lazy(()=> import('@/pages/Client/Checkout/Shipping'))
 // @admin page
 export const DashboardPage = lazy(() => import('../pages/Admin/_dashboard_'));
 export const ProductsListAll = lazy(() => import('@/pages/Admin/_product_'));
