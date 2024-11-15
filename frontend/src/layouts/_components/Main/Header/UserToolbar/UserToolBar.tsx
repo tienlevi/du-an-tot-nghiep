@@ -26,7 +26,7 @@ export default function UserToolBar() {
             ? [
                   {
                       label: (
-                          <Link to={'/admin/dashboard'} className="text-global">
+                          <Link to={'/admin'} className="text-global">
                               Quản trị
                           </Link>
                       ),

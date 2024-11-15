@@ -89,9 +89,7 @@ export const addToCart = async (req, res, next) => {
   if (!product) throw new BadRequestError(`Not found product`);
   if (quantity < 1) throw new BadRequestError(`Quantity must be at least 1`);
 
-  const item = product.variants.find(
-    (item) => item._id.toString() === variantId.toString()
-  );
+  const item = product.variants.find((item) => item._id.equals(variantId));
   if (!item) throw new BadRequestError(`Not found variant`);
 
   if (quantity > item.stock) quantity = item.stock;
@@ -174,8 +172,9 @@ export const updateCartItemQuantity = async (req, res, next) => {
   });
   if (!product) throw new BadRequestError(`Not found product`);
 
-  if (req.body.quantity < 1)
-    throw new BadRequestError(`Quantity must be at least 1`);
+  if (req.body.quantity <= 0) {
+    req.body.quantity = 1;
+  }
   if (req.body.quantity > product.variants[0].stock)
     req.body.quantity = product.variants[0].stock;
 
