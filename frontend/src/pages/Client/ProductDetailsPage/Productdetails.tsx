@@ -1,6 +1,7 @@
 import ShopBenefits from '@/components/ShopBenefits';
 import { useMutationAddToCart } from '@/hooks/cart/Mutations/useAddCart';
 import { useGetDetailProduct } from '@/hooks/Products/Queries/useGetDetailProduct';
+import { useTypedSelector } from '@/store/store';
 import { Currency } from '@/utils/FormatCurreny';
 import showMessage from '@/utils/ShowMessage';
 import { HeartOutlined, ShoppingCartOutlined } from '@ant-design/icons';
@@ -16,7 +17,7 @@ import {
     Tooltip,
 } from 'antd';
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 interface TransformedVariant {
     size: {
@@ -28,6 +29,8 @@ interface TransformedVariant {
 const ProductDetailsPage = () => {
     const { id } = useParams();
     const { data } = useGetDetailProduct(id ? id : '');
+    const isAuth = useTypedSelector(state => state.auth.authenticate)
+    const navigate = useNavigate()
     const [valueQuantity, setValueQuantity] = useState(1);
     const [selectedColor, setSelectedColor] = useState<{
         _id: string;
@@ -142,15 +145,20 @@ const ProductDetailsPage = () => {
         setValueQuantity(e ? e : 1);
     };
     const handleAddToCart = () => {
-       if(selectedColor){
-        mutate({
-            productId: id,
-            quantity: valueQuantity,
-            variantId: selectedColor._id,
-        });
-       }else{
-        showMessage('Bạn chưa chọn biến thể sản phẩm!', 'warning')
-       }
+      if(isAuth){
+        if(selectedColor){
+            mutate({
+                productId: id,
+                quantity: valueQuantity,
+                variantId: selectedColor._id,
+            });
+           }else{
+            showMessage('Bạn chưa chọn biến thể sản phẩm!', 'warning')
+           }
+      }else{
+        navigate('/login')
+        showMessage('Bạn cần đăng nhập trước khi mua hàng!','warning', 2000)
+      }
     };
     return (
         data && (
