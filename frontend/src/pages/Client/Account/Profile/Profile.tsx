@@ -1,3 +1,6 @@
+import StaticImages from '@/assets';
+import WrapperList from '@/components/_common/WrapperList';
+import useWindowSize from '@/hooks/_common/useWindowSize';
 import {
     DeleteOutlined,
     EyeOutlined,
@@ -9,7 +12,6 @@ import {
     ConfigProvider,
     Form,
     FormProps,
-    GetProp,
     Image,
     Input,
     Modal,
@@ -18,10 +20,6 @@ import {
     UploadProps,
 } from 'antd';
 import { useEffect, useState } from 'react';
-import StaticImages from '@/assets';
-import WrapperList from '@/components/_common/WrapperList';
-import useWindowSize from '@/hooks/_common/useWindowSize';
-import useSendResetPassword from '@/hooks/auth/useSendResetPassword';
 // import { useMutationUpdateProfle } from '@/hooks/profile/Mutations/useUpdateProfile';
 import useGetProfile from '@/hooks/profile/Queries/useGetProfile';
 import {
@@ -32,13 +30,14 @@ import {
 } from '@/pages/Admin/_product_/Helper/_helper_';
 import convertApiResponseToFileList from '@/pages/Admin/_product_/Helper/convertImageUrlToFileList';
 import { IProductFiles, IThumbnailAntd } from '@/types/Product';
-import showMessage from '@/utils/ShowMessage';
 import { errorMessage } from '@/validation/Products/Product';
+import useSendResetPassword from '@/hooks/Auth/Mutation/useSendResetPassword';
+import { useMutationUpdateProfle } from '@/hooks/profile/Mutations/useUpdateProfile';
 
 const Profile = () => {
     const [loading, setLoading] = useState(false);
 
-    // const { mutate: updateProfile, isPending } = useMutationUpdateProfle();
+    const { mutate: updateProfile, isPending } = useMutationUpdateProfle();
 
     const {
         mutate: sendResetPassword,
@@ -95,7 +94,7 @@ const Profile = () => {
             (values.avatar?.fileList[0] as IThumbnailAntd)?.originFileObj,
         );
 
-        // updateProfile(formDataUpdateProfile);
+        updateProfile(formDataUpdateProfile);
     };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -299,6 +298,7 @@ const Profile = () => {
                                         }}
                                     >
                                         <Button
+                                            loading={isPending}
                                             className="block w-full rounded-3xl bg-[#da291c] text-center text-white transition-colors duration-300 ease-linear hover:bg-[#da291c]"
                                             size="large"
                                             htmlType="submit"

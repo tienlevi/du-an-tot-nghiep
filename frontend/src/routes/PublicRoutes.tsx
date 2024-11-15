@@ -9,8 +9,8 @@ import {
     LoginPage,
     RegisterPage,
     Suspense,
+    ProductDetailPage,
 } from './LazyRoutes';
-import ProductDetailsPage from '@/pages/Client/ProductDetailsPage/Productdetails';
 import AdminLayout from '@/layouts/AdminLayout';
 import AccountLayout from '@/layouts/AccountLayout';
 import { MAIN_ROUTES } from '@/constants/router';
@@ -48,7 +48,7 @@ const PublicRoutes = [
                 path: 'products/:id',
                 element: (
                     <Suspense>
-                        <ProductDetailsPage />
+                        <ProductDetailPage/>
                     </Suspense>
                 ),
             },

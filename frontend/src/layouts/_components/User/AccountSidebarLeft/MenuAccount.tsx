@@ -1,4 +1,4 @@
-import useLogout from '@/hooks/Auth/useLogout';
+import useLogout from '@/hooks/Auth/Mutation/useLogout';
 import MenuItem from './MenuItem';
 import { ADMIN_ROUTES, MAIN_ROUTES } from '@/constants/router';
 

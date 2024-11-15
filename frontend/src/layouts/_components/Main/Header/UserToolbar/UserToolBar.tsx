@@ -1,6 +1,6 @@
 import CartDrawer from '@/components/CartDrawer';
 import { MAIN_ROUTES } from '@/constants/router';
-import useLogout from '@/hooks/Auth/useLogout';
+import useLogout from '@/hooks/Auth/Mutation/useLogout';
 import { doLogout } from '@/store/slice/authSlice';
 import { useAppDispatch, useTypedSelector } from '@/store/store';
 import {

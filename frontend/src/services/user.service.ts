@@ -1,8 +1,8 @@
 import { IAxiosResponse } from '@/types/AxiosResponse';
-import instance from '@/utils/api/axiosIntance';
 import { USER_ENDPOINT } from '@/constants/endpoint';
 import { IAllUsersResponse, IUserProfileResponse, IUsers } from '@/types/User ';
 import { Params } from '@/types/Api';
+import instance from '@/utils/api/axiosIntance';
 
 const userService = {
     async getProfile() {

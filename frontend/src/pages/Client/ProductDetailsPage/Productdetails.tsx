@@ -1,6 +1,8 @@
 import ShopBenefits from '@/components/ShopBenefits';
+import { useMutationAddToCart } from '@/hooks/cart/Mutations/useAddCart';
 import { useGetDetailProduct } from '@/hooks/Products/Queries/useGetDetailProduct';
 import { Currency } from '@/utils/FormatCurreny';
+import showMessage from '@/utils/ShowMessage';
 import { HeartOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import {
     Breadcrumb,
@@ -10,6 +12,7 @@ import {
     Divider,
     Flex,
     Image,
+    InputNumber,
     Tooltip,
 } from 'antd';
 import { useEffect, useState } from 'react';
@@ -25,6 +28,7 @@ interface TransformedVariant {
 const ProductDetailsPage = () => {
     const { id } = useParams();
     const { data } = useGetDetailProduct(id ? id : '');
+    const [valueQuantity, setValueQuantity] = useState(1);
     const [selectedColor, setSelectedColor] = useState<{
         _id: string;
         color: any;
@@ -90,6 +94,7 @@ const ProductDetailsPage = () => {
         }
     }, [data]);
     const handleChooseSize = (item: any) => {
+        setValueQuantity(1)
         let selectedColor = item.colors[0];
         if (selectedColor.stock === 0) {
             const availableColor = item.colors.find(
@@ -111,6 +116,7 @@ const ProductDetailsPage = () => {
     };
 
     const handleChooseColor = (item: any) => {
+        setValueQuantity(1)
         setSelectedColor({
             _id: item._id,
             color: item.color,
@@ -124,7 +130,28 @@ const ProductDetailsPage = () => {
     const hasAvailableStock = variantsList?.some((variant) =>
         variant.colors.some((color) => color.stock > 0),
     );
-
+    const { mutate } = useMutationAddToCart();
+    const handleIncrement = () => {
+        if (valueQuantity < (selectedColor?.stock ? selectedColor.stock : 0))
+            setValueQuantity(valueQuantity + 1);
+    };
+    const handleDecrement = () => {
+        if (valueQuantity > 1) setValueQuantity(valueQuantity - 1);
+    };
+    const onChangeInputQuantity = (e: number | null) => {
+        setValueQuantity(e ? e : 1);
+    };
+    const handleAddToCart = () => {
+       if(selectedColor){
+        mutate({
+            productId: id,
+            quantity: valueQuantity,
+            variantId: selectedColor._id,
+        });
+       }else{
+        showMessage('Bạn chưa chọn biến thể sản phẩm!', 'warning')
+       }
+    };
     return (
         data && (
             <div className="max-w-screen-default default:mx-auto mx-4">
@@ -310,7 +337,9 @@ const ProductDetailsPage = () => {
                                                             }
                                                             className={`w-10  ${item.stock === 0 ? 'bg-opacity-60 border-opacity-60 cursor-not-allowed' : 'cursor-pointer'} relative h-10 flex justify-center items-center border-[1px] mr-2 bg-[#f5f5f5] rounded-sm ${selectedColor?._id === item._id ? `border-black` : 'border-[#eee9e9] '}`}
                                                         >
-                                                            <div className={`border-[1px] p-0.5 rounded-full ${selectedColor?._id === item._id ? 'border-global': 'border-[#d3d3d3]'}`}>
+                                                            <div
+                                                                className={`border-[1px] p-0.5 rounded-full ${selectedColor?._id === item._id ? 'border-global' : 'border-[#d3d3d3]'}`}
+                                                            >
                                                                 <div
                                                                     className={` w-5  h-5 rounded-full ${item.stock === 0 && 'opacity-55'}`}
                                                                     style={{
@@ -332,6 +361,35 @@ const ProductDetailsPage = () => {
                                             Sản phẩm
                                         </span>
                                     </div>
+                                    {selectedColor && (
+                                        <div className="mb-[15px] flex w-[100%] items-center gap-[5px] md:mb-0 lg:w-[28%]">
+                                            <Button
+                                                onClick={handleDecrement}
+                                                disabled={valueQuantity < 2}
+                                                className="h-[48px] w-[48px]"
+                                            >
+                                                -
+                                            </Button>
+                                            <InputNumber
+                                                onChange={onChangeInputQuantity}
+                                                min={1}
+                                                max={selectedColor.stock || 1}
+                                                className="flex h-[48px] w-[58px] items-center"
+                                                value={valueQuantity}
+                                                controls={false}
+                                            />
+                                            <Button
+                                                onClick={handleIncrement}
+                                                disabled={
+                                                    valueQuantity ===
+                                                    selectedColor.stock
+                                                }
+                                                className="h-[48px] w-[48px]"
+                                            >
+                                                +
+                                            </Button>
+                                        </div>
+                                    )}
                                 </>
                             ) : (
                                 <div className="flex justify-center min-h-[20vh] items-center">
@@ -342,7 +400,7 @@ const ProductDetailsPage = () => {
                             )}
 
                             {/* ADD TO CART */}
-                            <Flex gap={15}>
+                            <Flex gap={15} className="mt-4">
                                 <div className="w-3/5">
                                     <ConfigProvider
                                         theme={{
@@ -358,6 +416,7 @@ const ProductDetailsPage = () => {
                                         }}
                                     >
                                         <Button
+                                            onClick={() => handleAddToCart()}
                                             disabled={
                                                 !variantsList || !selectedSize
                                             }

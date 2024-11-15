@@ -1,6 +1,6 @@
-import instance from "@/config/axios"
 import { IAxiosResponse } from "@/types/AxiosResponse"
 import { IProduct } from "@/types/ProductNew"
+import instance from "@/utils/api/axiosIntance"
 
 export const ProductServices = {
     async getProductBestSelling (){

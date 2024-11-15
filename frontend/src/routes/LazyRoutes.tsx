@@ -1,6 +1,7 @@
 import Loader from '@/utils/Loader';
 import React, { lazy } from 'react';
 export const HomePage = lazy(() => import('@/pages/Client/HomePage/Homepage'));
+export const ProductDetailPage = lazy(()=> import('@/pages/Client/ProductDetailsPage/Productdetails'))
 export const ProfilePage = lazy(() => import('@/pages/Client/Account/Profile'));
 export const MyOrdersPage = lazy(
     () => import('@/pages/Client/Account/MyOrders'),

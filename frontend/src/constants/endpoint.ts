@@ -29,8 +29,8 @@ export const CATEGORY_ENDPOINT = {
 export const CART_ENDPOINT = {
     GET: '/carts',
     ADDCART: '/carts/add',
-    UPDATEQUANTITY: '/carts/update_quantity',
-    REMOVEITEM: '/carts/remove',
+    UPDATEQUANTITY: '/carts/update-quantity',
+    REMOVEITEM: '/carts/remove-item',
 };
 export const BRAND_ENDPOINT = {
     ALL: '/brands/all',
