@@ -2,7 +2,6 @@ import { MAIN_ROUTES } from '@/constants/router';
 import { useCart } from '@/hooks/_common/useCart';
 import { useMutationRemoveItem } from '@/hooks/cart/Mutations/useRemoveOne';
 import { useUpdateQuantity } from '@/hooks/cart/Mutations/useUpdateQuantity';
-import useGetMyCart from '@/hooks/cart/Queries/useGetMyCart';
 import { Currency } from '@/utils/FormatCurreny';
 import {
     CloseOutlined,
@@ -19,12 +18,13 @@ import { Link } from 'react-router-dom';
 
 type PropsType = {
     children: React.ReactNode;
+    data: any;
+    isFetching: boolean
 };
-const CartDrawer = ({ children }: PropsType) => {
+const CartDrawer = ({ data, isFetching, children }: PropsType) => {
     const { cart, handleOpenCart, onClose } = useCart();
     const { handleRemoveCart, isPending } = useMutationRemoveItem();
     const { mutate: updateQuantity } = useUpdateQuantity();
-    const { data, isFetching } = useGetMyCart();
     const [quantityProduct, setQuantityProduct] = useState<
         { quantity: number; id: string }[]
     >([]);

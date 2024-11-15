@@ -1,6 +1,7 @@
 import CartDrawer from '@/components/CartDrawer';
 import { MAIN_ROUTES } from '@/constants/router';
 import useLogout from '@/hooks/Auth/Mutation/useLogout';
+import useGetMyCart from '@/hooks/cart/Queries/useGetMyCart';
 import { doLogout } from '@/store/slice/authSlice';
 import { useAppDispatch, useTypedSelector } from '@/store/store';
 import {
@@ -17,7 +18,7 @@ export default function UserToolBar() {
     const isAuth = useTypedSelector((state) => state.auth.authenticate);
     const dispatch = useAppDispatch();
     const handleLogout = useLogout();
-
+    const { data, isFetching } = useGetMyCart();
     const isAdmin = useTypedSelector(
         (state) => state.auth.user?.role === 'admin',
     );
@@ -82,14 +83,23 @@ export default function UserToolBar() {
                         </div>
                     </Dropdown>
 
-                    <CartDrawer>
+                    {data ? (
+                        <CartDrawer data={data} isFetching={isFetching}>
+                            <span className="flex flex-col items-center justify-center">
+                                <Badge count={data.items.length} overflowCount={10}>
+                                    <ShoppingCartOutlined className="text-2xl" />
+                                </Badge>
+                                <span className="text-sm">Giỏ hàng</span>
+                            </span>
+                        </CartDrawer>
+                    ) : (
                         <span className="flex flex-col items-center justify-center">
-                            <Badge count={1} overflowCount={10}>
+                            <Badge count={0} overflowCount={10} >
                                 <ShoppingCartOutlined className="text-2xl" />
                             </Badge>
                             <span className="text-sm">Giỏ hàng</span>
                         </span>
-                    </CartDrawer>
+                    )}
                 </>
             )}
             {!isAuth && (
