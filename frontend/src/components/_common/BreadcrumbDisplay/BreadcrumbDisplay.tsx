@@ -1,6 +1,6 @@
 import { Breadcrumb, ConfigProvider } from 'antd';
 import { useLocation } from 'react-router-dom';
-import Contact from '~/pages/Clients/Contact';
+// import Contact from '~/pages/Clients/Contact';
 
 // Function to translate English words to Vietnamese
 const translateToVietnamese = (word: string) => {
@@ -25,7 +25,8 @@ const BreadcrumbDisplay = ({ titleProduct }: { titleProduct?: string }) => {
         const { pathname } = location;
 
         // capitalize the first letter of the each segment
-        const capatilize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+        const capatilize = (s: string) =>
+            s.charAt(0).toUpperCase() + s.slice(1);
 
         // seperate the segments from the URL
         const pathnames = pathname
@@ -37,7 +38,7 @@ const BreadcrumbDisplay = ({ titleProduct }: { titleProduct?: string }) => {
                           .split('-')
                           .map((word) => capatilize(word))
                           .join(' ')
-                    : capatilize(item)
+                    : capatilize(item),
             );
 
         return (
@@ -48,19 +49,25 @@ const BreadcrumbDisplay = ({ titleProduct }: { titleProduct?: string }) => {
                     },
                 }}
             >
-                <div className='breadcrumb-container flex h-[60px] w-full items-center font-semibold'>
+                <div className="breadcrumb-container flex h-[60px] w-full items-center font-semibold">
                     <Breadcrumb
-                        separator='>'
+                        separator=">"
                         items={[
                             pathnames.length <= 0
                                 ? { title: translateToVietnamese('Home') }
-                                : { title: translateToVietnamese('Home'), href: '/' },
+                                : {
+                                      title: translateToVietnamese('Home'),
+                                      href: '/',
+                                  },
 
                             ...pathnames.map((name) => ({
                                 title:
-                                    name === pathnames[pathnames.length - 1] && titleProduct
+                                    name === pathnames[pathnames.length - 1] &&
+                                    titleProduct
                                         ? titleProduct
-                                        : translateToVietnamese(capatilize(name)),
+                                        : translateToVietnamese(
+                                              capatilize(name),
+                                          ),
                             })),
                         ]}
                     />

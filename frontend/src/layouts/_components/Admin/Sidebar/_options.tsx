@@ -68,7 +68,10 @@ export const menuGroups: IMenuItem[] = [
         label: 'Quản lý danh mục',
         children: [
             { label: 'Tất cả danh mục', route: ADMIN_ROUTES.CATEGORIES },
-            { label: 'Thêm mới danh mục', route: ADMIN_ROUTES.CATEGORIES_CREATE },
+            {
+                label: 'Thêm mới danh mục',
+                route: ADMIN_ROUTES.CATEGORIES_CREATE,
+            },
         ],
     },
     {
@@ -76,7 +79,10 @@ export const menuGroups: IMenuItem[] = [
         label: 'Quản lý thuộc tính',
         children: [
             { label: 'Tất cả thuộc tính', route: ADMIN_ROUTES.ATTRIBUTES },
-            { label: 'Thêm mới thuộc tính', route: ADMIN_ROUTES.ATTRIBUTES_CREATE },
+            {
+                label: 'Thêm mới thuộc tính',
+                route: ADMIN_ROUTES.ATTRIBUTES_CREATE,
+            },
         ],
     },
     {

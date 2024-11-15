@@ -63,3 +63,38 @@ export type IProductForm = {
     attributes: IAttribute[];
     variations: IProductVariation[];
 };
+
+export type IProductItem = {
+    isHide: boolean;
+    reviewCount: number;
+    _id: string;
+    name: string;
+    discount: number;
+    images: string[];
+    imageUrlRefs: string[];
+    thumbnail: string;
+    thumbnailUrlRef: string[];
+    status: string;
+    isAvailable: boolean;
+    isDeleted: boolean;
+    attributes: {
+        key: string;
+        value: string;
+        _id?: string;
+    }[];
+    rating: number;
+    reviewIds: string[];
+    variationIds: {
+        _id: string;
+        price: number;
+        image: string;
+        stock: number;
+        sku: string;
+        color: string;
+        productId: string;
+    }[];
+    brandId: string;
+    categoryId: string;
+    createdAt: string;
+    updatedAt: string;
+};

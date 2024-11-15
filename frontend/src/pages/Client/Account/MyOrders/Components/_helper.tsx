@@ -1,11 +1,11 @@
 /* eslint-disable no-nested-ternary */
-import { Button } from 'antd';
-import { OrderStatus, PaymentMethod } from '~/constants/enum';
+import { Button, ConfigProvider } from 'antd';
+import { OrderStatus, PaymentMethod } from '@/constants/enum';
 import ActionLink from './ActionLink';
-import OrderStatusTag from '~/components/OrderStatusTag';
-import { Currency } from '~/utils';
+import OrderStatusTag from '@/components/OrderStatusTag';
+import { Currency } from '@/utils';
 import dayjs from 'dayjs';
-import { MAIN_ROUTES } from '~/constants/router';
+import { MAIN_ROUTES } from '@/constants/router';
 import { Link, Params } from 'react-router-dom';
 import { TableProps } from 'antd/lib';
 import { ColumnType } from 'antd/es/table';
@@ -71,8 +71,14 @@ export const orderColumns = ({
         {
             title: 'Hình thức thanh toán',
             dataIndex: 'paymentMethod',
-            filteredValue: query.paymentMethod ? (query.paymentMethod as string).split(',') : undefined,
-            render: (text: PaymentMethod) => <span className='font-semibold'>{translatePaymentMethod(text)}</span>,
+            filteredValue: query.paymentMethod
+                ? (query.paymentMethod as string).split(',')
+                : undefined,
+            render: (text: PaymentMethod) => (
+                <span className="font-semibold">
+                    {translatePaymentMethod(text)}
+                </span>
+            ),
             filters: [
                 {
                     text: 'Online',
@@ -96,7 +102,9 @@ export const orderColumns = ({
                     : undefined
                 : undefined,
             showSorterTooltip: { target: 'full-header' },
-            filteredValue: query.totalPrice ? (query.totalPrice as string).split(',') : undefined,
+            filteredValue: query.totalPrice
+                ? (query.totalPrice as string).split(',')
+                : undefined,
             render: (value) => <span>{Currency.format(value)}</span>,
             sorter: (a: any, b: any) => a.totalPrice - b.totalPrice,
         },
@@ -104,7 +112,9 @@ export const orderColumns = ({
             title: 'Trạng thái',
             key: 'orderStatus',
             dataIndex: 'orderStatus',
-            filteredValue: query.orderStatus ? (query.orderStatus as string).split(',') : undefined,
+            filteredValue: query.orderStatus
+                ? (query.orderStatus as string).split(',')
+                : undefined,
             render: (value) => <OrderStatusTag status={value} />,
             filters: filterStatusItems,
         },
@@ -119,19 +129,35 @@ export const orderColumns = ({
                         : 'ascend'
                     : undefined
                 : undefined,
-            sorter: (a: any, b: any) => dayjs(a.createdAt).unix() - dayjs(b.createdAt).unix(),
-            render: (value) => <span>{dayjs(value).format('DD/MM/YYYY  hh-mm')}</span>,
+            sorter: (a: any, b: any) =>
+                dayjs(a.createdAt).unix() - dayjs(b.createdAt).unix(),
+            render: (value) => (
+                <span>{dayjs(value).format('DD/MM/YYYY  hh-mm')}</span>
+            ),
         },
         {
             title: 'Thao tác',
             render: (value, record) => (
                 <>
                     <Link to={`${MAIN_ROUTES.MY_ORDERS}/${record._id}`}>
-                        <Button type='primary' className='mr-2'>
-                            Xem chi tiết
-                        </Button>
+                        <ConfigProvider
+                            theme={{
+                                components: {
+                                    Button: {
+                                        defaultBg: '#da291c',
+                                        defaultColor: '#ffffff',
+                                        defaultHoverBorderColor: '#da291c',
+                                        defaultHoverColor: '#da291c',
+                                    },
+                                },
+                            }}
+                        >
+                            <Button className="mr-2">Xem chi tiết</Button>
+                        </ConfigProvider>
                     </Link>
-                    {value === 'done' && <ActionLink status={value} orderId={record._id} />}
+                    {value === 'done' && (
+                        <ActionLink status={value} orderId={record._id} />
+                    )}
                 </>
             ),
         },

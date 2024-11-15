@@ -1,4 +1,4 @@
-import useLogout from '@/hooks/auth/useLogout';
+import useLogout from '@/hooks/Auth/useLogout';
 import MenuItem from './MenuItem';
 import { ADMIN_ROUTES, MAIN_ROUTES } from '@/constants/router';
 
@@ -24,8 +24,8 @@ const MenuAccount = ({ isAdmin }: { isAdmin: boolean }) => {
                 )}
 
                 <button
-                    onClick={() => handleLogout.mutate()}
-                    className="mt-5 border p-2 transition-transform duration-200 ease-in-out hover:border-[#16bcdc] active:-translate-y-3"
+                    onClick={handleLogout}
+                    className="mt-5 border p-2 transition-transform duration-200 ease-in-out hover:border-[#da291c] active:-translate-y-3"
                 >
                     Đăng xuất
                 </button>

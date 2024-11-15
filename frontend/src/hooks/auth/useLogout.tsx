@@ -18,14 +18,11 @@ const useLogout = () => {
         localStorage.removeItem('accessToken');
         dispatch(doLogout());
         navigator('/');
-        showMessage('Logged out!', 'info');
+        // showMessage('Logged out!', 'info');
         queryClient.removeQueries({ queryKey: [QUERY_KEY.USERS] });
         queryClient.resetQueries();
     };
-    return useMutation({
-        mutationFn: () => AuthService.doLogout(),
-        onSuccess: handleLogout,
-    });
+    return handleLogout;
 };
 
 export default useLogout;

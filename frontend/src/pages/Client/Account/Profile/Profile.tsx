@@ -6,6 +6,7 @@ import {
 } from '@ant-design/icons';
 import {
     Button,
+    ConfigProvider,
     Form,
     FormProps,
     GetProp,
@@ -202,7 +203,7 @@ const Profile = () => {
 
     return (
         <>
-            <WrapperList classic title="Thông tin của tôi" className="my-0">
+            <WrapperList classic title="Thông tin của tôi" className="my-5">
                 {/* @Content */}
                 <div className="flex items-center justify-center">
                     <div className="w-[80%] rounded-2xl bg-white px-6 py-4">
@@ -261,7 +262,7 @@ const Profile = () => {
                             >
                                 <Input
                                     placeholder="Họ và tên"
-                                    className="py-3"
+                                    className="py-3 hover:border-[#da291c]"
                                 />
                             </Form.Item>
 
@@ -271,7 +272,7 @@ const Profile = () => {
                             >
                                 <Input
                                     placeholder="Số điện thoại"
-                                    className="py-3"
+                                    className="py-3 hover:border-[#da291c]"
                                 />
                             </Form.Item>
 
@@ -285,14 +286,27 @@ const Profile = () => {
 
                             <Form.Item>
                                 <div className="flex flex-wrap justify-between gap-5 md:flex-nowrap">
-                                    <Button
-                                        className="block w-full rounded-3xl bg-black text-center text-white transition-colors duration-300 ease-linear hover:bg-[#16bcdc] "
-                                        size="large"
-                                        htmlType="submit"
-                                        // loading={isPending}
+                                    <ConfigProvider
+                                        theme={{
+                                            components: {
+                                                Button: {
+                                                    defaultHoverColor:
+                                                        '#da291c',
+                                                    defaultHoverBorderColor:
+                                                        '#da291c',
+                                                },
+                                            },
+                                        }}
                                     >
-                                        Cập nhật thông tin
-                                    </Button>
+                                        <Button
+                                            className="block w-full rounded-3xl bg-[#da291c] text-center text-white transition-colors duration-300 ease-linear hover:bg-[#da291c]"
+                                            size="large"
+                                            htmlType="submit"
+                                            // loading={isPending}
+                                        >
+                                            Cập nhật thông tin
+                                        </Button>
+                                    </ConfigProvider>
 
                                     {profile && (
                                         <Button
@@ -324,7 +338,7 @@ const Profile = () => {
                     onCancel={handleCancel}
                     footer={
                         <Button
-                            className="mb-8 block w-full rounded-3xl border-black bg-black text-center text-white transition-colors duration-300 ease-linear hover:bg-[#16bcdc]"
+                            className="mb-8 block w-full rounded-3xl border-black bg-black text-center text-white transition-colors duration-300 ease-linear hover:bg-[#da291c]"
                             size="large"
                         >
                             Cập nhật thông tin

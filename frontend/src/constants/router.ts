@@ -5,7 +5,7 @@ export const MAIN_ROUTES = {
     SHIPPING: '/shipping',
     CHECKOUT: '/checkout',
     CONTACT: '/contact',
-    PROFILE: '/profile',
+    PROFILE: '/account',
     MY_ORDERS: '/my-orders',
     MY_ORDERS_DETAIL: '/my-orders/:id',
     MY_ADDRESS: '/my-address',

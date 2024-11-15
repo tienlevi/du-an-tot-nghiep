@@ -13,6 +13,7 @@ import {
 import ProductDetailsPage from '@/pages/Client/ProductDetailsPage/Productdetails';
 import AdminLayout from '@/layouts/AdminLayout';
 import AccountLayout from '@/layouts/AccountLayout';
+import { MAIN_ROUTES } from '@/constants/router';
 
 const PublicRoutes = [
     {
@@ -24,6 +25,22 @@ const PublicRoutes = [
                 element: (
                     <Suspense>
                         <HomePage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: '/login',
+                element: (
+                    <Suspense>
+                        <LoginPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: '/register',
+                element: (
+                    <Suspense>
+                        <RegisterPage />
                     </Suspense>
                 ),
             },
@@ -54,7 +71,6 @@ const PublicRoutes = [
 
             // @Account
             {
-                path: 'account',
                 element: (
                     <Suspense>
                         {/* <AuthProtected> */}
@@ -63,10 +79,16 @@ const PublicRoutes = [
                     </Suspense>
                 ),
                 children: [
-                    { path: '', element: <ProfilePage /> },
-                    { path: 'my-orders', element: <MyOrdersPage /> },
                     {
-                        path: 'my-orders/:id',
+                        path: `${MAIN_ROUTES.PROFILE}`,
+                        element: <ProfilePage />,
+                    },
+                    {
+                        path: `${MAIN_ROUTES.MY_ORDERS}`,
+                        element: <MyOrdersPage />,
+                    },
+                    {
+                        path: `${MAIN_ROUTES.MY_ORDERS_DETAIL}`,
                         element: <MyOrderDetailsPage />,
                     },
                 ],

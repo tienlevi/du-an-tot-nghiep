@@ -50,7 +50,7 @@ const AccountSidebarLeft = () => {
         <>
             <div className="hidden flex-col bg-white md:flex">
                 <div className="">
-                    <h1 className="pt-5 text-center text-2xl font-semibold uppercase text-[#16bcdc]">
+                    <h1 className="pt-5 text-center text-2xl font-semibold uppercase text-[#da291c]">
                         Tài khoản
                     </h1>
                 </div>
