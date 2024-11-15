@@ -23,6 +23,9 @@ export const QUERY_KEY = {
     MY_ORDERS: 'my-orders',
     CHECKOUT: 'checkout',
 
+    //tag
+    TAGS: 'tags',
+
     SHIPPING_SERVICES: 'shippingServices',
     GET_PROVINCE: 'province',
     GET_DISTRICT: 'district',

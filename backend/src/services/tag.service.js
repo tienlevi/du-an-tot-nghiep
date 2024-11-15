@@ -1,6 +1,6 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import customResponse from "../helpers/response.js";
-import Tag from "../models/size.js";
+import Tag from "../models/tag.js";
 import handleQuery from "../utils/handleQuery.js";
 
 // @Post create new tag
@@ -26,6 +26,24 @@ export const getTag = async (req, res, next) => {
       data: tag,
       message: ReasonPhrases.OK,
       status: StatusCodes.OK,
+      success: true,
+    })
+  );
+};
+// @Get get all tag
+export const getAllTag = async (req, res, next) => {
+  const { data, page, totalDocs, totalPages } = await handleQuery(req, Tag);
+
+  return res.status(StatusCodes.OK).json(
+    customResponse({
+      data: {
+        tags: data,
+        page,
+        totalDocs,
+        totalPages,
+      },
+      status: StatusCodes.OK,
+      message: ReasonPhrases.OK,
       success: true,
     })
   );

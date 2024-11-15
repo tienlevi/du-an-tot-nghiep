@@ -10,6 +10,10 @@ export const createTag = asyncHandler(async (req, res, next) => {
 export const getTag = asyncHandler(async (req, res, next) => {
   return tagServices.getTag(req, res, next);
 });
+// @Get get all Tag
+export const getAllTag = asyncHandler(async (req, res, next) => {
+  return tagServices.getAllTag(req, res, next);
+});
 
 // @Patch update Tag
 export const updateTag = asyncHandler(async (req, res, next) => {

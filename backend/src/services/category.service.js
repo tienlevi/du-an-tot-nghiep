@@ -20,7 +20,10 @@ export const createNewCategory = async (req, res, next) => {
 
 // @Get get all categories
 export const getAllCategories = async (req, res, next) => {
-  const { data, page, totalDocs, totalPages } = await handleQuery(req, Size);
+  const { data, page, totalDocs, totalPages } = await handleQuery(
+    req,
+    category
+  );
 
   return res.status(StatusCodes.OK).json(
     customResponse({
