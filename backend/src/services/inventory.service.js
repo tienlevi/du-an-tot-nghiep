@@ -39,10 +39,7 @@ export const updateStockOnCancelOrder = async (dataItems) => {
         }
         return variant;
       });
-<<<<<<< HEAD
       target.sold -= item.quantity;
-=======
->>>>>>> origin/develop
       target.variants = newVariants;
       await target.save();
     })
