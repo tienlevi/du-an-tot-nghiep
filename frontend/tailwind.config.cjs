@@ -6,7 +6,7 @@ module.exports = {
   darkMode: 'class',
   theme: {
     fontFamily: {
-      Montserrat: ['Montserrat', 'sans-serif'],
+      Montserrat: ['Montserrat'],
     },
     screens: {
       default: '1634px',
