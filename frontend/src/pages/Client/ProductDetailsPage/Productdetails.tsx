@@ -265,7 +265,7 @@ const ProductDetailsPage = () => {
                                                     return (
                                                         <button
                                                             key={index}
-                                                            className={`relative mr-1 ${!hasStock ? 'text-[#777777]' : ''} w-8 h-8 text-xs rounded-lg ${selectedSize?.size.name === item.size.name ? ' bg-hover text-white font-semibold' : 'border-[1px]'}`}
+                                                            className={`relative mr-1 ${!hasStock ? 'text-[#777777] border-[#d3d3d3]' : ''} w-10 h-10 text-xs rounded-sm ${selectedSize?.size.name === item.size.name ? ' bg-hover text-white font-semibold' : 'border-[1px]'}`}
                                                             onClick={() =>
                                                                 handleChooseSize(
                                                                     item,
@@ -275,7 +275,7 @@ const ProductDetailsPage = () => {
                                                         >
                                                             {item.size.name}
                                                             {!hasStock && (
-                                                                <div className="absolute w-9 h-[2px] top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] bg-[#777777] rotate-45"></div>
+                                                                <div className="absolute w-13 h-[2px] top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] bg-[#d3d3d3] rotate-45"></div>
                                                             )}
                                                         </button>
                                                     );
@@ -308,20 +308,20 @@ const ProductDetailsPage = () => {
                                                                           item,
                                                                       )
                                                             }
-                                                            className={`w-8  ${item.stock === 0 ? 'bg-opacity-60 border-opacity-60 cursor-not-allowed' : 'cursor-pointer'} relative h-8 flex justify-center items-center border-[1px] mr-2 bg-[#f5f5f5] rounded-md ${selectedColor?._id === item._id ? `border-[1.5px] border-hover/70` : 'border-[#eee9e9] border-[1px]'}`}
+                                                            className={`w-10  ${item.stock === 0 ? 'bg-opacity-60 border-opacity-60 cursor-not-allowed' : 'cursor-pointer'} relative h-10 flex justify-center items-center border-[1px] mr-2 bg-[#f5f5f5] rounded-sm ${selectedColor?._id === item._id ? `border-black` : 'border-[#eee9e9] '}`}
                                                         >
-                                                            <div
-                                                                className={` w-5  h-5 rounded-full ${item.stock === 0 && 'opacity-55'}`}
-                                                                style={{
-                                                                    backgroundColor: `${item.color.hex}`,
-                                                                }}
-                                                            >
-                                                                
+                                                            <div className={`border-[1px] p-0.5 rounded-full ${selectedColor?._id === item._id ? 'border-global': 'border-[#d3d3d3]'}`}>
+                                                                <div
+                                                                    className={` w-5  h-5 rounded-full ${item.stock === 0 && 'opacity-55'}`}
+                                                                    style={{
+                                                                        backgroundColor: `${item.color.hex}`,
+                                                                    }}
+                                                                ></div>
                                                             </div>
                                                             {item.stock ===
-                                                                    0 && (
-                                                                    <div className="absolute w-10 h-[1px] top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] bg-[#777777] rotate-45"></div>
-                                                                )}
+                                                                0 && (
+                                                                <div className="absolute w-10 h-[1px] top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] bg-[#777777] rotate-45"></div>
+                                                            )}
                                                         </div>
                                                     );
                                                 },
