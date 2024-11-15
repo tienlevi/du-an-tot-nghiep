@@ -51,14 +51,13 @@ export const getAllOrdersByUser = async (req, res, next) => {
   req.query.limit = Number(req.query.limit || 10);
   req.query.userId;
 
-  const features = new APIQuery(Order.find({}), req.query);
+  const features = new APIQuery(Order.find({ userId }), req.query);
   features.filter().sort().limitFields().search().paginate();
 
   const [orders, totalDocs] = await Promise.all([
     features.query,
     features.count(),
   ]);
-  const tets = await Order.find({ userId });
   return res.status(StatusCodes.OK).json(
     customResponse({
       data: {
