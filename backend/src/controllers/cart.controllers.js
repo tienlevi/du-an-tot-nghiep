@@ -4,10 +4,10 @@ import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import customResponse from "../helpers/response.js";
 
 export const addToCart = asyncHandler(async (req, res) => {
-  await cartService.addToCart(req, res);
+  const cart = await cartService.addToCart(req, res);
   return res.status(StatusCodes.OK).json(
     customResponse({
-      data: null,
+      data: cart,
       success: true,
       status: StatusCodes.OK,
       message: ReasonPhrases.OK,
