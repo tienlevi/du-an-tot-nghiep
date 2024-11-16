@@ -83,7 +83,6 @@ export const calculateShippingFee = async (req, res) => {
             url: ENDPOINT.CALCULATE_SHIPPING_FEE,
             params,  
         } );
-        console.log(response)
         return response;
     } catch (error) {
         console.log('error', error);
