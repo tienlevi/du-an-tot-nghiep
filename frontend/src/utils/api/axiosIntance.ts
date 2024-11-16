@@ -1,13 +1,14 @@
 import axios from 'axios';
-import { getAccessToken, setAccessToken } from './apiHelper';
-import { AUTH_ENDPOINT } from '@/constants/endpoint';
-import { IAxiosResponse } from '@/types/AxiosResponse';
-// import { Params } from '@/types/Api';
-
+import { getAccessToken } from './apiHelper';
 const axiosOptions = {
     baseURL: import.meta.env.VITE_REACT_API_URL,
     // headers: getContentType(),
     withCredentials: true,
+};
+
+let logoutCallback: (() => void) | null = null;
+export const registerLogoutCallback = (callback: () => void) => {
+    logoutCallback = callback;
 };
 const instance = axios.create(axiosOptions);
 
@@ -23,32 +24,25 @@ instance.interceptors.request.use(
     },
     (error) => Promise.reject(error),
 );
-
 instance.interceptors.response.use(
-    (config) => config,
-    async (error) => {
-        const originalRequest = error.config;
-
-        if (
-            error.response.status === 401 &&
-            error.config &&
-            !originalRequest._isRetry
-        ) {
-            originalRequest._isRetry = true;
-
-            try {
-                const { data } = await instance.post<
-                    IAxiosResponse<{ accessToken: string }>
-                >(`${AUTH_ENDPOINT.REFRESH}`);
-                setAccessToken(data.data.accessToken);
-                originalRequest.headers.Authorization = `Bearer ${data.data.accessToken}`;
-                return instance.request(originalRequest);
-            } catch (e) {
-                console.log(e);
-            }
-        }
-        throw error;
+    (response) => {
+        return response;
     },
-);
+    async (error) => {
+        if (error.response && error.response.status === 401) {
+            const originalRequest = error.config;
+            if (originalRequest._retry) {
+                return Promise.reject(error);
+            }
+            originalRequest._retry = true;
+            if (logoutCallback) {
+                logoutCallback(); 
+            }
+            return Promise.reject(error); 
+        }
+
+        return Promise.reject(error);
+    }
+)
 
 export default instance;

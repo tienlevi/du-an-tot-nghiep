@@ -4,6 +4,7 @@ import useLogout from '@/hooks/Auth/Mutation/useLogout';
 import useGetMyCart from '@/hooks/cart/Queries/useGetMyCart';
 import { doLogout } from '@/store/slice/authSlice';
 import { useAppDispatch, useTypedSelector } from '@/store/store';
+import showMessage from '@/utils/ShowMessage';
 import {
     HeartOutlined,
     ShoppingCartOutlined,
@@ -55,7 +56,10 @@ export default function UserToolBar() {
             type: 'divider',
         },
         {
-            label: <button onClick={handleLogout}>Đăng xuất</button>,
+            label: <button onClick={()=>{
+                handleLogout()
+                showMessage('Đã đăng xuất khỏi tài khoản của bạn.', 'success')
+            }}>Đăng xuất</button>,
             key: 'logout',
         },
     ];
@@ -83,23 +87,14 @@ export default function UserToolBar() {
                         </div>
                     </Dropdown>
 
-                    {data ? (
-                        <CartDrawer data={data} isFetching={isFetching}>
-                            <span className="flex flex-col items-center justify-center">
-                                <Badge count={data.items.length} overflowCount={10}>
-                                    <ShoppingCartOutlined className="text-2xl" />
-                                </Badge>
-                                <span className="text-sm">Giỏ hàng</span>
-                            </span>
-                        </CartDrawer>
-                    ) : (
+                    <CartDrawer data={data} isFetching={isFetching}>
                         <span className="flex flex-col items-center justify-center">
-                            <Badge count={0} overflowCount={10} >
+                            <Badge count={data ? data.items.length : 0} overflowCount={10}>
                                 <ShoppingCartOutlined className="text-2xl" />
                             </Badge>
                             <span className="text-sm">Giỏ hàng</span>
                         </span>
-                    )}
+                    </CartDrawer>
                 </>
             )}
             {!isAuth && (

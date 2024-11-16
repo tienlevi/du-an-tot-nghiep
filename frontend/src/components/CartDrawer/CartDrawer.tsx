@@ -19,7 +19,7 @@ import { Link } from 'react-router-dom';
 type PropsType = {
     children: React.ReactNode;
     data: any;
-    isFetching: boolean
+    isFetching: boolean;
 };
 const CartDrawer = ({ data, isFetching, children }: PropsType) => {
     const { cart, handleOpenCart, onClose } = useCart();
@@ -165,7 +165,6 @@ const CartDrawer = ({ data, isFetching, children }: PropsType) => {
                                                 description={
                                                     <>
                                                         <Link
-                                                           
                                                             className="text-base font-bold text-global hover:text-hover"
                                                             to={`${MAIN_ROUTES.PRODUCTS}/${product?.productId}`}
                                                         >
@@ -351,24 +350,40 @@ const CartDrawer = ({ data, isFetching, children }: PropsType) => {
                         </div>
                     </>
                 )}
-                {!data ||
-                    (data.items.length === 0 && (
-                        <div className="flex flex-col items-center justify-center min-h-[60vh]">
-                            <img
-                                src="https://canifa.com/assets/images/cart-empty.png"
-                                alt=""
-                            />
-                            <p className="text-center text-global text-xl font-medium leading-6">
-                                Giỏ hàng hiện không có sản phẩm.
-                            </p>
-                            <button
-                                onClick={onClose}
-                                className="mt-12 h-[48px] rounded-md  px-12 font-bold border-[1px] text-[#da291c] border-[#da291c]"
-                            >
-                                Tiếp tục mua hàng
-                            </button>
-                        </div>
-                    ))}
+                {!data && (
+                    <div className="flex flex-col items-center justify-center min-h-[60vh]">
+                        <img
+                            src="https://canifa.com/assets/images/cart-empty.png"
+                            alt=""
+                        />
+                        <p className="text-center text-global text-xl font-medium leading-6">
+                            Giỏ hàng hiện không có sản phẩm.
+                        </p>
+                        <button
+                            onClick={onClose}
+                            className="mt-12 h-[48px] rounded-md  px-12 font-bold border-[1px] text-[#da291c] border-[#da291c]"
+                        >
+                            Tiếp tục mua hàng
+                        </button>
+                    </div>
+                )}
+                 {data?.items?.length === 0 && (
+                    <div className="flex flex-col items-center justify-center min-h-[60vh]">
+                        <img
+                            src="https://canifa.com/assets/images/cart-empty.png"
+                            alt=""
+                        />
+                        <p className="text-center text-global text-xl font-medium leading-6">
+                            Giỏ hàng hiện không có sản phẩm.
+                        </p>
+                        <button
+                            onClick={onClose}
+                            className="mt-12 h-[48px] rounded-md  px-12 font-bold border-[1px] text-[#da291c] border-[#da291c]"
+                        >
+                            Tiếp tục mua hàng
+                        </button>
+                    </div>
+                )}
             </Drawer>
         </motion.div>
     );

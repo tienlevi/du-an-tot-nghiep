@@ -65,7 +65,7 @@ export const ORDER_ENDPOINT = {
     SHIPPING_ORDER: '/orders/shipping',
     DELIVERED_ORDER: '/orders/delivered',
     FINISH_ORDER: '/orders/done',
-    CREATE_ORDER: '/orders',
+    CREATE_ORDER: '/orders/create',
     DISABLED_REVIEW: '/orders/disabled-review',
 };
 

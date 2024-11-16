@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { UserOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons';
 import { Form, Input, Switch, Card, Typography, Divider } from 'antd';
 import { FormInstance } from 'antd/lib/form';
+import { useTypedSelector } from '@/store/store';
+import useGetProfile from '@/hooks/profile/Queries/useGetProfile';
 
 const { Title, Text } = Typography;
 
@@ -11,11 +13,20 @@ interface ReceiverInfoProps {
 
 const ReceiverInfo: React.FC<ReceiverInfoProps> = ({ form }) => {
     const [showReceiverInfo, setShowReceiverInfo] = React.useState(false);
-
     const toggleReceiverInfo = (checked: boolean) => {
         setShowReceiverInfo(checked);
     };
+    const { data: customer } = useGetProfile();
 
+    React.useEffect(() => {
+        if (customer) {
+            form.setFieldsValue({
+                customerName: customer.data.name,
+                customerEmail: customer.data.email,
+                customerPhone: customer.data.phone,
+            });
+        }
+    }, [customer, form]);
     return (
         <Card className='w-full shadow-md transition-shadow duration-300 hover:shadow-lg'>
             <Title level={4} className='mb-6'>
