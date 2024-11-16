@@ -9,3 +9,4 @@ export * as colorControllers from "./color.controllers.js";
 export * as reviewControllers from "./review.controllers.js";
 export * as tagControllers from "./tag.controllers.js";
 export * as userControllers from "./user.controllers.js";
+export * as shippingController from './shipping.controllers.js';
