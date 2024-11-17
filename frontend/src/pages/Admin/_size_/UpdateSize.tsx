@@ -1,21 +1,21 @@
 import { ADMIN_ROUTES } from '@/constants/router';
-import { useMutationUpdateCategory } from '@/hooks/categories/Mutations/useUpdateCategory';
+import { useMutationUpdateSize } from '@/hooks/Sizes/Mutations/useUpdateSize';
+import useGetDetailSize from '@/hooks/Sizes/Queries/useGetDetailSize';
 import { ICategoryFormData } from '@/types/Category';
 import showMessage from '@/utils/ShowMessage';
+import { categoryValidator } from '@/validation/category/validator';
 import { EditOutlined } from '@ant-design/icons';
 import { Button, Form, FormProps, Input } from 'antd';
+import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import WrapperPageAdmin from '../_common/WrapperPageAdmin';
-import useGetDetailCategory from '@/hooks/categories/Queries/useGetDetailCategory';
-import { useEffect } from 'react';
-import { categoryValidator } from '@/validation/category/validator';
 
 const UpdateSize
  = () => {
     const { id } = useParams();
-    const { data: sizeRes } = useGetDetailCategory(id as string);
+    const { data: sizeRes } = useGetDetailSize(id as string);
     const [form] = Form.useForm<ICategoryFormData>();
-    const { mutate: updateCategory, isPending } = useMutationUpdateCategory();
+    const { mutate: updateCategory, isPending } = useMutationUpdateSize();
 
     const onFinish: FormProps<ICategoryFormData>['onFinish'] = (values) => {
         if (id) {

@@ -1,26 +1,26 @@
 import { ADMIN_ROUTES } from '@/constants/router';
-import { useMutationUpdateCategory } from '@/hooks/categories/Mutations/useUpdateCategory';
+import { useMutationUpdateTag } from '@/hooks/Tags/Mutations/useUpdateTag';
+import useGetDetailTag from '@/hooks/Tags/Queries/useGetDetailTag';
 import { ICategoryFormData } from '@/types/Category';
 import showMessage from '@/utils/ShowMessage';
+import { categoryValidator } from '@/validation/category/validator';
 import { EditOutlined } from '@ant-design/icons';
 import { Button, Form, FormProps, Input } from 'antd';
+import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import WrapperPageAdmin from '../_common/WrapperPageAdmin';
-import useGetDetailCategory from '@/hooks/categories/Queries/useGetDetailCategory';
-import { useEffect } from 'react';
-import { categoryValidator } from '@/validation/category/validator';
 
 const CreateCategory = () => {
     const { id } = useParams();
-    const { data: categoryRes } = useGetDetailCategory(id as string);
+    const { data: categoryRes } = useGetDetailTag(id as string);
     const [form] = Form.useForm<ICategoryFormData>();
-    const { mutate: updateCategory, isPending } = useMutationUpdateCategory();
+    const { mutate: updateCategory, isPending } = useMutationUpdateTag();
 
     const onFinish: FormProps<ICategoryFormData>['onFinish'] = (values) => {
         if (id) {
             updateCategory({ id, payload: values });
         } else {
-            showMessage('Không tìm thấy _id danh mục', 'error');
+            showMessage('Không tìm thấy _id thẻ', 'error');
         }
     };
     const onFinishFailed: FormProps<ICategoryFormData>['onFinishFailed'] = (
@@ -35,7 +35,7 @@ const CreateCategory = () => {
 
     return (
         <WrapperPageAdmin
-            title="Cập nhật thông tin danh mục"
+            title="Cập nhật thông tin thẻ"
             option={
                 <Link to={ADMIN_ROUTES.CATEGORIES} className="underline">
                     Quay lại
@@ -53,12 +53,12 @@ const CreateCategory = () => {
                 <div className="col-span-8">
                     <div className="w-full rounded-lg p-2 px-4">
                         <Form.Item<ICategoryFormData>
-                            label="Tên danh mục"
+                            label="Tên thẻ"
                             name="name"
                             className="font-medium text-[#08090F]"
                             rules={categoryValidator}
                         >
-                            <Input placeholder="Nhập tên cho danh mục..." />
+                            <Input placeholder="Nhập tên cho thẻ..." />
                         </Form.Item>
                     </div>
                 </div>

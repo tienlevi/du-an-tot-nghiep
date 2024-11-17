@@ -1,12 +1,11 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
 import { QUERY_KEY } from '@/constants/queryKey';
 import { ADMIN_ROUTES } from '@/constants/router';
-import showMessage from '@/utils/ShowMessage';
-import sizeService from '@/services/size.service';
+import colorService from '@/services/color.service';
 import { IColorFormData } from '@/types/Color';
 import { errorResponse } from '@/types/ErrorResponse';
-import colorService from '@/services/color.service';
+import showMessage from '@/utils/ShowMessage';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 
 export const useMutationUpdateColor = () => {
     const queryClient = useQueryClient();
@@ -30,7 +29,7 @@ export const useMutationUpdateColor = () => {
                         ),
                     ),
             });
-            showMessage('Đã cập nhật thông tin kích cỡ!', 'success');
+            showMessage('Đã cập nhật thông tin màu!', 'success');
             navigate(ADMIN_ROUTES.COLORS, { replace: true });
         },
         onError: (error: errorResponse) => {

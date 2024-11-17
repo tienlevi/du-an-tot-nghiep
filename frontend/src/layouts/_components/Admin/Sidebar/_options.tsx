@@ -65,7 +65,7 @@ export const menuGroups: IMenuItem[] = [
             { label: 'Tất cả màu', route: ADMIN_ROUTES.COLORS },
             {
                 label: 'Thêm mới màu',
-                route: ADMIN_ROUTES.COLORS,
+                route: ADMIN_ROUTES.COLOR_CREATE,
             },
         ],
     },
