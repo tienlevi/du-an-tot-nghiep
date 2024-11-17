@@ -12,6 +12,7 @@ const router = Router();
 
 // @Get
 router.get("/all", categoryControllers.getAllCategories);
+router.get("/:id", categoryControllers.getDetailedCategory);
 
 // @Post
 router.post(
