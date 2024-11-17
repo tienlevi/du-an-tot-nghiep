@@ -8,7 +8,7 @@ const ReviewRouter = Router();
 
 // Get
 ReviewRouter.get("/all", reviewControllers.getAllAdminReviews);
-ReviewRouter.get("/detail/:id", reviewControllers.getTopThreeReviewByProductId);
+ReviewRouter.get("/detail/:id", reviewControllers.getProductDetailReviews);
 ReviewRouter.get("/all/:id", reviewControllers.getAllReviewByProductId);
 
 // Post
