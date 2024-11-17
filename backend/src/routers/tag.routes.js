@@ -7,8 +7,8 @@ import { ROLE } from "../constants/role.js";
 const TagRouter = Router();
 
 // Get
-TagRouter.get("/:id", tagControllers.getTag);
 TagRouter.get("/", tagControllers.getAllTag);
+TagRouter.get("/:id", tagControllers.getTag);
 
 // Post
 TagRouter.post(

@@ -4,6 +4,7 @@ const router = Router();
 
 // @Get
 router.get("/all", sizeControllers.getAllSizes);
+router.get("/:id", sizeControllers.getDetailedSize);
 
 // @Post
 router.post("/", sizeControllers.createSize);
