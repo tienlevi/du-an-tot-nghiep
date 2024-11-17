@@ -13,7 +13,11 @@ export const getMyCart = async (req, res, next) => {
   })
     .populate({
       path: "items.product",
-      populate: [{ path: "variants.color" }, { path: "variants.size" }],
+      populate: [
+        { path: "variants.color" },
+        { path: "variants.size" },
+        { path: "category" },
+      ],
     })
     .lean();
   if (!cartUser)
@@ -37,6 +41,8 @@ export const getMyCart = async (req, res, next) => {
           ...variant,
           color: variant.color.name,
           size: variant.size.name,
+          category: item.product.category.name,
+          categoryId: item.product.category._id,
         },
       };
     })
