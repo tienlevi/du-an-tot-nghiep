@@ -42,11 +42,11 @@ export const getAllCategories = async (req, res, next) => {
 
 // @Get get detailed category
 export const getDetailedCategory = async (req, res, next) => {
-  const category = await category.findById(req.params.id).lean();
+  const newCategory = await category.findById(req.params.id).lean();
 
   return res.status(StatusCodes.OK).json(
     customResponse({
-      data: category,
+      data: newCategory,
       status: StatusCodes.OK,
       message: ReasonPhrases.OK,
       success: true,
