@@ -1,5 +1,5 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { HttpException } from "./HttpException";
+import { HttpException } from "./HttpException.js";
 
 export class NotFoundError extends HttpException {
   status;

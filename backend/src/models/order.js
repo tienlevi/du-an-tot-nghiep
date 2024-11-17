@@ -1,22 +1,24 @@
 import mongoose from "mongoose";
-import { ORDER_STATUS } from "../constants/orderStatus";
+import { ORDER_STATUS } from "../constants/orderStatus.js";
+import { PAYMENT_METHOD } from "../constants/paymentMethod.js";
+import { ROLE } from "../constants/role.js";
 
 const OrderItemSchema = new mongoose.Schema(
   {
-    product: {
-      type: String,
+    productId: {
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
+      ref: "Product",
     },
-    variant: {
-      type: String,
-      required: true,
-    },
+    variantId: mongoose.Schema.Types.ObjectId,
     name: {
       type: String,
       required: true,
     },
     size: { type: String, required: true },
     color: { type: String, required: true },
+    category: { type: String, required: true },
+    tags: [{ type: String, required: true }],
     quantity: {
       type: Number,
       required: true,
@@ -49,7 +51,7 @@ const OrderItemSchema = new mongoose.Schema(
 
 const orderSchema = new mongoose.Schema(
   {
-    user: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
@@ -85,8 +87,8 @@ const orderSchema = new mongoose.Schema(
       type: String,
       trim: true,
       required: true,
-      enum: ["cash", "card"],
-      default: "cash",
+      enum: Object.values(PAYMENT_METHOD),
+      default: PAYMENT_METHOD.CARD,
     },
     isPaid: {
       type: Boolean,
@@ -94,8 +96,8 @@ const orderSchema = new mongoose.Schema(
     },
     canceledBy: {
       type: String,
-      default: "user",
-      enum: ["user", "admin"],
+      default: "none",
+      enum: [...Object.values(ROLE), "none"],
     },
     description: {
       type: String,
@@ -103,7 +105,7 @@ const orderSchema = new mongoose.Schema(
     orderStatus: {
       type: String,
       default: ORDER_STATUS.PENDING,
-      enum: [Object.values(ORDER_STATUS)],
+      enum: Object.values(ORDER_STATUS),
     },
   },
   {

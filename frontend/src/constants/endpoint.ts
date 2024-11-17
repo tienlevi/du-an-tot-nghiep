@@ -29,8 +29,8 @@ export const CATEGORY_ENDPOINT = {
 export const CART_ENDPOINT = {
     GET: '/carts',
     ADDCART: '/carts/add',
-    UPDATEQUANTITY: '/carts/update_quantity',
-    REMOVEITEM: '/carts/remove',
+    UPDATEQUANTITY: '/carts/update-quantity',
+    REMOVEITEM: '/carts/remove-item',
 };
 
 export const SIZE_ENDPOINT = {
@@ -77,7 +77,7 @@ export const ORDER_ENDPOINT = {
     SHIPPING_ORDER: '/orders/shipping',
     DELIVERED_ORDER: '/orders/delivered',
     FINISH_ORDER: '/orders/done',
-    CREATE_ORDER: '/orders',
+    CREATE_ORDER: '/orders/create',
     DISABLED_REVIEW: '/orders/disabled-review',
 };
 
@@ -94,9 +94,9 @@ export const STATS_ENDPOINT = {
 };
 
 export const USER_ENDPOINT = {
-    PROFILE: '/users/private',
+    PROFILE: '/users/profile',
     ALL: '/users/all',
-    UPDATE: '/users/private',
+    UPDATE: '/users',
     UPDATE_ADMIN: '/users',
     DETAIL: '/users',
 };

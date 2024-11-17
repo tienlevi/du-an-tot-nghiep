@@ -1,6 +1,5 @@
 import { IUser } from '@/types/user';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { toast } from 'react-toastify';
 
 type IinitialState = {
   authenticate: boolean
@@ -22,7 +21,6 @@ const authSlice = createSlice({
         state.authenticate = false
         state.user = null
         localStorage.removeItem('token')
-        toast.success('Đã đăng xuất tài khoản của bạn.')
     }
   },
 });

@@ -1,6 +1,7 @@
 import AdminLayout from '@/layouts/AdminLayout';
 import ProtectedRoute from '@/layouts/Protected/ProtectedRoute';
 import {
+<<<<<<< HEAD
     CategoryList,
     ColorList,
     CreateCategory,
@@ -17,6 +18,12 @@ import {
     UpdateColor,
     UpdateSize,
     UpdateTag,
+=======
+    CreateProduct,
+    DashboardPage,
+    ProductsListAll,
+    Suspense,
+>>>>>>> FE/Shipping-test
     // UpdateProduct,
 } from './LazyRoutes';
 import { ADMIN_ROUTES } from '@/constants/router';
@@ -57,6 +64,10 @@ export const PrivateRoutes = [
                     },
                     {
                         path: 'list',
+<<<<<<< HEAD
+=======
+
+>>>>>>> FE/Shipping-test
                         element: (
                             <Suspense>
                                 <ProductsListAll />
@@ -81,6 +92,7 @@ export const PrivateRoutes = [
                     // },
                 ],
             },
+<<<<<<< HEAD
             // @Category
             {
                 path: ADMIN_ROUTES.CATEGORIES,
@@ -240,6 +252,8 @@ export const PrivateRoutes = [
                     },
                 ],
             },
+=======
+>>>>>>> FE/Shipping-test
         ],
     },
 ];

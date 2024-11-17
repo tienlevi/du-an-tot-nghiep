@@ -1,7 +1,13 @@
 import CartDrawer from '@/components/CartDrawer';
 import { MAIN_ROUTES } from '@/constants/router';
+<<<<<<< HEAD
+=======
+import useLogout from '@/hooks/Auth/Mutation/useLogout';
+import useGetMyCart from '@/hooks/cart/Queries/useGetMyCart';
+>>>>>>> FE/Shipping-test
 import { doLogout } from '@/store/slice/authSlice';
 import { useAppDispatch, useTypedSelector } from '@/store/store';
+import showMessage from '@/utils/ShowMessage';
 import {
     HeartOutlined,
     ShoppingCartOutlined,
@@ -15,6 +21,11 @@ import { Link } from 'react-router-dom';
 export default function UserToolBar() {
     const isAuth = useTypedSelector((state) => state.auth.authenticate);
     const dispatch = useAppDispatch();
+<<<<<<< HEAD
+=======
+    const handleLogout = useLogout();
+    const { data, isFetching } = useGetMyCart();
+>>>>>>> FE/Shipping-test
     const isAdmin = useTypedSelector(
         (state) => state.auth.user?.role === 'admin',
     );
@@ -23,7 +34,11 @@ export default function UserToolBar() {
             ? [
                   {
                       label: (
+<<<<<<< HEAD
                           <Link to={'/admin/dashboard'} className="text-global">
+=======
+                          <Link to={'/admin'} className="text-global">
+>>>>>>> FE/Shipping-test
                               Quản trị
                           </Link>
                       ),
@@ -51,9 +66,16 @@ export default function UserToolBar() {
             type: 'divider',
         },
         {
+<<<<<<< HEAD
             label: (
                 <button onClick={() => dispatch(doLogout())}>Đăng xuất</button>
             ),
+=======
+            label: <button onClick={()=>{
+                handleLogout()
+                showMessage('Đã đăng xuất khỏi tài khoản của bạn.', 'success')
+            }}>Đăng xuất</button>,
+>>>>>>> FE/Shipping-test
             key: 'logout',
         },
     ];
@@ -81,9 +103,15 @@ export default function UserToolBar() {
                         </div>
                     </Dropdown>
 
+<<<<<<< HEAD
                     <CartDrawer>
                         <span className="flex flex-col items-center justify-center">
                             <Badge count={1} overflowCount={10}>
+=======
+                    <CartDrawer data={data} isFetching={isFetching}>
+                        <span className="flex flex-col items-center justify-center">
+                            <Badge count={data ? data.items.length : 0} overflowCount={10}>
+>>>>>>> FE/Shipping-test
                                 <ShoppingCartOutlined className="text-2xl" />
                             </Badge>
                             <span className="text-sm">Giỏ hàng</span>

@@ -30,7 +30,7 @@ const Register = () => {
     mutate(data)
   };
   return (
-    <div className="relative flex justify-between max-w-screen-default default:mx-auto mx-12 mt-12">
+    <div className="relative flex justify-around max-w-screen-default default:mx-auto mx-12 mt-12">
       <img
         src={SignImg}
         alt="Sign Image"

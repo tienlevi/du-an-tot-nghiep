@@ -1,6 +1,6 @@
-import instance from '@/config/axios';
 import { IAxiosResponse } from '@/types/AxiosResponse';
 import { ILoginResponse } from '@/types/user';
+import instance from '@/utils/api/axiosIntance';
 import { LoginFormData, RegisterFormData } from '@/validation/Auth/Auth';
 import { AxiosResponse } from 'axios';
 

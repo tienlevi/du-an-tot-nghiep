@@ -9,8 +9,10 @@ import {
     LoginPage,
     RegisterPage,
     Suspense,
+    ProductDetailPage,
+    ShippingPage,
+    CheckoutPage,
 } from './LazyRoutes';
-import ProductDetailsPage from '@/pages/Client/ProductDetailsPage/Productdetails';
 import AdminLayout from '@/layouts/AdminLayout';
 import AccountLayout from '@/layouts/AccountLayout';
 import { MAIN_ROUTES } from '@/constants/router';
@@ -30,6 +32,25 @@ const PublicRoutes = [
             },
             {
                 path: '/login',
+<<<<<<< HEAD
+                element: (
+                    <Suspense>
+                        <LoginPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: '/register',
+                element: (
+                    <Suspense>
+                        <RegisterPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: 'products/:id',
+=======
+>>>>>>> FE/Shipping-test
                 element: (
                     <Suspense>
                         <LoginPage />
@@ -48,10 +69,45 @@ const PublicRoutes = [
                 path: 'products/:id',
                 element: (
                     <Suspense>
-                        <ProductDetailsPage />
+                        <ProductDetailPage/>
                     </Suspense>
                 ),
             },
+            {
+                path: '/login',
+                element: (
+                    <Suspense>
+                        <LoginPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: '/register',
+                element: (
+                    <Suspense>
+                        <RegisterPage />
+                    </Suspense>
+                ),
+            },
+            // @CheckOut
+            {
+                path: MAIN_ROUTES.SHIPPING,
+                element: (
+                    <Suspense>
+                        <ShippingPage/>
+                    </Suspense>
+                ),
+            },
+            {
+                path: MAIN_ROUTES.CHECKOUT,
+                element: (
+                    <Suspense>
+                            <CheckoutPage />
+                    </Suspense>
+                ),
+            },
+
+
             // @Account
             {
                 element: (
