@@ -22,6 +22,30 @@ export const CreateProduct = lazy(
 //     () => import('@/pages/Admins/_product_/UpdateProduct'),
 // );
 
+export const CategoryList = lazy(() => import('@/pages/Admin/_category_'));
+export const CreateCategory = lazy(
+    () => import('@/pages/Admin/_category_/CreateCategory'),
+);
+export const UpdateCategory = lazy(
+    () => import('@/pages/Admin/_category_/UpdateCategory'),
+);
+
+export const ColorList = lazy(() => import('@/pages/Admin/_color_'));
+export const CreateColor = lazy(
+    () => import('@/pages/Admin/_color_/CreateColor'),
+);
+export const UpdateColor = lazy(
+    () => import('@/pages/Admin/_color_/UpdateColor'),
+);
+
+export const SizeList = lazy(() => import('@/pages/Admin/_size_/'));
+export const CreateSize = lazy(() => import('@/pages/Admin/_size_/CreateSize'));
+export const UpdateSize = lazy(() => import('@/pages/Admin/_size_/UpdateSize'));
+
+export const TagList = lazy(() => import('@/pages/Admin/_tag_/'));
+export const CreateTag = lazy(() => import('@/pages/Admin/_tag_/CreateTag'));
+export const UpdateTag = lazy(() => import('@/pages/Admin/_tag_/UpdateTag'));
+
 // @suspense
 export const Suspense = ({ children }: { children: React.ReactNode }) => {
     return <React.Suspense fallback={<Loader />}>{children}</React.Suspense>;

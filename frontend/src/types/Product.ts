@@ -18,17 +18,6 @@ export type Product = {
     createdAt: string;
     updatedAt: string;
 };
-
-export type IAttribute = {
-    _id?: string;
-    type: string;
-    name: string;
-    attributeKey: string;
-    isRequired: boolean;
-    isVariant: boolean;
-    values?: string[];
-};
-
 export interface IThumbnailAntd extends File {
     uid: string;
     originFileObj: File;
@@ -60,7 +49,6 @@ export type IProductForm = {
     categoryId: string;
     brandId: string;
     description: string;
-    attributes: IAttribute[];
     variations: IProductVariation[];
 };
 

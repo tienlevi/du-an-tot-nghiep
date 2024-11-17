@@ -7,6 +7,7 @@ import {
     ProfileOutlined,
     ShoppingOutlined,
     StarOutlined,
+    TagsOutlined,
 } from '@ant-design/icons';
 import { ADMIN_ROUTES } from '@/constants/router';
 
@@ -31,10 +32,6 @@ export const menuGroups: IMenuItem[] = [
         icon: <ProfileOutlined />,
         label: 'Quản lý đơn hàng',
         route: ADMIN_ROUTES.ORDERS,
-        // children: [
-        //     { label: 'All', route: ADMIN_ROUTES.ORDERS },
-        //     // { label: 'Cancellation', route: ADMIN_ROUTES.ORDERS_CANCELLATION },
-        // ],
     },
     {
         icon: <ShoppingOutlined />,
@@ -47,22 +44,9 @@ export const menuGroups: IMenuItem[] = [
     {
         icon: <CommentOutlined />,
         label: 'Quản lý người dùng',
-        children: [
-            { label: 'Tất cả người dùng', route: ADMIN_ROUTES.USERS },
-            // { label: 'Tạo mới người dùng', route: ADMIN_ROUTES.USERS_CREATE },
-
-            // { label: 'Chat management', route: 'orders/test' },
-            // { label: 'Review management', route: ADMIN_ROUTES.PRODUCTS_CREATE },
-        ],
+        children: [{ label: 'Tất cả người dùng', route: ADMIN_ROUTES.USERS }],
     },
-    // {
-    //     icon: <ShopOutlined />,
-    //     label: 'Shop',
-    //     children: [
-    //         { label: 'Shop information', route: ADMIN_ROUTES.SHOP },
-    //         { label: 'Shop settings', route: ADMIN_ROUTES.SHOP_SETTINGS },
-    //     ],
-    // },
+
     {
         icon: <ProductOutlined />,
         label: 'Quản lý danh mục',
@@ -76,21 +60,29 @@ export const menuGroups: IMenuItem[] = [
     },
     {
         icon: <BgColorsOutlined />,
-        label: 'Quản lý thuộc tính',
+        label: 'Quản lý màu',
         children: [
-            { label: 'Tất cả thuộc tính', route: ADMIN_ROUTES.ATTRIBUTES },
+            { label: 'Tất cả màu', route: ADMIN_ROUTES.COLORS },
             {
-                label: 'Thêm mới thuộc tính',
-                route: ADMIN_ROUTES.ATTRIBUTES_CREATE,
+                label: 'Thêm mới màu',
+                route: ADMIN_ROUTES.COLORS,
             },
         ],
     },
     {
         icon: <CrownOutlined />,
-        label: 'Quản lý thương hiệu',
+        label: 'Quản lý kích cỡ',
         children: [
-            { label: 'Tất cả thương hiệu', route: ADMIN_ROUTES.BRANDS },
-            { label: 'Thêm mới thương hiệu', route: ADMIN_ROUTES.BRAND_CREATE },
+            { label: 'Tất cả kích cỡ', route: ADMIN_ROUTES.SIZES },
+            { label: 'Thêm mới kích cỡ', route: ADMIN_ROUTES.SIZE_CREATE },
+        ],
+    },
+    {
+        icon: <TagsOutlined />,
+        label: 'Quản lý thẻ',
+        children: [
+            { label: 'Tất cả thẻ', route: ADMIN_ROUTES.TAGS },
+            { label: 'Thêm mới thẻ', route: ADMIN_ROUTES.TAGS_CREATE },
         ],
     },
     {

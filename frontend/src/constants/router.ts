@@ -43,13 +43,17 @@ export const ADMIN_ROUTES = {
     CATEGORIES_CREATE: '/admin/categories/create',
     CATEGORIES_EDIT: '/admin/categories/edit', // @id
 
-    ATTRIBUTES: '/admin/attributes',
-    ATTRIBUTES_EDIT: '/admin/attributes/edit', // @id
-    ATTRIBUTES_CREATE: '/admin/attributes/create',
+    SIZES: '/admin/sizes',
+    SIZE_CREATE: '/admin/sizes/create',
+    SIZE_EDIT: '/admin/sizes/edit', // @id
 
-    BRANDS: '/admin/brands',
-    BRAND_EDIT: '/admin/brands/edit', // @id
-    BRAND_CREATE: '/admin/brands/create',
+    TAGS: '/admin/tags',
+    TAGS_CREATE: '/admin/tags/create',
+    TAGS_EDIT: '/admin/tags/edit', // @id
+
+    COLORS: '/admin/colors',
+    COLOR_CREATE: '/admin/colors/create',
+    COLOR_EDIT: '/admin/colors/edit', // @id
 
     REVIEWS: '/admin/reviews',
     REVIEWS_REPORT: '/admin/reviews/report',

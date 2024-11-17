@@ -26,7 +26,7 @@ const Header = (props: {
                     </button>
                 </div>
 
-                <Link className="block flex-shrink-0" to="/">
+                <Link className="block flex-shrink-0" to="/admin">
                     <span className="text-2xl font-semibold capitalize text-[#da291c]">
                         AdStore -{' '}
                     </span>

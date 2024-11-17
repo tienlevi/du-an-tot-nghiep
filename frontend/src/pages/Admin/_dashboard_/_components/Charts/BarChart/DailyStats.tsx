@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactApexChart from 'react-apexcharts';
-import WrapperList from '~/components/_common/WrapperList';
+import WrapperList from '@/components/_common/WrapperList';
 import { DatePicker, DatePickerProps } from 'antd';
-import { useDailyStats } from '~/hooks/stats/useDailyStats';
+import { useDailyStats } from '@/hooks/stats/useDailyStats';
 import { optionsBarChart } from './_option';
 
 const DailyStats: React.FC = () => {
