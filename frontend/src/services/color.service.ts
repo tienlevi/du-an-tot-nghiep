@@ -1,10 +1,38 @@
+import { COLOR_ENDPOINT } from '@/constants/endpoint';
+import { IAxiosResponse } from '@/types/AxiosResponse';
+import { IColor, IColorFormData, IColorResponse } from '@/types/Color';
 import instance from '@/utils/api/axiosIntance';
+import { Params } from 'react-router-dom';
 
-export const colorServices = {
-    async getAllColor() {
-        const res = await instance.get(`/colors/all`, {
-            params: { limit: 10000, page: 1 },
-        });
+const colorService = {
+    async getAll(params: Params) {
+        const res = await instance.get<IAxiosResponse<IColorResponse>>(
+            `${COLOR_ENDPOINT.ALL}`,
+            { params },
+        );
+        return res.data;
+    },
+    async createColor(payload: IColorFormData) {
+        const res = await instance.post<IAxiosResponse<IColor>>(
+            `${COLOR_ENDPOINT.CREATE}`,
+            payload,
+        );
+        return res.data;
+    },
+    async updateColor(id: string, payload: IColorFormData) {
+        const res = await instance.patch<IAxiosResponse<IColor>>(
+            `${COLOR_ENDPOINT.UPDATE}/${id}`,
+            payload,
+        );
+        return res.data;
+    },
+
+    async getDetail(id: string) {
+        const res = await instance.get<IAxiosResponse<IColor>>(
+            `${COLOR_ENDPOINT.DETAIL}/${id}`,
+        );
         return res.data;
     },
 };
+
+export default colorService;

@@ -298,7 +298,10 @@ const Profile = () => {
                                         }}
                                     >
                                         <Button
+<<<<<<< HEAD
+=======
                                             loading={isPending}
+>>>>>>> FE/Shipping-test
                                             className="block w-full rounded-3xl bg-[#da291c] text-center text-white transition-colors duration-300 ease-linear hover:bg-[#da291c]"
                                             size="large"
                                             htmlType="submit"

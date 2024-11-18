@@ -2,9 +2,9 @@ import { EditOutlined, EllipsisOutlined } from '@ant-design/icons';
 import { Button, Popconfirm, Space, TableProps, Tag, Tooltip } from 'antd';
 import { ColumnType } from 'antd/es/table';
 import { Link } from 'react-router-dom';
-import { Params } from '~/types/Api';
-import { IProductItemNew } from '~/types/Product';
-import { Currency } from '~/utils';
+import { Params } from '@/types/Api';
+import { IProductItemNew } from '@/types/Product';
+import { Currency } from '@/utils';
 
 export interface DataType {
     name: string;

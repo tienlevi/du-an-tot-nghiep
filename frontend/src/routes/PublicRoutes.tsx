@@ -11,6 +11,7 @@ import {
     Suspense,
     ProductDetailPage,
     ShippingPage,
+    CheckoutPage,
 } from './LazyRoutes';
 import AdminLayout from '@/layouts/AdminLayout';
 import AccountLayout from '@/layouts/AccountLayout';
@@ -31,6 +32,25 @@ const PublicRoutes = [
             },
             {
                 path: '/login',
+<<<<<<< HEAD
+                element: (
+                    <Suspense>
+                        <LoginPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: '/register',
+                element: (
+                    <Suspense>
+                        <RegisterPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: 'products/:id',
+=======
+>>>>>>> FE/Shipping-test
                 element: (
                     <Suspense>
                         <LoginPage />
@@ -71,10 +91,18 @@ const PublicRoutes = [
             },
             // @CheckOut
             {
-                path: `${MAIN_ROUTES.SHIPPING}`,
+                path: MAIN_ROUTES.SHIPPING,
                 element: (
                     <Suspense>
                         <ShippingPage/>
+                    </Suspense>
+                ),
+            },
+            {
+                path: MAIN_ROUTES.CHECKOUT,
+                element: (
+                    <Suspense>
+                            <CheckoutPage />
                     </Suspense>
                 ),
             },

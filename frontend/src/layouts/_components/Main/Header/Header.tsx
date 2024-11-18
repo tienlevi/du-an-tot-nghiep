@@ -18,7 +18,11 @@ export default function Header() {
         <div className="flex items-center justify-between max-w-screen-default py-1.5 mx-4 default:mx-auto">
           <div className="flex gap-10 items-center">
             <div>
+<<<<<<< HEAD
+              <img src="/logo.png" className="w-[55px]" alt="" />
+=======
               <img src="https://res-console.cloudinary.com/dpplfiyki/thumbnails/v1/image/upload/v1731678493/bG9nb193dDJlZWQ=/drilldown" className="w-[55px]" alt="" />
+>>>>>>> FE/Shipping-test
             </div>
             <div>
               <ul className="flex ">

@@ -32,13 +32,25 @@ export const CART_ENDPOINT = {
     UPDATEQUANTITY: '/carts/update-quantity',
     REMOVEITEM: '/carts/remove-item',
 };
-export const BRAND_ENDPOINT = {
-    ALL: '/brands/all',
-    DETAIL: '/brands',
-    CREATE: '/brands',
-    UPDATE: '/brands',
-};
 
+export const SIZE_ENDPOINT = {
+    ALL: '/sizes/all',
+    DETAIL: '/sizes',
+    CREATE: '/sizes',
+    UPDATE: '/sizes',
+};
+export const COLOR_ENDPOINT = {
+    ALL: '/colors/all',
+    DETAIL: '/colors',
+    CREATE: '/colors',
+    UPDATE: '/colors',
+};
+export const TAG_ENDPOINT = {
+    ALL: '/tags/all',
+    DETAIL: '/tags',
+    CREATE: '/tags',
+    UPDATE: '/tags',
+};
 export const AUTH_ENDPOINT = {
     LOGIN: '/auth/login',
     REGISTER: '/auth/register',
@@ -65,17 +77,11 @@ export const ORDER_ENDPOINT = {
     SHIPPING_ORDER: '/orders/shipping',
     DELIVERED_ORDER: '/orders/delivered',
     FINISH_ORDER: '/orders/done',
-    CREATE_ORDER: '/orders',
+    CREATE_ORDER: '/orders/create',
     DISABLED_REVIEW: '/orders/disabled-review',
 };
 
-export const ATTRIBUTES_ENDPOINT = {
-    ALL: '/attributes',
-    DETAILS: '/attributes/details',
-    All: '/attributes/all',
-    CREATE: 'attributes',
-    UPDATE: 'attributes',
-};
+
 
 export const STATS_ENDPOINT = {
     TOTAL: '/stats/total',
@@ -98,12 +104,9 @@ export const REVIEW_ENDPOINT = {
     GETOFPRODUCT: '/reviews',
     GET_DETAIL: '/reviews',
     GET_ALL: '/reviews/all',
-    GET_ALL_REPORT: '/reviews/report/all',
-    CREATE_REPORT: 'reviews/report',
     CREATE: '/reviews',
     STARS_REVIEW: '/reviews/stars-review',
     DELETE_REVIEW: '/reviews/',
-    DELETE_REPORT: '/reviews/report',
     CHECK_PURCHASED: '/reviews/purchased',
     UPDATE_ISREVIEWED: '/reviews/',
 };

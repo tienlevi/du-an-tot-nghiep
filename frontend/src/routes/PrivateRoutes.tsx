@@ -1,10 +1,29 @@
 import AdminLayout from '@/layouts/AdminLayout';
 import ProtectedRoute from '@/layouts/Protected/ProtectedRoute';
 import {
+<<<<<<< HEAD
+    CategoryList,
+    ColorList,
+    CreateCategory,
+    CreateColor,
+    CreateProduct,
+    CreateSize,
+    CreateTag,
+    DashboardPage,
+    ProductsListAll,
+    SizeList,
+    Suspense,
+    TagList,
+    UpdateCategory,
+    UpdateColor,
+    UpdateSize,
+    UpdateTag,
+=======
     CreateProduct,
     DashboardPage,
     ProductsListAll,
     Suspense,
+>>>>>>> FE/Shipping-test
     // UpdateProduct,
 } from './LazyRoutes';
 import { ADMIN_ROUTES } from '@/constants/router';
@@ -45,7 +64,10 @@ export const PrivateRoutes = [
                     },
                     {
                         path: 'list',
+<<<<<<< HEAD
+=======
 
+>>>>>>> FE/Shipping-test
                         element: (
                             <Suspense>
                                 <ProductsListAll />
@@ -70,6 +92,168 @@ export const PrivateRoutes = [
                     // },
                 ],
             },
+<<<<<<< HEAD
+            // @Category
+            {
+                path: ADMIN_ROUTES.CATEGORIES,
+                children: [
+                    {
+                        index: true,
+                        element: (
+                            <Suspense>
+                                <CategoryList />
+                            </Suspense>
+                        ),
+                    },
+                    {
+                        path: ADMIN_ROUTES.CATEGORIES_CREATE,
+                        element: (
+                            <Suspense>
+                                <CreateCategory />
+                            </Suspense>
+                        ),
+                    },
+                    {
+                        path: `${ADMIN_ROUTES.CATEGORIES_EDIT}/:id`,
+                        element: (
+                            <Suspense>
+                                <UpdateCategory />
+                            </Suspense>
+                        ),
+                    },
+                ],
+            },
+            // @Color
+            {
+                path: ADMIN_ROUTES.COLORS,
+                element: (
+                    <Suspense>
+                        <Outlet />
+                    </Suspense>
+                ),
+                children: [
+                    {
+                        index: true,
+                        element: (
+                            <Suspense>
+                                <ColorList />
+                            </Suspense>
+                        ),
+                    },
+                    {
+                        path: 'list',
+                        element: (
+                            <Suspense>
+                                <ColorList />
+                            </Suspense>
+                        ),
+                    },
+                    {
+                        path: 'create',
+                        element: (
+                            <Suspense>
+                                <CreateColor />
+                            </Suspense>
+                        ),
+                    },
+                    {
+                        path: 'edit/:id',
+                        element: (
+                            <Suspense>
+                                <UpdateColor />
+                            </Suspense>
+                        ),
+                    },
+                ],
+            },
+            // @Size
+            {
+                path: ADMIN_ROUTES.SIZES,
+                element: (
+                    <Suspense>
+                        <Outlet />
+                    </Suspense>
+                ),
+                children: [
+                    {
+                        index: true,
+                        element: (
+                            <Suspense>
+                                <SizeList />
+                            </Suspense>
+                        ),
+                    },
+                    {
+                        path: 'list',
+                        element: (
+                            <Suspense>
+                                <SizeList />
+                            </Suspense>
+                        ),
+                    },
+                    {
+                        path: 'create',
+                        element: (
+                            <Suspense>
+                                <CreateSize />
+                            </Suspense>
+                        ),
+                    },
+                    {
+                        path: 'edit/:id',
+                        element: (
+                            <Suspense>
+                                <UpdateSize />
+                            </Suspense>
+                        ),
+                    },
+                ],
+            },
+            // @Tag
+            {
+                path: ADMIN_ROUTES.TAGS,
+                element: (
+                    <Suspense>
+                        <Outlet />
+                    </Suspense>
+                ),
+                children: [
+                    {
+                        index: true,
+                        element: (
+                            <Suspense>
+                                <TagList />
+                            </Suspense>
+                        ),
+                    },
+                    {
+                        path: 'list',
+                        element: (
+                            <Suspense>
+                                <TagList />
+                            </Suspense>
+                        ),
+                    },
+                    {
+                        path: 'create',
+                        element: (
+                            <Suspense>
+                                <CreateTag />
+                            </Suspense>
+                        ),
+                    },
+                    {
+                        path: 'edit/:id',
+                        element: (
+                            <Suspense>
+                                <UpdateTag />
+                            </Suspense>
+                        ),
+                    },
+                ],
+            },
+=======
+>>>>>>> FE/Shipping-test
         ],
     },
 ];

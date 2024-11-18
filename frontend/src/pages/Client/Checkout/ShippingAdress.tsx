@@ -1,8 +1,41 @@
+import { useGetProvince } from '@/hooks/shipping/useGetProvince';
+import { setShippingAddress } from '@/store/slice/orderSlice';
+import { RootState } from '@/store/store';
 import { Form, Input, Select, Space, Typography } from 'antd';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import WardSelectList from './WardSelectList';
+import DistrictSelectList from './DistrictSelectList';
 
 const ShippingAddress = () => {
     const form = Form.useFormInstance();
-   
+    const { data: provinceList } = useGetProvince();
+    const dispatch = useDispatch();
+    const { shippingAddress, description, receiverInfo } = useSelector((state: RootState) => state.order);
+
+    const handleSelectProvinceChange = (value: string, option: any) => {
+        dispatch(setShippingAddress({ provinceId: +value, province: option.label }));
+        dispatch(setShippingAddress({ district: '', districtId: null, ward: '', wardCode: '' }));
+        form.setFieldsValue({
+            districtId: null,
+            wardCode: '',
+            ward: '',
+            district: '',
+        });
+    };
+
+    const handleAddressChange = () => {
+        dispatch(setShippingAddress({ address: form.getFieldValue('address') }));
+    };
+
+    useEffect(() => {
+        form.setFieldsValue({
+            country: 'vn',
+            ...shippingAddress,
+            description,
+            ...receiverInfo,
+        });
+    }, []);
 
     return (
         <Space direction='vertical' className='mt-5 w-full rounded-lg border border-gray p-3'>
@@ -13,7 +46,7 @@ const ShippingAddress = () => {
             </Form.Item>
 
             <Form.Item label='Tỉnh/Thành phố' name='provinceId' rules={[{ required: true, message: <></> }]}>
-                {/* <Select options={provinceList} allowClear onChange={handleSelectProvinceChange} /> */}
+                <Select options={provinceList} allowClear onChange={handleSelectProvinceChange} />
             </Form.Item>
 
             <Form.Item
@@ -26,9 +59,9 @@ const ShippingAddress = () => {
                 {({ getFieldValue }) => {
                     const provinceId = getFieldValue('provinceId');
 
-                    // if (provinceId) {
-                    //     return <DistrictSelectList provinceId={provinceId} />;
-                    // }
+                    if (provinceId) {
+                        return <DistrictSelectList provinceId={provinceId} />;
+                    }
                     return (
                         <Form.Item name='districtId' rules={[{ required: true, message: <></> }]}>
                             <Select options={[]} disabled />
@@ -48,7 +81,7 @@ const ShippingAddress = () => {
                     const districtId = getFieldValue('districtId');
 
                     if (districtId) {
-                        // return <WardSelectList districtId={districtId} />;
+                        return <WardSelectList districtId={districtId} />;
                     }
                     return (
                         <Form.Item name='wardCode' rules={[{ required: true, message: <></> }]}>
@@ -58,7 +91,7 @@ const ShippingAddress = () => {
                 }}
             </Form.Item>
             <Form.Item label='Địa chỉ' name='address' rules={[{ required: true, message: <></> }]}>
-                {/* <Input onChange={handleAddressChange} /> */}
+                <Input onChange={handleAddressChange} />
             </Form.Item>
         </Space>
     );

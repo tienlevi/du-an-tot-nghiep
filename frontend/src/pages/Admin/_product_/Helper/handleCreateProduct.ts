@@ -1,4 +1,4 @@
-import { IProductForm, IThumbnailAntd } from '~/types/Product';
+import { IProductForm, IThumbnailAntd } from '@/types/Product';
 
 export const handleCreateProduct = (data: IProductForm, createProduct: (product: FormData) => void) => {
     const dataTransfer = new DataTransfer();

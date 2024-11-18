@@ -1,4 +1,4 @@
-import { DataTypeConvert } from '~/constants/enum';
+import { DataTypeConvert } from '@/constants/enum';
 import { IAttribute } from '../../../../types/Product';
 import _ from 'lodash';
 

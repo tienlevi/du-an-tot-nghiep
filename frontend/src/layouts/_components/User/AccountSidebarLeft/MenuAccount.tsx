@@ -1,6 +1,7 @@
 import useLogout from '@/hooks/Auth/Mutation/useLogout';
 import MenuItem from './MenuItem';
 import { ADMIN_ROUTES, MAIN_ROUTES } from '@/constants/router';
+import showMessage from '@/utils/ShowMessage';
 
 const menus = [
     { name: 'Tài khoản', path: MAIN_ROUTES.PROFILE },
@@ -24,7 +25,17 @@ const MenuAccount = ({ isAdmin }: { isAdmin: boolean }) => {
                 )}
 
                 <button
-                    onClick={handleLogout}
+<<<<<<< HEAD
+                    onClick={() => handleLogout.mutate()}
+=======
+                    onClick={() => {
+                        handleLogout();
+                        showMessage(
+                            'Đã đăng xuất khỏi tài khoản của bạn.',
+                            'success',
+                        );
+                    }}
+>>>>>>> FE/Shipping-test
                     className="mt-5 border p-2 transition-transform duration-200 ease-in-out hover:border-[#da291c] active:-translate-y-3"
                 >
                     Đăng xuất
