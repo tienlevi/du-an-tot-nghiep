@@ -19,14 +19,13 @@ import {
 import WrapperCard from './_component/WrapperCard';
 import { ADMIN_ROUTES } from '@/constants/router';
 import WrapperPageAdmin from '@/pages/Admin/_common/WrapperPageAdmin';
-import useGetAllCate from '@/hooks/category/Queries/useGetAllCate';
-import useGetAllTag from '@/hooks/Tag/Queries/useGetAllTag';
+import useGetAllCategoriesNoParams from '@/hooks/categories/Queries/useGetAllCategoriesNoParams';
+import useGetAllTagNoParams from '@/hooks/Tags/Queries/useGetAllTagNoParams';
 
 const CreateProduct = () => {
     const [form] = Form.useForm<any>();
-    const { data } = useGetAllCate();
-    const { data: tags } = useGetAllTag();
-    console.log(tags);
+    const { data: categories } = useGetAllCategoriesNoParams();
+    const { data: tags } = useGetAllTagNoParams();
 
     return (
         <WrapperPageAdmin
@@ -54,7 +53,7 @@ const CreateProduct = () => {
                                 size="large"
                                 placeholder="Chọn danh mục cho sản phẩm..."
                                 className="w-full"
-                                options={data?.data?.categories?.map(
+                                options={categories?.data?.categories?.map(
                                     (item: any) => ({
                                         label: item.name,
                                         value: item._id,

@@ -32,25 +32,6 @@ const PublicRoutes = [
             },
             {
                 path: '/login',
-<<<<<<< HEAD
-                element: (
-                    <Suspense>
-                        <LoginPage />
-                    </Suspense>
-                ),
-            },
-            {
-                path: '/register',
-                element: (
-                    <Suspense>
-                        <RegisterPage />
-                    </Suspense>
-                ),
-            },
-            {
-                path: 'products/:id',
-=======
->>>>>>> FE/Shipping-test
                 element: (
                     <Suspense>
                         <LoginPage />
@@ -69,7 +50,23 @@ const PublicRoutes = [
                 path: 'products/:id',
                 element: (
                     <Suspense>
-                        <ProductDetailPage/>
+                        <LoginPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: '/register',
+                element: (
+                    <Suspense>
+                        <RegisterPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: 'products/:id',
+                element: (
+                    <Suspense>
+                        <ProductDetailPage />
                     </Suspense>
                 ),
             },
@@ -94,7 +91,7 @@ const PublicRoutes = [
                 path: MAIN_ROUTES.SHIPPING,
                 element: (
                     <Suspense>
-                        <ShippingPage/>
+                        <ShippingPage />
                     </Suspense>
                 ),
             },
@@ -102,11 +99,10 @@ const PublicRoutes = [
                 path: MAIN_ROUTES.CHECKOUT,
                 element: (
                     <Suspense>
-                            <CheckoutPage />
+                        <CheckoutPage />
                     </Suspense>
                 ),
             },
-
 
             // @Account
             {

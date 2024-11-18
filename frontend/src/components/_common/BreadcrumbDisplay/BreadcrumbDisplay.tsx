@@ -1,11 +1,5 @@
 import { Breadcrumb, ConfigProvider } from 'antd';
 import { useLocation } from 'react-router-dom';
-<<<<<<< HEAD
-// import Contact from '@/pages/Clients/Contact';
-=======
-// import Contact from '~/pages/Clients/Contact';
->>>>>>> FE/Shipping-test
-
 // Function to translate English words to Vietnamese
 const translateToVietnamese = (word: string) => {
     const translations: { [key: string]: string } = {

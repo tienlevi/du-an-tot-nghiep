@@ -62,17 +62,10 @@ export const menuGroups: IMenuItem[] = [
         icon: <BgColorsOutlined />,
         label: 'Quản lý màu',
         children: [
-<<<<<<< HEAD
             { label: 'Tất cả màu', route: ADMIN_ROUTES.COLORS },
             {
                 label: 'Thêm mới màu',
                 route: ADMIN_ROUTES.COLOR_CREATE,
-=======
-            { label: 'Tất cả thuộc tính', route: ADMIN_ROUTES.ATTRIBUTES },
-            {
-                label: 'Thêm mới thuộc tính',
-                route: ADMIN_ROUTES.ATTRIBUTES_CREATE,
->>>>>>> FE/Shipping-test
             },
         ],
     },
