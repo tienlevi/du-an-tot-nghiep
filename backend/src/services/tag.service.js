@@ -18,7 +18,7 @@ export const createNewTag = async (req, res, next) => {
 };
 
 // @Get get tag
-export const getTag = async (req, res, next) => {
+export const getDetailedTag = async (req, res, next) => {
   const tag = await Tag.findById(req.params.id).lean();
 
   return res.status(StatusCodes.OK).json(
@@ -57,7 +57,7 @@ export const updateTag = async (req, res, next) => {
 
   return res.status(StatusCodes.OK).json(
     customResponse({
-      data: { tag },
+      data: tag,
       message: ReasonPhrases.OK,
       status: StatusCodes.OK,
       success: true,

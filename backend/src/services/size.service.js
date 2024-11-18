@@ -37,6 +37,20 @@ export const getAllSizes = async (req, res, next) => {
   );
 };
 
+// @Get get detailed size
+export const getDetailedSize = async (req, res, next) => {
+  const size = await Size.findById(req.params.id).lean();
+
+  return res.status(StatusCodes.OK).json(
+    customResponse({
+      data: size,
+      message: ReasonPhrases.OK,
+      status: StatusCodes.OK,
+      success: true,
+    })
+  );
+};
+
 // @Post update color
 export const updateSize = async (req, res, next) => {
   const newSize = await Size.findOneAndUpdate(
@@ -49,7 +63,7 @@ export const updateSize = async (req, res, next) => {
 
   return res.status(StatusCodes.OK).json(
     customResponse({
-      data: { size: newSize },
+      data: newSize,
       message: ReasonPhrases.OK,
       status: StatusCodes.OK,
       success: true,

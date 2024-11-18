@@ -12,7 +12,8 @@ const handleQuery = async (req, model) => {
     features.count(),
   ]);
 
-  const totalPages = Math.ceil(totalDocs / +req.query.limit);
+  const totalPages = Math.ceil(totalDocs / +req.query.limit) || 0;
+
   return { data, page, totalDocs, totalPages };
 };
 export default handleQuery;
