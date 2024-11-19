@@ -1,44 +1,19 @@
-import Loader from '@/utils/Loader';
-import Router from '@/routes/routes';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { useRoutes } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
+import RootRoutes from './routes/routes';
+import useLogout from './hooks/Auth/Mutation/useLogout';
+import React from 'react';
+import { registerLogoutCallback } from './utils/api/axiosIntance';
 
-const queryClient = new QueryClient();
 
 function App() {
-  const { pathname } = useLocation();
-  const [loading, setLoading] = useState<boolean>(true);
+  const router = useRoutes(RootRoutes)
+  const logout = useLogout();
 
-  useEffect(() => {
-    setTimeout(() => setLoading(false), 1000);
+  React.useEffect(() => {
+      registerLogoutCallback(() => logout());
   }, []);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
-
-  return loading ? (
-    <Loader />
-  ) : (
-    <QueryClientProvider client={queryClient}>
-      <ToastContainer
-        position="top-right"
-        autoClose={4000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
-      <Router />
-    </QueryClientProvider>
-  );
+  return router
 }
 
 export default App;

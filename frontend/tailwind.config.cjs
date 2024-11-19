@@ -1,4 +1,4 @@
-const defaultTheme = require('tailwindcss/defaultTheme')
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -6,9 +6,10 @@ module.exports = {
   darkMode: 'class',
   theme: {
     fontFamily: {
-      satoshi: ['Satoshi', 'sans-serif'],
+      Montserrat: ['Montserrat'],
     },
     screens: {
+      default: '1634px',
       '2xsm': '375px',
       xsm: '425px',
       '3xl': '2000px',
@@ -18,6 +19,8 @@ module.exports = {
       colors: {
         current: 'currentColor',
         transparent: 'transparent',
+        global: '#333f48',
+        hover: '#da291c',
         white: '#FFFFFF',
         black: '#1C2434',
         'black-2': '#010101',
@@ -251,4 +254,4 @@ module.exports = {
     },
   },
   plugins: [],
-}
+};

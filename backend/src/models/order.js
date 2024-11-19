@@ -1,60 +1,116 @@
 import mongoose from "mongoose";
+import { ORDER_STATUS } from "../constants/orderStatus.js";
+import { PAYMENT_METHOD } from "../constants/paymentMethod.js";
+import { ROLE } from "../constants/role.js";
 
-// Hàm để sinh orderId
-const generateOrderId = () => {
-  const timestamp = Date.now().toString();
-  const random = Math.floor(Math.random() * 1000)
-    .toString()
-    .padStart(3, "0");
-  return `${timestamp}-${random}`;
-};
-
-const orderItemSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  price: { type: Number, required: true },
-  image: { type: String },
-  quantity: { type: Number },
-});
+const OrderItemSchema = new mongoose.Schema(
+  {
+    productId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "Product",
+    },
+    variantId: mongoose.Schema.Types.ObjectId,
+    name: {
+      type: String,
+      required: true,
+    },
+    size: { type: String, required: true },
+    color: { type: String, required: true },
+    category: { type: String, required: true },
+    tags: [{ type: String, required: true }],
+    quantity: {
+      type: Number,
+      required: true,
+      min: 1,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+    image: {
+      type: String,
+      required: true,
+    },
+    isReviewed: {
+      type: Boolean,
+      default: false,
+    },
+    isReviewDisabled: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    _id: false,
+    id: false,
+    versionKey: false,
+    timestamps: false,
+  }
+);
 
 const orderSchema = new mongoose.Schema(
   {
-    orderId: { type: String, unique: true },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "User", // Nếu bạn có một schema User để liên kết
+      ref: "User",
     },
-    items: {
-      type: [orderItemSchema],
-      required: true,
-    },
-    email: { type: String, required: true }, // Yêu cầu email
-    name: { type: String, required: true },
-    address: { type: String, required: true }, // Yêu cầu địa chỉ
+    items: [OrderItemSchema],
     totalPrice: {
       type: Number,
       required: true,
     },
-    method: {
-      type: String,
-      required: true,
+    shippingFee: {
+      type: Number,
+      default: 0,
     },
-    phone: { type: String, required: true }, // Yêu cầu số điện thoại
-    status: {
+    customerInfo: {
+      name: { type: String, required: true },
+      email: { type: String, required: true },
+      phone: { type: String, required: true },
+    },
+    receiverInfo: {
+      name: { type: String, default: "" },
+      email: { type: String, default: "" },
+      phone: { type: String, default: "" },
+    },
+    shippingAddress: {
+      country: {
+        type: String,
+        default: "Viet Nam",
+      },
+      province: String,
+      district: String,
+      address: String,
+    },
+    paymentMethod: {
       type: String,
-      enum: ["chờ xử lý", "đã xác nhận", "đang giao", "đã giao"],
-      default: "chờ xử lý",
+      trim: true,
+      required: true,
+      enum: Object.values(PAYMENT_METHOD),
+      default: PAYMENT_METHOD.CARD,
+    },
+    isPaid: {
+      type: Boolean,
+      default: false,
+    },
+    canceledBy: {
+      type: String,
+      default: "none",
+      enum: [...Object.values(ROLE), "none"],
+    },
+    description: {
+      type: String,
+    },
+    orderStatus: {
+      type: String,
+      default: ORDER_STATUS.PENDING,
+      enum: Object.values(ORDER_STATUS),
     },
   },
-  { timestamps: true, versionKey: false }
-);
-
-// Tạo pre-save hook để sinh orderId trước khi lưu vào cơ sở dữ liệu
-orderSchema.pre("save", function (next) {
-  if (!this.orderId) {
-    this.orderId = generateOrderId();
+  {
+    versionKey: false,
+    timestamps: true,
   }
-  next();
-});
-
+);
 export default mongoose.model("Order", orderSchema);
