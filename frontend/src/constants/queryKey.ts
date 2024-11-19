@@ -7,8 +7,8 @@ export const QUERY_KEY = {
     PRODUCTS_LAZY: 'products_lazy',
     CATEGORIES: 'categories',
     SIZES: 'Sizes',
-    COLORS: 'Sizes',
-    TAGS: 'Sizes',
+    COLORS: 'colors',
+    TAGS: 'tags',
     MENU: 'categories-menu',
     LATEST: 'latest',
     DEALS: 'deals',
@@ -22,9 +22,6 @@ export const QUERY_KEY = {
     ORDERS: 'orders',
     MY_ORDERS: 'my-orders',
     CHECKOUT: 'checkout',
-
-    //tag
-    TAGS: 'tags',
 
     SHIPPING_SERVICES: 'shippingServices',
     GET_PROVINCE: 'province',
