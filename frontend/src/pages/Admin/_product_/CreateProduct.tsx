@@ -4,6 +4,7 @@ import {
     Form,
     Image,
     Input,
+    InputNumber,
     Select,
     Upload,
     UploadFile,
@@ -19,13 +20,36 @@ import {
 import WrapperCard from './_component/WrapperCard';
 import { ADMIN_ROUTES } from '@/constants/router';
 import WrapperPageAdmin from '@/pages/Admin/_common/WrapperPageAdmin';
-import useGetAllCategoriesNoParams from '@/hooks/categories/Queries/useGetAllCategoriesNoParams';
-import useGetAllTagNoParams from '@/hooks/Tags/Queries/useGetAllTagNoParams';
+import VariationItem from '@/pages/Admin/_product_/_component/VariationItem';
+import useGetCategories from '@/hooks/categories/Queries/useGetCategories';
+import useGetTags from '@/hooks/Tags/Queries/useGetTags';
+import useGetColors from '@/hooks/Colors/Queries/useGetColors';
+import useGetSizes from '@/hooks/Sizes/Queries/useGetSizes';
+import { useState } from 'react';
 
 const CreateProduct = () => {
     const [form] = Form.useForm<any>();
-    const { data: categories } = useGetAllCategoriesNoParams();
-    const { data: tags } = useGetAllTagNoParams();
+    const [attributesFile, setAttributesFile] = useState<UploadFile[][]>([]);
+
+    const { data: categories } = useGetCategories({ limit: '100000' });
+    const { data: tags } = useGetTags({ limit: '100000' });
+    const { data: sizes } = useGetSizes({ limit: '100000' });
+    const { data: colors } = useGetColors({ limit: '100000' });
+
+    const handleChangeAttributeThumbnail = (
+        index: number,
+    ): UploadProps['onChange'] => {
+        return ({ fileList: newFileList }) => {
+            const newAttributesFile = [...attributesFile];
+            newAttributesFile[index] = newFileList;
+            setAttributesFile(newAttributesFile);
+        };
+    };
+    const handleRemoveAttributeThumbnail = (index: number) => {
+        const newAttributesFile = [...attributesFile];
+        newAttributesFile[index] = [];
+        setAttributesFile(newAttributesFile);
+    };
 
     return (
         <WrapperPageAdmin
@@ -96,6 +120,30 @@ const CreateProduct = () => {
                             />
                         </Form.Item>
                         <Form.Item<any>
+                            className="font-medium flex text-[#08090F] capitalize"
+                            name={'price'}
+                            required
+                            label="giá tiền (VNĐ)"
+                        >
+                            <InputNumber<number>
+                                min={1}
+                                placeholder="Nhập giá tiền..."
+                                formatter={(value) =>
+                                    `${value}`.replace(
+                                        /\B(?=(\d{3})+(?!\d))/g,
+                                        ',',
+                                    )
+                                }
+                                parser={(value) =>
+                                    value?.replace(
+                                        /VNĐ\s?|(,*)/g,
+                                        '',
+                                    ) as unknown as number
+                                }
+                                size="large"
+                            />
+                        </Form.Item>
+                        <Form.Item<any>
                             label="Mô tả"
                             name="description"
                             className="font-medium text-[#08090F]"
@@ -122,7 +170,7 @@ const CreateProduct = () => {
                         >
                             {(fields, { add, remove }, { errors }) => (
                                 <>
-                                    {/* {fields.map(
+                                    {fields.map(
                                         (
                                             { key, name, ...restField },
                                             index,
@@ -130,24 +178,28 @@ const CreateProduct = () => {
                                             return (
                                                 <VariationItem
                                                     key={key}
-                                                    index={index}
-                                                    attributesForVariant={
-                                                        attributesForVariant
+                                                    colors={
+                                                        colors?.data.colors ||
+                                                        []
                                                     }
-                                                    fieldName={name}
-                                                    restField={restField}
-                                                    variantFile={attributesFile}
                                                     handleChangeThumbnail={
                                                         handleChangeAttributeThumbnail
                                                     }
+                                                    variantFile={attributesFile}
                                                     handleRemoveThumbnail={
                                                         handleRemoveAttributeThumbnail
                                                     }
+                                                    sizes={
+                                                        sizes?.data.sizes || []
+                                                    }
+                                                    index={index}
+                                                    fieldName={name}
+                                                    restField={restField}
                                                     removeVariation={remove}
                                                 />
                                             );
                                         },
-                                    )} */}
+                                    )}
                                     <Form.Item>
                                         <Button
                                             type="dashed"

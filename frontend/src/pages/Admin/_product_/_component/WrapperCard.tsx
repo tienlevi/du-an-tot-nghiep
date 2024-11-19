@@ -19,9 +19,16 @@ const WrapperCard = ({
         <Card
             loading={isLoading}
             title={title}
-            className={clsx(isOpacity && 'pointer-events-none opacity-60', 'shadow-10 shadow-graydark')}
+            className={clsx(
+                isOpacity && 'pointer-events-none opacity-60',
+                'shadow-10 shadow-graydark',
+            )}
         >
-            {isOpacity && <span className='mb-4 inline-block'>Có thể chỉnh sau khi chọn danh mục</span>}
+            {isOpacity && (
+                <span className="mb-4 inline-block">
+                    Có thể chỉnh sau khi điền đẩy đủ thông tin cơ bản
+                </span>
+            )}
             {!isOpacity && children}
         </Card>
     );
