@@ -43,6 +43,7 @@ export type IProductFiles = {
 
 export type IProductForm = {
     name: string;
+    category: string;
     description: string;
     variants: IProductVariation[];
     price: number;

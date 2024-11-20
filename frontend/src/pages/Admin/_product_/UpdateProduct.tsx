@@ -30,6 +30,8 @@ import { FormProps } from 'antd/lib';
 import { handleCreateProduct } from '@/pages/Admin/_product_/Helper/handleCreateProduct';
 import { useGetDetailProduct } from '@/hooks/Products/Queries/useGetDetailProduct';
 import convertApiResponseToFileList from '@/pages/Admin/_product_/Helper/convertImageUrlToFileList';
+import useUpdateProduct from '@/hooks/Products/Mutations/useUpdateProduct';
+import { handleEditProduct } from '@/pages/Admin/_product_/Helper/handleEditProduct';
 
 const UpdateProduct = () => {
     const [form] = Form.useForm<any>();
@@ -42,12 +44,11 @@ const UpdateProduct = () => {
     const { data: tags } = useGetTags({ limit: '100000' });
     const { data: sizes } = useGetSizes({ limit: '100000' });
     const { data: colors } = useGetColors({ limit: '100000' });
-    const { mutate: createProduct } = useCreateProduct();
+    const { mutate: updateProduct } = useUpdateProduct();
     const { data: targetProduct } = useGetDetailProduct(id as string);
 
     const onFinish: FormProps<any>['onFinish'] = (values) => {
-        console.log(values, 'values');
-        handleCreateProduct(values, createProduct);
+        handleEditProduct(values, id as string, updateProduct);
     };
     const handleChangeAttributeThumbnail = (
         index: number,
@@ -65,7 +66,7 @@ const UpdateProduct = () => {
     };
 
     useEffect(() => {
-        if (targetProduct) {
+        if (targetProduct && colors?.data.colors && sizes?.data.sizes) {
             const { variants, ...rest } = targetProduct;
 
             let newVariantFile: UploadFile<any>[][] = [];
@@ -80,6 +81,8 @@ const UpdateProduct = () => {
                 setVariantFile((prev) => [...prev, image]);
                 const newVaria: any = {
                     ...varia,
+                    size: varia.size._id,
+                    color: varia.color._id,
                     thumbnail: image,
                 };
                 delete newVaria.image;
@@ -94,11 +97,11 @@ const UpdateProduct = () => {
                 initialValue: initial,
                 initialVariantFile: newVariantFile,
             });
-
+            console.log(initial, 'initial');
             form.setFieldsValue(initial as any);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [targetProduct, id]);
+    }, [targetProduct, id, colors, sizes]);
 
     return (
         <WrapperPageAdmin
@@ -117,7 +120,7 @@ const UpdateProduct = () => {
                         </Form.Item>
                         <Form.Item<any>
                             label="Danh mục"
-                            name="categoryId"
+                            name="category"
                             required
                             className="font-medium text-[#08090F]"
                         >
@@ -135,7 +138,7 @@ const UpdateProduct = () => {
                         </Form.Item>
                         <Form.Item<any>
                             label="Thẻ phân loại"
-                            name="brandId"
+                            name="tags"
                             required
                             className="font-medium text-[#08090F]"
                         >
@@ -209,7 +212,7 @@ const UpdateProduct = () => {
                         title="Thông tin bán hàng"
                     >
                         <Form.List
-                            name="variations"
+                            name="variants"
                             rules={[
                                 {
                                     validator: variationsValidator,
@@ -230,10 +233,10 @@ const UpdateProduct = () => {
                                                         colors?.data.colors ||
                                                         []
                                                     }
+                                                    variantFile={variantFile}
                                                     handleChangeThumbnail={
                                                         handleChangeAttributeThumbnail
                                                     }
-                                                    variantFile={attributesFile}
                                                     handleRemoveThumbnail={
                                                         handleRemoveAttributeThumbnail
                                                     }

@@ -22,7 +22,14 @@ export const ProductServices = {
     },
     async createProduct(data: FormData) {
         const res = await instance.post<IAxiosResponse<null>>(
-            `/products/add`,
+            `/products/create`,
+            data,
+        );
+        return res.data;
+    },
+    async updateProduct(data: FormData, id: string) {
+        const res = await instance.put<IAxiosResponse<null>>(
+            `/products/update/${id}`,
             data,
         );
         return res.data;

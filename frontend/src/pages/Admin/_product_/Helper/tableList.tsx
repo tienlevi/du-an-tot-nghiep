@@ -35,7 +35,9 @@ export const ProductsListColumns = ({
                 <>
                     <div className="flex items-center gap-2">
                         <div>
-                            <h4 className="max-w-[300px] truncate">{text}</h4>
+                            <h4 className="max-w-[300px] truncate font-semibold text-[16px]">
+                                {text}
+                            </h4>
                             <p className="text-[10px]">ID: {record._id}</p>
                         </div>
                     </div>
@@ -54,7 +56,7 @@ export const ProductsListColumns = ({
                                 </div>
                                 <div>
                                     <p className="text-[10px]">
-                                        kich thước: {item.size.name}
+                                        Kích thước: {item.size.name}
                                     </p>
                                     <p className="text-[10px]">
                                         Màu sắc: {item.color.name}
@@ -119,7 +121,11 @@ export const ProductsListColumns = ({
             filters: tagsFilter,
             filteredValue: getFilteredValue('tags'),
             render: (_, record) => {
-                return <h4>{record.tags.join(', ')}</h4>;
+                return (
+                    <h4>
+                        {record.tags.map((item: any) => item.name).join(', ')}
+                    </h4>
+                );
             },
         },
         {

@@ -1,7 +1,7 @@
 import { QUERY_KEY } from '@/constants/queryKey';
 import { ProductServices } from '@/services/products.service';
+import { Params } from '@/types/Api';
 import { useQuery } from '@tanstack/react-query';
-import { Params } from 'react-router-dom';
 
 const useGetProducts = (params?: Params) => {
     return useQuery({
@@ -10,7 +10,7 @@ const useGetProducts = (params?: Params) => {
             ...Object.values(params || {}),
             ...Object.keys(params || {}),
         ],
-        queryFn: () => ProductServices.getAll(params),
+        queryFn: async () => await ProductServices.getAll(params),
     });
 };
 
