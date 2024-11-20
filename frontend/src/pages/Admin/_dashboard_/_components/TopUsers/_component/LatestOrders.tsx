@@ -19,18 +19,6 @@ type LatestOrder = {
     customerAvatar: string;
 };
 
-const getStatusColor = (status: LatestOrder['orderStatus']) => {
-    const statusMap: Record<LatestOrder['orderStatus'], string> = {
-        pending: '#faad14',
-        confirmed: '#1890ff',
-        shipping: '#13c2c2',
-        delivered: '#52c41a',
-        cancelled: '#f5222d',
-        done: '#237804',
-    };
-    return statusMap[status] || '#d9d9d9';
-};
-
 const LatestOrders: React.FC<{ orders: LatestOrder[] }> = ({ orders }) => {
     const navigate = useNavigate();
 

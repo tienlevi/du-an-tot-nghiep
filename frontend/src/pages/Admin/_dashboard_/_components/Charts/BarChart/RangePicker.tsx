@@ -4,33 +4,13 @@ import ReactApexChart from 'react-apexcharts';
 import WrapperList from '@/components/_common/WrapperList';
 import DateRangePickerComponent from '../RangePicker/DateRangePickerComponent'; 
 import { optionsBarChart } from './_option';
-
-const generateMockData = (startDate: Dayjs, endDate: Dayjs) => {
-    const days = endDate.diff(startDate, 'day') + 1;
-    const data = [];
-  
-    for (let i = 0; i < days; i++) {
-      const currentDate = startDate.add(i, 'day');
-      data.push({
-        date: currentDate.format('YYYY-MM-DD'),
-        totalOrders: Math.floor(Math.random() * 100) + 50, // Random orders between 50-150
-        totalRevenue: Math.floor(Math.random() * 10000000) + 5000000, // Random revenue between 5M-15M
-      });
-    }
-  
-    return {
-      data,
-      success: true,
-      message: "Success"
-    };
-  };
-
-
+import { UseRangePicker } from '@/hooks/stats/useRangePicker';
 
 const BarChartRangePicker: React.FC = () => {
     const today = dayjs();
     const [dateRange, setDateRange] = useState<[Dayjs, Dayjs]>([today, today]);
-    const dailyStats = generateMockData(dateRange[0], dateRange[1]);
+    const { data: dailyStats }:any = UseRangePicker(dateRange[0], dateRange[1]);
+
 
     const revenue = dailyStats?.data?.map((item: any) => item.totalRevenue) || [];
     const orders = dailyStats?.data?.map((item: any) => item.totalOrders) || [];
@@ -54,7 +34,6 @@ const BarChartRangePicker: React.FC = () => {
         }
     };
     useEffect(() => {
-        // Khi component mount, đảm bảo rằng dateRange có giá trị
         if (!dateRange[0] || !dateRange[1]) {
             setDateRange([today, today]);
         }
