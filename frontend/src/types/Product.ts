@@ -29,10 +29,10 @@ export type IProductVariation = {
         file: File;
         fileList: IThumbnailAntd[];
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
     imageUrlRef: string;
-    price: number;
+    size: string;
+    color: string;
     stock: number;
 };
 
@@ -43,46 +43,10 @@ export type IProductFiles = {
 
 export type IProductForm = {
     name: string;
-    isHide: boolean;
-    thumbnail: IProductFiles | null;
-    images: IProductFiles | null;
-    categoryId: string;
-    brandId: string;
+    category: string;
     description: string;
-    variations: IProductVariation[];
-};
-
-export type IProductItem = {
-    isHide: boolean;
-    reviewCount: number;
-    _id: string;
-    name: string;
+    variants: IProductVariation[];
+    price: number;
     discount: number;
-    images: string[];
-    imageUrlRefs: string[];
-    thumbnail: string;
-    thumbnailUrlRef: string[];
-    status: string;
-    isAvailable: boolean;
-    isDeleted: boolean;
-    attributes: {
-        key: string;
-        value: string;
-        _id?: string;
-    }[];
-    rating: number;
-    reviewIds: string[];
-    variationIds: {
-        _id: string;
-        price: number;
-        image: string;
-        stock: number;
-        sku: string;
-        color: string;
-        productId: string;
-    }[];
-    brandId: string;
-    categoryId: string;
-    createdAt: string;
-    updatedAt: string;
+    tags: string[];
 };

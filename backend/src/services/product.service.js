@@ -4,7 +4,11 @@ import { removeUploadedFile, uploadFiles } from "../utils/upload.js";
 
 export const getAllProducts = async (query) => {
   const features = new APIQuery(
-    Product.find().populate("variants.color").populate("variants.size"),
+    Product.find()
+      .populate("variants.color")
+      .populate("variants.size")
+      .populate("category")
+      .populate("tags"),
     query
   );
   features.filter().sort().limitFields().search().paginate();
@@ -27,7 +31,7 @@ export const getDiscountProducts = async () => {
   const products = await Product.find()
     .populate("variants.color")
     .populate("variants.size")
-    .sort({ sdiscountold: -1 })
+    .sort({ discount: -1 })
     .limit(10);
   return products;
 };
@@ -58,6 +62,7 @@ export const createProduct = async (productData, files) => {
   // @add variants to product
   const newProduct = new Product({
     ...productData,
+    tags: productData.tags ? productData.tags.split(",") : [],
     variants: variationList,
   });
 

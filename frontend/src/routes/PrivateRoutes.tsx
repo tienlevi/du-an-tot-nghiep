@@ -23,6 +23,7 @@ import {
 } from './LazyRoutes';
 import { ADMIN_ROUTES } from '@/constants/router';
 import { Outlet } from 'react-router-dom';
+import UpdateProduct from '@/pages/Admin/_product_/UpdateProduct';
 
 export const PrivateRoutes = [
     {
@@ -74,14 +75,14 @@ export const PrivateRoutes = [
                             </Suspense>
                         ),
                     },
-                    // {
-                    //     path: ':id/edit',
-                    //     element: (
-                    //         <Suspense>
-                    //             <UpdateProduct />
-                    //         </Suspense>
-                    //     ),
-                    // },
+                    {
+                        path: ':id/edit',
+                        element: (
+                            <Suspense>
+                                <UpdateProduct />
+                            </Suspense>
+                        ),
+                    },
                 ],
             },
             // @Category
