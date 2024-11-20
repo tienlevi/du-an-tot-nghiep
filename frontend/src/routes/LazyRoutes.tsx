@@ -22,6 +22,8 @@ export const CheckoutPage = lazy(
 // @admin page
 export const DashboardPage = lazy(() => import('../pages/Admin/_dashboard_'));
 export const ProductsListAll = lazy(() => import('@/pages/Admin/_product_'));
+export const ManageOrders = lazy(() => import('@/pages/Admin/_order_/ManageOrder'));
+export const OrdersDetails = lazy(() => import('@/pages/Admin/_order_/OrderDetails'));
 
 export const CreateProduct = lazy(
     () => import('@/pages/Admin/_product_/CreateProduct'),

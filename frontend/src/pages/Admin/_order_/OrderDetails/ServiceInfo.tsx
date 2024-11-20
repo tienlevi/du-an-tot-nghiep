@@ -1,5 +1,6 @@
-import { Descriptions, Input, Space } from 'antd';
-import { DescriptionsProps } from 'antd/lib';
+import React from 'react';
+import { Card, Space, Input } from 'antd';
+import { DollarCircleFilled, CreditCardFilled, TruckFilled, PercentageOutlined, CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 
 interface Props {
     serviceInfo: {
@@ -12,88 +13,99 @@ interface Props {
     description: string;
 }
 
-const ServiceInfo = ({ serviceInfo, description }: Props) => {
-    const items: DescriptionsProps['items'] = [
+const ServiceInfo: React.FC<Props> = ({ serviceInfo, description }) => {
+    const formatCurrency = (amount: number) => {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+        }).format(amount);
+    };
+
+    const infoCards = [
         {
-            key: 'Payment Method',
-            label: (
-                <span className="font-semibold capitalize">
-                    Phương thức thanh toán
-                </span>
-            ),
-            children: (
-                <p className="capitalize">
-                    {serviceInfo.paymentMethod === 'cash'
-                        ? 'Thanh toán khi nhận hàng'
-                        : 'Thanh toán Online'}
-                </p>
-            ),
+            icon: <CreditCardFilled className="text-2xl text-blue-500" />,
+            label: 'Phương thức thanh toán',
+            value: serviceInfo.paymentMethod === 'cash' ? 'Thanh toán khi nhận hàng' : 'Thanh toán Online',
+            className: 'from-blue-50 to-indigo-50'
         },
         {
-            key: 'ShippingFee',
-            label: (
-                <span className="font-semibold capitalize">
-                    Cước phí vận chuyển
-                </span>
-            ),
-            children: (
-                <p>
-                    {new Intl.NumberFormat('vi-VN', {
-                        style: 'currency',
-                        currency: 'VND',
-                    }).format(serviceInfo.shippingFee)}
-                </p>
-            ),
+            icon: <TruckFilled className="text-2xl text-green-500" />,
+            label: 'Cước phí vận chuyển',
+            value: formatCurrency(serviceInfo.shippingFee),
+            className: 'from-green-50 to-emerald-50'
         },
         {
-            key: 'Tax',
-            label: <span className="font-semibold capitalize">Thuế</span>,
-            children: <p>{`${Number(serviceInfo.tax) * 100}% VAT `}</p>,
+            icon: <PercentageOutlined className="text-2xl text-yellow-500" />,
+            label: 'Thuế',
+            value: `${Number(serviceInfo.tax) * 100}% VAT`,
+            className: 'from-yellow-50 to-amber-50'
         },
         {
-            key: 'Total Price',
-            label: <span className="font-semibold capitalize">Tổng tiền</span>,
-            children: (
-                <p>
-                    {new Intl.NumberFormat('vi-vn', {
-                        style: 'currency',
-                        currency: 'vnd',
-                    }).format(serviceInfo.totalPrice)}
-                </p>
-            ),
-        },
-        {
-            key: 'Payment Status',
-            label: (
-                <span className="font-semibold capitalize">
-                    Trạng thái thanh toán
-                </span>
-            ),
-            children: (
-                <p>
-                    {serviceInfo.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'}
-                </p>
-            ),
-        },
+            icon: <DollarCircleFilled className="text-2xl text-purple-500" />,
+            label: 'Tổng tiền',
+            value: formatCurrency(serviceInfo.totalPrice),
+            className: 'from-purple-50 to-fuchsia-50'
+        }
     ];
 
     return (
-        <Space
-            className="mt-5 w-full rounded-lg bg-[#fff] p-4"
-            direction="vertical"
+        <Card 
+            className="w-full shadow-sm rounded-2xl border-gray-100 overflow-hidden"
+            title={
+                <div className="flex items-center justify-between py-2">
+                    <h2 className="text-xl font-semibold text-gray-800">Thông tin dịch vụ</h2>
+                    <div className="flex items-center gap-2">
+                        {serviceInfo.isPaid ? (
+                            <>
+                                <CheckCircleFilled className="text-lg text-green-500" />
+                                <span className="text-green-600 font-medium">Đã thanh toán</span>
+                            </>
+                        ) : (
+                            <>
+                                <CloseCircleFilled className="text-lg text-red-500" />
+                                <span className="text-red-600 font-medium">Chưa thanh toán</span>
+                            </>
+                        )}
+                    </div>
+                </div>
+            }
         >
-            <Descriptions title="Thông tin dịch vụ" items={items} />
-            <Input.TextArea
-                className="mt-3"
-                rows={3}
-                readOnly
-                value={
-                    description
-                        ? description
-                        : 'Không có ghi chú nào cho đơn hàng này'
-                }
-            />
-        </Space>
+            <Space direction="vertical" className="w-full" size="large">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {infoCards.map((info, index) => (
+                        <div
+                            key={index}
+                            className={`p-4 rounded-xl bg-gradient-to-r ${info.className} border border-gray-100`}
+                        >
+                            <div className="flex items-start gap-3">
+                                <div className="p-2 bg-white rounded-lg shadow-sm">
+                                    {info.icon}
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-sm text-gray-600 mb-1">{info.label}</p>
+                                    <p className="text-lg font-semibold text-gray-800">{info.value}</p>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="mt-4">
+                    <h3 className="text-lg font-medium text-gray-700 mb-3">Ghi chú đơn hàng</h3>
+                    <Input.TextArea
+                        className="rounded-xl bg-gray-50 border-gray-200"
+                        rows={3}
+                        readOnly
+                        value={description || 'Không có ghi chú nào cho đơn hàng này'}
+                        style={{ 
+                            resize: 'none',
+                            fontSize: '0.95rem',
+                            color: description ? '#374151' : '#6B7280'
+                        }}
+                    />
+                </div>
+            </Space>
+        </Card>
     );
 };
 

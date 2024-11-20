@@ -17,6 +17,8 @@ import {
     DashboardPage,
     ProductsListAll,
     Suspense,
+    ManageOrders,
+    OrdersDetails,
     // UpdateProduct,
 } from './LazyRoutes';
 import { ADMIN_ROUTES } from '@/constants/router';
@@ -240,6 +242,24 @@ export const PrivateRoutes = [
                         ),
                     },
                 ],
+            },
+            //@Order-List
+            {
+                path: ADMIN_ROUTES.ORDERS,
+                element: (
+                    <Suspense>
+                        <ManageOrders />
+                    </Suspense>
+                ),
+            },
+            //@Order-detail
+            {
+                path: `${ADMIN_ROUTES.ORDERS}/:id/detail`,
+                element: (
+                    <Suspense>
+                        <OrdersDetails />
+                    </Suspense>
+                ),
             },
         ],
     },
