@@ -11,6 +11,7 @@ import reviewRouter from "./review.routes.js";
 import tagRouter from "./tag.routes.js";
 import userRouter from "./user.routes.js";
 import shippingRouter from './shipping.routes.js';
+import statsRouter from './stat.routes.js'
 const router = Router();
 
 router.use("/categories", categoryRouter);
@@ -25,5 +26,7 @@ router.use('/shipping', shippingRouter);
 router.use("/reviews", reviewRouter);
 router.use("/tags", tagRouter);
 router.use("/users", userRouter);
+router.use("/stats",statsRouter)
+
 
 export default router;

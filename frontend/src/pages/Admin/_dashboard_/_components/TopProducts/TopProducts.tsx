@@ -20,6 +20,7 @@ import { MAIN_ROUTES } from '@/constants/router';
 
 import DateRangePickerComponent from '../Charts/RangePicker/DateRangePickerComponent';
 import { Currency } from '@/utils';
+import useGetProductStatsByRange from '@/hooks/stats/useGetProductStatsByRange';
 
 const { Text } = Typography;
 
@@ -47,43 +48,13 @@ type ProductDataType = {
     percentageOfAllProducts: number;
 };
 
-// Mock data generator
-const generateMockProducts = (count) => {
-    return Array.from({ length: count }, (_, i) => ({
-      _id: `product-${i + 1}`,
-      name: `Product ${i + 1}`,
-      image: `/api/placeholder/100/100`,
-      price: Math.floor(Math.random() * 1000000) + 500000,
-      totalQuantity: Math.floor(Math.random() * 100) + 50,
-      totalRevenue: Math.floor(Math.random() * 50000000) + 25000000,
-      percentageOfTotal: Math.floor(Math.random() * 60) + 40,
-      percentageOfAllProducts: Math.floor(Math.random() * 20) + 5,
-    }));
-  };
-  
-  // Mock hook to replace useGetProductStatsByRange
-  const useGetProductStatsByRange = (startDate, endDate) => {
-    const [data, setData] = useState(null);
-  
-    useEffect(() => {
-      const mockData = {
-        data: {
-          data: {
-            topSellingProducts: generateMockProducts(5),
-            leastSellingProducts: generateMockProducts(5),
-          }
-        }
-      };
-      setData(mockData);
-    }, [startDate, endDate]);
-  
-    return { data };
-  };
+
 export const TopProducts: React.FC = () => {
     const today = dayjs();
 
     const [dateRange, setDateRange] = useState<[Dayjs, Dayjs]>([today, today]);
     const { data } = useGetProductStatsByRange(dateRange[0], dateRange[1]);
+    console.log(data)
     const topSellingProducts = data?.data?.data?.topSellingProducts;
     const leastSellingProducts = data?.data?.data?.leastSellingProducts;
 
