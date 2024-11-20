@@ -26,6 +26,9 @@ import useGetTags from '@/hooks/Tags/Queries/useGetTags';
 import useGetColors from '@/hooks/Colors/Queries/useGetColors';
 import useGetSizes from '@/hooks/Sizes/Queries/useGetSizes';
 import { useState } from 'react';
+import useCreateProduct from '@/hooks/Products/Mutations/useCreateProduct';
+import { FormProps } from 'antd/lib';
+import { handleCreateProduct } from '@/pages/Admin/_product_/Helper/handleCreateProduct';
 
 const CreateProduct = () => {
     const [form] = Form.useForm<any>();
@@ -35,7 +38,11 @@ const CreateProduct = () => {
     const { data: tags } = useGetTags({ limit: '100000' });
     const { data: sizes } = useGetSizes({ limit: '100000' });
     const { data: colors } = useGetColors({ limit: '100000' });
-
+    const { mutate: createProduct } = useCreateProduct();
+    const onFinish: FormProps<any>['onFinish'] = (values) => {
+        console.log(values, 'values');
+        handleCreateProduct(values, createProduct);
+    };
     const handleChangeAttributeThumbnail = (
         index: number,
     ): UploadProps['onChange'] => {
@@ -60,8 +67,7 @@ const CreateProduct = () => {
                 </Link>
             }
         >
-            {/* <Form layout="vertical" form={form} onFinish={onFinish}> */}
-            <Form layout="vertical" form={form}>
+            <Form layout="vertical" form={form} onFinish={onFinish}>
                 <div className="grid grid-cols-1 gap-4">
                     <WrapperCard title="Thông tin cơ bản">
                         <Form.Item name="isHide" className="hidden" hidden>
@@ -87,7 +93,7 @@ const CreateProduct = () => {
                         </Form.Item>
                         <Form.Item<any>
                             label="Thẻ phân loại"
-                            name="brandId"
+                            name="tags"
                             required
                             className="font-medium text-[#08090F]"
                         >
@@ -168,7 +174,7 @@ const CreateProduct = () => {
                                 },
                             ]}
                         >
-                            {(fields, { add, remove }, { errors }) => (
+                            {(fields, { add, remove }) => (
                                 <>
                                     {fields.map(
                                         (

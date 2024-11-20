@@ -1,4 +1,3 @@
-
 interface Variant {
     _id: string;
     color: {
@@ -18,7 +17,7 @@ interface Variant {
 export type IProduct = {
     _id: string;
     name: string;
-    category: string;
+    category: string | { name: string; _id: string };
     discount: number;
     price: number;
     variants: Variant[];
@@ -27,4 +26,4 @@ export type IProduct = {
     tags: string[];
     createdAt: string;
     updatedAt: string;
-}
+};
