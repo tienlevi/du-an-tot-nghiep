@@ -7,7 +7,8 @@ export const getAllProducts = asyncHandler(async (req, res) => {
   const products = await productService.getAllProducts(req.query);
   return res.status(StatusCodes.OK).json(
     customResponse({
-      data: products,
+      data: products.products,
+      totalDocs: products.totalDocs,
       success: true,
       status: StatusCodes.OK,
       message: ReasonPhrases.OK,
