@@ -17,7 +17,7 @@ export default function Header() {
                     <div className="flex gap-10 items-center">
                         <div>
                             <img
-                                src="https://res-console.cloudinary.com/dpplfiyki/thumbnails/v1/image/upload/v1731678493/bG9nb193dDJlZWQ=/drilldown"
+                                src="https://res-console.cloudinary.com/dpplfiyki/thumbnails/v1/image/upload/v1731678493/bG9nb193dDJlZWQ=/as_is"
                                 className="w-[55px]"
                                 alt=""
                             />
