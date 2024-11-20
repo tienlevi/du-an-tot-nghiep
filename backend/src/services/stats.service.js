@@ -67,23 +67,11 @@ export const totalStats = async (req, res, next) => {
                 $group: {
                     _id: null,
                     total: { $sum: '$totalPrice' },
-                    totalShipping: { $sum: '$shippingFee' },
                     count: { $sum: 1 },
                 },
             },
-            {
-                $project: {
-                    adjustedTotal: {
-                        $subtract: [
-                            { $subtract: ['$total', '$totalShipping'] },
-                            { $multiply: [{ $subtract: ['$total', '$totalShipping'] }, 0.1] },
-                        ],
-                    },
-                    count: 1,
-                },
-            },
         ]).then((result) => ({
-            total: result[0]?.adjustedTotal || 0,
+            total: result[0]?.total || 0,
             count: result[0]?.count || 0,
         })),
         User.countDocuments({
@@ -126,10 +114,10 @@ export const totalStats = async (req, res, next) => {
         },
     };
 };
-
 export const orderByDayStats = async (req, res, next) => {
     let year = new Date().getFullYear();
     let month = new Date().getMonth() + 1;
+    
     if (req.query.year) {
         year = parseInt(req.query.year);
     }
@@ -137,6 +125,7 @@ export const orderByDayStats = async (req, res, next) => {
     if (req.query.month) {
         month = parseInt(req.query.month);
     }
+    
     const startDate = new Date(`${year}-${month}-01`);
     const endDate = new Date(`${year}-${month + 1}-01`);
 
@@ -149,6 +138,7 @@ export const orderByDayStats = async (req, res, next) => {
                 },
             },
         },
+        
         {
             $group: {
                 _id: {
@@ -157,10 +147,10 @@ export const orderByDayStats = async (req, res, next) => {
                     year: { $year: '$createdAt' },
                 },
                 totalOrders: { $sum: 1 },
-                totalPrice: { $sum: '$totalPrice' },
-                totalShipping: { $sum: '$shippingFee' },
+                totalRevenue: { $sum: '$totalPrice' },  
             },
         },
+        
         {
             $project: {
                 _id: 0,
@@ -172,14 +162,10 @@ export const orderByDayStats = async (req, res, next) => {
                     },
                 },
                 totalOrders: 1,
-                totalRevenue: {
-                    $subtract: [
-                        { $subtract: ['$totalPrice', '$totalShipping'] },
-                        { $multiply: [{ $subtract: ['$totalPrice', '$totalShipping'] }, 0.1] },
-                    ],
-                },
+                totalRevenue: 1, 
             },
         },
+        
         {
             $sort: { date: 1 },
         },
@@ -215,7 +201,8 @@ export const orderByMonthStats = async (req, res, next) => {
                 orderStatus: 'done',
                 isPaid: true,
             },
-        }, {
+        },
+        {
             $addFields: {
                 createdAtVN: {
                     $dateToString: {
@@ -233,8 +220,7 @@ export const orderByMonthStats = async (req, res, next) => {
                     year: { $year: { $toDate: '$createdAtVN' } },
                 },
                 totalOrders: { $sum: 1 },
-                totalPrice: { $sum: '$totalPrice' },
-                totalShipping: { $sum: '$shippingFee' },
+                totalRevenue: { $sum: '$totalPrice' },  
             },
         },
         {
@@ -248,14 +234,10 @@ export const orderByMonthStats = async (req, res, next) => {
                 },
                 year: '$_id.year',
                 totalOrders: 1,
-                totalRevenue: {
-                    $subtract: [
-                        { $subtract: ['$totalPrice', '$totalShipping'] },
-                        { $multiply: [{ $subtract: ['$totalPrice', '$totalShipping'] }, 0.1] },
-                    ],
-                },
+                totalRevenue: 1,  
             },
         },
+       
         {
             $sort: { '_id.month': 1 },
         },
@@ -263,6 +245,7 @@ export const orderByMonthStats = async (req, res, next) => {
 
     const data = await Order.aggregate(pipeline);
 
+   
     const fullYearData = Array.from({ length: 12 }, (_, i) => ({
         month: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][i],
         year: parseInt(year),
@@ -326,12 +309,7 @@ export const orderByYearStats = async (req, res, next) => {
                     $sum: {
                         $cond: [
                             { $eq: ['$orderStatus', 'done'] },
-                            {
-                                $subtract: [
-                                    { $subtract: ['$totalPrice', '$shippingFee'] },
-                                    { $multiply: [{ $subtract: ['$totalPrice', '$shippingFee'] }, 0.1] },
-                                ],
-                            },
+                            '$totalPrice', 
                             0,
                         ],
                     },
@@ -411,12 +389,7 @@ export const orderByDateRangeStats = async (req, res, next) => {
                     $sum: {
                         $cond: [
                             { $eq: ['$orderStatus', 'done'] },
-                            {
-                                $subtract: [
-                                    { $subtract: ['$totalPrice', '$shippingFee'] },
-                                    { $multiply: [{ $subtract: ['$totalPrice', '$shippingFee'] }, 0.1] },
-                                ],
-                            },
+                            '$totalPrice',  
                             0,
                         ],
                     },
@@ -492,17 +465,7 @@ export const getProductStats = async (req, res, next) => {
                 name: { $first: '$items.name' },
                 totalQuantity: { $sum: '$items.quantity' },
                 totalRevenue: {
-                    $sum: {
-                        $multiply: [
-                            '$items.quantity',
-                            {
-                                $subtract: [
-                                    '$items.price',
-                                    { $multiply: ['$items.price', 0.1] }
-                                ]
-                            }
-                        ]
-                    }
+                    $sum: { $multiply: ['$items.quantity', '$items.price'] } 
                 },
                 image: { $first: '$items.image' }
             },
