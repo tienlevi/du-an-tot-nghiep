@@ -12,6 +12,8 @@ interface DataType {
     key: number;
     image: string;
     name: string;
+    color: string;
+    size: string;
     price: number;
     quantity: number;
     productId: string;
@@ -60,8 +62,6 @@ const TableDetailOrder = ({ orderItems, status }: Props) => {
             dataIndex: 'name',
             key: 'name',
             render: (_, record) => {
-                console.log(record);
-                // const { data } = useGetVariantDetail();
                 return (
                     <>
                         <Flex justify="center" align="center">
@@ -75,26 +75,18 @@ const TableDetailOrder = ({ orderItems, status }: Props) => {
                 );
             },
         },
-        // {
-        //     title: 'Loại sản phẩm',
-        //     dataIndex: 'variant',
-        //     key: 'variant',
-        //     render: (variant) => {
-        //         return (
-        //             <>
-        //                 <div className="flex gap-2">
-        //                     {variant.variantAttributes.map(
-        //                         (item: any, i: number) => (
-        //                             <span key={i} className="text-xs">
-        //                                 {item.value}
-        //                             </span>
-        //                         ),
-        //                     )}
-        //                 </div>
-        //             </>
-        //         );
-        //     },
-        // },
+        {
+            title: 'Màu',
+            dataIndex: 'color',
+            key: 'color',
+            render: (color) => <p>{color}</p>,
+        },
+        {
+            title: 'Kích cỡ',
+            dataIndex: 'size',
+            key: 'size',
+            render: (size) => <p>{size}</p>,
+        },
         {
             title: 'Giá Tiền',
             dataIndex: 'price',
@@ -148,6 +140,8 @@ const TableDetailOrder = ({ orderItems, status }: Props) => {
         key: index,
         image: item.image,
         name: item.name,
+        color: item.color,
+        size: item.size,
         price: item.price,
         quantity: item.quantity,
         productId: item.productId,
