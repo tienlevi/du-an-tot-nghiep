@@ -29,4 +29,8 @@ export const envConfig = {
     vnp_ReturnUrl: process.env.VNP_RETURNURL,
     urlSuccess: process.env.VNP_RETURNURL,
   },
+    nodeMailer: {
+        email: process.env.EMAIL_USER,
+        password: process.env.EMAIL_PASSWORD,
+    },
 };

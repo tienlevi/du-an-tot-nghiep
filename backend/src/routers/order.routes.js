@@ -4,7 +4,7 @@ import { authenticate } from "../middleware/authenticateMiddleware.js";
 
 const orderRouter = Router();
 orderRouter.post("/create", authenticate, orderControllers.createOrder);
-orderRouter.post("/canceled", authenticate, orderControllers.cancelOrder);
+orderRouter.patch("/cancel", authenticate, orderControllers.cancelOrder);
 orderRouter.patch("/confirm", authenticate, orderControllers.confirmOrder);
 orderRouter.patch("/shipping", authenticate, orderControllers.shippingOrder);
 orderRouter.patch("/done", authenticate, orderControllers.finishOrder);
