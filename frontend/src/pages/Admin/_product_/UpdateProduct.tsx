@@ -1,12 +1,10 @@
-import { PlusOutlined, PlusSquareOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import {
     Button,
     Form,
-    Image,
     Input,
     InputNumber,
     Select,
-    Upload,
     UploadFile,
     UploadProps,
 } from 'antd';
@@ -25,9 +23,7 @@ import useGetTags from '@/hooks/Tags/Queries/useGetTags';
 import useGetColors from '@/hooks/Colors/Queries/useGetColors';
 import useGetSizes from '@/hooks/Sizes/Queries/useGetSizes';
 import { useEffect, useState } from 'react';
-import useCreateProduct from '@/hooks/Products/Mutations/useCreateProduct';
 import { FormProps } from 'antd/lib';
-import { handleCreateProduct } from '@/pages/Admin/_product_/Helper/handleCreateProduct';
 import { useGetDetailProduct } from '@/hooks/Products/Queries/useGetDetailProduct';
 import convertApiResponseToFileList from '@/pages/Admin/_product_/Helper/convertImageUrlToFileList';
 import useUpdateProduct from '@/hooks/Products/Mutations/useUpdateProduct';
@@ -35,34 +31,34 @@ import { handleEditProduct } from '@/pages/Admin/_product_/Helper/handleEditProd
 
 const UpdateProduct = () => {
     const [form] = Form.useForm<any>();
-    const [attributesFile, setAttributesFile] = useState<UploadFile[][]>([]);
     const { id } = useParams();
-    const [initialValues, setInitialValues] = useState<any>();
     const [variantFile, setVariantFile] = useState<UploadFile[][]>([]);
     // @Query
     const { data: categories } = useGetCategories({ limit: '100000' });
     const { data: tags } = useGetTags({ limit: '100000' });
     const { data: sizes } = useGetSizes({ limit: '100000' });
     const { data: colors } = useGetColors({ limit: '100000' });
-    const { mutate: updateProduct } = useUpdateProduct();
+    const { mutate: updateProduct, isPending } = useUpdateProduct();
     const { data: targetProduct } = useGetDetailProduct(id as string);
 
     const onFinish: FormProps<any>['onFinish'] = (values) => {
+        console.log(values, 'values');
         handleEditProduct(values, id as string, updateProduct);
     };
     const handleChangeAttributeThumbnail = (
         index: number,
     ): UploadProps['onChange'] => {
         return ({ fileList: newFileList }) => {
-            const newAttributesFile = [...attributesFile];
+            const newAttributesFile = [...variantFile];
             newAttributesFile[index] = newFileList;
-            setAttributesFile(newAttributesFile);
+            setVariantFile(newAttributesFile);
         };
     };
     const handleRemoveAttributeThumbnail = (index: number) => {
-        const newAttributesFile = [...attributesFile];
-        newAttributesFile[index] = [];
-        setAttributesFile(newAttributesFile);
+        const newAttributesFile = [...variantFile];
+        newAttributesFile.splice(index, 1);
+
+        setVariantFile(newAttributesFile);
     };
 
     useEffect(() => {
@@ -85,7 +81,6 @@ const UpdateProduct = () => {
                     color: varia.color._id,
                     thumbnail: image,
                 };
-                delete newVaria.image;
                 return newVaria;
             });
 
@@ -93,11 +88,6 @@ const UpdateProduct = () => {
                 variants: variaConverts,
                 ...rest,
             };
-            setInitialValues({
-                initialValue: initial,
-                initialVariantFile: newVariantFile,
-            });
-            console.log(initial, 'initial');
             form.setFieldsValue(initial as any);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -115,9 +105,6 @@ const UpdateProduct = () => {
             <Form layout="vertical" form={form} onFinish={onFinish}>
                 <div className="grid grid-cols-1 gap-4">
                     <WrapperCard title="Thông tin cơ bản">
-                        <Form.Item name="isHide" className="hidden" hidden>
-                            <Input type="hidden" />
-                        </Form.Item>
                         <Form.Item<any>
                             label="Danh mục"
                             name="category"
@@ -273,8 +260,8 @@ const UpdateProduct = () => {
                             type="default"
                             htmlType="submit"
                             className="mr-3 px-5"
-                            // loading={isPending && isHide}
-                            // disabled={isPending}
+                            loading={isPending}
+                            disabled={isPending}
                             size="large"
                         >
                             Cập nhật

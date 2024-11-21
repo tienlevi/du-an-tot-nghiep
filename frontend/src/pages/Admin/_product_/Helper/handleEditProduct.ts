@@ -31,6 +31,20 @@ export const handleEditProduct = (
                     color,
                     stock,
                 };
+                console.log(thumbnail, 'thumbnail2');
+
+                newVariants.push(variantFinal);
+            } else {
+                const { thumbnail, ...rest } = value;
+                const { imageUrlRef, size, color, stock, image } = rest;
+                const variantFinal = {
+                    imageUrlRef,
+                    size,
+                    color,
+                    stock,
+                    image,
+                };
+                console.log(thumbnail, 'thumbnail');
                 newVariants.push(variantFinal);
             }
         }

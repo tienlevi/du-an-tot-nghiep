@@ -79,7 +79,8 @@ export const updateProduct = async (
   productNew
 ) => {
   const product = await Product.findById(productId);
-  let newVariants;
+  let newVariants = [];
+  let oldVariants = [];
   if (!product)
     throw new NotFoundError(
       `${ReasonPhrases.NOT_FOUND} product with id: ${productId}`
@@ -103,20 +104,19 @@ export const updateProduct = async (
         return variants[i];
       }
     });
+    oldVariants = variants.filter((item) => item.image);
+  } else {
+    newVariants = variants;
   }
 
-  // @remove old images in firebase storage
-  if (oldImageUrlRefs || oldImageUrlRefs.length > 0) {
-    await Promise.all(
-      oldImageUrlRefs.map(async (ref) => {
-        await removeUploadedFile(ref);
-      })
-    );
-  }
   const tags = productNew.tags ? productNew.tags.split(",") : product.tags;
 
   // @update product
-  product.set({ ...productNew, variants: newVariants, tags });
+  product.set({
+    ...productNew,
+    variants: [...newVariants, ...oldVariants],
+    tags,
+  });
   return await product.save();
 };
 

@@ -1,19 +1,16 @@
-import { PlusOutlined, PlusSquareOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import {
     Button,
     Form,
-    Image,
     Input,
     InputNumber,
     Select,
-    Upload,
     UploadFile,
     UploadProps,
 } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { Link } from 'react-router-dom';
 import {
-    brandValidator,
     nameValidator,
     variationsValidator,
 } from '@/validation/Products/validators';
@@ -40,7 +37,7 @@ const CreateProduct = () => {
     const { data: sizes } = useGetSizes({ limit: '100000' });
     const { data: colors } = useGetColors({ limit: '100000' });
 
-    const { mutate: createPro } = useCreateProduct();
+    const { mutate: createPro, isPending } = useCreateProduct();
 
     const handleChangeAttributeThumbnail = (
         index: number,
@@ -53,12 +50,12 @@ const CreateProduct = () => {
     };
     const handleRemoveAttributeThumbnail = (index: number) => {
         const newAttributesFile = [...attributesFile];
-        newAttributesFile[index] = [];
+        newAttributesFile.splice(index, 1);
+
         setAttributesFile(newAttributesFile);
     };
 
     const onFinish: FormProps<IProductForm>['onFinish'] = (values) => {
-        console.log(values, 'values');
         handleCreateProduct(values, createPro);
     };
     return (
@@ -229,8 +226,8 @@ const CreateProduct = () => {
                             type="default"
                             htmlType="submit"
                             className="mr-3 px-5"
-                            // loading={isPending && isHide}
-                            // disabled={isPending}
+                            loading={isPending}
+                            disabled={isPending}
                             size="large"
                         >
                             Lưu

@@ -1,6 +1,7 @@
 import { MinusCircleOutlined } from '@ant-design/icons';
 import {
     Form,
+    Input,
     InputNumber,
     Select,
     Upload,
@@ -62,15 +63,21 @@ const VariationItem = ({
                 </Upload>
             </Form.Item>
             <Form.Item
+                className="hidden"
+                {...restField}
+                name={[fieldName, 'image']}
+            >
+                <Input></Input>
+            </Form.Item>
+            <Form.Item
                 className="w-full capitalize"
                 {...restField}
                 name={[fieldName, 'size']}
                 label="Kích cỡ"
-                dependencies={['size']}
             >
                 <Select placeholder="Chọn kích cỡ">
-                    {sizes.map((value, index) => (
-                        <Select.Option value={value._id} key={index}>
+                    {sizes.map((value) => (
+                        <Select.Option value={value._id} key={value._id}>
                             {value.name}
                         </Select.Option>
                     ))}
@@ -81,7 +88,6 @@ const VariationItem = ({
                 {...restField}
                 name={[fieldName, 'color']}
                 label="Màu sắc"
-                dependencies={['color']}
             >
                 <Select placeholder="Chọn màu sắc!">
                     {colors.map((value, index) => (
@@ -111,15 +117,13 @@ const VariationItem = ({
                 />
             </Form.Item>
             <div className="h-14 w-14">
-                {!id && (
-                    <MinusCircleOutlined
-                        onClick={() => {
-                            handleRemoveThumbnail(index);
-                            removeVariation(fieldName);
-                        }}
-                        className="translate-y-[20%] text-lg"
-                    />
-                )}
+                <MinusCircleOutlined
+                    onClick={() => {
+                        handleRemoveThumbnail(index);
+                        removeVariation(fieldName);
+                    }}
+                    className="translate-y-[20%] text-lg"
+                />
             </div>
         </div>
     );
