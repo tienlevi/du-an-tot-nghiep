@@ -50,42 +50,11 @@ const PublicRoutes = [
                 path: 'products/:id',
                 element: (
                     <Suspense>
-                        <LoginPage />
-                    </Suspense>
-                ),
-            },
-            {
-                path: '/register',
-                element: (
-                    <Suspense>
-                        <RegisterPage />
-                    </Suspense>
-                ),
-            },
-            {
-                path: 'products/:id',
-                element: (
-                    <Suspense>
                         <ProductDetailPage />
                     </Suspense>
                 ),
             },
-            {
-                path: '/login',
-                element: (
-                    <Suspense>
-                        <LoginPage />
-                    </Suspense>
-                ),
-            },
-            {
-                path: '/register',
-                element: (
-                    <Suspense>
-                        <RegisterPage />
-                    </Suspense>
-                ),
-            },
+
             // @CheckOut
             {
                 path: MAIN_ROUTES.SHIPPING,
