@@ -86,3 +86,58 @@ export const updateProfile = async (req, res, next) => {
     })
   );
 };
+
+// @Patch: Add wishlist
+export const addWishList = async (req, res) => {
+  const userId = req.userId;
+  const productId = req.body.productId;
+  const user = await User.findByIdAndUpdate(userId, { $addToSet: { wishList: productId } }, { new: true }).lean();
+
+  return res.status(StatusCodes.OK).json(
+      customResponse({
+          data: user,
+          success: true,
+          status: StatusCodes.OK,
+          message: ReasonPhrases.OK,
+      }),
+  );
+};
+// @Patch: delete wishlist
+export const deleteWishList = async (req, res) => {
+  const userId = req.userId;
+  const productId = req.body.productId;
+  const user = await User.findByIdAndUpdate(userId, { $pull: { wishList: productId } }, { new: true }).lean();
+  return res.status(StatusCodes.OK).json(
+      customResponse({
+          data: user,
+          success: true,
+          status: StatusCodes.OK,
+          message: ReasonPhrases.OK,
+      }),
+  );
+};
+// @Get: get wishlist by user
+export const getWishListByUser = async (req, res) => {
+  const userId = req.userId;
+
+  const whislist = await User.findById(userId)
+      .select('wishList')
+      .populate({
+          path: 'wishList',
+          populate: {
+              path: 'variationIds',
+              select: 'price image sku color productId stock variantAttributes imageUrlRef isActive',
+              model: 'ProductVariation',
+              options: { sort: 'price' },
+          },
+      })
+      .lean();
+  return res.status(StatusCodes.OK).json(
+      customResponse({
+          data: whislist,
+          success: true,
+          status: StatusCodes.OK,
+          message: ReasonPhrases.OK,
+      }),
+  );
+};

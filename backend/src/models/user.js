@@ -34,6 +34,7 @@ const userSchema = new Schema(
       default: "../upload/default-avatar.jpeg",
     },
     imageUrlRef: { type: String },
+    wishList: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product', default: [] }],
   },
   { timestamps: true, versionKey: false }
 );
