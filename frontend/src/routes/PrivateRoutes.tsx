@@ -5,22 +5,28 @@ import {
     ColorList,
     CreateCategory,
     CreateColor,
-    CreateProduct,
     CreateSize,
     CreateTag,
-    DashboardPage,
-    ProductsListAll,
     SizeList,
-    Suspense,
     TagList,
     UpdateCategory,
     UpdateColor,
     UpdateSize,
     UpdateTag,
+<<<<<<< HEAD
+=======
+    CreateProduct,
+    DashboardPage,
+    ProductsListAll,
+    Suspense,
+    ManageOrders,
+    OrdersDetails,
+>>>>>>> develop
     // UpdateProduct,
 } from './LazyRoutes';
 import { ADMIN_ROUTES } from '@/constants/router';
 import { Outlet } from 'react-router-dom';
+import UpdateProduct from '@/pages/Admin/_product_/UpdateProduct';
 
 export const PrivateRoutes = [
     {
@@ -57,6 +63,10 @@ export const PrivateRoutes = [
                     },
                     {
                         path: 'list',
+<<<<<<< HEAD
+=======
+
+>>>>>>> develop
                         element: (
                             <Suspense>
                                 <ProductsListAll />
@@ -71,14 +81,14 @@ export const PrivateRoutes = [
                             </Suspense>
                         ),
                     },
-                    // {
-                    //     path: ':id/edit',
-                    //     element: (
-                    //         <Suspense>
-                    //             <UpdateProduct />
-                    //         </Suspense>
-                    //     ),
-                    // },
+                    {
+                        path: ':id/edit',
+                        element: (
+                            <Suspense>
+                                <UpdateProduct />
+                            </Suspense>
+                        ),
+                    },
                 ],
             },
             // @Category
@@ -240,6 +250,27 @@ export const PrivateRoutes = [
                     },
                 ],
             },
+<<<<<<< HEAD
+=======
+            //@Order-List
+            {
+                path: ADMIN_ROUTES.ORDERS,
+                element: (
+                    <Suspense>
+                        <ManageOrders />
+                    </Suspense>
+                ),
+            },
+            //@Order-detail
+            {
+                path: `${ADMIN_ROUTES.ORDERS}/:id/detail`,
+                element: (
+                    <Suspense>
+                        <OrdersDetails />
+                    </Suspense>
+                ),
+            },
+>>>>>>> develop
         ],
     },
 ];

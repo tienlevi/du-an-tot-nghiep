@@ -11,6 +11,7 @@ import OrderDetailNavbar from './OrderDetailNavbar';
 const OrderDetail = () => {
     const { id } = useParams();
     const { data } = useOrderDetails(id!);
+    
 
     const orderStatus = data?.orderStatus;
 
@@ -27,7 +28,9 @@ const OrderDetail = () => {
     };
     const description = data?.description || '';
 
-    const orderItems = data?.items || [];
+    const orderItems = data?.items || [];  
+    
+    console.log(orderItems)
 
     return (
         <>

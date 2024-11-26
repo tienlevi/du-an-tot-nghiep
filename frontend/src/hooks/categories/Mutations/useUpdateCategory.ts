@@ -23,11 +23,9 @@ export const useMutationUpdateCategory = () => {
             queryClient.refetchQueries({
                 predicate: (query) =>
                     query.queryKey.some((element) =>
-                        [
-                            QUERY_KEY.CATEGORIES,
-                            QUERY_KEY.PRODUCTS,
-                            QUERY_KEY.ATTRIBUTES,
-                        ].includes(element as string),
+                        [QUERY_KEY.CATEGORIES, QUERY_KEY.PRODUCTS].includes(
+                            element as string,
+                        ),
                     ),
             });
             showMessage('Đã cập nhật thông tin danh mục!', 'success');

@@ -68,7 +68,7 @@ const AccountSidebarLeft = () => {
                             </p>
 
                             <div className="flex gap-4">
-                                <p className="text-[16px]">
+                                {/* <p className="text-[16px]">
                                     Trạng thái:{' '}
                                     {profile?.isActive && (
                                         <span className="text-green-500">
@@ -80,7 +80,7 @@ const AccountSidebarLeft = () => {
                                             Chưa kích hoạt
                                         </span>
                                     )}
-                                </p>
+                                </p> */}
 
                                 {/* {!profile?.isActive && (
                                     <div className="flex items-center">

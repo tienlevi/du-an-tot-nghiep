@@ -1,5 +1,6 @@
-import { Descriptions, Space } from 'antd';
-import { DescriptionsProps } from 'antd/lib';
+import React from 'react';
+import { Card, Space } from 'antd';
+import { UserOutlined, PhoneOutlined, MailOutlined, HomeOutlined, EnvironmentOutlined } from '@ant-design/icons';
 
 interface User {
     email: string;
@@ -19,108 +20,128 @@ interface Props {
     };
 }
 
-const CustomerInfo = ({
+const InfoSection: React.FC<{ icon: React.ReactNode; label: string; value: string }> = ({
+    icon,
+    label,
+    value
+}) => (
+    <div className="flex items-start gap-3 p-3 rounded-xl bg-gray-50 border border-gray-100">
+        <div className="p-2 bg-white rounded-lg shadow-sm">
+            {icon}
+        </div>
+        <div>
+            <p className="text-sm text-gray-500 mb-1">{label}</p>
+            <p className="text-base text-gray-800 font-medium">{value || '---'}</p>
+        </div>
+    </div>
+);
+
+const AddressSection: React.FC<{ address: string; location: string }> = ({
+    address,
+    location
+}) => (
+    <div className="flex items-start gap-3 p-3 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-gray-100">
+        <div className="p-2 bg-white rounded-lg shadow-sm">
+            <EnvironmentOutlined className="text-lg text-blue-500" />
+        </div>
+        <div className="flex-1">
+            <p className="text-sm text-gray-500 mb-1">Địa chỉ</p>
+            <p className="text-base text-gray-800 font-medium mb-1">{address}</p>
+            <p className="text-sm text-gray-600">{location}</p>
+        </div>
+    </div>
+);
+
+const CustomerInfo: React.FC<Props> = ({
     customerInfo,
     receiverInfo,
     shippingAddress,
-}: Props) => {
-    const customerItems: DescriptionsProps['items'] = [
-        {
-            key: 'name',
-            label: (
-                <span className="font-semibold capitalize">Tên khách hàng</span>
-            ),
-            children: <p className="capitalize">{customerInfo?.name}</p>,
-        },
-        {
-            key: 'email',
-            label: <span className="font-semibold capitalize">Email</span>,
-            children: <p className="capitalize">{customerInfo?.email}</p>,
-        },
-        {
-            key: 'phone',
-            label: (
-                <span className="font-semibold capitalize">Số điện thoại</span>
-            ),
-            children: <p className="capitalize">{customerInfo?.phone}</p>,
-        },
-    ];
-
-    const receiverItems: DescriptionsProps['items'] = [
-        {
-            key: 'name',
-            label: (
-                <span className="font-semibold capitalize">Tên khách hàng</span>
-            ),
-            children: <p className="capitalize">{receiverInfo?.name}</p>,
-        },
-        {
-            key: 'email',
-            label: <span className="font-semibold capitalize">Email</span>,
-            children: <p className="capitalize">{receiverInfo?.email}</p>,
-        },
-        {
-            key: 'phone',
-            label: (
-                <span className="font-semibold capitalize">Số điện thoại</span>
-            ),
-            children: <p className="capitalize">{receiverInfo?.phone}</p>,
-        },
-    ];
-
-    const shippingAddressItems: DescriptionsProps['items'] = [
-        {
-            key: 'country',
-            label: <span className="font-semibold capitalize">Quốc gia</span>,
-            children: <p className="capitalize">{shippingAddress?.country}</p>,
-        },
-        {
-            key: 'province',
-            label: (
-                <span className="font-semibold capitalize">Tỉnh/Thành phố</span>
-            ),
-            children: <p className="capitalize">{shippingAddress?.province}</p>,
-        },
-        {
-            key: 'district',
-            label: <span className="font-semibold capitalize">Quận/Huyện</span>,
-            children: <p className="capitalize">{shippingAddress?.district}</p>,
-        },
-        {
-            key: 'ward',
-            label: <span className="font-semibold capitalize">Phường/Xã</span>,
-            children: <p className="capitalize">{shippingAddress?.ward}</p>,
-        },
-        {
-            key: 'address',
-            label: (
-                <span className="font-semibold capitalize">
-                    Địa chỉ liên hệ
-                </span>
-            ),
-            children: <p className="capitalize">{shippingAddress?.address}</p>,
-        },
-    ];
+}) => {
+    const getFullAddress = () => {
+        const parts = [
+            shippingAddress?.address,
+            shippingAddress?.ward,
+            shippingAddress?.district,
+            shippingAddress?.province,
+            shippingAddress?.country
+        ].filter(Boolean);
+        return parts.join(', ');
+    };
 
     return (
-        <Space
-            className="mt-5 w-full  rounded-lg bg-[#fff] p-4 "
-            direction="vertical"
-        >
-            <Descriptions title="Thông tin khách hàng" items={customerItems} />
-            {receiverInfo && receiverInfo.name ? (
-                <Descriptions
-                    className="my-5"
-                    title="Thông tin người nhận"
-                    items={receiverItems}
-                />
-            ) : (
-                ''
+        <Space direction="vertical" size="large" className="w-full">
+            <Card 
+                title={
+                    <div className="flex items-center gap-2">
+                        <UserOutlined className="text-lg text-blue-500" />
+                        <span className="text-lg font-semibold">Thông tin khách hàng</span>
+                    </div>
+                }
+                className="w-full shadow-sm rounded-2xl border-gray-100"
+            >
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <InfoSection
+                        icon={<UserOutlined className="text-lg text-violet-500" />}
+                        label="Tên khách hàng"
+                        value={customerInfo?.name}
+                    />
+                    <InfoSection
+                        icon={<MailOutlined className="text-lg text-pink-500" />}
+                        label="Email"
+                        value={customerInfo?.email}
+                    />
+                    <InfoSection
+                        icon={<PhoneOutlined className="text-lg text-green-500" />}
+                        label="Số điện thoại"
+                        value={customerInfo?.phone}
+                    />
+                </div>
+            </Card>
+
+            {receiverInfo && receiverInfo.name && (
+                <Card 
+                    title={
+                        <div className="flex items-center gap-2">
+                            <UserOutlined className="text-lg text-green-500" />
+                            <span className="text-lg font-semibold">Thông tin người nhận</span>
+                        </div>
+                    }
+                    className="w-full shadow-sm rounded-2xl border-gray-100"
+                >
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <InfoSection
+                            icon={<UserOutlined className="text-lg text-violet-500" />}
+                            label="Tên người nhận"
+                            value={receiverInfo.name}
+                        />
+                        <InfoSection
+                            icon={<MailOutlined className="text-lg text-pink-500" />}
+                            label="Email"
+                            value={receiverInfo.email}
+                        />
+                        <InfoSection
+                            icon={<PhoneOutlined className="text-lg text-green-500" />}
+                            label="Số điện thoại"
+                            value={receiverInfo.phone}
+                        />
+                    </div>
+                </Card>
             )}
-            <Descriptions
-                title="Địa chỉ giao hàng"
-                items={shippingAddressItems}
-            />
+
+            <Card 
+                title={
+                    <div className="flex items-center gap-2">
+                        <HomeOutlined className="text-lg text-orange-500" />
+                        <span className="text-lg font-semibold">Địa chỉ giao hàng</span>
+                    </div>
+                }
+                className="w-full shadow-sm rounded-2xl border-gray-100"
+            >
+                <AddressSection
+                    address={shippingAddress?.address}
+                    location={getFullAddress()}
+                />
+            </Card>
         </Space>
     );
 };

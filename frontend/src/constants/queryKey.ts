@@ -3,11 +3,12 @@ export const QUERY_KEY = {
     VARIANT: 'variant',
     PRODUCTS: 'products',
     HOT_PRODUCTS: 'HOT_PRODUCT',
-    FILTER_BYCATE: 'products',
+    FILTER_BYCATE: 'products-cate',
     PRODUCTS_LAZY: 'products_lazy',
     CATEGORIES: 'categories',
     SIZES: 'sizes',
     COLORS: 'colors',
+    TAGS: 'tags',
     MENU: 'categories-menu',
     LATEST: 'latest',
     DEALS: 'deals',
@@ -21,9 +22,6 @@ export const QUERY_KEY = {
     ORDERS: 'orders',
     MY_ORDERS: 'my-orders',
     CHECKOUT: 'checkout',
-
-    //tag
-    TAGS: 'tags',
 
     SHIPPING_SERVICES: 'shippingServices',
     GET_PROVINCE: 'province',

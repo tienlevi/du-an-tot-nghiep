@@ -4,42 +4,11 @@ import React, { useEffect, useState, useMemo } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import WrapperList from '@/components/_common/WrapperList';
 import { ApexOptions } from 'apexcharts';
-
-// Mock data generator function
-const generateMockData = (year :any) => {
-    // Generate realistic but fake data based on the year
-    const currentYear = dayjs().year();
-    const multiplier = Math.max(0.5, 1 - (currentYear - year) * 0.1); // Older years have less activity
-    
-    return {
-      year,
-      totalOrders: Math.floor(Math.random() * 1000 * multiplier + 500),
-      totalRevenue: Math.floor(Math.random() * 5000000000 * multiplier + 1000000000)
-    };
-  };
-  
-  // Mock API response
-  const useMockYearlyStats = (selectedYear:any) => {
-    const [data, setData] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-  
-    useEffect(() => {
-      // Simulate API delay
-      setIsLoading(true);
-      const timer = setTimeout(() => {
-        setData(generateMockData(selectedYear));
-        setIsLoading(false);
-      }, 800);
-  
-      return () => clearTimeout(timer);
-    }, [selectedYear]);
-  
-    return { data, isLoading, refetch: () => {} };
-  };
+import { useYearlyStats } from '@/hooks/stats/useYearly';
 
 const YearlyStats: React.FC = () => {
     const [selectedYear, setSelectedYear] = useState<number>(dayjs().year());
-    const { data: yearlyStats, isLoading ,refetch} = useMockYearlyStats(selectedYear);
+    const { data: yearlyStats, isLoading, refetch } : any = useYearlyStats(selectedYear);
 
     useEffect(() => {
         refetch();
@@ -59,7 +28,7 @@ const YearlyStats: React.FC = () => {
     };
 
     const chartData = useMemo(() => {
-        const yearData = yearlyStats || { year: selectedYear, totalOrders: 0, totalRevenue: 0 };
+        const yearData = yearlyStats?.data || { year: selectedYear, totalOrders: 0, totalRevenue: 0 };
         const { year, totalOrders, totalRevenue } = yearData;
 
         const options: ApexOptions = {
@@ -166,7 +135,7 @@ const YearlyStats: React.FC = () => {
         >
             <div>
                 {chartData.series[0].data[0] === 0 && chartData.series[1].data[0] === 0 ? (
-                    <div>Không có dữ liệu cho năm này</div>
+                    <div className='text-center'>Không có dữ liệu cho năm này</div>
                 ) : (
                     <div id='chart'>
                         <ReactApexChart options={chartData.options} series={chartData.series} type='bar' height={450} />

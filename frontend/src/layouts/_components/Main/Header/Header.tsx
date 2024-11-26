@@ -1,6 +1,4 @@
-import {
-  SearchOutlined
-} from '@ant-design/icons';
+import { SearchOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import UserToolBar from './UserToolbar/UserToolBar';
 export default function Header() {

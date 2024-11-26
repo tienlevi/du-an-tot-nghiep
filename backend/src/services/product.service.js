@@ -4,7 +4,11 @@ import { removeUploadedFile, uploadFiles } from "../utils/upload.js";
 
 export const getAllProducts = async (query) => {
   const features = new APIQuery(
-    Product.find().populate("variants.color").populate("variants.size"),
+    Product.find()
+      .populate("variants.color")
+      .populate("variants.size")
+      .populate("category")
+      .populate("tags"),
     query
   );
   features.filter().sort().limitFields().search().paginate();
@@ -27,7 +31,7 @@ export const getDiscountProducts = async () => {
   const products = await Product.find()
     .populate("variants.color")
     .populate("variants.size")
-    .sort({ sdiscountold: -1 })
+    .sort({ discount: -1 })
     .limit(10);
   return products;
 };
@@ -58,6 +62,7 @@ export const createProduct = async (productData, files) => {
   // @add variants to product
   const newProduct = new Product({
     ...productData,
+    tags: productData.tags ? productData.tags.split(",") : [],
     variants: variationList,
   });
 
@@ -74,7 +79,8 @@ export const updateProduct = async (
   productNew
 ) => {
   const product = await Product.findById(productId);
-  let newVariants;
+  let newVariants = [];
+  let oldVariants = [];
   if (!product)
     throw new NotFoundError(
       `${ReasonPhrases.NOT_FOUND} product with id: ${productId}`
@@ -98,20 +104,19 @@ export const updateProduct = async (
         return variants[i];
       }
     });
+    oldVariants = variants.filter((item) => item.image);
+  } else {
+    newVariants = variants;
   }
 
-  // @remove old images in firebase storage
-  if (oldImageUrlRefs || oldImageUrlRefs.length > 0) {
-    await Promise.all(
-      oldImageUrlRefs.map(async (ref) => {
-        await removeUploadedFile(ref);
-      })
-    );
-  }
   const tags = productNew.tags ? productNew.tags.split(",") : product.tags;
 
   // @update product
-  product.set({ ...productNew, variants: newVariants, tags });
+  product.set({
+    ...productNew,
+    variants: [...newVariants, ...oldVariants],
+    tags,
+  });
   return await product.save();
 };
 

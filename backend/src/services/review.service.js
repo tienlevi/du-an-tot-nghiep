@@ -40,7 +40,7 @@ export const getAllAdminReviews = async (req, res, next) => {
 // @Get get all reviews
 export const getAllReviewsByProductId = async (req, res, next) => {
   const limit = req.query.limit ? req.query.limit : 5;
-  const reviews = await Review.find({ productId: req.body.id })
+  const reviews = await Review.find({ productId: req.params.id })
     .sort({ createdAt: -1 })
     .limit(limit)
     .lean();
@@ -62,10 +62,11 @@ export const getAllReviewsByProductId = async (req, res, next) => {
 };
 
 // @Get get all review by productId
-export const getTopThreeReviewByProductId = async (req, res, next) => {
+export const getProductDetailReviews = async (req, res, next) => {
+  const limit = 3;
   const reviews = await Review.find({ productId: req.params.id })
     .sort({ createdAt: -1, rating: -1 })
-    .limit(3)
+    .limit(limit)
     .lean();
 
   const { averageRating, reviewCount } = reviewData(reviews);

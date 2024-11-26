@@ -17,7 +17,7 @@ interface Variant {
 export type IProduct = {
     _id: string;
     name: string;
-    category: string;
+    category: string | { name: string; _id: string };
     discount: number;
     price: number;
     variants: Variant[];

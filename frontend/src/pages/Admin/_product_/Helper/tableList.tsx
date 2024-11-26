@@ -3,41 +3,27 @@ import { Button, Popconfirm, Space, TableProps, Tag, Tooltip } from 'antd';
 import { ColumnType } from 'antd/es/table';
 import { Link } from 'react-router-dom';
 import { Params } from '@/types/Api';
-import { IProductItemNew } from '@/types/Product';
 import { Currency } from '@/utils';
+import { IProduct } from '@/types/ProductNew';
 
-export interface DataType {
-    name: string;
-    thumbnail: string;
-    price: string;
-    stock: string;
-    sold: string;
-    category: string;
-    brand: string;
-    action: string;
-}
 interface IFilter {
     text: string;
     value: string;
 }
 
 export const ProductsListColumns = ({
-    brandFilter,
-    categoryFilter,
+    categoriesFilter,
+    tagsFilter,
     query,
     getColumnSearchProps,
-    mutateHideProduct,
-    mutateShowProduct,
     getFilteredValue,
 }: {
-    brandFilter?: IFilter[];
-    categoryFilter?: IFilter[];
+    categoriesFilter: IFilter[];
+    tagsFilter?: IFilter[];
     query: Params;
     getColumnSearchProps: (dataIndex: string) => ColumnType<any>;
-    mutateHideProduct: (id: string) => void;
-    mutateShowProduct: (id: string) => void;
     getFilteredValue: (key: string) => string[] | undefined;
-}): TableProps<IProductItemNew>['columns'] => {
+}): TableProps<IProduct>['columns'] => {
     return [
         {
             title: 'Tên sản phẩm',
@@ -47,33 +33,34 @@ export const ProductsListColumns = ({
             ...getColumnSearchProps('name'),
             render: (text, record) => (
                 <>
-                    <div className='flex items-center gap-2'>
+                    <div className="flex items-center gap-2">
                         <div>
-                            <img src={record.thumbnail} className='h-10 w-10 object-cover' alt={record.name} />
-                        </div>
-                        <div>
-                            <h4 className='max-w-[300px] truncate'>{text}</h4>
-                            <p className='text-[10px]'>ID: {record._id}</p>
+                            <h4 className="max-w-[300px] truncate font-semibold text-[16px]">
+                                {text}
+                            </h4>
+                            <p className="text-[10px]">ID: {record._id}</p>
                         </div>
                     </div>
-                    <div className='ms-7 mt-1 border-s-4 border-graydark border-opacity-10 p-5'>
-                        {record.variationIds.map((item, index) => (
-                            <div className='my-4 flex items-center gap-2' key={index}>
+                    <div className="ms-7 mt-1 border-s-4 border-graydark border-opacity-10 p-5">
+                        {record.variants.map((item, index) => (
+                            <div
+                                className="my-4 flex items-center gap-2"
+                                key={index}
+                            >
                                 <div>
-                                    <img src={item.image} className='h-8 w-8 object-cover' alt={record.name + index} />
+                                    <img
+                                        src={item.image}
+                                        className="h-8 w-8 object-cover"
+                                        alt={record.name + index}
+                                    />
                                 </div>
                                 <div>
-                                    <p className='text-[10px]'>
-                                        {item.variantAttributes.map((att) => att.value).join(', ')}
+                                    <p className="text-[10px]">
+                                        Kích thước: {item.size.name}
                                     </p>
-                                </div>
-                                <div className='ms-2'>
-                                    {item.isActive && (
-                                        <Tag className='text-[10px]' color='blue'>
-                                            Đang bán
-                                        </Tag>
-                                    )}
-                                    {!item.isActive && <Tag className='text-[10px]'>Đang không bán</Tag>}
+                                    <p className="text-[10px]">
+                                        Màu sắc: {item.color.name}
+                                    </p>
                                 </div>
                             </div>
                         ))}
@@ -84,47 +71,14 @@ export const ProductsListColumns = ({
         {
             title: 'Đã bán',
             key: 'sold',
-            render: (_, record) => (
-                <>
-                    <div className='flex flex-col justify-between'>
-                        <p className='h-14'>{record.variationIds.reduce((acc, curr) => acc + (curr.sold || 0), 0)}</p>
-                    </div>
-                    <div className=''>
-                        {record.variationIds.map((item, index) => (
-                            <p className='my-4 h-8' key={index}>
-                                {item.sold}
-                            </p>
-                        ))}
-                    </div>
-                </>
-            ),
+            render: (_, record) => <p className="text-center">{record.sold}</p>,
             responsive: ['md'],
         },
         {
             title: 'Giá tiền (VNĐ)',
             key: 'price',
             render: (_, record) => {
-                return (
-                    <>
-                        <div className='flex flex-col justify-between'>
-                            <p className='h-14 whitespace-nowrap'>
-                                {record.variationIds &&
-                                    record.variationIds.length > 1 &&
-                                    `${Currency.format(record.variationIds[0].price)} - ${Currency.format(record.variationIds[record.variationIds.length - 1].price)}`}
-                                {record.variationIds &&
-                                    record.variationIds.length === 1 &&
-                                    `${Currency.format(record.variationIds[0].price)}`}
-                            </p>
-                        </div>
-                        <div className=''>
-                            {record.variationIds.map((item, index) => (
-                                <p className='my-4 h-8' key={index}>
-                                    {Currency.format(item.price)}
-                                </p>
-                            ))}
-                        </div>
-                    </>
-                );
+                return <>{Currency.format(record.price)}</>;
             },
         },
         {
@@ -132,19 +86,29 @@ export const ProductsListColumns = ({
             key: 'stock',
             render: (_, record) => (
                 <>
-                    <div className='flex flex-col justify-between'>
-                        <p className='h-14 whitespace-nowrap'>
-                            {record.variationIds.reduce((acc, curr) => acc + (curr.stock || 0), 0) !== 0 ? (
-                                record.variationIds.reduce((acc, curr) => acc + (curr.stock || 0), 0)
+                    <div className="flex flex-col justify-between">
+                        <p className="h-14 whitespace-nowrap">
+                            {record.variants.reduce(
+                                (acc, curr) => acc + (curr.stock || 0),
+                                0,
+                            ) !== 0 ? (
+                                record.variants.reduce(
+                                    (acc, curr) => acc + (curr.stock || 0),
+                                    0,
+                                )
                             ) : (
-                                <span className='text-red'>Hết hàng</span>
+                                <span className="text-red">Hết hàng</span>
                             )}
                         </p>
                     </div>
-                    <div className=''>
-                        {record.variationIds.map((item, index) => (
-                            <p className='my-4 h-8' key={index}>
-                                {item.stock ? item.stock : <span className='text-red'>Hết hàng</span>}
+                    <div className="">
+                        {record.variants.map((item, index) => (
+                            <p className="my-4 h-8" key={index}>
+                                {item.stock ? (
+                                    item.stock
+                                ) : (
+                                    <span className="text-red">Hết hàng</span>
+                                )}
                             </p>
                         ))}
                     </div>
@@ -152,37 +116,30 @@ export const ProductsListColumns = ({
             ),
         },
         {
-            title: 'Danh mục',
-            key: 'categoryId',
-            filters: categoryFilter,
-            filteredValue: getFilteredValue('categoryId'),
-            render: (_, record) => {
-                return <h4>{record.categoryId.name}</h4>;
-            },
-        },
-        {
-            title: 'Thương hiệu',
-            key: 'brandId',
-            filteredValue: getFilteredValue('brandId'),
-            filters: brandFilter,
-            render: (_, record) => {
-                return <h4>{record.brandId.name}</h4>;
-            },
-        },
-        {
-            title: 'Trạng thái',
-            key: 'isHide',
-            filteredValue: getFilteredValue('isHide'),
-            filters: [
-                { text: 'Ẩn', value: 'true' },
-                { text: 'Hiện', value: 'false' },
-            ],
+            title: 'Thẻ hàng',
+            key: 'tags',
+            filters: tagsFilter,
+            filteredValue: getFilteredValue('tags'),
             render: (_, record) => {
                 return (
-                    <>
-                        <p className='text-red'>{record.isHide && 'Đã ẩn'}</p>
-                        <p className='text-green-400'>{!record.isHide && 'Đang hiển thị'}</p>
-                    </>
+                    <h4>
+                        {record.tags.map((item: any) => item.name).join(', ')}
+                    </h4>
+                );
+            },
+        },
+        {
+            title: 'Danh mục',
+            key: 'category',
+            filters: categoriesFilter,
+            filteredValue: getFilteredValue('category'),
+            render: (_, record) => {
+                return (
+                    <h4>
+                        {typeof record.category === 'object'
+                            ? record.category.name
+                            : record.category}
+                    </h4>
                 );
             },
         },
@@ -191,45 +148,18 @@ export const ProductsListColumns = ({
             title: 'Thao tác',
             key: 'action',
             render: (_, record) => (
-                <Space key={record._id} className='flex flex-col items-start justify-start'>
-                    <Tooltip title='Cập nhật'>
+                <Space
+                    key={record._id}
+                    className="flex flex-col items-start justify-start"
+                >
+                    <Tooltip title="Cập nhật">
                         <Link
                             to={`/admin/products/${record._id}/edit`}
-                            className='text-blue-500 transition-colors duration-500 hover:text-blue-400'
+                            className="text-blue-500 transition-colors duration-500 hover:text-blue-400"
                         >
                             Cập nhật
                         </Link>
                     </Tooltip>
-                    {!record.isHide && (
-                        <Tooltip title='Ẩn sản phẩm này'>
-                            <Popconfirm
-                                title='Ấn sản phẩm khỏi người dùng?'
-                                description='Người dùng sẽ không thể thấy sản phẩm này của bạn.'
-                                onConfirm={() => mutateHideProduct(record._id)}
-                                okText='Đồng ý'
-                                cancelText='Đóng'
-                            >
-                                <p className='text-blue-500 transition-colors duration-500 hover:text-blue-400'>
-                                    Ẩn đi
-                                </p>
-                            </Popconfirm>
-                        </Tooltip>
-                    )}
-                    {record.isHide && (
-                        <Tooltip title='Hiện thị sản phẩm này'>
-                            <Popconfirm
-                                title='Hiện thị sản phẩm này?'
-                                description='Người dùng sẽ thầy sản phẩm này của bạn.'
-                                onConfirm={() => mutateShowProduct(record._id)}
-                                okText='Đồng ý'
-                                cancelText='Đóng'
-                            >
-                                <p className='text-blue-500 transition-colors duration-500 hover:text-blue-400'>
-                                    Hiển thị
-                                </p>
-                            </Popconfirm>
-                        </Tooltip>
-                    )}
                 </Space>
             ),
         },

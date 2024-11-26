@@ -4,6 +4,7 @@ const router = Router();
 
 // @Get
 router.get("/all", colorControllers.getAllColors);
+router.get("/:id", colorControllers.getDetailedColor);
 
 // @Post
 router.post("/", colorControllers.createColor);

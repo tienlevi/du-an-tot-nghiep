@@ -5,6 +5,13 @@ export const envConfig = {
   JWT_SECRET: process.env.JWT_SECRET || "12345678hehe",
   NODE_ENV: process.env.NODE_ENV || "12345678hehe",
   DB_URL: process.env.DB_URL || "mongodb://localhost:27017/dev",
+  shipping: {
+    apiToken: process.env.SHIPPING_API_TOKEN,
+    apiEndpoint: process.env.SHIPPING_API_ENDPOINT,
+    shopId: process.env.SHOP_ID,
+    fromDistrictId: process.env.FROM_DISTRICT_ID,
+    fromWardCode: process.env.FROM_WARD_CODE,
+  },
   FIREBASE: {
     apiKey: process.env.FIREBASE_API_KEY,
     authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -22,4 +29,8 @@ export const envConfig = {
     vnp_ReturnUrl: process.env.VNP_RETURNURL,
     urlSuccess: process.env.VNP_RETURNURL,
   },
+    nodeMailer: {
+        email: process.env.EMAIL_USER,
+        password: process.env.EMAIL_PASSWORD,
+    },
 };

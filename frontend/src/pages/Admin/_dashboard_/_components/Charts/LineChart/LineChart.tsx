@@ -5,17 +5,18 @@ import { useMemo, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import WrapperList from '@/components/_common/WrapperList';
 import { optionsLineChart } from './_options';
+import { useMonthlyStats } from '@/hooks/stats/useMonthlyStats';
 
 const monthOrder = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 const LineChart = () => {
     const [selectedYear, setSelectedYear] = useState<number>(dayjs().year());
+    const { data: result, isLoading } = useMonthlyStats(selectedYear);
 
-    const sortedData = monthOrder.map(month => ({
-        month,
-        totalOrders: Math.floor(Math.random() * 100 + 50),
-        totalRevenue: Math.floor(Math.random() * 1000000000 + 500000000)
-    }));
+    const sortedData = useMemo(() => {
+        if (!result || !Array.isArray(result.data)) return [];
+        return [...result.data].sort((a, b) => monthOrder.indexOf(a.month) - monthOrder.indexOf(b.month));
+    }, [result]);
 
     const months = sortedData.map((item) => item.month);
     const totalRevenue = sortedData.map((item) => item.totalRevenue);
@@ -29,7 +30,7 @@ const LineChart = () => {
             name: 'Doanh thu',
             data: totalRevenue,
         },
-        {
+        {   
             name: 'Đơn hàng',
             data: totalOrders,
         },
@@ -48,6 +49,9 @@ const LineChart = () => {
         return current.year() > dayjs().year();
     };
 
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <WrapperList

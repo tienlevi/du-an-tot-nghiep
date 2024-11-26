@@ -36,6 +36,20 @@ export const getAllColors = async (req, res, next) => {
   );
 };
 
+// @Get get detailed color
+export const getDetailedColor = async (req, res, next) => {
+  const color = await Color.findById(req.params.id).lean();
+
+  return res.status(StatusCodes.OK).json(
+    customResponse({
+      data: color,
+      message: ReasonPhrases.OK,
+      status: StatusCodes.OK,
+      success: true,
+    })
+  );
+};
+
 // @Post update color
 export const updateColor = async (req, res, next) => {
   const newColor = await Color.findOne({ _id: req.params.id }, req.body, {
@@ -44,7 +58,7 @@ export const updateColor = async (req, res, next) => {
 
   return res.status(StatusCodes.OK).json(
     customResponse({
-      data: { color: newColor },
+      data: newColor,
       message: ReasonPhrases.OK,
       status: StatusCodes.OK,
       success: true,

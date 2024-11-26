@@ -13,6 +13,13 @@ const tagService = {
         );
         return res.data;
     },
+    async getAllTagsNoParams() {
+        const res = await instance.get<IAxiosResponse<ITagResponse>>(
+            `${TAG_ENDPOINT.ALL}`,
+            { params: { limit: 10000, page: 1 } },
+        );
+        return res.data;
+    },
     async createTag(payload: ICategoryFormData) {
         const res = await instance.post<IAxiosResponse<ITag>>(
             `${TAG_ENDPOINT.CREATE}`,

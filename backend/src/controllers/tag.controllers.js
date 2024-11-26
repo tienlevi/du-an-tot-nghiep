@@ -7,8 +7,8 @@ export const createTag = asyncHandler(async (req, res, next) => {
 });
 
 // @Get get Tag
-export const getTag = asyncHandler(async (req, res, next) => {
-  return tagServices.getTag(req, res, next);
+export const getDetailedTag = asyncHandler(async (req, res, next) => {
+  return tagServices.getDetailedTag(req, res, next);
 });
 // @Get get all Tag
 export const getAllTag = asyncHandler(async (req, res, next) => {

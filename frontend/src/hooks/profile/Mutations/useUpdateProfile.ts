@@ -10,7 +10,9 @@ export const useMutationUpdateProfle = () => {
         mutationKey: [QUERY_KEY.USERS],
         mutationFn: (payload: FormData) => userService.updateProfile(payload),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [QUERY_KEY.USERS_PROFILE, QUERY_KEY.USERS] });
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEY.USERS_PROFILE, QUERY_KEY.USERS],
+            });
             showMessage('Tài khoản của bạn đã được cập nhật', 'success');
         },
     });

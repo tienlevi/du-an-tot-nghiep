@@ -9,7 +9,7 @@ const useGetAllOrders = (params: Params) => {
         queryFn: async () => {
             const result = await instance<Promise<any>>({
                 method: 'GET',
-                url: '/orders',
+                url: '/orders/all',
                 params,
             });
             return result && result.data ? result.data : null;

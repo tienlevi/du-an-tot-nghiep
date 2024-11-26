@@ -13,6 +13,8 @@ import {
 import CardDataStats from './CardDataStats';
 import DatePickerCard from '../DatePickerCard/DatePickerCard';
 import moment from 'moment';
+import { useTotalStats } from '@/hooks/stats/useTotal';
+import { Currency } from '@/utils';
 
 
 type DateInput =
@@ -23,49 +25,57 @@ type DateInput =
 
 const StatisticsCards: React.FC = () => {
     const [dateInput, setDateInput] = useState<DateInput>({ type: 'single', date: moment().format('YYYY-MM-DD') });
+    const { data, isLoading, error } = useTotalStats(dateInput);
     const carouselRef = useRef<CarouselRef>(null);
 
     const handleDateChange = (newDateInput: DateInput) => {
         setDateInput(newDateInput);
     };
-
+    if (isLoading) return <div className='flex h-screen items-center justify-center'>Loading...</div>;
+    if (error)
+        return <div className='text-red-500 flex h-screen items-center justify-center'>Error: {error.message}</div>;
+    const statsData :any = data?.data?.data || {};
+    console.log(statsData)
     const cardData = [
         {
             title: 'Tổng đơn hàng',
-            total: 1500,
-            rate: '5%',
-            levelUp: true,
-            subtitle: 'Thành công',
+            total: statsData.totalOrders || 0,
+            rate: `${(statsData.orderSuccessRate || 0).toFixed(2)}%`,
+            levelUp: (statsData.orderSuccessRate || 0) > 50,
+            levelDown: (statsData.orderSuccessRate || 0) <= 50,
+            subtitle: `Thành công: ${statsData.successfulOrders || 0} | Đã hủy: ${statsData.cancelledOrders || 0}`,
             icon: <ShoppingCartOutlined />,
-            tooltip: 'Total orders placed in selected time period',
-            rateTooltip: 'Success rate for the selected period',
+            tooltip: 'Tổng số đơn hàng được đặt trong khoảng thời gian đã chọn',
+            rateTooltip: 'Tỷ lệ thành công trong khoảng thời gian đã chọn',
         },
         {
-            title: 'Total Revenue',
-            total: '$5,000',
-            rate: '20%',
-            subtitle: 'Average Daily Revenue',
+            title: 'Tổng doanh thu',
+            total: Currency.format(statsData.totalRevenue || 0),
+            rate: Currency.format(statsData.averageDailyRevenue || 0),
+            subtitle: 'Doanh thu trung bình ',
             icon: <DollarCircleOutlined />,
-            tooltip: 'Total revenue for selected period',
-            rateTooltip: 'Average daily revenue for selected period',
+            tooltip: 'Tổng doanh thu trong khoảng thời gian đã chọn',
+            rateTooltip: 'Doanh thu trung bình hàng ngày trong khoảng thời gian đã chọn',
         },
         {
-            title: 'New Users',
-            total: 234,
-            rate: '3%',
-            levelDown: true,
-            subtitle: 'Cancellation Rate',
+            title: 'Người dùng mới',
+            total: statsData.newUsers || 0,
+            rate: `${(statsData.orderCancelRate || 0).toFixed(2)}%`,
+            levelUp: (statsData.orderCancelRate || 0) < 30,
+            levelDown: (statsData.orderCancelRate || 0) >= 30,
+            subtitle: 'Tỷ lệ hủy đơn',
             icon: <UserOutlined />,
-            tooltip: 'New user registrations in selected period',
-            rateTooltip: 'Order cancellation rate for selected period',
+            tooltip: 'Số lượng người dùng đăng ký mới trong khoảng thời gian đã chọn',
+            rateTooltip: 'Tỷ lệ hủy đơn trong khoảng thời gian đã chọn',
         },
         {
-            title: 'New Products',
-            total: 45,
+            title: 'Sản phẩm mới',
+            total: statsData.newProducts || 0,
             icon: <ShoppingOutlined />,
-            tooltip: 'New products added in selected period',
+            tooltip: 'Số lượng sản phẩm mới được thêm vào trong khoảng thời gian đã chọn',
         },
     ];
+   
 
     const NavigationButton = ({ direction, onClick }: { direction: 'left' | 'right'; onClick: () => void }) => (
         <Button

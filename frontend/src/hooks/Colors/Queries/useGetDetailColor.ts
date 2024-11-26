@@ -5,7 +5,7 @@ import colorService from '@/services/color.service';
 
 const useGetDetailColor = (id: string) => {
     return useQuery({
-        queryKey: [QUERY_KEY.SIZES, id],
+        queryKey: [QUERY_KEY.COLORS, id],
         queryFn: async () => {
             const res = await colorService.getDetail(id);
             return res.data;
