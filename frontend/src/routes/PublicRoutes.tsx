@@ -12,6 +12,7 @@ import {
     ProductDetailPage,
     ShippingPage,
     CheckoutPage,
+    ProductPage,
 } from './LazyRoutes';
 import AdminLayout from '@/layouts/AdminLayout';
 import AccountLayout from '@/layouts/AccountLayout';
@@ -32,7 +33,6 @@ const PublicRoutes = [
             },
             {
                 path: '/login',
-<<<<<<< HEAD
                 element: (
                     <Suspense>
                         <LoginPage />
@@ -47,21 +47,12 @@ const PublicRoutes = [
                     </Suspense>
                 ),
             },
+            // @Product page
             {
-                path: 'products/:id',
-=======
->>>>>>> FE/Shipping-test
+                path: '/products',
                 element: (
                     <Suspense>
-                        <LoginPage />
-                    </Suspense>
-                ),
-            },
-            {
-                path: '/register',
-                element: (
-                    <Suspense>
-                        <RegisterPage />
+                        <ProductPage />
                     </Suspense>
                 ),
             },
@@ -69,7 +60,7 @@ const PublicRoutes = [
                 path: 'products/:id',
                 element: (
                     <Suspense>
-                        <ProductDetailPage/>
+                        <ProductDetailPage />
                     </Suspense>
                 ),
             },
@@ -89,12 +80,13 @@ const PublicRoutes = [
                     </Suspense>
                 ),
             },
+
             // @CheckOut
             {
                 path: MAIN_ROUTES.SHIPPING,
                 element: (
                     <Suspense>
-                        <ShippingPage/>
+                        <ShippingPage />
                     </Suspense>
                 ),
             },
@@ -102,11 +94,10 @@ const PublicRoutes = [
                 path: MAIN_ROUTES.CHECKOUT,
                 element: (
                     <Suspense>
-                            <CheckoutPage />
+                        <CheckoutPage />
                     </Suspense>
                 ),
             },
-
 
             // @Account
             {

@@ -13,16 +13,12 @@ export default function Header() {
       </div>
       <header
         dir="ltr"
-        className="sticky top-0 left-0 w-full z-50 bg-white shadow-md"
+        className="sticky top-0 z-9999 bg-white shadow-md"
       >
         <div className="flex items-center justify-between max-w-screen-default py-1.5 mx-4 default:mx-auto">
           <div className="flex gap-10 items-center">
             <div>
-<<<<<<< HEAD
-              <img src="/logo.png" className="w-[55px]" alt="" />
-=======
-              <img src="https://res-console.cloudinary.com/dpplfiyki/thumbnails/v1/image/upload/v1731678493/bG9nb193dDJlZWQ=/drilldown" className="w-[55px]" alt="" />
->>>>>>> FE/Shipping-test
+              <img src="https://res.cloudinary.com/dn1s3axok/image/upload/v1732159969/adstore/logo_zhcecc.png" className="w-[55px]" alt="" />
             </div>
             <div>
               <ul className="flex ">
@@ -36,7 +32,7 @@ export default function Header() {
                 </li>
                 <li>
                   <Link
-                    to={'/'}
+                    to={'/products'}
                     className="text-base text-global uppercase font-bold hover:text-hover duration-300 ml-8"
                   >
                     Sản phẩm

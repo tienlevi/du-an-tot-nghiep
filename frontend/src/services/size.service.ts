@@ -12,6 +12,12 @@ const sizeService = {
         );
         return res.data;
     },
+    async getAllSizes() {
+        const res = await instance.get<IAxiosResponse<ISizeResponse>>(
+            `${SIZE_ENDPOINT.ALL}`,
+        );
+        return res.data;
+    },
     async createSize(payload: ISizeFormData) {
         const res = await instance.post<IAxiosResponse<ISize>>(
             `${SIZE_ENDPOINT.CREATE}`,

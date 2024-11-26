@@ -38,13 +38,11 @@ const useFilter = () => {
         );
 
         Object.entries(params).forEach(([key, value]) => {
-            console.log(value);
             if (value) newParams.set(key, String(value));
             else {
                 newParams.delete(key);
             }
         });
-        console.log(checkedParams);
         dispatch(setQuery(checkedParams));
         navigator(`${pathname}?${newParams.toString()}`);
     };

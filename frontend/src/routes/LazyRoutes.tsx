@@ -13,6 +13,8 @@ export const LoginPage = lazy(() => import('@/pages/Client/Auth/Login'));
 export const RegisterPage = lazy(() => import('@/pages/Client/Auth/Register'));
 export const ShippingPage = lazy(()=> import('@/pages/Client/Checkout/Shipping'))
 export const CheckoutPage = lazy(() => import('@/pages/Client/Checkout/CheckOut'));
+export const ProductPage = lazy(() => import('@/pages/Client/ProductPage/ProductPage'));
+
 // @admin page
 export const DashboardPage = lazy(() => import('../pages/Admin/_dashboard_'));
 export const ProductsListAll = lazy(() => import('@/pages/Admin/_product_'));
@@ -23,7 +25,6 @@ export const CreateProduct = lazy(
 // export const UpdateProduct = lazy(
 //     () => import('@/pages/Admins/_product_/UpdateProduct'),
 // );
-<<<<<<< HEAD
 
 export const CategoryList = lazy(() => import('@/pages/Admin/_category_'));
 export const CreateCategory = lazy(
@@ -48,8 +49,6 @@ export const UpdateSize = lazy(() => import('@/pages/Admin/_size_/UpdateSize'));
 export const TagList = lazy(() => import('@/pages/Admin/_tag_/'));
 export const CreateTag = lazy(() => import('@/pages/Admin/_tag_/CreateTag'));
 export const UpdateTag = lazy(() => import('@/pages/Admin/_tag_/UpdateTag'));
-=======
->>>>>>> FE/Shipping-test
 
 // @suspense
 export const Suspense = ({ children }: { children: React.ReactNode }) => {

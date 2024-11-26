@@ -12,6 +12,12 @@ const colorService = {
         );
         return res.data;
     },
+    async getAllColors() {
+        const res = await instance.get<IAxiosResponse<IColorResponse>>(
+            `${COLOR_ENDPOINT.ALL}`,
+        );
+        return res.data;
+    },
     async createColor(payload: IColorFormData) {
         const res = await instance.post<IAxiosResponse<IColor>>(
             `${COLOR_ENDPOINT.CREATE}`,
