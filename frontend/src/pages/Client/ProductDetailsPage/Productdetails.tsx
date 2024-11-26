@@ -29,8 +29,8 @@ interface TransformedVariant {
 const ProductDetailsPage = () => {
     const { id } = useParams();
     const { data } = useGetDetailProduct(id ? id : '');
-    const isAuth = useTypedSelector(state => state.auth.authenticate)
-    const navigate = useNavigate()
+    const isAuth = useTypedSelector((state) => state.auth.authenticate);
+    const navigate = useNavigate();
     const [valueQuantity, setValueQuantity] = useState(1);
     const [selectedColor, setSelectedColor] = useState<{
         _id: string;
@@ -97,7 +97,7 @@ const ProductDetailsPage = () => {
         }
     }, [data]);
     const handleChooseSize = (item: any) => {
-        setValueQuantity(1)
+        setValueQuantity(1);
         let selectedColor = item.colors[0];
         if (selectedColor.stock === 0) {
             const availableColor = item.colors.find(
@@ -119,7 +119,7 @@ const ProductDetailsPage = () => {
     };
 
     const handleChooseColor = (item: any) => {
-        setValueQuantity(1)
+        setValueQuantity(1);
         setSelectedColor({
             _id: item._id,
             color: item.color,
@@ -145,21 +145,30 @@ const ProductDetailsPage = () => {
         setValueQuantity(e ? e : 1);
     };
     const handleAddToCart = () => {
-      if(isAuth){
-        if(selectedColor){
-            mutate({
-                productId: id,
-                quantity: valueQuantity,
-                variantId: selectedColor._id,
-            });
-           }else{
-            showMessage('Bạn chưa chọn biến thể sản phẩm!', 'warning')
-           }
-      }else{
-        navigate('/login')
-        showMessage('Bạn cần đăng nhập trước khi mua hàng!','warning', 2000)
-      }
+        if (isAuth) {
+            if (selectedColor) {
+                mutate({
+                    productId: id,
+                    quantity: valueQuantity,
+                    variantId: selectedColor._id,
+                });
+            } else {
+                showMessage('Bạn chưa chọn biến thể sản phẩm!', 'warning');
+            }
+        } else {
+            navigate('/login');
+            showMessage(
+                'Bạn cần đăng nhập trước khi mua hàng!',
+                'warning',
+                2000,
+            );
+        }
     };
+    const uniqueImage = data?.variants.filter(
+        (item, index, self) =>
+            self.findIndex(v => v.color._id === item.color._id) === index
+    );
+
     return (
         data && (
             <div className="max-w-screen-default default:mx-auto mx-4">
@@ -195,26 +204,28 @@ const ProductDetailsPage = () => {
                         </div>
 
                         <div className=" flex flex-col gap-2 items-center">
-                            {data.variants.map((item, index: number) => {
-                                return (
-                                    <div
-                                        key={index}
-                                        onClick={() =>
-                                            setSelectedImage({
-                                                index,
-                                                image: item.image,
-                                            })
-                                        }
-                                        className={`${index === selectedImage.index ? 'border-[1px] border-global' : 'border-none'}  w-24 cursor-pointer rounded-md overflow-hidden`}
-                                    >
-                                        <img
-                                            className="object-cover"
-                                            src={item.image}
-                                            alt=""
-                                        />
-                                    </div>
-                                );
-                            })}
+                            {uniqueImage?.map((item, index) => (
+                                <div
+                                    key={index}
+                                    onClick={() =>
+                                        setSelectedImage({
+                                            index,
+                                            image: item.image,
+                                        })
+                                    }
+                                    className={`${
+                                        index === selectedImage.index
+                                            ? 'border-[1px] border-global'
+                                            : 'border-none'
+                                    } w-24 cursor-pointer rounded-md overflow-hidden`}
+                                >
+                                    <img
+                                        className="object-cover"
+                                        src={item.image}
+                                        alt=""
+                                    />
+                                </div>
+                            ))}
                         </div>
                     </div>
 
