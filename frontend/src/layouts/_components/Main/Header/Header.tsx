@@ -11,7 +11,7 @@ export default function Header() {
       </div>
       <header
         dir="ltr"
-        className="sticky top-0 z-9999 bg-white shadow-md"
+        className="sticky top-0 z-10 bg-white shadow-md"
       >
         <div className="flex items-center justify-between max-w-screen-default py-1.5 mx-4 default:mx-auto">
           <div className="flex gap-10 items-center">

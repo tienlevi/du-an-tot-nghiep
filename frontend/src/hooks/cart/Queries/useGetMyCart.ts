@@ -15,17 +15,8 @@ const useGetMyCart = () => {
         refetchOnWindowFocus: true,
         enabled: !!user?._id,
     });
-    const cartItem = useTypedSelector((state) => state.cartReducer.items);
-    const responsePayloadCheckout = cartItem?.map((item: any) => ({
-        productId: item.productVariation.productId._id,
-        productVariationId: item.productVariation._id,
-        name: item?.productVariation?.productId?.name,
-        price: item?.productVariation?.price,
-        image: item?.productVariation?.image,
-        quantity: item.quantity,
-        variants: item.productVariation.variantAttributes,
-    }));
-    return { data, ...rest, responsePayloadCheckout };
+
+    return { data, ...rest };
 };
 
 export default useGetMyCart;

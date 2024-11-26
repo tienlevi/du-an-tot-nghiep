@@ -15,6 +15,8 @@ import {
     CheckoutPage,
     ProductPage,
     Suspense,
+    CartDetailPage,
+    OrderSuccessPage,
 } from './LazyRoutes';
 
 const PublicRoutes = [
@@ -66,6 +68,14 @@ const PublicRoutes = [
 
             // @CheckOut
             {
+                path: MAIN_ROUTES.CART,
+                element: (
+                    <Suspense>
+                        <CartDetailPage />
+                    </Suspense>
+                ),
+            },
+            {
                 path: MAIN_ROUTES.SHIPPING,
                 element: (
                     <Suspense>
@@ -108,9 +118,16 @@ const PublicRoutes = [
             },
         ],
     },
-
-    { path: '*', element: <Navigate to={'/404'} /> },
+    {
+        path: MAIN_ROUTES.SUCCESS_ORDER,
+        element: (
+            <Suspense>
+                <OrderSuccessPage />
+            </Suspense>
+        ),
+    },
     { path: '/404', element: <NotFound /> },
+    { path: '*', element: <Navigate to={'/404'} /> },
 ];
 
 export default PublicRoutes;

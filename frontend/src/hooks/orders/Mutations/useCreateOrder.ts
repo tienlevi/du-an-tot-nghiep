@@ -3,6 +3,7 @@ import request from '../../../utils/api/axiosIntance';
 import { HTTP_METHOD } from '@/constants/http';
 import { ORDER_ENDPOINT } from '@/constants/endpoint';
 import { QUERY_KEY } from '@/constants/queryKey';
+import { useTypedSelector } from '@/store/store';
 
 type DataType = {
     items: {
@@ -40,7 +41,7 @@ type DataType = {
 
 export const useCreateOrder = () => {
     const queryClient = useQueryClient();
-
+    const userId = useTypedSelector(state=> state.auth.user?._id)
     return useMutation({
         mutationFn: async (data: DataType) => {
             return await request<any>({
@@ -58,6 +59,9 @@ export const useCreateOrder = () => {
                         ),
                     ),
             });
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEY.CART, userId]
+            })
         },
     });
 };

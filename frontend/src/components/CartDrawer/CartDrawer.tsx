@@ -326,12 +326,12 @@ const CartDrawer = ({ data, isFetching, children }: PropsType) => {
                                 </p>
                             </div>
                             <div className="mt-6">
-                                <Link to={MAIN_ROUTES.SHIPPING}>
+                                <Link to={MAIN_ROUTES.CART}>
                                     <button
                                         onClick={onClose}
                                         className="h-[50px] bg-white text-sm font-semibold uppercase text-black transition-colors border-[1px] rounded-md w-full duration-300 hover:border-hover hover:text-hover"
                                     >
-                                        Thanh Toán
+                                        Xem giỏ hàng
                                     </button>
                                 </Link>
                             </div>

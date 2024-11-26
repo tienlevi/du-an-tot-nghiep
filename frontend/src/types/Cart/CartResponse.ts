@@ -1,30 +1,21 @@
-export type variationAttribute = {
-    _id: string;
-    name: string;
-    key: string;
-    value: string;
-};
-export interface ICartItem {
-    _id: string;
-    color: string;
-    image: string;
-    isActive: boolean;
-    price: number;
-    productId: {
-        _id: string;
-        name: string;
-    };
-    stock: number;
-    variantAttributes: variationAttribute[];
+export type ICartItemsResponse  ={
+    productId: string
+    variantId: string
+    quantity: number
+    name: string
+    price: number
+    image: string
+    description: string
+    discount: number
+    color: string
+    size: string
+    stock: number
+    imageUrlRef: string
+    _id: string
+    category: string
+    categoryId: string
 }
-
-export type ICartItemsResponse = {
-    productVariation: ICartItem;
-    quantity: number;
-};
-
-export type ICartDataResponse = {
-    items: ICartItemsResponse[];
+export type ICartResponse ={
     userId: string;
-    _id: string;
-};
+    items: ICartItemsResponse[]
+}
