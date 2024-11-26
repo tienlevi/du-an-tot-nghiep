@@ -28,7 +28,7 @@ import { TableProps } from 'antd/lib';
 import clsx from 'clsx';
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function CartDetail() {
     useDocumentTitle('ADSTORE - Chi tiết giỏ hàng');
@@ -36,8 +36,8 @@ export default function CartDetail() {
     const { mutate: updateQuantity } = useUpdateQuantity();
     const { handleRemoveCart } = useMutationRemoveItem();
     const dispatch = useAppDispatch();
+    const navigate= useNavigate()
     const cartItem = useTypedSelector((state) => state.cartReducer.items);
-    const user = useTypedSelector((state) => state.auth.user?._id);
     const totalOrderAmount = cartItem
         ? cartItem.reduce(
               (total: number, product) =>
@@ -174,7 +174,11 @@ export default function CartDetail() {
                 return null;
         }
     };
-
+    const handleNavigateCheckout= ()=>{
+        if(cartItem.length !==0){
+            navigate(MAIN_ROUTES.SHIPPING)
+        }
+    }
     const columns: TableProps<ICartItemsResponse>['columns'] = [
         {
             key: '',
@@ -210,8 +214,7 @@ export default function CartDetail() {
                             {product.stock !== 0 ? (
                                 <div className="flex flex-wrap">
                                     <Link
-                                        style={{ color: '#0068c9' }}
-                                        className="text[#0068c9] text-base font-semibold"
+                                        className="text-global text-base font-semibold"
                                         to={`${MAIN_ROUTES.PRODUCTS}/${product._id}`}
                                     >
                                         {product.name}
@@ -356,14 +359,14 @@ export default function CartDetail() {
                                 <div className='flex gap-2'>
                                     <Link
                                         to='/'
-                                        className='block rounded-sm bg-black px-6 py-[0.62rem] text-center text-sm font-medium text-white transition-colors duration-300 ease-linear hover:bg-[#16bcdc]'
+                                        className='block rounded-sm bg-global px-6 py-[0.62rem] text-center text-sm font-medium text-white transition-colors duration-300 ease-linear hover:bg-[#16bcdc]'
                                     >
                                         Tiếp tục mua hàng
                                     </Link>
                                     <Button
                                         size='large'
                                         onClick={() => onChangeTargetAll('ADD')}
-                                        className='block rounded-sm bg-black px-10 py-2 text-center text-sm font-medium text-white transition-colors duration-300 ease-linear hover:bg-[#16bcdc]'
+                                        className='block rounded-sm bg-global px-10 py-2 text-center text-sm font-medium text-white transition-colors duration-300 ease-linear hover:bg-[#16bcdc]'
                                     >
                                         Chọn Tất Cả Sản Phẩm
                                     </Button>
@@ -371,7 +374,7 @@ export default function CartDetail() {
                                         <Button
                                             size='large'
                                             onClick={() => onChangeTargetAll('REMOVE')}
-                                            className='block rounded-sm bg-black px-10 py-2 text-center text-sm font-medium text-white transition-colors duration-300 ease-linear hover:bg-[#16bcdc]'
+                                            className='block rounded-sm bg-global px-10 py-2 text-center text-sm font-medium text-white transition-colors duration-300 ease-linear hover:bg-[#16bcdc]'
                                         >
                                             Bỏ Chọn Tất Cả Sản Phẩm
                                         </Button>
@@ -379,7 +382,7 @@ export default function CartDetail() {
                                 </div>
                                 <Button
                                     size='large'
-                                    className='block rounded-sm bg-black px-10 py-2 text-center text-sm font-medium text-white transition-colors duration-300 ease-linear hover:bg-[#16bcdc]'
+                                    className='block rounded-sm bg-global px-10 py-2 text-center text-sm font-medium text-white transition-colors duration-300 ease-linear hover:bg-[#16bcdc]'
                                 >
                                     Xóa tất cả
                                 </Button>
@@ -395,7 +398,7 @@ export default function CartDetail() {
                         </div> */}
                     </Form>
 
-                    <div className="border-2 border-[#16bcdc] px-8 pb-6 pt-6 text-base text-black">
+                    <div className="border-[1px] border-hover px-8 pb-6 pt-6 text-base text-black">
                         {cartItem.length > 0 ? (
                             <>
                                 <div className="mt-4 flex items-center justify-between border-b border-gray pb-6 text-base font-semibold">
@@ -422,14 +425,13 @@ export default function CartDetail() {
                         )}
 
                         <div className="mt-12">
-                            <Link to={MAIN_ROUTES.SHIPPING}>
-                                <Button
-                                    size="large"
-                                    className={`block h-[48px] w-full  rounded-[5px] bg-black px-10 py-2 text-center text-sm font-medium text-white transition-colors duration-300 ease-linear hover:bg-[#16bcdc]`}
+                                <button
+                                    disabled={cartItem.length === 0}
+                                    onClick={()=> handleNavigateCheckout()}
+                                    className={`block h-[48px] w-full  rounded-[5px] bg-global px-10 py-2 text-center text-sm font-medium text-white transition-colors duration-300 ease-linear hover:bg-hover disabled:hover:bg-global`}
                                 >
                                     Thanh Toán
-                                </Button>
-                            </Link>
+                                </button>
                         </div>
                     </div>
                 </div>
