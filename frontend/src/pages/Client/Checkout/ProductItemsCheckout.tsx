@@ -75,6 +75,8 @@ const ProductItemsCheckout: React.FC = () => {
                     },
                 },
             );
+        }else if(paymentMethod === 1){
+            
         }else{
             showMessage('Vui lòng chọn phương thức thanh toán', 'warning')
         }
