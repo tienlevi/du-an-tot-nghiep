@@ -64,7 +64,6 @@ const PopupFormCancelOrder = ({ id }: { id: string }) => {
 
     useEffect(() => {
         if (isSuccess) {
-            showMessage('Cancel order successfully!', 'success');
             setIsModalOpen(false);
             reset();
         }
