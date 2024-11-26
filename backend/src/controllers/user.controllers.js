@@ -19,3 +19,16 @@ export const getProfile = asyncHandler(async (req, res, next) => {
 export const updateProfile = asyncHandler(async (req, res, next) => {
   return userServices.updateProfile(req, res, next);
 });
+
+// @Get: getWishListByUser
+export const getWishListByUser = asyncHandler(async (req, res, next) => {
+  return  userServices.getWishListByUser(req, res);
+});
+// @Patch: addWishList
+export const addWishList = asyncHandler(async (req, res, next) => {
+  return  userServices.addWishList(req, res);
+});
+// @Patch: deleteWishList
+export const deleteWishList = asyncHandler(async (req , res, next) => {
+  return  userServices.deleteWishList(req, res);
+});

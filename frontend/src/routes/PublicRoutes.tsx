@@ -1,22 +1,21 @@
+import { MAIN_ROUTES } from '@/constants/router';
+import AccountLayout from '@/layouts/AccountLayout';
 import MainLayout from '@/layouts/Mainlayout/MainLayout';
 import NotFound from '@/pages/Client/NotFound';
 import { Navigate } from 'react-router';
 import {
     HomePage,
+    LoginPage,
     MyOrderDetailsPage,
     MyOrdersPage,
-    ProfilePage,
-    LoginPage,
-    RegisterPage,
-    Suspense,
     ProductDetailPage,
+    ProfilePage,
+    RegisterPage,
     ShippingPage,
     CheckoutPage,
     ProductPage,
+    Suspense,
 } from './LazyRoutes';
-import AdminLayout from '@/layouts/AdminLayout';
-import AccountLayout from '@/layouts/AccountLayout';
-import { MAIN_ROUTES } from '@/constants/router';
 
 const PublicRoutes = [
     {
@@ -61,22 +60,6 @@ const PublicRoutes = [
                 element: (
                     <Suspense>
                         <ProductDetailPage />
-                    </Suspense>
-                ),
-            },
-            {
-                path: '/login',
-                element: (
-                    <Suspense>
-                        <LoginPage />
-                    </Suspense>
-                ),
-            },
-            {
-                path: '/register',
-                element: (
-                    <Suspense>
-                        <RegisterPage />
                     </Suspense>
                 ),
             },
@@ -126,7 +109,6 @@ const PublicRoutes = [
         ],
     },
 
-    { path: '/admin', element: <AdminLayout /> },
     { path: '*', element: <Navigate to={'/404'} /> },
     { path: '/404', element: <NotFound /> },
 ];

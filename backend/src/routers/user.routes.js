@@ -7,6 +7,8 @@ const userRouter = Router();
 
 // Get
 userRouter.get("/profile", authenticate, userControllers.getProfile);
+userRouter.get('/private/wish-list', authenticate, userControllers.getWishListByUser);
+
 
 // Post
 
@@ -28,5 +30,9 @@ userRouter.patch(
   upload.fields([{ name: "avatar", maxCount: 1 }]),
   userControllers.updateProfile
 );
+
+userRouter.patch('/private/wish-list/add', authenticate, userControllers.addWishList);
+userRouter.patch('/private/wish-list/remove', authenticate, userControllers.deleteWishList);
+
 
 export default userRouter;
