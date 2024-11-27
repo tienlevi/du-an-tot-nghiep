@@ -86,3 +86,70 @@ export const updateProfile = async (req, res, next) => {
     })
   );
 };
+
+// @Patch: Add wishlist
+export const addWishList = async (req, res) => {
+  const userId = req.userId;
+  const productId = req.body.productId;
+  const user = await User.findByIdAndUpdate(userId, { $addToSet: { wishList: productId } }, { new: true }).lean();
+
+  return res.status(StatusCodes.OK).json(
+      customResponse({
+          data: user,
+          success: true,
+          status: StatusCodes.OK,
+          message: ReasonPhrases.OK,
+      }),
+  );
+};
+// @Patch: delete wishlist
+export const deleteWishList = async (req, res) => {
+  const userId = req.userId;
+  const productId = req.body.productId;
+  const user = await User.findByIdAndUpdate(userId, { $pull: { wishList: productId } }, { new: true }).lean();
+  return res.status(StatusCodes.OK).json(
+      customResponse({
+          data: user,
+          success: true,
+          status: StatusCodes.OK,
+          message: ReasonPhrases.OK,
+      }),
+  );
+};
+// @Get: get wishlist by user
+export const getWishListByUser = async (req, res) => {
+  const userId = req.userId;
+
+  const wishlist = await User.findById(userId)
+    .select('wishList')
+    .populate({
+      path: 'wishList',
+      populate: [
+        {
+          path: 'variants',
+          select: 'color size stock image imageUrlRef',
+          populate: [
+            {
+              path: 'color',
+              select: 'name hex'
+            },
+            {
+              path: 'size',
+              select: 'name'
+            }
+          ]
+        }
+      ],
+      select: 'name price discount variants description rating reviewCount' 
+    })
+    .lean();
+
+  return res.status(StatusCodes.OK).json(
+    customResponse({
+      data: wishlist,
+      success: true,
+      status: StatusCodes.OK,
+      message: ReasonPhrases.OK,
+    }),
+  );
+};

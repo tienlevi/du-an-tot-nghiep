@@ -1,22 +1,23 @@
+import { MAIN_ROUTES } from '@/constants/router';
+import AccountLayout from '@/layouts/AccountLayout';
 import MainLayout from '@/layouts/Mainlayout/MainLayout';
 import NotFound from '@/pages/Client/NotFound';
 import { Navigate } from 'react-router';
 import {
     HomePage,
+    LoginPage,
     MyOrderDetailsPage,
     MyOrdersPage,
-    ProfilePage,
-    LoginPage,
-    RegisterPage,
-    Suspense,
     ProductDetailPage,
+    ProfilePage,
+    RegisterPage,
     ShippingPage,
     CheckoutPage,
     ProductPage,
+    Suspense,
+    WishlistPage,
 } from './LazyRoutes';
-import AdminLayout from '@/layouts/AdminLayout';
-import AccountLayout from '@/layouts/AccountLayout';
-import { MAIN_ROUTES } from '@/constants/router';
+import AuthProtected from '@/layouts/Protected/AuthProtected';
 
 const PublicRoutes = [
     {
@@ -64,22 +65,6 @@ const PublicRoutes = [
                     </Suspense>
                 ),
             },
-            {
-                path: '/login',
-                element: (
-                    <Suspense>
-                        <LoginPage />
-                    </Suspense>
-                ),
-            },
-            {
-                path: '/register',
-                element: (
-                    <Suspense>
-                        <RegisterPage />
-                    </Suspense>
-                ),
-            },
 
             // @CheckOut
             {
@@ -98,7 +83,17 @@ const PublicRoutes = [
                     </Suspense>
                 ),
             },
-
+            //@WishList
+            {
+                path: MAIN_ROUTES.WISH_LIST,
+                element: (
+                    <Suspense>
+                        <AuthProtected>
+                            <WishlistPage />
+                        </AuthProtected>
+                    </Suspense>
+                ),
+            },
             // @Account
             {
                 element: (
@@ -126,7 +121,6 @@ const PublicRoutes = [
         ],
     },
 
-    { path: '/admin', element: <AdminLayout /> },
     { path: '*', element: <Navigate to={'/404'} /> },
     { path: '/404', element: <NotFound /> },
 ];

@@ -108,7 +108,7 @@ export const optionsLineChart = (timeline: string[], showRevenue: boolean, showO
       {
         show: showRevenue,
         title: {
-          text: 'Total Revenue',
+          text: 'Doanh thu',
           style: {
             color: '#3C50E0',
             fontSize: '14px',
@@ -128,7 +128,7 @@ export const optionsLineChart = (timeline: string[], showRevenue: boolean, showO
         show: showOrders,
         opposite: true,
         title: {
-          text: 'Total Orders',
+          text: 'Đơn hàng',
           style: {
             color: '#10B981',
             fontSize: '14px',

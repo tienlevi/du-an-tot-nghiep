@@ -21,6 +21,11 @@ const productSchema = new mongoose.Schema(
     variants: [variantSchema],
     description: { type: String },
     sold: { type: Number, default: 0 },
+    rating: { type: Number, default: 0 },
+    reviewCount: {
+      type: Number,
+      default: 0,
+  },
     tags: [
       {
         type: mongoose.Schema.Types.ObjectId,

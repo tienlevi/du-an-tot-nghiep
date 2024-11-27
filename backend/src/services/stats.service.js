@@ -467,7 +467,8 @@ export const getProductStats = async (req, res, next) => {
                 totalRevenue: {
                     $sum: { $multiply: ['$items.quantity', '$items.price'] } 
                 },
-                image: { $first: '$items.image' }
+                image: { $first: '$items.image' },
+                price: { $first: '$items.price' } 
             },
         },
         { $sort: { totalQuantity: -1 } },
@@ -517,6 +518,7 @@ export const getProductStats = async (req, res, next) => {
                     totalQuantity: product.totalQuantity,
                     totalRevenue: parseFloat(product.totalRevenue.toFixed(2)),
                     image: product.image,
+                    price: product.price, 
                     percentageOfTotal: (
                         (product.totalQuantity / (product.totalQuantity + productTotalStock)) *
                         100
