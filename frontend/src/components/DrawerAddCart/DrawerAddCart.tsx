@@ -1,12 +1,17 @@
+import { MAIN_ROUTES } from '@/constants/router';
+import useFilter from '@/hooks/_common/useFilter';
 import { useMutationAddToCart } from '@/hooks/cart/Mutations/useAddCart';
-import { useTypedSelector } from '@/store/store';
+import useMutationAddWishList from '@/hooks/wishlist/Mutations/useAddWishList';
+import useGetAllWishlist from '@/hooks/wishlist/Queries/useGetAllWishlist';
+import { RootState, useTypedSelector } from '@/store/store';
 import { IProduct } from '@/types/ProductNew';
 import showMessage from '@/utils/ShowMessage';
 import { cn } from '@/utils/TailwindMerge';
-import { CloseOutlined, HeartOutlined } from '@ant-design/icons';
+import { CloseOutlined, HeartFilled, HeartOutlined } from '@ant-design/icons';
 import { Button, Drawer, Flex, InputNumber, Rate, Space, Spin } from 'antd';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 type IPropsDrawerAddCart = {
     children: React.ReactNode;
@@ -145,7 +150,7 @@ export default function DrawerAddCart({
         setValueQuantity(e ? e : 1);
     };
     const isAuth = useTypedSelector((state) => state.auth.authenticate);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const handleAddToCart = () => {
         if (isAuth) {
             if (selectedColor) {
@@ -160,9 +165,32 @@ export default function DrawerAddCart({
             } else {
                 showMessage('Bạn chưa chọn biến thể sản phẩm!', 'warning');
             }
-        }else{
-          navigate('/login')
-          showMessage('Bạn cần đăng nhập trước khi mua hàng!','warning', 2000)
+        } else {
+            navigate('/login');
+            showMessage(
+                'Bạn cần đăng nhập trước khi mua hàng!',
+                'warning',
+                2000,
+            );
+        }
+    };
+
+    //wishlist
+    const { mutate: addWishlist } = useMutationAddWishList();
+    const { query } = useFilter();
+    const user = useSelector((state: RootState) => state.auth.user);
+    const { data: allWishList } = useGetAllWishlist(query);
+    const wishListIds = allWishList?.data?.wishList?.map((item) => item._id);
+    const handleAddWishlist = () => {
+        if (user) {
+            if (wishListIds?.includes(item._id as string)) {
+                showMessage('Product already added to wishlist!', 'warning');
+                return;
+            }
+            addWishlist({ productId: item._id as string });
+        } else {
+            navigate(MAIN_ROUTES.LOGIN);
+            showMessage('You need to login first!', 'warning');
         }
     };
     return (
@@ -336,9 +364,32 @@ export default function DrawerAddCart({
                                     +
                                 </Button>
                             </Space>
-                            <Button className="flex h-[38px] text-xs items-center">
-                                <HeartOutlined /> Thêm vào yêu thích
-                            </Button>
+                            <>
+                                {wishListIds?.includes(item._id as string) ? (
+                                    <>
+                                     <Button
+                                            className="flex h-[38px] text-xs items-center"
+                                            type="default"
+                                            onClick={handleAddWishlist}
+                                            icon={<HeartFilled  className='text-red-500'/>}
+                                            disabled={true}
+                                        >
+                                            Đã thêm vào yêu thích
+                                        </Button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Button
+                                            className="flex h-[38px] text-xs items-center"
+                                            type="default"
+                                            onClick={handleAddWishlist}
+                                            icon={<HeartOutlined />}
+                                        >
+                                            Thêm vào yêu thích
+                                        </Button>
+                                    </>
+                                )}
+                            </>
                         </div>
                         <div className="mt-4">
                             <button

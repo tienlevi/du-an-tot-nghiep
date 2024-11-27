@@ -22,6 +22,7 @@ import { useCreateOrder } from '@/hooks/orders/Mutations/useCreateOrder';
 import showMessage from '@/utils/ShowMessage';
 import PolicyModal from '@/components/PolicyModal';
 import { RadioChangeEvent } from 'antd/lib';
+import { useVnPayOrder } from '@/hooks/orders/Mutations/useVnPayOrder';
 
 const { Text, Title } = Typography;
 
@@ -31,10 +32,10 @@ const ProductItemsCheckout: React.FC = () => {
     const cartItems = useTypedSelector((state) => state.cartReducer.items);
     const [policyAgreed, setPolicyAgreed] = useState<boolean>(false);
     const [paymentMethod, setPaymentMethod] = useState<number>(0);
-
+    const createOrderVnPay = useVnPayOrder();
     const { description, receiverInfo, shippingAddress, tax, shippingFee } =
         useSelector((state: RootState) => state.order);
-
+    const userId = useTypedSelector(state=> state.auth.user?._id)
     const subTotal =
         cartItems?.reduce(
             (acc: any, item: any) => acc + +item.price * item.quantity,
@@ -65,6 +66,7 @@ const ProductItemsCheckout: React.FC = () => {
                     totalPrice,
                     tax,
                     shippingFee,
+                    paymentMethod: 'cash',
                 },
                 {
                     onSuccess: () => {
@@ -75,10 +77,29 @@ const ProductItemsCheckout: React.FC = () => {
                     },
                 },
             );
-        }else if(paymentMethod === 1){
-            
-        }else{
-            showMessage('Vui lòng chọn phương thức thanh toán', 'warning')
+        } else if (paymentMethod === 1) {
+            createOrderVnPay.mutate({
+                userId: userId,
+                items: cartItems as [],
+                customerInfo: receiverInfo.customer,
+                receiverInfo: receiverInfo.addReceiver,
+                description: description ?? '',
+                shippingAddress: {
+                    province: shippingAddress.province,
+                    district: shippingAddress.district,
+                    ward: shippingAddress.ward,
+                    address: shippingAddress.address,
+                    provinceId: shippingAddress.provinceId!,
+                    districtId: shippingAddress.districtId!,
+                    wardCode: shippingAddress.wardCode,
+                },
+                totalPrice,
+                tax,
+                shippingFee,
+                paymentMethod: 'card',
+            });
+        } else {
+            showMessage('Vui lòng chọn phương thức thanh toán', 'warning');
         }
     };
 
@@ -91,9 +112,9 @@ const ProductItemsCheckout: React.FC = () => {
     const onChange: CheckboxProps['onChange'] = (e) => {
         setPolicyAgreed(e.target.checked);
     };
-    const onChangePaymentMethod = (e: RadioChangeEvent)=>{
-        setPaymentMethod(e.target.value)
-    }
+    const onChangePaymentMethod = (e: RadioChangeEvent) => {
+        setPaymentMethod(e.target.value);
+    };
     return (
         <div className="flex h-full flex-col">
             <Title level={4} className="mb-4">

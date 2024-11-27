@@ -81,7 +81,7 @@ const OrderDetailPage = () => {
                     <ReceiverInfor
                         receiverInfo={receiverInfo}
                         shippingAddress={shippingAddress}
-                        paymentMethod={data.paymentMethod}
+                        description={data.description}
                     />
                     <ServicesDetail
                         services={serviceInfo}

@@ -2,7 +2,8 @@ import CartDrawer from '@/components/CartDrawer';
 import { MAIN_ROUTES } from '@/constants/router';
 import useLogout from '@/hooks/Auth/Mutation/useLogout';
 import useGetMyCart from '@/hooks/cart/Queries/useGetMyCart';
-import { useAppDispatch, useTypedSelector } from '@/store/store';
+import useGetAllWishlist from '@/hooks/wishlist/Queries/useGetAllWishlist';
+import { RootState, useAppDispatch, useTypedSelector } from '@/store/store';
 import showMessage from '@/utils/ShowMessage';
 import {
     HeartOutlined,
@@ -12,11 +13,15 @@ import {
 } from '@ant-design/icons';
 import { Badge, Dropdown } from 'antd';
 import { MenuProps } from 'antd/lib';
+import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 
 export default function UserToolBar() {
+    const user = useSelector((state: RootState) => state.auth.user);
     const isAuth = useTypedSelector((state) => state.auth.authenticate);
     const handleLogout = useLogout();
+    const { data: wishListData } = useGetAllWishlist({ userId: user?._id });
+    const wishListAllItems = wishListData?.data?.wishList?.length;
     const { data, isFetching } = useGetMyCart();
     const isAdmin = useTypedSelector(
         (state) => state.auth.user?.role === 'admin',
@@ -81,10 +86,15 @@ export default function UserToolBar() {
             {isAuth && (
                 <>
                     <Link
-                        to={'/'}
+                        to={MAIN_ROUTES.WISH_LIST}
                         className="flex flex-col items-center justify-center"
                     >
-                        <HeartOutlined className="text-2xl" />
+                         <Badge
+                                count={wishListAllItems}
+                                overflowCount={10}
+                            >
+                                 <HeartOutlined className="text-2xl" />
+                            </Badge>
                         <span className="text-sm">Yêu thích</span>
                     </Link>
                     <Dropdown

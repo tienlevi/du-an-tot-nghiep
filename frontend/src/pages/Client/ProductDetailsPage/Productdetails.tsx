@@ -1,10 +1,16 @@
 import ShopBenefits from '@/components/ShopBenefits';
 import { useMutationAddToCart } from '@/hooks/cart/Mutations/useAddCart';
 import { useGetDetailProduct } from '@/hooks/Products/Queries/useGetDetailProduct';
-import { useTypedSelector } from '@/store/store';
+import useMutationAddWishList from '@/hooks/wishlist/Mutations/useAddWishList';
+import { useMutationRemoveWishList } from '@/hooks/wishlist/Mutations/useRemoveWishList';
+import { RootState, useTypedSelector } from '@/store/store';
 import { Currency } from '@/utils/FormatCurreny';
 import showMessage from '@/utils/ShowMessage';
-import { HeartOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import {
+    HeartFilled,
+    HeartOutlined,
+    ShoppingCartOutlined,
+} from '@ant-design/icons';
 import {
     Breadcrumb,
     Button,
@@ -18,6 +24,11 @@ import {
 } from 'antd';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { debounce } from 'lodash';
+import { useSelector } from 'react-redux';
+import useGetAllWishlist from '@/hooks/wishlist/Queries/useGetAllWishlist';
+import useFilter from '@/hooks/_common/useFilter';
+import { MAIN_ROUTES } from '@/constants/router';
 
 interface TransformedVariant {
     size: {
@@ -30,6 +41,8 @@ const ProductDetailsPage = () => {
     const { id } = useParams();
     const { data } = useGetDetailProduct(id ? id : '');
     const isAuth = useTypedSelector((state) => state.auth.authenticate);
+    const { mutate: addWishlist } = useMutationAddWishList();
+    const { handleRemoveWishList } = useMutationRemoveWishList();
     const navigate = useNavigate();
     const [valueQuantity, setValueQuantity] = useState(1);
     const [selectedColor, setSelectedColor] = useState<{
@@ -169,6 +182,28 @@ const ProductDetailsPage = () => {
             self.findIndex(v => v.color._id === item.color._id) === index
     );
 
+    // wishlist
+    const { query } = useFilter();
+    const user = useSelector((state: RootState) => state.auth.user);
+    const { data: allWishList } = useGetAllWishlist(query);
+    const wishListIds = allWishList?.data.wishList.map((item) => item._id);
+    const debouncedRemove = debounce(
+        (ProductId: string) => handleRemoveWishList(ProductId),
+        500,
+    );
+    const handleAddWishlist = () => {
+        if (user) {
+            if (wishListIds?.includes(id as string)) {
+                showMessage('Product already added to wishlist!', 'warning');
+                return;
+            }
+            addWishlist({ productId: id as string });
+        } else {
+            navigate(MAIN_ROUTES.LOGIN);
+            showMessage('You need to login first!', 'warning');
+        }
+    };
+
     return (
         data && (
             <div className="max-w-screen-default default:mx-auto mx-4">
@@ -253,31 +288,38 @@ const ProductDetailsPage = () => {
                                             },
                                         }}
                                     >
-                                        {/* ADD BUTTON */}
-                                        <Tooltip
+                                        {wishListIds?.includes(id as string) ? (
+                                            <>
+                                                <Tooltip
+                                                    title="Bỏ yêu thích"
+                                                    color={'#da291c'}
+                                                >
+                                                    <Button
+                                                        className="text-red-500"
+                                                        type="default"
+                                                        shape="circle"
+                                                        icon={<HeartFilled />}
+                                                        onClick={()=>debouncedRemove(id!)}
+                                                    />
+                                                </Tooltip>
+                                            </>
+                                        ) : (
+                                            <>
+                                                 <Tooltip
                                             title="Thêm vào yêu thích"
                                             color={'#da291c'}
+                                            
                                         >
                                             <Button
                                                 className="text-red-500"
                                                 type="default"
                                                 shape="circle"
                                                 icon={<HeartOutlined />}
+                                                onClick={handleAddWishlist}
                                             />
                                         </Tooltip>
-
-                                        {/* REMOVE BUTTON */}
-                                        {/* <Tooltip
-                                        title="Bỏ yêu thích"
-                                        color={'#da291c'}
-                                    >
-                                        <Button
-                                            className="text-red-500"
-                                            type="default"
-                                            shape="circle"
-                                            icon={<HeartFilled />}
-                                        />
-                                    </Tooltip> */}
+                                            </>
+                                        )}
                                     </ConfigProvider>
                                 </div>
                             </div>

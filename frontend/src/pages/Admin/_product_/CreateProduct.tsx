@@ -72,42 +72,6 @@ const CreateProduct = () => {
                 <div className="grid grid-cols-1 gap-4">
                     <WrapperCard title="Thông tin cơ bản">
                         <Form.Item<any>
-                            label="Danh mục"
-                            name="category"
-                            required
-                            className="font-medium text-[#08090F]"
-                        >
-                            <Select
-                                size="large"
-                                placeholder="Chọn danh mục cho sản phẩm..."
-                                className="w-full"
-                                options={categories?.data?.categories?.map(
-                                    (item: any) => ({
-                                        label: item.name,
-                                        value: item._id,
-                                    }),
-                                )}
-                            />
-                        </Form.Item>
-                        <Form.Item<any>
-                            label="Thẻ phân loại"
-                            name="tags"
-                            required
-                            className="font-medium text-[#08090F]"
-                        >
-                            <Select
-                                size="large"
-                                mode="multiple"
-                                allowClear
-                                className="w-full normal-case"
-                                placeholder="Chọn các thẻ phân loại cho sản phẩm..."
-                                options={tags?.data?.tags?.map((tag: any) => ({
-                                    label: tag.name,
-                                    value: tag._id,
-                                }))}
-                            />
-                        </Form.Item>
-                        <Form.Item<any>
                             label="Tên sản phẩm"
                             name="name"
                             required
@@ -147,6 +111,55 @@ const CreateProduct = () => {
                                 size="large"
                             />
                         </Form.Item>
+                        <Form.Item<any>
+                            className="font-medium flex text-[#08090F] capitalize"
+                            name={'discount'}
+                            required
+                            label="Giảm giá (%)"
+                        >
+                            <InputNumber<number>
+                                min={0}
+                                placeholder="Nhập giá phần trăm giảm giá..."
+                                size="large"
+                            />
+                        </Form.Item>
+                        <Form.Item<any>
+                            label="Danh mục"
+                            name="category"
+                            required
+                            className="font-medium text-[#08090F]"
+                        >
+                            <Select
+                                size="large"
+                                placeholder="Chọn danh mục cho sản phẩm..."
+                                className="w-full"
+                                options={categories?.data?.categories?.map(
+                                    (item: any) => ({
+                                        label: item.name,
+                                        value: item._id,
+                                    }),
+                                )}
+                            />
+                        </Form.Item>
+                        <Form.Item<any>
+                            label="Thẻ phân loại"
+                            name="tags"
+                            required
+                            className="font-medium text-[#08090F]"
+                        >
+                            <Select
+                                size="large"
+                                mode="multiple"
+                                allowClear
+                                className="w-full normal-case"
+                                placeholder="Chọn các thẻ phân loại cho sản phẩm..."
+                                options={tags?.data?.tags?.map((tag: any) => ({
+                                    label: tag.name,
+                                    value: tag._id,
+                                }))}
+                            />
+                        </Form.Item>
+
                         <Form.Item<any>
                             label="Mô tả"
                             name="description"

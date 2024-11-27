@@ -14,15 +14,14 @@ interface Props {
         ward: string;
         address: string;
     };
-    paymentMethod: string;
+    description: string;
 }
 
 export default function ReceiverInfor({
     receiverInfo,
     shippingAddress,
-    paymentMethod,
+    description,
 }: Props) {
-    console.log(paymentMethod);
     const receiverItems: DescriptionsProps['items'] = [
         {
             key: 'name',
@@ -57,13 +56,19 @@ export default function ReceiverInfor({
             ),
             children: (
                 <p>
-                    [{shippingAddress?.address}] -{' '}
-                    {paymentMethod === 'card'
-                        ? ''
-                        : `${shippingAddress?.ward}, ${shippingAddress?.district},`}{' '}
+                    [{shippingAddress?.address}] - {shippingAddress?.district} -
                     {shippingAddress?.province} - {shippingAddress?.country}
                 </p>
             ),
+        },
+        {
+            key: 'description',
+            label: (
+                <span className="font-semibold capitalize">
+                    Ghi chú đơn hàng:
+                </span>
+            ),
+            children: <p className="capitalize">{description}</p>,
         },
     ];
 
@@ -83,12 +88,14 @@ export default function ReceiverInfor({
                     </div>
                 ))}
             </div>
-            {shippingAddressItems.map((item, index) => (
-                <div className="flex gap-2" key={index}>
-                    {item.label}
-                    {item.children}
-                </div>
-            ))}
+            <div className='grid-cols-2 grid'>
+                {shippingAddressItems.map((item, index) => (
+                    <div className="flex gap-2" key={index}>
+                        {item.label}
+                        {item.children}
+                    </div>
+                ))}
+            </div>
         </Space>
     );
 }

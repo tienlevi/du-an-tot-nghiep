@@ -24,6 +24,7 @@ export const ShippingPage = lazy(
 export const CheckoutPage = lazy(
     () => import('@/pages/Client/Checkout/CheckOut'),
 );
+export const WishlistPage = lazy(() => import('@/pages/Client/WishList'));
 // @admin page
 export const DashboardPage = lazy(() => import('../pages/Admin/_dashboard_'));
 export const ProductsListAll = lazy(() => import('@/pages/Admin/_product_'));

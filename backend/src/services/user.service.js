@@ -120,24 +120,36 @@ export const deleteWishList = async (req, res) => {
 export const getWishListByUser = async (req, res) => {
   const userId = req.userId;
 
-  const whislist = await User.findById(userId)
-      .select('wishList')
-      .populate({
-          path: 'wishList',
-          populate: {
-              path: 'variationIds',
-              select: 'price image sku color productId stock variantAttributes imageUrlRef isActive',
-              model: 'ProductVariation',
-              options: { sort: 'price' },
-          },
-      })
-      .lean();
+  const wishlist = await User.findById(userId)
+    .select('wishList')
+    .populate({
+      path: 'wishList',
+      populate: [
+        {
+          path: 'variants',
+          select: 'color size stock image imageUrlRef',
+          populate: [
+            {
+              path: 'color',
+              select: 'name hex'
+            },
+            {
+              path: 'size',
+              select: 'name'
+            }
+          ]
+        }
+      ],
+      select: 'name price discount variants description rating reviewCount' 
+    })
+    .lean();
+
   return res.status(StatusCodes.OK).json(
-      customResponse({
-          data: whislist,
-          success: true,
-          status: StatusCodes.OK,
-          message: ReasonPhrases.OK,
-      }),
+    customResponse({
+      data: wishlist,
+      success: true,
+      status: StatusCodes.OK,
+      message: ReasonPhrases.OK,
+    }),
   );
 };

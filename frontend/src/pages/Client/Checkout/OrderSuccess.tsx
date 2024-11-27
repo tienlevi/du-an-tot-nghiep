@@ -1,10 +1,12 @@
 import { MAIN_ROUTES } from '@/constants/router';
+import UseVNPayReturn from '@/hooks/orders/Queries/useVnPayReturn';
 import { Button, Result, Watermark } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 export default function OrderSuccess() {
     const navigate = useNavigate();
-
+    const params = new URLSearchParams(window.location.search);
+    UseVNPayReturn(params);
     return (
         <Watermark content={['ADSTORE', 'Thank you!']}>
             <div className='h-[100vh]' />

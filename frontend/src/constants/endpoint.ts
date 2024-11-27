@@ -71,6 +71,7 @@ export const CHECKOUT_ENDPOINT = {
 export const ORDER_ENDPOINT = {
     GET_ALL_ORDERS: '/orders',
     // MY_ORDERS: '/orders/user',
+    VNPAY_RETURN: '/vnpay-return',
     MY_ORDERS: 'orders/my-order',
     CANCEL_ORDER: '/orders/cancel',
     CONFIRM_ORDER: '/orders/confirm',

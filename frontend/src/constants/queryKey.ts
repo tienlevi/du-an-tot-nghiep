@@ -18,7 +18,7 @@ export const QUERY_KEY = {
     POPULARCATEGORIES: 'poularCategories',
     USERS: 'users',
     USERS_PROFILE: 'profile',
-
+    VNPAY_RETURN: 'vnpay-return',
     ORDERS: 'orders',
     MY_ORDERS: 'my-orders',
     CHECKOUT: 'checkout',

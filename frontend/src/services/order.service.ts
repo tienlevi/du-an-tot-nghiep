@@ -1,6 +1,6 @@
 import instance from '@/utils/api/axiosIntance';
 import { IAxiosResponse } from '@/types/AxiosResponse';
-import { ORDER_ENDPOINT } from '@/constants/endpoint';
+import { CHECKOUT_ENDPOINT, ORDER_ENDPOINT } from '@/constants/endpoint';
 import { IOrderResponse, IOrderDetails } from '@/types/Order';
 import { OrderStatus } from '@/constants/enum';
 import { Params } from '@/types/Api';
@@ -89,6 +89,13 @@ const orderService = {
         return instance.get<IAxiosResponse<OrderStatus[]>>(
             `${ORDER_ENDPOINT.MY_ORDERS}`,
         );
+    },
+    async checkOutVnPay(body: any) {
+        const res = await instance.post(`/checkout${CHECKOUT_ENDPOINT.VNPAY}`, body);
+        return res.data;
+    },
+    vnpayReturnStatusOrder(params: URLSearchParams) {
+        return instance.get<{ code: string; message: string; data?: any }>(`/checkout${ORDER_ENDPOINT.VNPAY_RETURN}?${params}`);
     },
     /* eslint-disable */
     // vnpayReturnStatusOrder(params: URLSearchParams) {

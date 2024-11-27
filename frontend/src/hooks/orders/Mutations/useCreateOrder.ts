@@ -5,7 +5,8 @@ import { ORDER_ENDPOINT } from '@/constants/endpoint';
 import { QUERY_KEY } from '@/constants/queryKey';
 import { useTypedSelector } from '@/store/store';
 
-type DataType = {
+export type DataType = {
+    userId?: string
     items: {
         productId: string;
         name: string;
@@ -35,6 +36,7 @@ type DataType = {
     };
     totalPrice: number;
     tax: number;
+    paymentMethod: string;
     coupon?: string;
     shippingFee: number;
 };
