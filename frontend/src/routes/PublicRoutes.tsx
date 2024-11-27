@@ -15,7 +15,9 @@ import {
     CheckoutPage,
     ProductPage,
     Suspense,
+    WishlistPage,
 } from './LazyRoutes';
+import AuthProtected from '@/layouts/Protected/AuthProtected';
 
 const PublicRoutes = [
     {
@@ -81,7 +83,17 @@ const PublicRoutes = [
                     </Suspense>
                 ),
             },
-
+            //@WishList
+            {
+                path: MAIN_ROUTES.WISH_LIST,
+                element: (
+                    <Suspense>
+                        <AuthProtected>
+                            <WishlistPage />
+                        </AuthProtected>
+                    </Suspense>
+                ),
+            },
             // @Account
             {
                 element: (
