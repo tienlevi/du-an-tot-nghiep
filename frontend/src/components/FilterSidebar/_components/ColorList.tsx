@@ -10,9 +10,12 @@ type ColorProps = {
 const ColorList = ({ colorData }: ColorProps) => {
     const { updateQueryParam, query } = useFilter();
 
-    const handleFilter = useCallback((id: string) => {
-        updateQueryParam({ ...query, color: id });
-    }, []);
+    const handleFilter = useCallback(
+        (id: string) => {
+            updateQueryParam({ ...query, ['color']: id, page: 1 });
+        },
+        [query],
+    );
 
     return (
         <div className="grid grid-cols-2 md:grid-cols-3  lg:grid-cols-4 justify-center items-center gap-4">

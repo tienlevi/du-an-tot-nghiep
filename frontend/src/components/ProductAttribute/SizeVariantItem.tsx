@@ -9,7 +9,6 @@ type SizeVariantItemProps = {
 
 const SizeVariantItem = ({ item, updateQueryParam }: SizeVariantItemProps) => {
     const query = useTypedSelector((state) => state.filter.query);
-
     return (
         <button
             onClick={() => updateQueryParam(item._id)}

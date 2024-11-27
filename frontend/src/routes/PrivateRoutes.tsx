@@ -13,15 +13,12 @@ import {
     UpdateColor,
     UpdateSize,
     UpdateTag,
-<<<<<<< HEAD
-=======
     CreateProduct,
     DashboardPage,
     ProductsListAll,
     Suspense,
     ManageOrders,
     OrdersDetails,
->>>>>>> develop
     // UpdateProduct,
 } from './LazyRoutes';
 import { ADMIN_ROUTES } from '@/constants/router';
@@ -63,10 +60,6 @@ export const PrivateRoutes = [
                     },
                     {
                         path: 'list',
-<<<<<<< HEAD
-=======
-
->>>>>>> develop
                         element: (
                             <Suspense>
                                 <ProductsListAll />
@@ -250,8 +243,6 @@ export const PrivateRoutes = [
                     },
                 ],
             },
-<<<<<<< HEAD
-=======
             //@Order-List
             {
                 path: ADMIN_ROUTES.ORDERS,
@@ -270,7 +261,6 @@ export const PrivateRoutes = [
                     </Suspense>
                 ),
             },
->>>>>>> develop
         ],
     },
 ];

@@ -10,23 +10,23 @@ const PriceRange = () => {
     const [form] = Form.useForm();
 
     // check query price is empty or not
-    const minPrice = !isEmpty(query?.['priceFilter[gte]'])
-        ? query?.['priceFilter[gte]']
+    const minPrice = !isEmpty(query?.['price[gte]'])
+        ? query?.['price[gte]']
         : 0;
-    const maxPrice = !isEmpty(query?.['priceFilter[lte]'])
-        ? query?.['priceFilter[lte]']
+    const maxPrice = !isEmpty(query?.['price[lte]'])
+        ? query?.['price[lte]']
         : 0;
 
     const onChangePrice = (value: number[]) => {
         const [min, max] = value;
         updateQueryParam({
             ...query,
-            ['priceFilter[gte]']: min,
-            ['priceFilter[lte]']: max,
+            ['price[gte]']: min,
+            ['price[lte]']: max,
             page: 1,
         });
     };
-    const debounceFn = useCallback(_.debounce(onChangePrice, 700), []);
+    const debounceFn = useCallback(_.debounce(onChangePrice, 700), [query]);
 
     const resetForm = () => {
         form.resetFields();

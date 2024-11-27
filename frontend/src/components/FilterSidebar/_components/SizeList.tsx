@@ -10,9 +10,12 @@ type SizeProps = {
 const SizeList = ({ sizeData }: SizeProps) => {
     const { updateQueryParam, query } = useFilter();
 
-    const handleFilter = useCallback((id: string) => {
-        updateQueryParam({ ...query, size: id });
-    }, []);
+    const handleFilter = useCallback(
+        (id: string) => {
+            updateQueryParam({ ...query, ['size']: id, page: 1 });
+        },
+        [query],
+    );
     return (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-center items-center  gap-2 ">
             {sizeData?.map((item) => (
