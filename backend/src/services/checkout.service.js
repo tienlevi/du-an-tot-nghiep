@@ -4,6 +4,7 @@ import { ORDER_STATUS } from "../constants/orderStatus.js";
 import { PAYMENT_METHOD } from "../constants/paymentMethod.js";
 import { buildSigned, createVpnUrl } from "../utils/vnpayGenerator.js";
 import Order from "../models/order.js";
+import { updateStockOnCreateOrder } from "./inventory.service.js";
 
 export const createPaymentUrlWithVNpay = async (req, res, next) => {
   const ipAddr = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
@@ -27,11 +28,16 @@ export const createPaymentUrlWithVNpay = async (req, res, next) => {
 
 export const vnpayReturn = async (req, res, next) => {
   const vnp_Params = req.query;
-  console.log(vnp_Params);
   const secureHash = vnp_Params["vnp_SecureHash"];
   const signed = buildSigned(vnp_Params);
 
   if (secureHash === signed) {
+
+    const order = await Order.findById(vnp_Params["vnp_TxnRef"]);
+      if (!order) {
+        return res.status(400).json({ code: "01", message: "Order not found" });
+      }
+
     const data = await Order.findByIdAndUpdate(vnp_Params["vnp_TxnRef"], {
       isPaid: true,
       currentOrderStatus: ORDER_STATUS.CONFIRMED,
@@ -42,6 +48,7 @@ export const vnpayReturn = async (req, res, next) => {
         reason: "User paid by VNPay",
       }),
     });
+    await updateStockOnCreateOrder(order.items);
     res
       .status(200)
       .json({ code: vnp_Params["vnp_ResponseCode"], message: "Success", data });
@@ -65,6 +72,12 @@ export const vnpayIpn = async (req, res, next) => {
       if (checkAmount) {
         if (paymentStatus == "0") {
           if (rspCode == "00") {
+               
+            const order = await Order.findById(vnp_Params["vnp_TxnRef"]);
+            if (!order) {
+              return res.status(200).json({ code: "01", message: "Order not found" });
+            }
+
             await Order.findByIdAndUpdate(vnp_Params["vnp_TxnRef"], {
               isPaid: true,
               currentOrderStatus: ORDER_STATUS.CONFIRMED,
@@ -76,6 +89,8 @@ export const vnpayIpn = async (req, res, next) => {
                 reason: "User paid by VNPay",
               }),
             });
+
+            await updateStockOnCreateOrder(order.items);
 
             res.status(200).json({ code: "00", message: "Success" });
           } else {
