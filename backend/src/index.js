@@ -22,7 +22,7 @@ app.use(
       if (
         ["http://localhost:5173", "http://localhost:3000"].indexOf(origin) !==
           -1 ||
-        !origin
+        !origin || envConfig.NODE_ENV === "development"
       ) {
         callback(null, true);
       } else {

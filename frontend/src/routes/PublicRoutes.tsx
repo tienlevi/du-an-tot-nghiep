@@ -18,6 +18,7 @@ import {
     CartDetailPage,
     OrderSuccessPage,
     WishlistPage,
+    OrderErrorPage,
 } from './LazyRoutes';
 import AuthProtected from '@/layouts/Protected/AuthProtected';
 
@@ -135,6 +136,14 @@ const PublicRoutes = [
         element: (
             <Suspense>
                 <OrderSuccessPage />
+            </Suspense>
+        ),
+    },
+    {
+        path: MAIN_ROUTES.ERROR_ORDER,
+        element: (
+            <Suspense>
+                <OrderErrorPage />
             </Suspense>
         ),
     },
