@@ -88,6 +88,7 @@ export const ProductsListColumns = ({
                 <>
                     <div className="flex flex-col justify-between">
                         <p className="h-14 whitespace-nowrap">
+                            Tổng:{' '}
                             {record.variants.reduce(
                                 (acc, curr) => acc + (curr.stock || 0),
                                 0,

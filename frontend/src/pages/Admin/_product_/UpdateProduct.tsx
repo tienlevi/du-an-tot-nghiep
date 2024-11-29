@@ -166,22 +166,20 @@ const UpdateProduct = () => {
                         </Form.Item>
                         <Form.Item<any>
                             className="font-medium flex text-[#08090F] capitalize"
-                            name={'discount'}
+                            name="discount"
                             required
                             label="Giảm giá (%)"
                             rules={[
                                 {
+                                    type: 'number',
                                     min: 0,
-                                    message: 'Giảm giá phải lớn hơn 0%',
-                                },
-                                {
                                     max: 99,
-                                    message: 'Chỉ có thể giảm 99%',
+                                    message:
+                                        'Giảm giá phải lớn hơn 0 và nhỏ hơn 99!',
                                 },
                             ]}
                         >
                             <InputNumber<number>
-                                min={0}
                                 placeholder="Nhập giá phần trăm giảm giá..."
                                 size="large"
                                 className="w-full"
