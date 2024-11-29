@@ -13,13 +13,16 @@ class APIQuery {
     const excludedFields = ["page", "sort", "limit", "fields", "search"];
     excludedFields.forEach((el) => delete queryObj[el]);
     const queryArr = {};
+    console.log(queryObj)
 
     Object.keys(queryObj).forEach((el) => {
-      if (String(queryObj[el]).includes(",") && !el.includes(".arr")) {
+      if (String(queryObj[el]).includes(",") && !el.includes("-arr")) {
+        console.log(typeof queryObj[el])
         queryObj[el] = { $in: queryObj[el].split(",") };
       }
       if (el.includes("-arr")) {
-        console.log(el, "el");
+        console.log(typeof queryObj[el])
+console.log(queryObj[el])
         const key = el.split("-")[0];
         queryObj[key] = { $in: queryObj[el].split(",") };
         delete queryObj[el];
