@@ -23,7 +23,7 @@ function ProductCard({ item }: { item: IProduct }) {
                 <Link to={`/products/${item?._id}`}>
                     <img
                         className="object-contain "
-                        src={item.variants?.[0].image}
+                        src={item.variants?.[0]?.image}
                         alt=""
                     />
                 </Link>
@@ -39,7 +39,7 @@ function ProductCard({ item }: { item: IProduct }) {
                     </button>
                 </div>
             </div>
-            <Link to={`/products/${item._id}`} className="text-global text-sm">
+            <Link to={`/products/${item?._id}`} className="text-global text-sm">
                 <h3 className=" font-semibold group-hover:text-hover mt-4 w-[90%] text-ellipsis whitespace-nowrap overflow-hidden">
                     {item?.name}
                 </h3>

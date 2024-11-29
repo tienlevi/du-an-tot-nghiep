@@ -54,31 +54,31 @@ export default function DrawerAddCart({
         if (item) {
             setSelectedImage({
                 index: 0,
-                image: item.variants[0].image,
+                image: item?.variants[0]?.image,
             });
             const transformedVariants: TransformedVariant[] =
                 item.variants.reduce((acc, variant) => {
                     let sizeIndex = acc.findIndex(
-                        (item) => item.size._id === variant.size._id,
+                        (item) => item?.size?._id === variant?.size?._id,
                     );
                     if (sizeIndex === -1) {
                         acc.push({
-                            size: variant.size,
+                            size: variant?.size,
                             colors: [
                                 {
-                                    color: variant.color,
-                                    stock: variant.stock,
-                                    image: variant.image,
-                                    _id: variant._id,
+                                    color: variant?.color,
+                                    stock: variant?.stock,
+                                    image: variant?.image,
+                                    _id: variant?._id,
                                 },
                             ],
                         });
                     } else {
                         acc[sizeIndex].colors.push({
-                            color: variant.color,
-                            stock: variant.stock,
-                            image: variant.image,
-                            _id: variant._id,
+                            color: variant?.color,
+                            stock: variant?.stock,
+                            image: variant?.image,
+                            _id: variant?._id,
                         });
                     }
 
@@ -251,26 +251,26 @@ export default function DrawerAddCart({
                                         </span>
                                         :{' '}
                                         <span className="text-global font-semibold">
-                                            {selectedSize?.size.name}
+                                            {selectedSize?.size?.name}
                                         </span>
                                     </div>
 
                                     <Flex className="my-2">
                                         {variantsList?.map((item, index) => {
-                                            const hasStock = item.colors.some(
+                                            const hasStock = item?.colors?.some(
                                                 (color: any) => color.stock > 0,
                                             );
 
                                             return (
                                                 <button
                                                     key={index}
-                                                    className={`relative mr-1 ${!hasStock ? 'text-[#777777] border-[#d3d3d3]' : ''} w-10 h-10 text-xs rounded-sm ${selectedSize?.size.name === item.size.name ? ' bg-hover text-white font-semibold' : 'border-[1px]'}`}
+                                                    className={`relative mr-1 ${!hasStock ? 'text-[#777777] border-[#d3d3d3]' : ''} w-10 h-10 text-xs rounded-sm ${selectedSize?.size?.name === item?.size?.name ? ' bg-hover text-white font-semibold' : 'border-[1px]'}`}
                                                     onClick={() =>
                                                         handleChooseSize(item)
                                                     }
                                                     disabled={!hasStock}
                                                 >
-                                                    {item.size.name}
+                                                    {item?.size?.name}
                                                     {!hasStock && (
                                                         <div className="absolute w-13 h-[2px] top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] bg-[#d3d3d3] rotate-45"></div>
                                                     )}
