@@ -12,7 +12,22 @@ const ColorList = ({ colorData }: ColorProps) => {
 
     const handleFilter = useCallback(
         (id: string) => {
-            updateQueryParam({ ...query, ['color']: id, page: 1 });
+            let queryValue = '';
+            if (query['variants.color-arr']?.includes(id)) {
+                queryValue = query['variants.color-arr']
+                    .split(',')
+                    .filter((item: string) => item !== id)
+                    .join(',');
+            } else {
+                queryValue = query['variants.color-arr']
+                    ? `${query['variants.color-arr']},${id}`
+                    : id;
+            }
+            updateQueryParam({
+                ...query,
+                ['variants.color-arr']: queryValue,
+                page: 1,
+            });
         },
         [query],
     );

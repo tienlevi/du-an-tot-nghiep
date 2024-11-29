@@ -12,7 +12,22 @@ const SizeList = ({ sizeData }: SizeProps) => {
 
     const handleFilter = useCallback(
         (id: string) => {
-            updateQueryParam({ ...query, ['size']: id, page: 1 });
+            let queryValue = '';
+            if (query['variants.size-arr']?.includes(id)) {
+                queryValue = query['variants.size-arr']
+                    .split(',')
+                    .filter((item: string) => item !== id)
+                    .join(',');
+            } else {
+                queryValue = query['variants.size-arr']
+                    ? `${query['variants.size-arr']},${id}`
+                    : id;
+            }
+            updateQueryParam({
+                ...query,
+                ['variants.size-arr']: queryValue,
+                page: 1,
+            });
         },
         [query],
     );

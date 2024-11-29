@@ -1,9 +1,9 @@
 import { MAX_PRICE, MIN_PRICE } from '@/constants/products';
 import useFilter from '@/hooks/_common/useFilter';
 import { Currency } from '@/utils/FormatCurreny';
-import { Button, Form, Slider } from 'antd';
+import { Form, Slider } from 'antd';
 import _, { isEmpty } from 'lodash';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 
 const PriceRange = () => {
     const { query, updateQueryParam } = useFilter();
