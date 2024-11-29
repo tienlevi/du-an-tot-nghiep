@@ -8,7 +8,10 @@ import {
     UploadFile,
     UploadProps,
 } from 'antd';
-import { variationsStockValidator } from '@/validation/Products/validators';
+import {
+    variationsStockValidator,
+    variationsThumbnailValidator,
+} from '@/validation/Products/validators';
 import { ISize } from '@/types/Size';
 import { IColor } from '@/types/Color';
 import CustomItemRenderVariant from '@/pages/Admin/_product_/_component/CustomItemRenderVariant';
@@ -48,6 +51,11 @@ const VariationItem = ({
                 {...restField}
                 name={[fieldName, 'thumbnail']}
                 dependencies={['thumbnail']}
+                rules={[
+                    {
+                        validator: variationsThumbnailValidator,
+                    },
+                ]}
             >
                 <Upload
                     itemRender={CustomItemRenderVariant}
@@ -63,17 +71,16 @@ const VariationItem = ({
                 </Upload>
             </Form.Item>
             <Form.Item
-                className="hidden"
-                {...restField}
-                name={[fieldName, 'image']}
-            >
-                <Input></Input>
-            </Form.Item>
-            <Form.Item
                 className="w-full capitalize"
                 {...restField}
                 name={[fieldName, 'size']}
                 label="Kích cỡ"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Vui lòng chọn kích cỡ!',
+                    },
+                ]}
             >
                 <Select placeholder="Chọn kích cỡ">
                     {sizes.map((value) => (
@@ -88,6 +95,12 @@ const VariationItem = ({
                 {...restField}
                 name={[fieldName, 'color']}
                 label="Màu sắc"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Vui lòng chọn màu sắc!',
+                    },
+                ]}
             >
                 <Select placeholder="Chọn màu sắc!">
                     {colors.map((value, index) => (

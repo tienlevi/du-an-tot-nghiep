@@ -88,6 +88,7 @@ const UpdateProduct = () => {
                 variants: variaConverts,
                 ...rest,
             };
+            console.log(initial);
             form.setFieldsValue(initial as any);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -106,10 +107,98 @@ const UpdateProduct = () => {
                 <div className="grid grid-cols-1 gap-4">
                     <WrapperCard title="Thông tin cơ bản">
                         <Form.Item<any>
+                            label="Tên sản phẩm"
+                            name="name"
+                            required
+                            className="font-medium text-[#08090F]"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng nhập tên sản phẩm!',
+                                },
+                                {
+                                    min: 3,
+                                    message:
+                                        'Tên sản phẩm phải có ít nhất 3 ký tự!',
+                                },
+                                {
+                                    max: 50,
+                                    message:
+                                        'Tên sản phẩm không được vượt quá 50 ký tự!',
+                                },
+                            ]}
+                        >
+                            <Input
+                                placeholder="Nhập tên sản phẩm..."
+                                size="large"
+                            />
+                        </Form.Item>
+                        <Form.Item<any>
+                            className="font-medium flex text-[#08090F] capitalize"
+                            name={'price'}
+                            required
+                            label="giá tiền (VNĐ)"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng nhập giá của sản phẩm!',
+                                },
+                            ]}
+                        >
+                            <InputNumber<number>
+                                min={10000}
+                                placeholder="Nhập giá tiền của sản phẩm..."
+                                formatter={(value) =>
+                                    `${value}`.replace(
+                                        /\B(?=(\d{3})+(?!\d))/g,
+                                        ',',
+                                    )
+                                }
+                                parser={(value) =>
+                                    value?.replace(
+                                        /VNĐ\s?|(,*)/g,
+                                        '',
+                                    ) as unknown as number
+                                }
+                                size="large"
+                                className="w-full"
+                            />
+                        </Form.Item>
+                        <Form.Item<any>
+                            className="font-medium flex text-[#08090F] capitalize"
+                            name={'discount'}
+                            required
+                            label="Giảm giá (%)"
+                            rules={[
+                                {
+                                    min: 0,
+                                    message: 'Giảm giá phải lớn hơn 0%',
+                                },
+                                {
+                                    max: 99,
+                                    message: 'Chỉ có thể giảm 99%',
+                                },
+                            ]}
+                        >
+                            <InputNumber<number>
+                                min={0}
+                                placeholder="Nhập giá phần trăm giảm giá..."
+                                size="large"
+                                className="w-full"
+                            />
+                        </Form.Item>
+                        <Form.Item<any>
                             label="Danh mục"
                             name="category"
                             required
                             className="font-medium text-[#08090F]"
+                            rules={[
+                                {
+                                    required: true,
+                                    message:
+                                        'Vui lòng chọn danh mục cho sản phẩm',
+                                },
+                            ]}
                         >
                             <Select
                                 size="large"
@@ -128,6 +217,13 @@ const UpdateProduct = () => {
                             name="tags"
                             required
                             className="font-medium text-[#08090F]"
+                            rules={[
+                                {
+                                    required: true,
+                                    message:
+                                        'Vui lòng chọn thẻ phân loại cho sản phẩm',
+                                },
+                            ]}
                         >
                             <Select
                                 size="large"
@@ -141,50 +237,17 @@ const UpdateProduct = () => {
                                 }))}
                             />
                         </Form.Item>
-                        <Form.Item<any>
-                            label="Tên sản phẩm"
-                            name="name"
-                            required
-                            className="font-medium text-[#08090F]"
-                            rules={[
-                                {
-                                    validator: nameValidator,
-                                },
-                            ]}
-                        >
-                            <Input
-                                placeholder="Nhập tên sản phẩm..."
-                                size="large"
-                            />
-                        </Form.Item>
-                        <Form.Item<any>
-                            className="font-medium flex text-[#08090F] capitalize"
-                            name={'price'}
-                            required
-                            label="giá tiền (VNĐ)"
-                        >
-                            <InputNumber<number>
-                                min={1}
-                                placeholder="Nhập giá tiền..."
-                                formatter={(value) =>
-                                    `${value}`.replace(
-                                        /\B(?=(\d{3})+(?!\d))/g,
-                                        ',',
-                                    )
-                                }
-                                parser={(value) =>
-                                    value?.replace(
-                                        /VNĐ\s?|(,*)/g,
-                                        '',
-                                    ) as unknown as number
-                                }
-                                size="large"
-                            />
-                        </Form.Item>
+
                         <Form.Item<any>
                             label="Mô tả"
                             name="description"
                             className="font-medium text-[#08090F]"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng viết mô tả cho sản phẩm',
+                                },
+                            ]}
                         >
                             <TextArea
                                 placeholder="Nhập mô tả sản phẩm..."
@@ -206,7 +269,7 @@ const UpdateProduct = () => {
                                 },
                             ]}
                         >
-                            {(fields, { add, remove }) => (
+                            {(fields, { add, remove }, { errors }) => (
                                 <>
                                     {fields.map(
                                         (
@@ -249,6 +312,12 @@ const UpdateProduct = () => {
                                             Thêm biến thể
                                         </Button>
                                     </Form.Item>
+                                    {errors && (
+                                        <Form.ErrorList
+                                            errors={errors}
+                                            className="text-red-600"
+                                        />
+                                    )}
                                 </>
                             )}
                         </Form.List>

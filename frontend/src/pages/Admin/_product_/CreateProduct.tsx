@@ -78,7 +78,18 @@ const CreateProduct = () => {
                             className="font-medium text-[#08090F]"
                             rules={[
                                 {
-                                    validator: nameValidator,
+                                    required: true,
+                                    message: 'Vui lòng nhập tên sản phẩm!',
+                                },
+                                {
+                                    min: 3,
+                                    message:
+                                        'Tên sản phẩm phải có ít nhất 3 ký tự!',
+                                },
+                                {
+                                    max: 50,
+                                    message:
+                                        'Tên sản phẩm không được vượt quá 50 ký tự!',
                                 },
                             ]}
                         >
@@ -92,10 +103,16 @@ const CreateProduct = () => {
                             name={'price'}
                             required
                             label="giá tiền (VNĐ)"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng nhập giá của sản phẩm!',
+                                },
+                            ]}
                         >
                             <InputNumber<number>
-                                min={1}
-                                placeholder="Nhập giá tiền..."
+                                min={10000}
+                                placeholder="Nhập giá tiền của sản phẩm..."
                                 formatter={(value) =>
                                     `${value}`.replace(
                                         /\B(?=(\d{3})+(?!\d))/g,
@@ -109,6 +126,7 @@ const CreateProduct = () => {
                                     ) as unknown as number
                                 }
                                 size="large"
+                                className="w-full"
                             />
                         </Form.Item>
                         <Form.Item<any>
@@ -116,11 +134,23 @@ const CreateProduct = () => {
                             name={'discount'}
                             required
                             label="Giảm giá (%)"
+                            rules={[
+                                {
+                                    min: 0,
+                                    message: 'Giảm giá phải lớn hơn 0%',
+                                },
+                                {
+                                    max: 99,
+                                    message: 'Chỉ có thể giảm 99%',
+                                },
+                            ]}
                         >
                             <InputNumber<number>
                                 min={0}
+                                defaultValue={0}
                                 placeholder="Nhập giá phần trăm giảm giá..."
                                 size="large"
+                                className="w-full"
                             />
                         </Form.Item>
                         <Form.Item<any>
@@ -128,6 +158,13 @@ const CreateProduct = () => {
                             name="category"
                             required
                             className="font-medium text-[#08090F]"
+                            rules={[
+                                {
+                                    required: true,
+                                    message:
+                                        'Vui lòng chọn danh mục cho sản phẩm',
+                                },
+                            ]}
                         >
                             <Select
                                 size="large"
@@ -146,6 +183,13 @@ const CreateProduct = () => {
                             name="tags"
                             required
                             className="font-medium text-[#08090F]"
+                            rules={[
+                                {
+                                    required: true,
+                                    message:
+                                        'Vui lòng chọn thẻ phân loại cho sản phẩm',
+                                },
+                            ]}
                         >
                             <Select
                                 size="large"
@@ -164,6 +208,12 @@ const CreateProduct = () => {
                             label="Mô tả"
                             name="description"
                             className="font-medium text-[#08090F]"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng viết mô tả cho sản phẩm',
+                                },
+                            ]}
                         >
                             <TextArea
                                 placeholder="Nhập mô tả sản phẩm..."
@@ -228,6 +278,12 @@ const CreateProduct = () => {
                                             Thêm biến thể
                                         </Button>
                                     </Form.Item>
+                                    {errors && (
+                                        <Form.ErrorList
+                                            errors={errors}
+                                            className="text-red-600"
+                                        />
+                                    )}
                                 </>
                             )}
                         </Form.List>

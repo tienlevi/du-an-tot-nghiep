@@ -67,16 +67,22 @@ export const brandValidator = () => {
 
 export const variationsValidator = async (
     _: any,
-    variations: IProductVariation[],
+    variants: any[],
 ) => {
-    if (!variations || variations.length < 1) {
-        return errorMessage('Hãy thêm ít nhất 1 biến thể cho sản phẩm!');
+    console.log(variants,'22')
+    if (!variants) {
+        return await errorMessage('Hãy thêm ít nhất 1 biến thể cho sản phẩm!');
     }
-    const variationEmpty = variations.some(
+    if (!variants || variants.length < 1) {
+        return await errorMessage('Hãy thêm ít nhất 1 biến thể cho sản phẩm!');
+    }
+
+    
+    const variationEmpty = variants.some(
         (variation) => variation === undefined,
     );
     if (variationEmpty) {
-        return errorMessage('Hãy thêm ít nhất 1 biến thể cho sản phẩm!');
+        return await errorMessage('Hãy thêm ít nhất 1 biến thể cho sản phẩm!');
     }
     return Promise.resolve();
 };
