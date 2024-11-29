@@ -15,7 +15,10 @@ import {
     CheckoutPage,
     ProductPage,
     Suspense,
+    CartDetailPage,
+    OrderSuccessPage,
     WishlistPage,
+    OrderErrorPage,
 } from './LazyRoutes';
 import AuthProtected from '@/layouts/Protected/AuthProtected';
 
@@ -67,6 +70,14 @@ const PublicRoutes = [
             },
 
             // @CheckOut
+            {
+                path: MAIN_ROUTES.CART,
+                element: (
+                    <Suspense>
+                        <CartDetailPage />
+                    </Suspense>
+                ),
+            },
             {
                 path: MAIN_ROUTES.SHIPPING,
                 element: (
@@ -120,9 +131,24 @@ const PublicRoutes = [
             },
         ],
     },
-
-    { path: '*', element: <Navigate to={'/404'} /> },
+    {
+        path: MAIN_ROUTES.SUCCESS_ORDER,
+        element: (
+            <Suspense>
+                <OrderSuccessPage />
+            </Suspense>
+        ),
+    },
+    {
+        path: MAIN_ROUTES.ERROR_ORDER,
+        element: (
+            <Suspense>
+                <OrderErrorPage />
+            </Suspense>
+        ),
+    },
     { path: '/404', element: <NotFound /> },
+    { path: '*', element: <Navigate to={'/404'} /> },
 ];
 
 export default PublicRoutes;

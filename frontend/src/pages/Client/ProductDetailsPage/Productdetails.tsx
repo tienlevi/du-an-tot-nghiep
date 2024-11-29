@@ -177,6 +177,10 @@ const ProductDetailsPage = () => {
             );
         }
     };
+    const uniqueImage = data?.variants.filter(
+        (item, index, self) =>
+            self.findIndex(v => v.color._id === item.color._id) === index
+    );
 
     // wishlist
     const { query } = useFilter();
@@ -235,26 +239,28 @@ const ProductDetailsPage = () => {
                         </div>
 
                         <div className=" flex flex-col gap-2 items-center">
-                            {data.variants.map((item, index: number) => {
-                                return (
-                                    <div
-                                        key={index}
-                                        onClick={() =>
-                                            setSelectedImage({
-                                                index,
-                                                image: item.image,
-                                            })
-                                        }
-                                        className={`${index === selectedImage.index ? 'border-[1px] border-global' : 'border-none'}  w-24 cursor-pointer rounded-md overflow-hidden`}
-                                    >
-                                        <img
-                                            className="object-cover"
-                                            src={item.image}
-                                            alt=""
-                                        />
-                                    </div>
-                                );
-                            })}
+                            {uniqueImage?.map((item, index) => (
+                                <div
+                                    key={index}
+                                    onClick={() =>
+                                        setSelectedImage({
+                                            index,
+                                            image: item.image,
+                                        })
+                                    }
+                                    className={`${
+                                        index === selectedImage.index
+                                            ? 'border-[1px] border-global'
+                                            : 'border-none'
+                                    } w-24 cursor-pointer rounded-md overflow-hidden`}
+                                >
+                                    <img
+                                        className="object-cover"
+                                        src={item.image}
+                                        alt=""
+                                    />
+                                </div>
+                            ))}
                         </div>
                     </div>
 

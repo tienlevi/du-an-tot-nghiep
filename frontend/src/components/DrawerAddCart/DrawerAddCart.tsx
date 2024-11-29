@@ -180,7 +180,7 @@ export default function DrawerAddCart({
     const { query } = useFilter();
     const user = useSelector((state: RootState) => state.auth.user);
     const { data: allWishList } = useGetAllWishlist(query);
-    const wishListIds = allWishList?.data.wishList.map((item) => item._id);
+    const wishListIds = allWishList?.data?.wishList?.map((item) => item._id);
     const handleAddWishlist = () => {
         if (user) {
             if (wishListIds?.includes(item._id as string)) {

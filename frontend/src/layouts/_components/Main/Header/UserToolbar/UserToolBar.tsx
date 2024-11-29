@@ -14,19 +14,24 @@ import {
 import { Badge, Dropdown } from 'antd';
 import { MenuProps } from 'antd/lib';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function UserToolBar() {
     const user = useSelector((state: RootState) => state.auth.user);
     const isAuth = useTypedSelector((state) => state.auth.authenticate);
-    const dispatch = useAppDispatch();
     const handleLogout = useLogout();
     const { data: wishListData } = useGetAllWishlist({ userId: user?._id });
-    const wishListAllItems = wishListData?.data?.wishList.length;
+    const wishListAllItems = wishListData?.data?.wishList?.length;
     const { data, isFetching } = useGetMyCart();
     const isAdmin = useTypedSelector(
         (state) => state.auth.user?.role === 'admin',
     );
+    const location = useLocation();
+    const locationPathDisableCart = [
+        MAIN_ROUTES.CART,
+        MAIN_ROUTES.SHIPPING,
+        MAIN_ROUTES.CHECKOUT,
+    ];
     const items: MenuProps['items'] = [
         ...(isAdmin
             ? [
@@ -105,7 +110,19 @@ export default function UserToolBar() {
                         </div>
                     </Dropdown>
 
-                    <CartDrawer data={data} isFetching={isFetching}>
+                    {!locationPathDisableCart.includes(location.pathname) ? (
+                        <CartDrawer data={data} isFetching={isFetching}>
+                            <span className="flex flex-col items-center justify-center">
+                                <Badge
+                                    count={data ? data.items.length : 0}
+                                    overflowCount={10}
+                                >
+                                    <ShoppingCartOutlined className="text-2xl" />
+                                </Badge>
+                                <span className="text-sm">Giỏ hàng</span>
+                            </span>
+                        </CartDrawer>
+                    ) : (
                         <span className="flex flex-col items-center justify-center">
                             <Badge
                                 count={data ? data.items.length : 0}
@@ -115,7 +132,7 @@ export default function UserToolBar() {
                             </Badge>
                             <span className="text-sm">Giỏ hàng</span>
                         </span>
-                    </CartDrawer>
+                    )}
                 </>
             )}
             {!isAuth && (

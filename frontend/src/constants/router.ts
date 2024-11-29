@@ -17,6 +17,7 @@ export const MAIN_ROUTES = {
     RESET_PASSWORD: '/resetPassword/:token',
     NOT_FOUND: '/404',
     SUCCESS_ORDER: '/success',
+    ERROR_ORDER: '/order-error',
     VERIFY_ORDER: '/verify-order',
     WISHLIST: '/wish-list',
     CART: '/cart',

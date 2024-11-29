@@ -50,7 +50,7 @@ const Wishlist = () => {
         }
     };
     return (
-        <div className='px-6'>
+        <div className='max-w-screen-default default:mx-auto mx-4'>
             <WrapperList
                 classic
                 title="Danh sách sản phẩm yêu thích"
@@ -127,7 +127,7 @@ const Wishlist = () => {
                                                     <Rate
                                                         allowHalf
                                                         disabled
-                                                        value={item.rating || 0}
+                                                        value={item.rating || 5}
                                                         className="text-xs"
                                                     />
                                                     <span className="text-xs text-gray-500 ml-2">

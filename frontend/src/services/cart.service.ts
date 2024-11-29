@@ -1,9 +1,11 @@
 import { CART_ENDPOINT } from '@/constants/endpoint';
+import { IAxiosResponse } from '@/types/AxiosResponse';
+import { ICartResponse } from '@/types/Cart/CartResponse';
 import instance from '@/utils/api/axiosIntance';
 
 export const cartService = {
     async getItemCart() {
-        const res = await instance.get(`${CART_ENDPOINT.GET}/my-cart`);
+        const res = await instance.get<IAxiosResponse<ICartResponse>>(`${CART_ENDPOINT.GET}/my-cart`);
         return res.data;
     },
     async addToCart(body: any) {

@@ -52,7 +52,7 @@ const initialState: InitialState = {
         address: '',
     },
     shippingFee: 0,
-    tax: 0.1,
+    tax: 0,
     description: '',
 };
 

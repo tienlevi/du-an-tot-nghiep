@@ -23,12 +23,12 @@ const cartSlice = createSlice({
             state.items = payload.payload;
         },
         removeItems: (state, payload: PayloadAction<string>) => {
-            const filteredItems = state.items.filter((item) => item.productVariation._id !== payload.payload);
+            const filteredItems = state.items.filter((item) => item._id !== payload.payload);
             state.items = filteredItems;
         },
         updateItemsCart: (state, payload: PayloadAction<ICartItemsResponse>) => {
             const findIndex = state.items.findIndex(
-                (item) => item.productVariation._id === payload.payload.productVariation._id
+                (item) => item._id === payload.payload._id
             );
             state.items[findIndex] = payload.payload;
         },

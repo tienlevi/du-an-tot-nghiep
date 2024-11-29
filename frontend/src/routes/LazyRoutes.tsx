@@ -13,6 +13,9 @@ export const MyOrderDetailsPage = lazy(
 );
 export const LoginPage = lazy(() => import('@/pages/Client/Auth/Login'));
 export const RegisterPage = lazy(() => import('@/pages/Client/Auth/Register'));
+export const CartDetailPage = lazy(
+    () => import(`@/pages/Client/CartDetail/CartDetail`),
+);
 export const ProductPage = lazy(
     () => import('@/pages/Client/ProductPage/ProductPage'),
 );
@@ -48,7 +51,12 @@ export const CreateCategory = lazy(
 export const UpdateCategory = lazy(
     () => import('@/pages/Admin/_category_/UpdateCategory'),
 );
-
+export const OrderSuccessPage = lazy(
+    () => import('@/pages/Client/Checkout/OrderSuccess'),
+);
+export const OrderErrorPage = lazy(
+    () => import('@/pages/Client/Checkout/OrderError'),
+);
 export const ColorList = lazy(() => import('@/pages/Admin/_color_'));
 export const CreateColor = lazy(
     () => import('@/pages/Admin/_color_/CreateColor'),
