@@ -52,4 +52,11 @@ export const ProductServices = {
         );
         return res.data;
     },
+    async getDiscount() {
+        const res =
+            await instance.get<IAxiosResponse<IProduct[]>>(
+                `/products/discount`,
+            );
+        return res.data;
+    },
 };

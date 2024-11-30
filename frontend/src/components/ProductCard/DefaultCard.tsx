@@ -17,16 +17,19 @@ export default function DefaultCard({ item }: { item: IProduct }) {
         : item.price;
     return (
         <div className="h-[452px] group cursor-pointer">
-            <div className="w-[310px] h-[310px] relative">
+            <div className="w-[280px] h-[280px] relative">
                 <Link to={`/products/${item._id}`}>
                     <img
-                        className="object-contain "
+                        className="object-contain"
                         src={item.variants[0].image}
                         alt=""
                     />
                 </Link>
                 <div className="opacity-0 px-2 py-1 group-hover:opacity-100 flex items-center w-full justify-between duration-300 absolute bottom-0">
-                    <DrawerAddCart item={item} classNameBtn="text-global hover:bg-hover px-10 duration-300 hover:text-white bg-white shadow-md flex justify-center w-full h-[32px] flex items-center justify-center rounded-md text-sm font-medium">
+                    <DrawerAddCart
+                        item={item}
+                        classNameBtn="text-global hover:bg-hover px-10 duration-300 hover:text-white bg-white shadow-md flex justify-center w-full h-[32px] flex items-center justify-center rounded-md text-sm font-medium"
+                    >
                         Thêm vào giỏ hàng
                     </DrawerAddCart>
                     <button className="w-1/6 h-[32px] bg-global hover:bg-opacity-80 duration-300 rounded-lg text-white">
