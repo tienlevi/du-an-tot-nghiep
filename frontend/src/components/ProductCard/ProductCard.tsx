@@ -20,10 +20,10 @@ function ProductCard({ item }: { item: IProduct }) {
     return (
         <div className="group cursor-pointer">
             <div className="w-full relative">
-                <Link to={`/products/${item._id}`}>
+                <Link to={`/products/${item?._id}`}>
                     <img
                         className="object-contain "
-                        src={item.variants?.[0].image}
+                        src={item.variants?.[0]?.image}
                         alt=""
                     />
                 </Link>
@@ -39,17 +39,17 @@ function ProductCard({ item }: { item: IProduct }) {
                     </button>
                 </div>
             </div>
-            <Link to={`/products/${item._id}`} className="text-global text-sm">
+            <Link to={`/products/${item?._id}`} className="text-global text-sm">
                 <h3 className=" font-semibold group-hover:text-hover mt-4 w-[90%] text-ellipsis whitespace-nowrap overflow-hidden">
-                    {item.name}
+                    {item?.name}
                 </h3>
                 <div className="flex items-center ">
                     <Rate allowHalf value={5} disabled className="text-xs" />{' '}
-                    {!item._id && (
+                    {!item?._id && (
                         <span className="text-xs text-global">( 5 )</span>
                     )}
                 </div>
-                <p className="font-semibold mt-1">{Currency(item.price)}</p>
+                <p className="font-semibold mt-1">{Currency(item?.price)}</p>
                 {item.discount !== 0 ? (
                     <div className="mt-1">
                         <div className="flex gap-2 items-center">

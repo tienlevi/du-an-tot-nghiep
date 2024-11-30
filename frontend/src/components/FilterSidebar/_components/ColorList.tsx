@@ -10,9 +10,27 @@ type ColorProps = {
 const ColorList = ({ colorData }: ColorProps) => {
     const { updateQueryParam, query } = useFilter();
 
-    const handleFilter = useCallback((id: string) => {
-        updateQueryParam({ ...query, color: id });
-    }, []);
+    const handleFilter = useCallback(
+        (id: string) => {
+            let queryValue = '';
+            if (query['variants.color-arr']?.includes(id)) {
+                queryValue = query['variants.color-arr']
+                    .split(',')
+                    .filter((item: string) => item !== id)
+                    .join(',');
+            } else {
+                queryValue = query['variants.color-arr']
+                    ? `${query['variants.color-arr']},${id}`
+                    : id;
+            }
+            updateQueryParam({
+                ...query,
+                ['variants.color-arr']: queryValue,
+                page: 1,
+            });
+        },
+        [query],
+    );
 
     return (
         <div className="grid grid-cols-2 md:grid-cols-3  lg:grid-cols-4 justify-center items-center gap-4">

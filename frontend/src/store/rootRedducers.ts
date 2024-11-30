@@ -7,7 +7,7 @@ import orderReducer from './slice/orderSlice';
 const rootReducer = combineReducers({
     cartReducer,
     auth: authReducer,
-    filter: filterSlice.reducer,
+    filter: filterSlice,
     order: orderReducer,
 });
 
