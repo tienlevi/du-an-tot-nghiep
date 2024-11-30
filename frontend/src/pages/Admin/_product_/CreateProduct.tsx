@@ -132,16 +132,14 @@ const CreateProduct = () => {
                         <Form.Item<any>
                             className="font-medium flex text-[#08090F] capitalize"
                             name={'discount'}
-                            required
                             label="Giảm giá (%)"
                             rules={[
                                 {
+                                    type: 'number',
                                     min: 0,
-                                    message: 'Giảm giá phải lớn hơn 0%',
-                                },
-                                {
                                     max: 99,
-                                    message: 'Chỉ có thể giảm 99%',
+                                    message:
+                                        'Giảm giá phải lớn hơn 0 và nhỏ hơn 99!',
                                 },
                             ]}
                         >

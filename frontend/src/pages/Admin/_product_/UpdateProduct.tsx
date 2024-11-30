@@ -167,7 +167,6 @@ const UpdateProduct = () => {
                         <Form.Item<any>
                             className="font-medium flex text-[#08090F] capitalize"
                             name="discount"
-                            required
                             label="Giảm giá (%)"
                             rules={[
                                 {

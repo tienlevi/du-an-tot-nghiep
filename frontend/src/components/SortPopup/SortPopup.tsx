@@ -15,7 +15,7 @@ const SortPopup = ({ value, onChange }: SortPopup) => {
         >
             <Space direction="vertical">
                 <Radio
-                    value={'createdAt'}
+                    value={'-createdAt'}
                     className="w-full font-medium py-1 select-none"
                 >
                     Mới nhất

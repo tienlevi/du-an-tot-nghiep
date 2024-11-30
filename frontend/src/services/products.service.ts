@@ -17,13 +17,13 @@ export const ProductServices = {
         return data.data;
     },
     async getAllProducts(params: Params) {
-        const data = await instance.get<IAxiosResponse<IProductResponse>>(
+        const res = await instance.get<IAxiosResponse<IProductResponse>>(
             '/products/all',
             {
                 params,
             },
         );
-        return data.data;
+        return res.data;
     },
     async getDetailProduct(id: string) {
         const data = await instance.get<IAxiosResponse<IProduct>>(

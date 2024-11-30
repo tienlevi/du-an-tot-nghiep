@@ -60,7 +60,6 @@ export const PrivateRoutes = [
                     },
                     {
                         path: 'list',
-
                         element: (
                             <Suspense>
                                 <ProductsListAll />

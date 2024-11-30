@@ -1,4 +1,3 @@
-import SmallSkeleton from '@/components/_common/SmallSkeleton/SmallSkeleton';
 import FilterSidebar from '@/components/FilterSidebar/FilterSidebar';
 import ProductCard from '@/components/ProductCard/ProductCard';
 import SortPopup from '@/components/SortPopup/SortPopup';
@@ -29,7 +28,7 @@ const ProductPage = () => {
     // const totalPages = Math.ceil(totalDocs / Number(query?.limit)) || 0;
 
     const onChange = (e: RadioChangeEvent) => {
-        updateQueryParam({ ...query, sort: e.target.value });
+        updateQueryParam({ ...query, ['sort']: e.target.value });
     };
 
     const handleReset = () => {
@@ -111,7 +110,7 @@ const ProductPage = () => {
                         </div>
 
                         {products && products?.length === 0 && <Empty />}
-                        {isProductLoading && <SmallSkeleton />}
+                        {isProductLoading && <Skeleton />}
                         {products && products?.length > 0 && (
                             <Pagination
                                 className="flex justify-center item-center my-4"
