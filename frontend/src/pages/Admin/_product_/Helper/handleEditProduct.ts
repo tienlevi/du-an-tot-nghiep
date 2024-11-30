@@ -31,7 +31,6 @@ export const handleEditProduct = (
                     color,
                     stock,
                 };
-                console.log(thumbnail, 'thumbnail2');
 
                 newVariants.push(variantFinal);
             } else {

@@ -1,7 +1,12 @@
+import { BadRequestError } from "../errors/customError.js";
 import Product from "../models/product.js";
 import APIQuery from "../utils/APIQuery.js";
 import { removeUploadedFile, uploadFiles } from "../utils/upload.js";
 
+
+function hasDuplicates(array) {
+  return new Set(array).size !== array.length;
+}
 export const getAllProducts = async (query) => {
   const features = new APIQuery(
     Product.find()
@@ -44,9 +49,18 @@ export const createProduct = async (productData, files) => {
     const { fileUrls, fileUrlRefs, originNames } = await uploadFiles(
       files["variantImages"]
     );
+    const variants = JSON.parse(productData.variantString);
+    console.log((item) => item.imageUrlRef)
+    console.log(productData.variantString, "variantString")
+    console.log(variants, "variants")
+    if(hasDuplicates(variants.map((item) => item.imageUrlRef))){
+      throw new BadRequestError("File ảnh không được trùng nhau");
+    }
+
     variationList = fileUrls.map((item, i) => {
-      const variation = JSON.parse(productData.variantString).find((obj) => {
+      const variation = variants.find((obj) => {
         const originName = originNames[i];
+        
         const fileName = obj.imageUrlRef;
         return fileName === originName;
       });
