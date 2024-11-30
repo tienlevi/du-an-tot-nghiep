@@ -18,14 +18,26 @@ import { Link } from 'react-router-dom';
 const ProductPage = () => {
     const limit = 10;
     const { query, updateQueryParam, reset } = useFilter();
-    const isQueryEmpty = Object.values(query).length > 0;
-
+    const queryKeys = Object.keys(query);
+    let isResetFilter = false;
     const { data: productResponse, isLoading: isProductLoading } =
         useGetProducts(query);
     const products = productResponse?.data.products;
     const totalProducts = products?.length;
     const totalDocs = productResponse?.data?.totalDocs;
     // const totalPages = Math.ceil(totalDocs / Number(query?.limit)) || 0;
+
+    // check if query key is have one
+    if (
+        (queryKeys.length === 1 && queryKeys.includes('category')) ||
+        (queryKeys.length === 2 &&
+            queryKeys.includes('category') &&
+            queryKeys.includes('page'))
+    ) {
+        isResetFilter = false;
+    } else if (queryKeys.length > 0) {
+        isResetFilter = true;
+    }
 
     const onChange = (e: RadioChangeEvent) => {
         updateQueryParam({ ...query, ['sort']: e.target.value });
@@ -93,7 +105,7 @@ const ProductPage = () => {
                             </Dropdown>
                         </div>
                     </div>
-                    {isQueryEmpty && (
+                    {isResetFilter && (
                         <Button
                             htmlType="button"
                             type="default"

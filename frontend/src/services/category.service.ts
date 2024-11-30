@@ -19,9 +19,12 @@ const categoryService = {
         return res.data;
     },
     async getALLCategoriesNoParams() {
-        const res = await instance.get(`${CATEGORY_ENDPOINT.ALL}`, {
-            params: { limit: 10000, page: 1 },
-        });
+        const res = await instance.get<IAxiosResponse<ICategoryResponse>>(
+            `${CATEGORY_ENDPOINT.ALL}`,
+            {
+                params: { limit: 10000, page: 1 },
+            },
+        );
         return res.data;
     },
     async getAllForMenu() {

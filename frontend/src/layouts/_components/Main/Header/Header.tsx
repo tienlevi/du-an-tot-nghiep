@@ -1,7 +1,12 @@
+import useGetCategoriesMenu from '@/hooks/categories/Queries/useGetCategoriesMenu';
 import { SearchOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import MenuItem from './MenuItem/MenuItem';
 import UserToolBar from './UserToolbar/UserToolBar';
 export default function Header() {
+    const { data: categoriesRes } = useGetCategoriesMenu();
+    const location = useLocation();
+    const categoriesResData = categoriesRes?.data.categories;
     return (
         <>
             <div className="h-[40px] bg-[#333f48] flex items-center justify-center">
@@ -20,7 +25,7 @@ export default function Header() {
                             />
                         </Link>
                         <div>
-                            <ul className="flex ">
+                            <ul className="flex">
                                 <li>
                                     <Link
                                         to={'/'}
@@ -32,27 +37,14 @@ export default function Header() {
                                 <li>
                                     <Link
                                         to={'/products'}
-                                        className="text-base text-global uppercase font-bold hover:text-hover duration-300 ml-8"
+                                        className={`text-base text-global uppercase font-bold ${location.pathname === '/products/' && location.search === '' ? 'text-hover' : 'hover:text-hover'}  duration-300 ml-8`}
                                     >
                                         Sản phẩm
                                     </Link>
                                 </li>
-                                <li>
-                                    <Link
-                                        to={'/'}
-                                        className="text-base text-global uppercase font-bold hover:text-hover duration-300 ml-8"
-                                    >
-                                        Nam
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        to={'/'}
-                                        className="text-base text-global uppercase font-bold hover:text-hover duration-300 ml-8"
-                                    >
-                                        Nữ
-                                    </Link>
-                                </li>
+                                {categoriesResData?.map((item) => (
+                                    <MenuItem item={item} key={item._id} />
+                                ))}
                             </ul>
                         </div>
                     </div>
