@@ -19,7 +19,7 @@ export default function ShowMoreList({
     return (
         <div>
             <h3 className="text-xl text-global font-bold">Sản phẩm nổi bật</h3>
-            <div className="grid grid-cols-3 xl:grid-cols-4 gap-y-2 mt-4">
+            <div className="grid grid-cols-3 default:grid-cols-4 gap-y-2  mt-4">
                 {enableButton.enable &&
                     data
                         .slice(0, enableButton.limit)

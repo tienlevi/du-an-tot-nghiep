@@ -33,7 +33,7 @@ const ColorList = ({ colorData }: ColorProps) => {
     );
 
     return (
-        <div className="grid grid-cols-2 md:grid-cols-3  lg:grid-cols-4 justify-center items-center gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3  lg:grid-cols-4 default:grid-cols-5 justify-center items-center gap-4">
             {colorData?.map((item) => (
                 <ColorVariantItem
                     item={item}

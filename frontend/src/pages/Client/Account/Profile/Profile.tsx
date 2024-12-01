@@ -313,12 +313,7 @@ const Profile = () => {
                                             type="primary"
                                             size="large"
                                             danger
-                                            // onClick={showModal}
-                                            onClick={() =>
-                                                sendResetPassword({
-                                                    email: profile.email!,
-                                                })
-                                            }
+                                            onClick={showModal}
                                             className="w-full rounded-3xl"
                                             loading={isPendingPassword}
                                         >

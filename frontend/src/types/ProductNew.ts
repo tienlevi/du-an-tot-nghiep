@@ -1,4 +1,4 @@
-interface Variant {
+export interface IVariant {
     _id: string;
     color: {
         _id: string;
@@ -20,7 +20,7 @@ export type IProduct = {
     category: string | { name: string; _id: string };
     discount: number;
     price: number;
-    variants: Variant[];
+    variants: IVariant[];
     description: string;
     sold: number;
     tags: string[];

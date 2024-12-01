@@ -44,7 +44,7 @@ const ProductPage = () => {
     };
 
     return (
-        <div className="xl:max-w-[1200px] w-full xsm:mx-auto mx-4">
+        <div className="xl:max-w-screen-default w-full default:mx-auto mx-4">
             <div className="gap-4 flex">
                 <div className="basis-1/4 mt-6">
                     <FilterSidebar />

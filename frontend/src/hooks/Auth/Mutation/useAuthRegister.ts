@@ -9,10 +9,15 @@ export const useAuthRegister = ()=>{
     return useMutation({
         mutationKey: ['REGISTER'],
         mutationFn: (body: RegisterFormData)=>{
-            return AuthServices.register(body)
+            const payload = {
+                email: body.email,
+                name: body.name,
+                password: body.password
+            }
+            return AuthServices.register(payload)
         },
-        onSuccess: ()=>{
-            toast.success('Đăng ký thành công.')
+        onSuccess: (data: any)=>{
+            toast.success(data.message)
             navigate('/login')
         },
         onError: (error: any)=>{

@@ -43,7 +43,8 @@ export const CreateProduct = lazy(
 // export const UpdateProduct = lazy(
 //     () => import('@/pages/Admins/_product_/UpdateProduct'),
 // );
-
+export const VerifyAccountPage = lazy(()=> import('@/pages/Client/Auth/Email'))
+export const ForgotPasswordPage = lazy(()=> import('@/pages/Client/Auth/ForgotPassword'))
 export const CategoryList = lazy(() => import('@/pages/Admin/_category_'));
 export const CreateCategory = lazy(
     () => import('@/pages/Admin/_category_/CreateCategory'),

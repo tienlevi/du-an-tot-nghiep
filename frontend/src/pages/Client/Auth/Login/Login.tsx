@@ -1,4 +1,5 @@
 import SignImg from '@/assets/SignImg.png';
+import { MAIN_ROUTES } from '@/constants/router';
 import useDocumentTitle from '@/hooks/_common/useDocumentTitle';
 import { useAuthLogin } from '@/hooks/Auth/Mutation/useAuthLogin';
 import { LoginFormData, loginSchema } from '@/validation/Auth/Auth';
@@ -82,7 +83,7 @@ const Login = () => {
             {isPending ? <Spin className='text-hover'/> : 'Đăng nhập'}
           </button>
           <Link
-            to="/signup"
+            to={MAIN_ROUTES.FORGOT_PASSWORD}
             className="text-global text-center mt-4 hover:text-hover duration-300"
           >
             Quên mật khẩu?
