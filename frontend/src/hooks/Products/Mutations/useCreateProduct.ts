@@ -17,7 +17,7 @@ const useCreateProduct = () => {
                     query.queryKey.includes(QUERY_KEY.PRODUCTS),
             });
             showMessage('Thêm mới sản phẩm thành công!', 'success');
-            // navigate(ADMIN_ROUTES.PRODUCTS);
+            navigate(ADMIN_ROUTES.PRODUCTS);
         },
         onError: (error: any) => {
             showMessage(error.response.data.message, 'error');
