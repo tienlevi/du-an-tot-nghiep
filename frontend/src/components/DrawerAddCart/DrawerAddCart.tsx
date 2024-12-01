@@ -2,14 +2,17 @@ import { MAIN_ROUTES } from '@/constants/router';
 import useFilter from '@/hooks/_common/useFilter';
 import { useMutationAddToCart } from '@/hooks/cart/Mutations/useAddCart';
 import useMutationAddWishList from '@/hooks/wishlist/Mutations/useAddWishList';
+import { useMutationRemoveWishList } from '@/hooks/wishlist/Mutations/useRemoveWishList';
 import useGetAllWishlist from '@/hooks/wishlist/Queries/useGetAllWishlist';
 import { RootState, useTypedSelector } from '@/store/store';
 import { IProduct } from '@/types/ProductNew';
+import { Currency } from '@/utils/FormatCurreny';
 import showMessage from '@/utils/ShowMessage';
 import { cn } from '@/utils/TailwindMerge';
 import { CloseOutlined, HeartFilled, HeartOutlined } from '@ant-design/icons';
 import { Button, Drawer, Flex, InputNumber, Rate, Space, Spin } from 'antd';
 import { motion } from 'framer-motion';
+import { debounce } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -176,16 +179,20 @@ export default function DrawerAddCart({
     };
 
     //wishlist
-    const { mutate: addWishlist } = useMutationAddWishList();
+    const { mutate: addWishlist, isPending: pendingWishList } = useMutationAddWishList();
     const { query } = useFilter();
     const user = useSelector((state: RootState) => state.auth.user);
     const { data: allWishList } = useGetAllWishlist(query);
     const wishListIds = allWishList?.data?.wishList?.map((item) => item._id);
+    const { handleRemoveWishList, isPending: pendingRemoveWishList } = useMutationRemoveWishList();
+    const debouncedRemove = debounce(
+        (id: string) => handleRemoveWishList(id),
+        500,
+    );
     const handleAddWishlist = () => {
         if (user) {
             if (wishListIds?.includes(item._id as string)) {
-                showMessage('Product already added to wishlist!', 'warning');
-                return;
+                debouncedRemove(item._id)
             }
             addWishlist({ productId: item._id as string });
         } else {
@@ -230,17 +237,45 @@ export default function DrawerAddCart({
                         <img src={selectedImage.image} alt="" />
                     </div>
                     <div className="flex flex-col">
-                        <h3 className="font-semibold text-lg text-global">
-                            Áo Thun Chạy Bộ Nam Adidas Own The Run
-                        </h3>
-                        <div className="flex items-center gap-2">
-                            <Rate
-                                allowHalf
-                                value={5}
-                                disabled
-                                className="text-base"
-                            />
-                            <span className="text-xs text-global">(5)</span>
+                        <div className="flex gap-5">
+                            <div>
+                                <h3 className="font-semibold text-lg text-global">
+                                    {item.name}
+                                </h3>
+                                <div className="flex items-center gap-2">
+                                    <Rate
+                                        allowHalf
+                                        value={5}
+                                        disabled
+                                        className="text-base"
+                                    />
+                                    <span className="text-xs text-global">
+                                        (5)
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                                <p className="font-semibold text-xl">
+                                    {Currency(item?.price)}
+                                </p>
+                                {item.discount !== 0 && (
+                                    <div className="flex gap-2 items-center">
+                                        <span className="line-through text-xl">
+                                            {Currency(
+                                                item.discount
+                                                    ? item.price /
+                                                          (1 -
+                                                              item.discount /
+                                                                  100)
+                                                    : item.price,
+                                            )}
+                                        </span>
+                                        <span className="text-hover font-semibold text-xl">
+                                            {item.discount}%
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                         {hasAvailableStock ? (
                             <>
@@ -367,12 +402,14 @@ export default function DrawerAddCart({
                             <>
                                 {wishListIds?.includes(item._id as string) ? (
                                     <>
-                                     <Button
+                                        <Button
                                             className="flex h-[38px] text-xs items-center"
                                             type="default"
                                             onClick={handleAddWishlist}
-                                            icon={<HeartFilled  className='text-red-500'/>}
-                                            disabled={true}
+                                            icon={
+                                                <HeartFilled className="text-red-500" />
+                                            }
+                                            loading={pendingWishList}
                                         >
                                             Đã thêm vào yêu thích
                                         </Button>
@@ -384,6 +421,7 @@ export default function DrawerAddCart({
                                             type="default"
                                             onClick={handleAddWishlist}
                                             icon={<HeartOutlined />}
+                                            loading={pendingWishList}
                                         >
                                             Thêm vào yêu thích
                                         </Button>

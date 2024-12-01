@@ -16,6 +16,7 @@ import { RootState } from '@/store/store';
 import { Product } from '@/types/Product';
 import { Currency } from '@/utils';
 import showMessage from '@/utils/ShowMessage';
+import { IVariant } from '@/types/ProductNew';
 type IStateVariant = {
     _id: string;
     price: number;
@@ -39,7 +40,7 @@ export default function VariantPickerDrawer({
     product: Product;
 }) {
     const [open, setOpen] = useState(false);
-    const [variant, setVariant] = useState<IStateVariant>();
+    const [variant, setVariant] = useState<any>();
     const [active, setActive] = useState<string>();
     const [valueQuantity, setQuantityValue] = useState(1);
     const navigate = useNavigate();
@@ -68,7 +69,7 @@ export default function VariantPickerDrawer({
     const onChangeInputQuantity = (e: number | null) => {
         setQuantityValue(e ? e : 1);
     };
-    const initialVariant = product?.variationIds?.find((item:any) => item.stock > 0 && item.isActive);
+    const initialVariant = product?.variants?.find((item:any) => item.stock > 0);
     const handleOnSubmit = () => {
         if (user) {
             const bodyAddToCart = {
@@ -135,20 +136,17 @@ export default function VariantPickerDrawer({
                 <Space className='flex flex-col lg:flex lg:flex-row'>
                     <Space className='overflow-hidden rounded-[15px]'>
                         {variant?.image && <img className='h-[350px] max-w-[500px] ' src={variant?.image} alt='' />}
-                        {!variant?.image && (
-                            <img className='h-[350px] max-w-[500px] ' src={product?.thumbnail} alt='' />
-                        )}
                     </Space>
                     <div>
                         <h1 className='text-xl font-medium text-black'>{product.name}</h1>
-                        <RatingDisplay rating={product.rating} reviews={product.reviewCount} />
+                        <RatingDisplay rating={5} reviews={0} />
                         <span className='text-xl font-medium text-black'>
                             {variant?.price
                                 ? Currency.format(variant?.price!)
-                                : Currency.format(product.variationIds[0].price)}
+                                : Currency.format(product.price)}
                         </span>
                         <div className='mt-2 flex flex-wrap items-center gap-3'>
-                            {product?.variationIds.map((item:any) => {
+                            {product?.variants.map((item:any) => {
                                 return (
                                     <div
                                         key={item._id}
