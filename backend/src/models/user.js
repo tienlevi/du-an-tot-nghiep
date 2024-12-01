@@ -2,6 +2,8 @@ import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcryptjs";
 import Cart from "./cart.js";
 import { ROLE } from "../constants/role.js";
+import "dotenv/config";
+
 
 const userSchema = new Schema(
   {
@@ -35,7 +37,7 @@ const userSchema = new Schema(
     },
     avatar: {
       type: String,
-      default: "../upload/default-avatar.jpeg",
+      default: process.env.DEFAULT_IMAGE_URL,
     },
     imageUrlRef: { type: String },
     wishList: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product', default: [] }],

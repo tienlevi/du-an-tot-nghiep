@@ -97,6 +97,7 @@ export const USER_ENDPOINT = {
     PROFILE: '/users/profile',
     ALL: '/users/all',
     UPDATE: '/users',
+    CHANGE_PASSWORD: '/users/changePassword',
     UPDATE_ADMIN: '/users',
     DETAIL: '/users',
 };
