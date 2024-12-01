@@ -60,29 +60,11 @@ export const menuGroups: IMenuItem[] = [
     },
     {
         icon: <BgColorsOutlined />,
-        label: 'Quản lý màu',
+        label: 'Quản lý thuộc tính',
         children: [
-            { label: 'Tất cả màu', route: ADMIN_ROUTES.COLORS },
-            {
-                label: 'Thêm mới màu',
-                route: ADMIN_ROUTES.COLOR_CREATE,
-            },
-        ],
-    },
-    {
-        icon: <CrownOutlined />,
-        label: 'Quản lý kích cỡ',
-        children: [
-            { label: 'Tất cả kích cỡ', route: ADMIN_ROUTES.SIZES },
-            { label: 'Thêm mới kích cỡ', route: ADMIN_ROUTES.SIZE_CREATE },
-        ],
-    },
-    {
-        icon: <TagsOutlined />,
-        label: 'Quản lý thẻ',
-        children: [
-            { label: 'Tất cả thẻ', route: ADMIN_ROUTES.TAGS },
-            { label: 'Thêm mới thẻ', route: ADMIN_ROUTES.TAGS_CREATE },
+            { label: 'Màu sắc', route: ADMIN_ROUTES.COLORS },
+            { label: 'Kích cỡ', route: ADMIN_ROUTES.SIZES },
+            { label: 'Thẻ phân loại', route: ADMIN_ROUTES.TAGS },
         ],
     },
     {

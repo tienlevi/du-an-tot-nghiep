@@ -35,7 +35,7 @@ const userSchema = new Schema(
     },
     avatar: {
       type: String,
-      default: "../upload/default-avatar.jpeg",
+      default: "https://firebasestorage.googleapis.com/v0/b/morata-a9eba.appspot.com/o/default-avatar-icon-of-social-media-user-vector.jpg?alt=media&token=2b109a33-e31c-4d60-92df-d80f3b4dc123",
     },
     imageUrlRef: { type: String },
     wishList: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product', default: [] }],
