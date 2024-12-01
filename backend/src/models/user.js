@@ -29,6 +29,10 @@ const userSchema = new Schema(
       enum: Object.values(ROLE),
       default: ROLE.USER,
     },
+    isActive: {
+      type: Boolean,
+      default: false
+    },
     avatar: {
       type: String,
       default: "../upload/default-avatar.jpeg",
