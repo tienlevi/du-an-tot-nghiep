@@ -50,8 +50,8 @@ export default function DefaultCard({ item }: { item: IProduct }) {
         ? item.price / (1 - item.discount / 100)
         : item.price;
     return (
-        <div className="h-[452px] group cursor-pointer">
-            <div className="w-[310px] h-[310px] relative">
+        <div className="group cursor-pointer">
+            <div className="w-full relative">
                 <Link to={`/products/${item._id}`}>
                     <img
                         className="object-contain "
@@ -84,12 +84,12 @@ export default function DefaultCard({ item }: { item: IProduct }) {
                 <h3 className=" font-semibold group-hover:text-hover mt-4 w-[90%] text-ellipsis whitespace-nowrap overflow-hidden">
                     {item.name}
                 </h3>
-                <div className="flex items-center ">
+                {/* <div className="flex items-center ">
                     <Rate allowHalf value={5} disabled className="text-xs" />{' '}
                     {!item._id && (
                         <span className="text-xs text-global">( 5 )</span>
                     )}
-                </div>
+                </div> */}
                 <p className="font-semibold mt-1">{Currency(item.price)}</p>
                 {item.discount !== 0 ? (
                     <div className="mt-1">
