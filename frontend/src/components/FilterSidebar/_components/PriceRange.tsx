@@ -9,13 +9,13 @@ const PriceRange = () => {
     const { query, updateQueryParam } = useFilter();
     const [form] = Form.useForm();
 
-    // check query price is empty or not
-    const minPrice = !isEmpty(query?.['price[gte]'])
-        ? query?.['price[gte]']
-        : 0;
-    const maxPrice = !isEmpty(query?.['price[lte]'])
-        ? query?.['price[lte]']
-        : 0;
+    // // check query price is empty or not
+    // const minPrice = !isEmpty(query?.['price[gte]'])
+    //     ? query?.['price[gte]']
+    //     : 0;
+    // const maxPrice = !isEmpty(query?.['price[lte]'])
+    //     ? query?.['price[lte]']
+    //     : 0;
 
     const onChangePrice = (value: number[]) => {
         const [min, max] = value;
@@ -33,26 +33,26 @@ const PriceRange = () => {
     };
 
     useEffect(() => {
-        if (minPrice || !maxPrice) {
+        if (!query['price[gte]'] && !query['price[lte]']) {
             resetForm();
         }
-    }, [minPrice, maxPrice]);
+    }, [query]);
     return (
         <div className="w-full px-2 pl-2 min-h-32 bg-white">
             <div className="flex justify-between mt-4">
                 <span className="text-sm font-medium cursor-default">
-                    {Currency(MIN_PRICE)}
+                    {Currency(query['price[gte]'] || MIN_PRICE)}
                 </span>
                 <span className="text-sm font-medium cursor-default">
-                    {Currency(MAX_PRICE)}
+                    {Currency(query['price[lte]'] || MAX_PRICE)}
                 </span>
             </div>
             <Form form={form}>
                 <Form.Item
                     name="slider"
                     initialValue={[
-                        minPrice || MIN_PRICE,
-                        maxPrice || MAX_PRICE,
+                        query['price[gte]'] || MIN_PRICE,
+                        query['price[lte]'] || MAX_PRICE,
                     ]}
                 >
                     <Slider
