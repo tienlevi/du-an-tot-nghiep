@@ -2,6 +2,8 @@ import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcryptjs";
 import Cart from "./cart.js";
 import { ROLE } from "../constants/role.js";
+import "dotenv/config";
+
 
 const userSchema = new Schema(
   {

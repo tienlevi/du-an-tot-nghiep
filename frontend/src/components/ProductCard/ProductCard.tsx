@@ -63,7 +63,7 @@ function ProductCard({ item }: { item: IProduct }) {
                 <div className="opacity-0 px-2 py-1 group-hover:opacity-100 flex items-center w-full justify-between duration-300 absolute bottom-0">
                     <DrawerAddCart
                         item={item}
-                        classNameBtn="text-global hover:bg-hover px-2  duration-300 hover:text-white bg-white shadow-md flex justify-center w-full h-[32px] flex items-center justify-center rounded-md lg:text-sm font-medium"
+                        classNameBtn="text-global hover:bg-hover px-2 duration-300 hover:text-white bg-white shadow-md flex justify-center w-full h-[32px] flex items-center justify-center rounded-md lg:text-sm font-medium"
                     >
                         <span className="text-xs xl:text-sm py-2">
                             {' '}
@@ -85,12 +85,12 @@ function ProductCard({ item }: { item: IProduct }) {
                 <h3 className=" font-semibold group-hover:text-hover mt-4 w-[90%] text-ellipsis whitespace-nowrap overflow-hidden">
                     {item?.name}
                 </h3>
-                <div className="flex items-center ">
+                {/* <div className="flex items-center ">
                     <Rate allowHalf value={5} disabled className="text-xs" />{' '}
                     {!item?._id && (
                         <span className="text-xs text-global">( 5 )</span>
                     )}
-                </div>
+                </div> */}
                 <div className="flex gap-2 items-center">
                     <p className="font-semibold">{Currency(item?.price)}</p>
                     {item.discount !== 0 && (

@@ -2,6 +2,7 @@ import { MAIN_ROUTES } from '@/constants/router';
 import { useCart } from '@/hooks/_common/useCart';
 import { useMutationRemoveItem } from '@/hooks/cart/Mutations/useRemoveOne';
 import { useUpdateQuantity } from '@/hooks/cart/Mutations/useUpdateQuantity';
+import { Product } from '@/types/Product';
 import { Currency } from '@/utils/FormatCurreny';
 import {
     CloseOutlined,
@@ -9,7 +10,17 @@ import {
     MinusOutlined,
     PlusOutlined,
 } from '@ant-design/icons';
-import { Button, ConfigProvider, Drawer, Image, InputNumber, List } from 'antd';
+import {
+    Button,
+    ConfigProvider,
+    Drawer,
+    Image,
+    InputNumber,
+    List,
+    message,
+    Popconfirm,
+    PopconfirmProps,
+} from 'antd';
 import clsx from 'clsx';
 import { motion } from 'framer-motion';
 import { debounce } from 'lodash';
@@ -23,6 +34,7 @@ type PropsType = {
 };
 const CartDrawer = ({ data, isFetching, children }: PropsType) => {
     const { cart, handleOpenCart, onClose } = useCart();
+    const [isOpenConfirm, setIsOpenConfirm] = useState<boolean>(false);
     const { handleRemoveCart, isPending } = useMutationRemoveItem();
     const { mutate: updateQuantity } = useUpdateQuantity();
     const [quantityProduct, setQuantityProduct] = useState<
@@ -111,6 +123,16 @@ const CartDrawer = ({ data, isFetching, children }: PropsType) => {
     const totalPrice = data?.items?.reduce((total: number, item: any) => {
         return total + item.price * item.quantity;
     }, 0);
+
+    const confirm: PopconfirmProps['onConfirm'] = (variantId: any) => {
+        handleRemoveCart(variantId);
+        message.success('Đã xóa sản phẩm khỏi giỏ hàng');
+    };
+
+    // const cancel: PopconfirmProps['onCancel'] = (e) => {
+    //     console.log(e);
+    // };
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -280,23 +302,30 @@ const CartDrawer = ({ data, isFetching, children }: PropsType) => {
                                                     </>
                                                 }
                                             />
-                                            <Button
-                                                onClick={() =>
-                                                    handleRemoveCart(
-                                                        product.variantId,
-                                                    )
+                                            <Popconfirm
+                                                title="Thông báo"
+                                                description="Bạn có chắc là muốn xóa sản phẩm này khỏi giỏ hàng?"
+                                                onConfirm={() =>
+                                                    confirm(product.variantId)
                                                 }
-                                                loading={isPending}
-                                                type="text"
-                                                className="mb-20 text-indigo-600 hover:text-indigo-500"
+                                                placement="leftTop"
+                                                okText="Đồng ý"
+                                                cancelText="Hủy"
                                             >
-                                                <DeleteOutlined />
-                                            </Button>
+                                                <Button
+                                                    loading={isPending}
+                                                    type="text"
+                                                    className="mb-20 text-indigo-600 hover:text-indigo-500"
+                                                >
+                                                    <DeleteOutlined />
+                                                </Button>
+                                            </Popconfirm>
                                         </div>
                                     </List.Item>
                                 );
                             }}
                         />
+
                         {/* {totalOrderAmount < freeShippingThreshold && (
                      <div className='free-shipping__text mb-14'>
                          <Slider
@@ -367,7 +396,7 @@ const CartDrawer = ({ data, isFetching, children }: PropsType) => {
                         </button>
                     </div>
                 )}
-                 {data?.items?.length === 0 && (
+                {data?.items?.length === 0 && (
                     <div className="flex flex-col items-center justify-center min-h-[60vh]">
                         <img
                             src="https://canifa.com/assets/images/cart-empty.png"

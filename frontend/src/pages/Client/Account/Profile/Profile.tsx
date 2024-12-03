@@ -33,11 +33,21 @@ import { IProductFiles, IThumbnailAntd } from '@/types/Product';
 import { errorMessage } from '@/validation/Products/Product';
 import useSendResetPassword from '@/hooks/Auth/Mutation/useSendResetPassword';
 import { useMutationUpdateProfle } from '@/hooks/profile/Mutations/useUpdateProfile';
+import useChangePassword from '@/hooks/users/Mutations/useChangePassword';
+import { ErrorMessage } from '@/validation/Message';
+
+type ChangePassword = {
+    password: string;
+    newPassword: string;
+    retypePassword: string;
+};
 
 const Profile = () => {
     const [loading, setLoading] = useState(false);
 
     const { mutate: updateProfile, isPending } = useMutationUpdateProfle();
+    const { mutate: changePassword, isPending: isChangePasswordPending } =
+        useChangePassword();
 
     const {
         mutate: sendResetPassword,
@@ -200,6 +210,23 @@ const Profile = () => {
         );
     };
 
+    const handleChangePassword: FormProps<ChangePassword>['onFinish'] = (
+        values,
+    ) => {
+        changePassword(
+            {
+                password: values.password,
+                newPassword: values.newPassword,
+            },
+            {
+                onSuccess() {
+                    handleCancel();
+                },
+            },
+        );
+        form.resetFields();
+    };
+
     return (
         <>
             <WrapperList classic title="Thông tin của tôi" className="my-5">
@@ -331,14 +358,7 @@ const Profile = () => {
                     centered
                     confirmLoading={confirmLoading}
                     onCancel={handleCancel}
-                    footer={
-                        <Button
-                            className="mb-8 block w-full rounded-3xl border-black bg-black text-center text-white transition-colors duration-300 ease-linear hover:bg-[#da291c]"
-                            size="large"
-                        >
-                            Cập nhật thông tin
-                        </Button>
-                    }
+                    footer={<></>}
                     width={windowSize.windowWidth >= 768 ? '460px' : '90vw'}
                 >
                     <div>
@@ -351,24 +371,102 @@ const Profile = () => {
                                 tài khoản tốt hơn.
                             </p>
                         </div>
-                        <Form layout="vertical">
-                            <Form.Item className="mt-1">
+                        <Form
+                            layout="vertical"
+                            onFinish={handleChangePassword}
+                            form={form}
+                        >
+                            <Form.Item
+                                className="mt-1"
+                                name={'password'}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Vui lòng nhập mật khẩu!',
+                                    },
+                                ]}
+                            >
                                 <Input.Password
                                     placeholder="Mật khẩu cũ"
                                     className="py-3"
                                 />
                             </Form.Item>
-                            <Form.Item className="mt-1">
+                            <Form.Item
+                                className="mt-1"
+                                name={'newPassword'}
+                                validateFirst
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Vui lòng nhập mật khẩu mới!',
+                                    },
+                                    {
+                                        validator: (_, newPassword) => {
+                                            if (newPassword.length < 6) {
+                                                return ErrorMessage(
+                                                    'Mật khẩu phải nhiều hơn hoặc bằng 6 kí tự',
+                                                );
+                                            }
+                                            const oldPassword =
+                                                form.getFieldValue('password');
+                                            if (
+                                                newPassword &&
+                                                newPassword === oldPassword
+                                            ) {
+                                                return ErrorMessage(
+                                                    'Mật khẩu mới và mật khẩu nhập lại không trùng khớp',
+                                                );
+                                            }
+                                            return Promise.resolve();
+                                        },
+                                    },
+                                ]}
+                            >
                                 <Input.Password
                                     placeholder="Mật khẩu mới"
                                     className="py-3"
                                 />
                             </Form.Item>
-                            <Form.Item className="mt-1">
+                            <Form.Item
+                                className="mt-1"
+                                name={'retypePassword'}
+                                validateFirst
+                                rules={[
+                                    {
+                                        required: true,
+                                        message:
+                                            'Vui lòng nhập lại xác nhận mật khẩu!',
+                                    },
+                                    ({ getFieldValue }) => ({
+                                        validator(_, retypePassword) {
+                                            if (
+                                                getFieldValue('newPassword') ===
+                                                retypePassword
+                                            ) {
+                                                return Promise.resolve();
+                                            }
+                                            return ErrorMessage(
+                                                'Mật khẩu mới và mật khẩu nhập lại phải trùng khớp',
+                                            );
+                                        },
+                                    }),
+                                ]}
+                            >
                                 <Input.Password
                                     placeholder="Nhập lại mật khẩu"
                                     className="py-3"
                                 />
+                            </Form.Item>
+                            <Form.Item>
+                                <Button
+                                    className="mb-8 block w-full rounded-3xl border-black bg-black text-center text-white transition-colors duration-300 ease-linear hover:bg-[#da291c]"
+                                    size="large"
+                                    htmlType="submit"
+                                    loading={isChangePasswordPending}
+                                    disabled={isChangePasswordPending}
+                                >
+                                    Cập nhật thông tin
+                                </Button>
                             </Form.Item>
                         </Form>
                     </div>

@@ -8,14 +8,7 @@ import errorHandler from "./errors/errorHandle.js";
 import { envConfig } from "./config/env.js";
 import { initializeApp } from "firebase/app";
 import { handleInsertData } from "./data/index.js";
-import path from 'path';
-import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const staticFolderPath = path.join(__dirname, 'public');
-
-const app = express();
 
 // firebase
 initializeApp(envConfig.FIREBASE);
@@ -40,11 +33,7 @@ app.use(
   })
 );
 app.use(morgan("tiny"));
-
 app.use(express.urlencoded({ extended: true }));
-
-app.use('/static', express.static(staticFolderPath));
-console.log(staticFolderPath)
 // connect db
 connectDB(envConfig.DB_URL);
 
