@@ -10,6 +10,9 @@ import { initializeApp } from "firebase/app";
 import { handleInsertData } from "./data/index.js";
 
 
+const app = express()
+
+
 // firebase
 initializeApp(envConfig.FIREBASE);
 

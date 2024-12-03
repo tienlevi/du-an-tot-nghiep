@@ -67,12 +67,5 @@ export const menuGroups: IMenuItem[] = [
             { label: 'Thẻ phân loại', route: ADMIN_ROUTES.TAGS },
         ],
     },
-    {
-        icon: <StarOutlined />,
-        label: 'Quản lý đánh giá',
-        children: [
-            { label: 'Tất cả đánh giá', route: ADMIN_ROUTES.REVIEWS },
-            { label: 'Tất cả báo cáo', route: ADMIN_ROUTES.REVIEWS_REPORT },
-        ],
-    },
+  
 ];
