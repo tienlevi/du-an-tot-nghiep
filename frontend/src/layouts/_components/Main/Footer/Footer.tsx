@@ -37,7 +37,7 @@ export default function Footer() {
                             </li>
                             <li>
                                 <p className="text-sm">
-                                    Email: adstore@gmail.com
+                                    Email: nguyentrachtien2401@gmail.com
                                 </p>
                             </li>
                         </ul>

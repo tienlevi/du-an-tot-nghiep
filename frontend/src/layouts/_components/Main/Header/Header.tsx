@@ -49,16 +49,6 @@ export default function Header() {
                         </div>
                     </div>
                     <div className="flex  items-center">
-                        <div className="flex items-center gap-2 border-[1px] border-[#7777] py-2 px-4 rounded-full">
-                            <button className="flex items-center">
-                                <SearchOutlined className="text-xl" />
-                            </button>
-                            <input
-                                type="text"
-                                placeholder="Tìm kiếm..."
-                                className="text-sm outline-none"
-                            />
-                        </div>
                         <UserToolBar />
                     </div>
                 </div>

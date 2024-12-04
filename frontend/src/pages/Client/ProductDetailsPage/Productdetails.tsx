@@ -183,6 +183,8 @@ const ProductDetailsPage = () => {
             self.findIndex((v) => v.color._id === item.color._id) === index,
     );
 
+    console.log(data);
+
     // wishlist
     const { query } = useFilter();
     const user = useSelector((state: RootState) => state.auth.user);
@@ -218,10 +220,16 @@ const ProductDetailsPage = () => {
                                 title: <Link to={'/'}>Trang chủ</Link>,
                             },
                             {
-                                title: <a href="">Bộ mặc nhà dài tay</a>,
+                                title: (
+                                    <Link
+                                        to={`/products/?category=${data?.category}`}
+                                    >
+                                        Sản phẩm
+                                    </Link>
+                                ),
                             },
                             {
-                                title: <a href="">Bộ mặc nhà dài tay mickey</a>,
+                                title: <p>{data?.name}</p>,
                             },
                         ]}
                     />
@@ -509,11 +517,7 @@ const ProductDetailsPage = () => {
                                                 },
                                             },
                                         }}
-                                    >
-                                        <Button block className="py-7 text-lg">
-                                            Tìm tại cửa hàng
-                                        </Button>
-                                    </ConfigProvider>
+                                    ></ConfigProvider>
                                 </div>
                             </Flex>
 
@@ -534,10 +538,7 @@ const ProductDetailsPage = () => {
                                                 </span>
                                             ),
                                             children: (
-                                                <p>
-                                                    Bộ mặc nhà bé trai in hình
-                                                    Mickey
-                                                </p>
+                                                <p>{data?.description}</p>
                                             ),
                                         },
                                     ]}
@@ -568,7 +569,8 @@ const ProductDetailsPage = () => {
                                             ),
                                         },
                                     ]}
-                                />
+                                /> */}
+                                <SizeGuideModal />
 
                                 <Divider className="my-4" />
                             </div>
