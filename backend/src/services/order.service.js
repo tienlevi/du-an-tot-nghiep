@@ -12,6 +12,7 @@ import { inventoryService } from "./index.js";
 import { ORDER_STATUS , PAYMENT_METHOD } from "../constants/orderStatus.js";
 import { ROLE } from "../constants/role.js";
 import mongoose from "mongoose";
+import Cart from "../models/cart.js";
 
 // @GET:  Get all orders
 export const getAllOrders = async (req, res, next) => {
@@ -102,19 +103,19 @@ export const createOrder = async (req, res, next) => {
   //   Update stock
   await inventoryService.updateStockOnCreateOrder(req.body.items);
 
-  // await Promise.all(
-  //   req.body.items.map(async (product) => {
-  //     await Cart.findOneAndUpdate(
-  //       { userId: req.userId },
-  //       {
-  //         $pull: {
-  //           items: { product: product.productId, variant: product.variantId },
-  //         },
-  //       },
-  //       { new: true }
-  //     );
-  //   })
-  // );
+  await Promise.all(
+    req.body.items.map(async (product) => {
+      await Cart.findOneAndUpdate(
+        { userId: req.userId },
+        {
+          $pull: {
+            items: { product: product.productId, variant: product.variantId },
+          },
+        },
+        { new: true }
+      );
+    })
+  );
   await order.save();
   return res.status(StatusCodes.OK).json(
     customResponse({

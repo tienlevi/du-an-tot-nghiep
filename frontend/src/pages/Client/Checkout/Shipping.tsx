@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Input, Button, Card, Space, Typography, Row, Col } from 'antd';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,9 @@ import ReceiverInfo from './ReceiverInfo';
 import ShippingAddress from './ShippingAdress';
 import useDocumentTitle from '@/hooks/_common/useDocumentTitle';
 import { setDescription, setReceiver } from '@/store/slice/orderSlice';
+import useGetMyCart from '@/hooks/cart/Queries/useGetMyCart';
+import showMessage from '@/utils/ShowMessage';
+import { useTypedSelector } from '@/store/store';
 
 const { Title, Text } = Typography;
 
@@ -40,7 +43,17 @@ const Shipping: React.FC = () => {
 
         navigate('/checkout');
     };
-
+    const cartItems = useTypedSelector((state) => state.cartReducer.items);
+    const {data} =useGetMyCart()
+    useEffect(() => {
+        if (data && cartItems) {
+          const isAnyItemRemoved = cartItems.some(item => !data.items.some(cartDataItem => cartDataItem._id === item._id));
+          if (isAnyItemRemoved) {
+            navigate('/');  
+            showMessage("Có sự thay đổi về sản phẩm vui lòng kiểm tra lại giỏ hàng", "info", 3000);
+          }
+        }
+      }, [data]);
     return (
         <Card className='mx-auto my-8 w-full max-w-6xl shadow-lg'>
             <Title level={2} className='mb-6 text-center'>

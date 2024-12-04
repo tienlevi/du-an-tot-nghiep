@@ -30,6 +30,9 @@ import useGetAllWishlist from '@/hooks/wishlist/Queries/useGetAllWishlist';
 import useFilter from '@/hooks/_common/useFilter';
 import { MAIN_ROUTES } from '@/constants/router';
 import SizeGuideModal from './SizeGuideModal';
+import { useGetRelatedProduct } from '@/hooks/Products/Queries/useGetRelatedProduct';
+import CarouselDisplay, { CarouselItem } from '@/components/CarouselDisplay';
+import DefaultCard from '@/components/ProductCard/DefaultCard';
 
 interface TransformedVariant {
     size: {
@@ -41,6 +44,7 @@ interface TransformedVariant {
 const ProductDetailsPage = () => {
     const { id } = useParams();
     const { data } = useGetDetailProduct(id ? id : '');
+    const { data: relatedProduct } = useGetRelatedProduct(id ? id : '');
     const isAuth = useTypedSelector((state) => state.auth.authenticate);
     const { mutate: addWishlist } = useMutationAddWishList();
     const { handleRemoveWishList } = useMutationRemoveWishList();
@@ -178,13 +182,7 @@ const ProductDetailsPage = () => {
             );
         }
     };
-    const uniqueImage = data?.variants.filter(
-        (item, index, self) =>
-            self.findIndex(v => v.color._id === item.color._id) === index
-    );
-
-   console.log(data)
-
+    const uniqueImage = data?.variants.map((item)=> item)
     // wishlist
     const { query } = useFilter();
     const user = useSelector((state: RootState) => state.auth.user);
@@ -220,10 +218,16 @@ const ProductDetailsPage = () => {
                                 title: <Link to={'/'}>Trang chủ</Link>,
                             },
                             {
-                                title: <Link to={`/products/?category=${data?.category}`}>Sản phẩm</Link>,
+                                title: (
+                                    <Link
+                                        to={`/products/?category=${data?.category}`}
+                                    >
+                                        Sản phẩm
+                                    </Link>
+                                ),
                             },
                             {
-                                title: <p >{data?.name}</p>,
+                                title: <p>{data?.name}</p>,
                             },
                         ]}
                     />
@@ -302,25 +306,28 @@ const ProductDetailsPage = () => {
                                                         type="default"
                                                         shape="circle"
                                                         icon={<HeartFilled />}
-                                                        onClick={()=>debouncedRemove(id!)}
+                                                        onClick={() =>
+                                                            debouncedRemove(id!)
+                                                        }
                                                     />
                                                 </Tooltip>
                                             </>
                                         ) : (
                                             <>
-                                                 <Tooltip
-                                            title="Thêm vào yêu thích"
-                                            color={'#da291c'}
-                                            
-                                        >
-                                            <Button
-                                                className="text-red-500"
-                                                type="default"
-                                                shape="circle"
-                                                icon={<HeartOutlined />}
-                                                onClick={handleAddWishlist}
-                                            />
-                                        </Tooltip>
+                                                <Tooltip
+                                                    title="Thêm vào yêu thích"
+                                                    color={'#da291c'}
+                                                >
+                                                    <Button
+                                                        className="text-red-500"
+                                                        type="default"
+                                                        shape="circle"
+                                                        icon={<HeartOutlined />}
+                                                        onClick={
+                                                            handleAddWishlist
+                                                        }
+                                                    />
+                                                </Tooltip>
                                             </>
                                         )}
                                     </ConfigProvider>
@@ -436,11 +443,22 @@ const ProductDetailsPage = () => {
                                             </Button>
                                             <InputNumber
                                                 onChange={onChangeInputQuantity}
+                                                onError={(e)=> console.log(e)}
                                                 min={1}
-                                                max={selectedColor.stock || 1}
+                                                max={selectedColor.stock}
                                                 className="flex h-[48px] w-[58px] items-center"
                                                 value={valueQuantity}
                                                 controls={false}
+                                                onPressEnter={(e: any)=> {
+                                                    if(e.target.value > selectedColor.stock){
+                                                        showMessage(`Số lượng tối đa là ${selectedColor.stock}`,'info')
+                                                    }
+                                                }}
+                                                onBlur={(e: any)=> {
+                                                    if(e.target.value > selectedColor.stock){
+                                                        showMessage(`Số lượng tối đa là ${selectedColor.stock}`,'info')
+                                                    }
+                                                }}
                                             />
                                             <Button
                                                 onClick={handleIncrement}
@@ -508,8 +526,7 @@ const ProductDetailsPage = () => {
                                                 },
                                             },
                                         }}
-                                    >
-                                    </ConfigProvider>
+                                    ></ConfigProvider>
                                 </div>
                             </Flex>
 
@@ -530,9 +547,7 @@ const ProductDetailsPage = () => {
                                                 </span>
                                             ),
                                             children: (
-                                                <p>
-                                                   {data?.description}
-                                                </p>
+                                                <p>{data?.description}</p>
                                             ),
                                         },
                                     ]}
@@ -564,7 +579,7 @@ const ProductDetailsPage = () => {
                                         },
                                     ]}
                                 /> */}
-                                <SizeGuideModal/>
+                                <SizeGuideModal />
 
                                 <Divider className="my-4" />
                             </div>
@@ -577,10 +592,19 @@ const ProductDetailsPage = () => {
                 </div>
 
                 {/* RELATED PRODUCTS */}
-                {/* <div className="text-global text-xl font-bold">
+                <div className="text-global text-xl font-bold mt-2">
                     Gợi ý mua cùng
-                </div> */}
-
+                </div>
+                <CarouselDisplay className="mt-4">
+                        {relatedProduct &&
+                            relatedProduct.map((item, index: number) => {
+                                return (
+                                    <CarouselItem key={index}>
+                                        <DefaultCard item={item} />
+                                    </CarouselItem>
+                                );
+                            })}
+                    </CarouselDisplay>
                 {/* <div className="flex flex-cols-4 flex-row-2">
                 {arr.map(() => {
                     return (

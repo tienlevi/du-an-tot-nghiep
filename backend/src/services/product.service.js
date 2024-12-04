@@ -1,8 +1,9 @@
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { BadRequestError } from "../errors/customError.js";
 import Product from "../models/product.js";
 import APIQuery from "../utils/APIQuery.js";
 import { removeUploadedFile, uploadFiles } from "../utils/upload.js";
-
+import customResponse from "../helpers/response.js";
 
 function hasDuplicates(array) {
   return new Set(array).size !== array.length;
@@ -50,23 +51,23 @@ export const createProduct = async (productData, files) => {
       files["variantImages"]
     );
     const variants = JSON.parse(productData.variantString);
-    const map = {}
-  variants.forEach(element => {
-    const key = element.size + element.color;
-  if(map[key]){
-    throw new BadRequestError("Biến thể không được trùng nhau");
-  }else{
-    map[key] = 1;
-  }
-  });
-    if(hasDuplicates(variants.map((item) => item.imageUrlRef))){
+    const map = {};
+    variants.forEach((element) => {
+      const key = element.size + element.color;
+      if (map[key]) {
+        throw new BadRequestError("Biến thể không được trùng nhau");
+      } else {
+        map[key] = 1;
+      }
+    });
+    if (hasDuplicates(variants.map((item) => item.imageUrlRef))) {
       throw new BadRequestError("File ảnh không được trùng nhau");
     }
 
     variationList = fileUrls.map((item, i) => {
       const variation = variants.find((obj) => {
         const originName = originNames[i];
-        
+
         const fileName = obj.imageUrlRef;
         return fileName === originName;
       });
@@ -101,17 +102,18 @@ export const updateProduct = async (
   const product = await Product.findById(productId);
   let newVariants = [];
   let oldVariants = [];
-  if(hasDuplicates(variants.map((item) => item.imageUrlRef))){
+  if (hasDuplicates(variants.map((item) => item.imageUrlRef))) {
     throw new BadRequestError("File ảnh không được trùng nhau");
   }
-  const map = {}
-  variants.forEach(element => {
+  const map = {};
+  variants.forEach((element) => {
     const key = element.size + element.color;
-  if(map[key]){
-    throw new BadRequestError("Biến thể không được trùng nhau");
-  }else{
-    map[key] = 1;
-  }});
+    if (map[key]) {
+      throw new BadRequestError("Biến thể không được trùng nhau");
+    } else {
+      map[key] = 1;
+    }
+  });
   if (!product)
     throw new NotFoundError(
       `${ReasonPhrases.NOT_FOUND} product with id: ${productId}`
@@ -161,4 +163,29 @@ export const getProductById = async (productId) => {
     );
 
   return product;
+};
+
+export const getRelatedProducts = async (req, res, next) => {
+  const product = await Product.findById(req.params.id)
+    .populate("variants.color")
+    .populate("variants.size")
+    .lean();
+
+  if (!product)
+    throw new NotFoundError(
+      `${ReasonPhrases.NOT_FOUND} product with id: ${req.params.id}`
+    );
+
+  const products = await Product.find({ tags: { $in: product.tags } }).limit(
+    10
+  );
+
+  return res.status(StatusCodes.OK).json(
+    customResponse({
+      data: products,
+      message: ReasonPhrases.OK,
+      status: StatusCodes.OK,
+      success: true,
+    })
+  );
 };

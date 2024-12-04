@@ -47,6 +47,11 @@ export const getProductById = asyncHandler(async (req, res) => {
     })
   );
 });
+
+export const getRelatedProducts = asyncHandler(async (req, res) => {
+  return await productService.getRelatedProducts(req, res);
+});
+
 export const createProduct = asyncHandler(async (req, res) => {
   const pro = await productService.createProduct(req.body, req.files);
   return res.status(StatusCodes.OK).json(

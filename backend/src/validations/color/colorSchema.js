@@ -24,7 +24,7 @@ const colorSchema = {
       "string.min": "Tên màu phải lớn hơn hoặc bằng {#limit} ký tự.",
       "string.max": "Tên màu phải nhỏ hơn hoặc bằng {#limit} ký tự.",
     }),
-    hex: Joi.string().min(3).max(6).required().messages({
+    hex: Joi.string().min(3).max(7).required().messages({
       "string.base": "Tên màu phải là chuỗi ký tự.",
       "string.empty": "Tên màu không được bỏ trống.",
       "string.min": "Tên màu phải lớn hơn hoặc bằng {#limit} ký tự.",

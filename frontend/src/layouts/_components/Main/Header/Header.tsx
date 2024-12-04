@@ -1,12 +1,30 @@
+import { MAIN_ROUTES } from '@/constants/router';
+import useFilter from '@/hooks/_common/useFilter';
 import useGetCategoriesMenu from '@/hooks/categories/Queries/useGetCategoriesMenu';
 import { SearchOutlined } from '@ant-design/icons';
-import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import MenuItem from './MenuItem/MenuItem';
 import UserToolBar from './UserToolbar/UserToolBar';
 export default function Header() {
     const { data: categoriesRes } = useGetCategoriesMenu();
     const location = useLocation();
+    const navigate = useNavigate();
     const categoriesResData = categoriesRes?.data.categories;
+    const [searchValue, setSearchValue] = useState<string>('');
+    const { query,updateQueryParam} = useFilter();
+    const onEnterSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+              if(location.pathname !== '/products'){
+                navigate(`${MAIN_ROUTES.PRODUCTS}?search=${searchValue}`);
+              }else{
+                updateQueryParam({
+                    ...query,
+                    search: searchValue
+                })
+              }
+        }
+    };
     return (
         <>
             <div className="h-[40px] bg-[#333f48] flex items-center justify-center">
@@ -54,7 +72,9 @@ export default function Header() {
                                 <SearchOutlined className="text-xl" />
                             </button>
                             <input
+                                onKeyDown={onEnterSearch}
                                 type="text"
+                                onChange={(e)=> setSearchValue(e.target.value)}
                                 placeholder="Tìm kiếm..."
                                 className="text-sm outline-none"
                             />

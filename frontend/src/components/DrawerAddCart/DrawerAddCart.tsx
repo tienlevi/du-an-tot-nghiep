@@ -207,7 +207,7 @@ export default function DrawerAddCart({
             exit={{ opacity: 0 }}
         >
             <button
-                className={cn('cursor-pointer', classNameBtn)}
+                className={cn('cursor-pointer whitespace-nowrap', classNameBtn)}
                 onClick={showDrawer}
             >
                 {children}
@@ -388,6 +388,16 @@ export default function DrawerAddCart({
                                     className="flex h-[38px] w-[48px] items-center"
                                     controls={false}
                                     onChange={onChangeInputQuantity}
+                                    onPressEnter={(e: any)=> {
+                                        if(selectedColor && e.target.value > selectedColor.stock){
+                                            showMessage(`Số lượng tối đa là ${selectedColor.stock}`,'info')
+                                        }
+                                    }}
+                                    onBlur={(e: any)=> {
+                                        if(selectedColor && e.target.value > selectedColor.stock){
+                                            showMessage(`Số lượng tối đa là ${selectedColor.stock}`,'info')
+                                        }
+                                    }}
                                 />
                                 <Button
                                     disabled={

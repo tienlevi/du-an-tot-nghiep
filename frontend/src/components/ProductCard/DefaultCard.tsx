@@ -95,11 +95,9 @@ export default function DefaultCard({ item }: { item: IProduct }) {
                         <span className="text-xs text-global">( 5 )</span>
                     )}
                 </div> */}
-
-                <p className="font-semibold mt-1">{Currency(item.price)}</p>
-
-                {item.discount !== 0 ? (
-                    <div className="mt-1">
+                <div className="flex gap-2 items-center">
+                    <p className="font-semibold">{Currency(item?.price)}</p>
+                    {item.discount !== 0 && (
                         <div className="flex gap-2 items-center">
                             <span className="line-through">
                                 {Currency(originalPrice)}
@@ -108,6 +106,10 @@ export default function DefaultCard({ item }: { item: IProduct }) {
                                 {item.discount}%
                             </span>
                         </div>
+                    )}
+                </div>
+                {item.discount !== 0 ? (
+                    <div>
                         <div className="mt-2">
                             <span className="text-hover text-xs px-2  border-[1px] rounded-sm py-0.5">
                                 Giá độc quyền Online
@@ -116,11 +118,6 @@ export default function DefaultCard({ item }: { item: IProduct }) {
                     </div>
                 ) : (
                     <div className=" flex justify-end flex-col">
-                        <div className="flex opacity-0 gap-2 items-center">
-                            <span className="text-hover font-semibold">
-                                Không được giảm giá
-                            </span>
-                        </div>
                         <div className="mt-2">
                             <span className="text-hover text-xs px-2  border-[1px] rounded-sm py-0.5">
                                 Hàng chính Hãng

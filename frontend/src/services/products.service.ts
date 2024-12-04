@@ -31,6 +31,10 @@ export const ProductServices = {
         );
         return data.data;
     },
+    async getRelatedProduct(id: string){
+        const data = await instance.get<IAxiosResponse<IProduct[]>>(`/products/related/${id}`)
+        return data.data 
+    },
     async createProduct(data: FormData) {
         const res = await instance.post<IAxiosResponse<null>>(
             `/products/create`,

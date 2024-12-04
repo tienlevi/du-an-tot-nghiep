@@ -11,7 +11,7 @@ import vi from 'antd/locale/vi_VN';
 import AutoScrollToTop from './components/_common/AutoScrollToTop';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-    <React.StrictMode>
+    // <React.StrictMode>
         <BrowserRouter>
             <ReduxProvider>
                 <QueryProvider>
@@ -32,5 +32,5 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                 </QueryProvider>
             </ReduxProvider>
         </BrowserRouter>
-    </React.StrictMode>,
+    // </React.StrictMode>,
 );
