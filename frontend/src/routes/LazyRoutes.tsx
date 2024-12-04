@@ -8,6 +8,7 @@ export const ProfilePage = lazy(() => import('@/pages/Client/Account/Profile'));
 export const MyOrdersPage = lazy(
     () => import('@/pages/Client/Account/MyOrders'),
 );
+export const ListUser = lazy(() => import('@/pages/Admin/_user_/ManageUsers'));
 export const MyOrderDetailsPage = lazy(
     () => import('@/pages/Client/Account/MyOrders/OrderDetail/OrderDetailPage'),
 );
@@ -43,7 +44,12 @@ export const CreateProduct = lazy(
 // export const UpdateProduct = lazy(
 //     () => import('@/pages/Admins/_product_/UpdateProduct'),
 // );
-
+export const VerifyAccountPage = lazy(
+    () => import('@/pages/Client/Auth/Email'),
+);
+export const ForgotPasswordPage = lazy(
+    () => import('@/pages/Client/Auth/ForgotPassword'),
+);
 export const CategoryList = lazy(() => import('@/pages/Admin/_category_'));
 export const CreateCategory = lazy(
     () => import('@/pages/Admin/_category_/CreateCategory'),

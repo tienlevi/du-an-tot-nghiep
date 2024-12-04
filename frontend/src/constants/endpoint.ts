@@ -55,9 +55,8 @@ export const AUTH_ENDPOINT = {
     LOGIN: '/auth/login',
     REGISTER: '/auth/register',
     SENDMAIL: '/auth/sendVerify',
-    SENDRESETPASS: '/auth/sendresetPassword',
     VERIFY: '/auth/verifyEmail',
-    RESETPASSWORD: '/auth/resetpassword',
+    RESETPASSWORD: '/auth/resetPassword',
     REFRESH: '/auth/refresh',
     LOGOUT: '/auth/logout',
 };
@@ -98,6 +97,7 @@ export const USER_ENDPOINT = {
     PROFILE: '/users/profile',
     ALL: '/users/all',
     UPDATE: '/users',
+    CHANGE_PASSWORD: '/users/changePassword',
     UPDATE_ADMIN: '/users',
     DETAIL: '/users',
 };

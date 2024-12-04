@@ -50,9 +50,15 @@ export const createProduct = async (productData, files) => {
       files["variantImages"]
     );
     const variants = JSON.parse(productData.variantString);
-    console.log((item) => item.imageUrlRef)
-    console.log(productData.variantString, "variantString")
-    console.log(variants, "variants")
+    const map = {}
+  variants.forEach(element => {
+    const key = element.size + element.color;
+  if(map[key]){
+    throw new BadRequestError("Biến thể không được trùng nhau");
+  }else{
+    map[key] = 1;
+  }
+  });
     if(hasDuplicates(variants.map((item) => item.imageUrlRef))){
       throw new BadRequestError("File ảnh không được trùng nhau");
     }
@@ -95,6 +101,17 @@ export const updateProduct = async (
   const product = await Product.findById(productId);
   let newVariants = [];
   let oldVariants = [];
+  if(hasDuplicates(variants.map((item) => item.imageUrlRef))){
+    throw new BadRequestError("File ảnh không được trùng nhau");
+  }
+  const map = {}
+  variants.forEach(element => {
+    const key = element.size + element.color;
+  if(map[key]){
+    throw new BadRequestError("Biến thể không được trùng nhau");
+  }else{
+    map[key] = 1;
+  }});
   if (!product)
     throw new NotFoundError(
       `${ReasonPhrases.NOT_FOUND} product with id: ${productId}`

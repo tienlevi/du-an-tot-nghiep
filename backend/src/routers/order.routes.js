@@ -1,6 +1,9 @@
 import { Router } from "express";
 import { orderControllers } from "../controllers/index.js";
 import { authenticate } from "../middleware/authenticateMiddleware.js";
+import { authorsize } from "../middleware/authorizeMiddleware.js";
+import { ROLE } from "../constants/role.js";
+
 
 const orderRouter = Router();
 orderRouter.post("/create", authenticate, orderControllers.createOrder);
@@ -10,7 +13,7 @@ orderRouter.patch("/shipping", authenticate, orderControllers.shippingOrder);
 orderRouter.patch("/done", authenticate, orderControllers.finishOrder);
 orderRouter.patch("/delivered", authenticate, orderControllers.deliverOrder);
 orderRouter.get("/my-order", authenticate, orderControllers.getAllOrdersByUser);
-orderRouter.get("/all", authenticate, orderControllers.getAllOrders);
+orderRouter.get("/all", authenticate,authorsize(ROLE.ADMIN), orderControllers.getAllOrders);
 orderRouter.get(
   "/details/:id",
   authenticate,

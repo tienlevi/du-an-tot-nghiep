@@ -19,6 +19,7 @@ import {
     Suspense,
     ManageOrders,
     OrdersDetails,
+    ListUser,
     // UpdateProduct,
 } from './LazyRoutes';
 import { ADMIN_ROUTES } from '@/constants/router';
@@ -29,9 +30,9 @@ export const PrivateRoutes = [
     {
         path: ADMIN_ROUTES.DASHBOARD,
         element: (
-            // <ProtectedRoute>
+            <ProtectedRoute>
             <AdminLayout />
-            // </ProtectedRoute>
+            </ProtectedRoute>
         ),
         children: [
             {
@@ -242,6 +243,15 @@ export const PrivateRoutes = [
                         ),
                     },
                 ],
+            },
+            // @user
+            {
+                path: ADMIN_ROUTES.USERS,
+                element: (
+                    <Suspense>
+                        <ListUser />
+                    </Suspense>
+                ),
             },
             //@Order-List
             {

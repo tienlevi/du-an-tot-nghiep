@@ -19,6 +19,8 @@ import {
     OrderSuccessPage,
     WishlistPage,
     OrderErrorPage,
+    VerifyAccountPage,
+    ForgotPasswordPage,
 } from './LazyRoutes';
 import AuthProtected from '@/layouts/Protected/AuthProtected';
 
@@ -34,6 +36,22 @@ const PublicRoutes = [
                         <HomePage />
                     </Suspense>
                 ),
+            },
+            {
+                path: MAIN_ROUTES.VERIFY,
+                element: (
+                    <Suspense>
+                        <VerifyAccountPage/>
+                    </Suspense>
+                )
+            },
+            {
+                path: MAIN_ROUTES.FORGOT_PASSWORD,
+                element: (
+                    <Suspense>
+                        <ForgotPasswordPage/>
+                    </Suspense>
+                )
             },
             {
                 path: '/login',

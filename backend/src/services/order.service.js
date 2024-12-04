@@ -167,7 +167,7 @@ export const cancelOrder = async (req, res, next) => {
     const template = {
       content: {
           title: `${req.role === ROLE.ADMIN ? 'Đơn hàng của bạn đã bị hủy bởi admin' : 'Đơn hàng của bạn đã bị hủy'}`,
-          description: `${req.role === ROLE.ADMIN ? `Đơn hàng của bạn đã bị hủy bởi admin với lý do ${foundedOrder.description} dưới đây là thông tin đơn hàng:` : `Bạn vừa hủy một đơn hàng với lý do ${foundedOrder.description} từ AdShop thông tin đơn hàng:`}`,
+          description: `${req.role === ROLE.ADMIN ? `Đơn hàng của bạn đã bị hủy bởi admin với lý do ${foundedOrder.description}, ${foundedOrder.isPaid? `Rất xin lỗi vì sự bất tiện này hãy liên hệ ngay với chúng tôi qua số điện thoại +84 123 456 789 để cửa hàng hoàn lại ${new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(foundedOrder.totalPrice || 0)} cho bạn `:""} dưới đây là thông tin đơn hàng:` : `Bạn vừa hủy một đơn hàng với lý do ${foundedOrder.description} từ AdShop thông tin đơn hàng:`}`,
           email:
               foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
                   ? foundedOrder.customerInfo.email
@@ -248,7 +248,7 @@ export const confirmOrder = async (req, res, next) => {
       },
       subject: '[AdShop] - Đơn hàng của bạn đã được xác nhận',
       link: {
-          linkHerf: `http://localhost:5173/my-orders/${req.body.orderId}`,
+          linkHerf: `http://localhost:3000/my-orders/${req.body.orderId}`,
           linkName: `Kiểm tra đơn hàng`,
       },
       user: {

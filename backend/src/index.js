@@ -9,7 +9,9 @@ import { envConfig } from "./config/env.js";
 import { initializeApp } from "firebase/app";
 import { handleInsertData } from "./data/index.js";
 
-const app = express();
+
+const app = express()
+
 
 // firebase
 initializeApp(envConfig.FIREBASE);
@@ -34,10 +36,7 @@ app.use(
   })
 );
 app.use(morgan("tiny"));
-
 app.use(express.urlencoded({ extended: true }));
-
-
 // connect db
 connectDB(envConfig.DB_URL);
 

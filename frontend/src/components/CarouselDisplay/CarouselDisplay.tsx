@@ -25,7 +25,7 @@ const CarouselDisplay = ({
         }
     };
     return (
-        <div className={cn('group relative', className)}>
+        <div className={cn('relative', className)}>
             <Carousel
                 className=""
                 ref={ref}
@@ -54,6 +54,7 @@ const CarouselDisplay = ({
             >
                 {children}
             </Carousel>
+
             <SliderControls
                 isButtonHandle={false}
                 handleNext={handleNext}

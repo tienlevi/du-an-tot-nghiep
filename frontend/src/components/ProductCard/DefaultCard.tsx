@@ -1,9 +1,18 @@
-import { HeartOutlined } from '@ant-design/icons';
+import { HeartFilled, HeartOutlined } from '@ant-design/icons';
 import DrawerAddCart from '../DrawerAddCart';
-import { Rate } from 'antd';
+import { Rate, Spin } from 'antd';
 import { Currency } from '@/utils/FormatCurreny';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { IProduct } from '@/types/ProductNew';
+import useFilter from '@/hooks/_common/useFilter';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import useGetAllWishlist from '@/hooks/wishlist/Queries/useGetAllWishlist';
+import showMessage from '@/utils/ShowMessage';
+import { MAIN_ROUTES } from '@/constants/router';
+import useMutationAddWishList from '@/hooks/wishlist/Mutations/useAddWishList';
+import { useMutationRemoveWishList } from '@/hooks/wishlist/Mutations/useRemoveWishList';
+import { debounce } from 'lodash';
 interface TransformedVariant {
     size: {
         name: string;
@@ -12,19 +21,46 @@ interface TransformedVariant {
     colors: any[];
 }
 export default function DefaultCard({ item }: { item: IProduct }) {
+    const navigate = useNavigate();
+    const { mutate: addWishlist, isPending } = useMutationAddWishList();
+    const { query } = useFilter();
+    const user = useSelector((state: RootState) => state.auth.user);
+    const { data: allWishList } = useGetAllWishlist(query);
+    const wishListIds = allWishList?.data?.wishList?.map((item) => item._id);
+    const { handleRemoveWishList, isPending: pendingRemove } =
+        useMutationRemoveWishList();
+    const debouncedRemove = debounce(
+        (id: string) => handleRemoveWishList(id),
+        500,
+    );
+    const handleAddWishlist = () => {
+        if (user) {
+            if (wishListIds?.includes(item._id as string)) {
+                debouncedRemove(item._id);
+            }
+            addWishlist({ productId: item._id as string });
+        } else {
+            navigate(MAIN_ROUTES.LOGIN);
+            showMessage(
+                'Bạn cần đăng nhập trước khi thêm vào yêu thích',
+                'warning',
+            );
+        }
+    };
     const originalPrice = item.discount
         ? item.price / (1 - item.discount / 100)
         : item.price;
     return (
-        <div className="h-[452px] group cursor-pointer">
-            <div className="w-[280px] h-[280px] relative">
+        <div className="group cursor-pointer mb-2">
+            <div className="w-full relative">
                 <Link to={`/products/${item._id}`}>
                     <img
-                        className="object-contain"
+                        className="w-full"
                         src={item.variants[0].image}
-                        alt=""
+                        alt={item.name}
                     />
                 </Link>
+
                 <div className="opacity-0 px-2 py-1 group-hover:opacity-100 flex items-center w-full justify-between duration-300 absolute bottom-0">
                     <DrawerAddCart
                         item={item}
@@ -32,22 +68,36 @@ export default function DefaultCard({ item }: { item: IProduct }) {
                     >
                         Thêm vào giỏ hàng
                     </DrawerAddCart>
-                    <button className="w-1/6 h-[32px] bg-global hover:bg-opacity-80 duration-300 rounded-lg text-white">
-                        <HeartOutlined />
+
+                    <button
+                        onClick={() => handleAddWishlist()}
+                        className="w-1/6 h-[32px] bg-global hover:bg-opacity-80 duration-300 rounded-lg text-white"
+                    >
+                        {isPending || pendingRemove ? (
+                            <Spin />
+                        ) : wishListIds?.includes(item._id) ? (
+                            <HeartFilled className="text-red-500" />
+                        ) : (
+                            <HeartFilled />
+                        )}
                     </button>
                 </div>
             </div>
+
             <Link to={`/products/${item._id}`} className="text-global text-sm">
                 <h3 className=" font-semibold group-hover:text-hover mt-4 w-[90%] text-ellipsis whitespace-nowrap overflow-hidden">
                     {item.name}
                 </h3>
-                <div className="flex items-center ">
+
+                {/* <div className="flex items-center ">
                     <Rate allowHalf value={5} disabled className="text-xs" />{' '}
                     {!item._id && (
                         <span className="text-xs text-global">( 5 )</span>
                     )}
-                </div>
+                </div> */}
+
                 <p className="font-semibold mt-1">{Currency(item.price)}</p>
+
                 {item.discount !== 0 ? (
                     <div className="mt-1">
                         <div className="flex gap-2 items-center">
