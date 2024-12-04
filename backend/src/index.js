@@ -9,10 +9,9 @@ import { envConfig } from "./config/env.js";
 import { initializeApp } from "firebase/app";
 import { handleInsertData } from "./data/index.js";
 
-
 // firebase
 initializeApp(envConfig.FIREBASE);
-
+const app = express();
 // middleware
 app.use(express.json());
 app.use(
@@ -21,7 +20,8 @@ app.use(
       if (
         ["http://localhost:5173", "http://localhost:3000"].indexOf(origin) !==
           -1 ||
-        !origin || envConfig.NODE_ENV === "development"
+        !origin ||
+        envConfig.NODE_ENV === "development"
       ) {
         callback(null, true);
       } else {
@@ -30,7 +30,7 @@ app.use(
     },
     credentials: true,
     optionsSuccessStatus: 200,
-  })
+  }),
 );
 app.use(morgan("tiny"));
 app.use(express.urlencoded({ extended: true }));

@@ -16,7 +16,7 @@ export default function Homepage() {
                     <ShopBenefits />
                 </div>
             </div>
-            <div className="mt-4 lg:max-w-[1200px] 2xl:max-w-screen-default w-full default:mx-auto mx-6">
+            <div className="mt-4 lg:max-w-[1200px] 2xl:max-w-screen-default w-full default:mx-auto px-6">
                 {!isLoading && data && (
                     <ShowMoreList
                         enableButton={{

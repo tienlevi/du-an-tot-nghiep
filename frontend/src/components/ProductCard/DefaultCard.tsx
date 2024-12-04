@@ -27,7 +27,8 @@ export default function DefaultCard({ item }: { item: IProduct }) {
     const user = useSelector((state: RootState) => state.auth.user);
     const { data: allWishList } = useGetAllWishlist(query);
     const wishListIds = allWishList?.data?.wishList?.map((item) => item._id);
-    const { handleRemoveWishList, isPending: pendingRemove } = useMutationRemoveWishList();
+    const { handleRemoveWishList, isPending: pendingRemove } =
+        useMutationRemoveWishList();
     const debouncedRemove = debounce(
         (id: string) => handleRemoveWishList(id),
         500,
@@ -52,9 +53,9 @@ export default function DefaultCard({ item }: { item: IProduct }) {
     return (
         <div className="group cursor-pointer">
             <div className="w-full relative">
-                <Link to={`/products/${item._id}`}>
+                <Link to={`/products/${item._id}`} className="w-full h-[350px]">
                     <img
-                        className="object-contain "
+                        className="object-cover w-full h-[350px]"
                         src={item.variants[0].image}
                         alt=""
                     />

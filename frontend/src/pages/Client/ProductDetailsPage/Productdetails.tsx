@@ -29,6 +29,7 @@ import { useSelector } from 'react-redux';
 import useGetAllWishlist from '@/hooks/wishlist/Queries/useGetAllWishlist';
 import useFilter from '@/hooks/_common/useFilter';
 import { MAIN_ROUTES } from '@/constants/router';
+import SizeGuideModal from './SizeGuideModal';
 
 interface TransformedVariant {
     size: {
@@ -179,8 +180,10 @@ const ProductDetailsPage = () => {
     };
     const uniqueImage = data?.variants.filter(
         (item, index, self) =>
-            self.findIndex(v => v.color._id === item.color._id) === index
+            self.findIndex((v) => v.color._id === item.color._id) === index,
     );
+
+    console.log(data);
 
     // wishlist
     const { query } = useFilter();
@@ -217,10 +220,16 @@ const ProductDetailsPage = () => {
                                 title: <Link to={'/'}>Trang chủ</Link>,
                             },
                             {
-                                title: <a href="">Bộ mặc nhà dài tay</a>,
+                                title: (
+                                    <Link
+                                        to={`/products/?category=${data?.category}`}
+                                    >
+                                        Sản phẩm
+                                    </Link>
+                                ),
                             },
                             {
-                                title: <a href="">Bộ mặc nhà dài tay mickey</a>,
+                                title: <p>{data?.name}</p>,
                             },
                         ]}
                     />
@@ -299,25 +308,28 @@ const ProductDetailsPage = () => {
                                                         type="default"
                                                         shape="circle"
                                                         icon={<HeartFilled />}
-                                                        onClick={()=>debouncedRemove(id!)}
+                                                        onClick={() =>
+                                                            debouncedRemove(id!)
+                                                        }
                                                     />
                                                 </Tooltip>
                                             </>
                                         ) : (
                                             <>
-                                                 <Tooltip
-                                            title="Thêm vào yêu thích"
-                                            color={'#da291c'}
-                                            
-                                        >
-                                            <Button
-                                                className="text-red-500"
-                                                type="default"
-                                                shape="circle"
-                                                icon={<HeartOutlined />}
-                                                onClick={handleAddWishlist}
-                                            />
-                                        </Tooltip>
+                                                <Tooltip
+                                                    title="Thêm vào yêu thích"
+                                                    color={'#da291c'}
+                                                >
+                                                    <Button
+                                                        className="text-red-500"
+                                                        type="default"
+                                                        shape="circle"
+                                                        icon={<HeartOutlined />}
+                                                        onClick={
+                                                            handleAddWishlist
+                                                        }
+                                                    />
+                                                </Tooltip>
                                             </>
                                         )}
                                     </ConfigProvider>
@@ -505,11 +517,7 @@ const ProductDetailsPage = () => {
                                                 },
                                             },
                                         }}
-                                    >
-                                        <Button block className="py-7 text-lg">
-                                            Tìm tại cửa hàng
-                                        </Button>
-                                    </ConfigProvider>
+                                    ></ConfigProvider>
                                 </div>
                             </Flex>
 
@@ -530,39 +538,12 @@ const ProductDetailsPage = () => {
                                                 </span>
                                             ),
                                             children: (
-                                                <p>
-                                                    Bộ mặc nhà bé trai in hình
-                                                    Mickey
-                                                </p>
+                                                <p>{data?.description}</p>
                                             ),
                                         },
                                     ]}
                                 />
-
-                                <Divider className="my-4" />
-
-                                <Collapse
-                                    expandIconPosition="end"
-                                    bordered={false}
-                                    ghost
-                                    items={[
-                                        {
-                                            key: 'Chất liệu',
-                                            label: (
-                                                <span className="text-base font-bold">
-                                                    Chất liệu
-                                                </span>
-                                            ),
-                                            children: (
-                                                <p>95% cotton 5% spandex.</p>
-                                            ),
-                                        },
-                                    ]}
-                                />
-
-                                <Divider className="my-4" />
-
-                                <Collapse
+                                {/* <Collapse
                                     expandIconPosition="end"
                                     bordered={false}
                                     ghost
@@ -588,7 +569,8 @@ const ProductDetailsPage = () => {
                                             ),
                                         },
                                     ]}
-                                />
+                                /> */}
+                                <SizeGuideModal />
 
                                 <Divider className="my-4" />
                             </div>
@@ -601,9 +583,9 @@ const ProductDetailsPage = () => {
                 </div>
 
                 {/* RELATED PRODUCTS */}
-                <div className="text-global text-xl font-bold">
+                {/* <div className="text-global text-xl font-bold">
                     Gợi ý mua cùng
-                </div>
+                </div> */}
 
                 {/* <div className="flex flex-cols-4 flex-row-2">
                 {arr.map(() => {
