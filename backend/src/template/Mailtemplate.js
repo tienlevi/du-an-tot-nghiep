@@ -1,19 +1,13 @@
 export const templateMail = (template, mailContent) => {
   switch (template) {
     case "Verify":
-      return `
-            <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Activate Your Morata Account</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
-      rel="stylesheet"
-    />
-    <style>
+      return `<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xác Nhận Đơn Hàng - AdStore</title>
+      <style>
       body {
         font-family: "Poppins", sans-serif;
         margin: 0;
@@ -84,48 +78,50 @@ export const templateMail = (template, mailContent) => {
         margin: 0;
       }
     </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="background">
-        <div class="header">
-          <img
-            src="https://res.cloudinary.com/dn1s3axok/image/upload/v1732159969/adstore/logo_zhcecc.png"
-            alt="AdShop Logo"
-          />
-          <h1>Chào mừng bạn đến với AdShop!</h1>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #f4f4f4;">
+    <div style="max-width: 700px; margin: 20px auto; background-color: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+        <div style="background: linear-gradient(135deg, #2c3e50, #3498db); color: white; padding: 30px; text-align: center; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+            <img src="https://res.cloudinary.com/dn1s3axok/image/upload/v1732159969/adstore/logo_zhcecc.png" alt="AdStore Logo" style="max-height: 80px; margin-bottom: 15px;">
+            <h1 style="margin: 0; font-size: 24px;">${mailContent?.content?.title}</h1>
         </div>
-        <div class="content">
-          <h1>${mailContent?.content?.title}</h1>
-          <p style="color: white text-decoration: none;">Hello ${mailContent?.content?.email},</p>
-          <p>${mailContent?.content?.description}</p>
-          <a style="color: white" href="${mailContent?.link?.linkHerf}" class="btn"
+        
+        <div style="padding: 30px;">
+            <h2 style="color: #2c3e50;">Xin chào, ${mailContent?.content?.email}!</h2>
+            
+            <p style="color: #333;">${mailContent.content.description}</p>
+            <div style="background-color: #f9f9f9; border-left: 4px solid #3498db; padding: 15px; margin: 20px 0;">
+               <a style="color: white" href="${mailContent?.link?.linkHerf}" class="btn"
             >${mailContent?.link?.linkName}</a
           >
-          <p>${mailContent?.content?.warning && mailContent?.content?.warning}</p>
+            </div>
+            ${
+              mailContent.content.warning
+                ? `
+                <div style="background-color: #ffdddd; border-left: 4px solid #f44336; color: #d32f2f; padding: 15px; margin-top: 20px;">
+                    <p>${mailContent.content.warning}</p>
+                </div>
+            `
+                : ""
+            }
         </div>
-        <div class="footer">
-          <p>Thank you,<br />The AdShop Team</p>
-          <p><small>AdShop Inc., FPT Polytechnic, Ha Noi, Viet Nam</small></p>
+
+        <div style="background-color: #2c3e50; color: white; padding: 20px; text-align: center;">
+            <p>© 2024 AdStore. Đã đăng ký bản quyền</p>
+            <p>Trải nghiệm mua sắm hoàn hảo</p>
         </div>
-      </div>
     </div>
-  </body>
+</body>
 </html>`;
     case "ResetPassword":
       return `
                   <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Activate Your Morata Account</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
-      rel="stylesheet"
-    />
-    <style>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khôi phục mật khẩu - AdStore</title>
+      <style>
       body {
         font-family: "Poppins", sans-serif;
         margin: 0;
@@ -196,33 +192,40 @@ export const templateMail = (template, mailContent) => {
         margin: 0;
       }
     </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="background">
-        <div class="header">
-          <img
-            src="https://res.cloudinary.com/dn1s3axok/image/upload/v1732159969/adstore/logo_zhcecc.png"
-            alt="AdShop Logo"
-          />
-          <h1>Chào mừng bạn đến với AdShop!</h1>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #f4f4f4;">
+    <div style="max-width: 700px; margin: 20px auto; background-color: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+        <div style="background: linear-gradient(135deg, #2c3e50, #3498db); color: white; padding: 30px; text-align: center; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+            <img src="https://res.cloudinary.com/dn1s3axok/image/upload/v1732159969/adstore/logo_zhcecc.png" alt="AdStore Logo" style="max-height: 80px; margin-bottom: 15px;">
+            <h1 style="margin: 0; font-size: 24px;">${mailContent?.content?.title}</h1>
         </div>
-        <div class="content">
-          <h1>${mailContent?.content?.title}</h1>
-          <p style="color: white text-decoration: none;">Hello ${mailContent?.content?.email},</p>
-          <p>${mailContent?.content?.description}</p>
-          <a style="color: white" href="${mailContent?.link?.linkHerf}" class="btn"
+        
+        <div style="padding: 30px;">
+            <h2 style="color: #2c3e50;">Xin chào, ${mailContent?.content?.email}!</h2>
+            
+            <p style="color: #333;">${mailContent.content.description}</p>
+            <div style="background-color: #f9f9f9; border-left: 4px solid #3498db; padding: 15px; margin: 20px 0;">
+               <a target='_blank' style="color: white" href="${mailContent?.link?.linkHerf}" class="btn"
             >${mailContent?.link?.linkName}</a
           >
-          <p>${mailContent?.content?.warning && mailContent?.content?.warning}</p>
+            </div>
+            ${
+              mailContent.content.warning
+                ? `
+                <div style="background-color: #ffdddd; border-left: 4px solid #f44336; color: #d32f2f; padding: 15px; margin-top: 20px;">
+                    <p>${mailContent.content.warning}</p>
+                </div>
+            `
+                : ""
+            }
         </div>
-        <div class="footer">
-          <p>Thank you,<br />The AdShop Team</p>
-          <p><small>AdShop Inc., FPT Polytechnic, Ha Noi, Viet Nam</small></p>
+
+        <div style="background-color: #2c3e50; color: white; padding: 20px; text-align: center;">
+            <p>© 2024 AdStore. Đã đăng ký bản quyền</p>
+            <p>Trải nghiệm mua sắm hoàn hảo</p>
         </div>
-      </div>
     </div>
-  </body>
+</body>
 </html>`;
     case "UpdateStatusOrder":
       return `

@@ -1,6 +1,11 @@
 import asyncHandler from "../helpers/asyncHandler.js";
 import { userServices } from "../services/index.js";
 
+
+// @Get: getAllUsers
+export const getAllUsers = asyncHandler(async (req, res, next) => {
+  return await userServices.getAllUsers(req, res, next);
+});
 // @Patch change password
 export const changePassword = asyncHandler(async (req, res, next) => {
   return userServices.changePassword(req, res, next);

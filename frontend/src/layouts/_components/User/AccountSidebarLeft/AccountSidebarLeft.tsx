@@ -46,6 +46,10 @@ const AccountSidebarLeft = () => {
     //         localStorage.setItem('countdown', '30');
     //     }
     // };
+
+    useEffect(()=>{
+        console.log(profile)
+    },[profile])
     return (
         <>
             <div className="hidden flex-col bg-white md:flex">

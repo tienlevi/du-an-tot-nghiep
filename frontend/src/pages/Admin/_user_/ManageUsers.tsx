@@ -1,23 +1,25 @@
-/* eslint-disable @typescript-eslint/no-shadow */
-import { EditOutlined } from '@ant-design/icons';
+/* eslint-disable no-nested-ternary */
+import useTable from '@/hooks/_common/useTable';
 import type { TableProps } from 'antd';
-import { Image, Space, Tooltip } from 'antd';
-import _ from 'lodash';
-import { Link } from 'react-router-dom';
-import StaticImages from '~/assets';
-import WrapperPageAdmin from '~/pages/Admins/_common/WrapperPageAdmin';
-import { ROLE } from '~/constants/enum';
-import { ADMIN_ROUTES } from '~/constants/router';
-import useGetAllUsers from '~/hooks/users/Queries/useGetAllUsers';
-import { IUser } from '~/utils/api/apiHelper';
-import { cn } from '~/utils';
-import useTable from '~/hooks/_common/useTable';
+import { Image } from 'antd';
 import TableDisplay from '../../../components/_common/TableDisplay';
+import WrapperPageAdmin from '../_common/WrapperPageAdmin';
+import { IUser } from '@/types/user';
+import { ROLE } from '@/constants/enum';
+import { cn } from '@/utils';
+import useGetAllUsers from '@/hooks/users/Queries/useGetAllUsers';
 
-const ManageUsers = () => {
-    const { query, onSelectPaginateChange, onFilter, getColumnSearchProps, getFilteredValue } = useTable<IUser>();
+const ManageUser = () => {
+    const {
+        query,
+        onSelectPaginateChange,
+        onFilter,
+        getColumnSearchProps,
+        getFilteredValue,
+    } = useTable<IUser>();
     const { data } = useGetAllUsers(query);
     const users = data?.data?.users;
+    console.log(users);
     const totalDocs = data?.data?.totalDocs;
     const currentPage = Number(query.page || 1);
 
@@ -28,7 +30,7 @@ const ManageUsers = () => {
             key: 'avatar',
             render: (avatar) => (
                 <div>
-                    <Image src={avatar || StaticImages.userImageDf} width={100} height={100} />
+                    <Image src={avatar} width={100} height={100} />
                 </div>
             ),
             responsive: ['lg'],
@@ -37,17 +39,23 @@ const ManageUsers = () => {
             title: 'Tên người dùng',
             dataIndex: 'name',
             key: 'search',
+            render: (text) => <h4>{text}</h4>,
             ...getColumnSearchProps('name'),
+            width: '20%',
+        },
+        {
+            title: 'Số điện thoại',
+            dataIndex: 'phone',
+            key: 'phone',
+            render: (text) => <h4>{text}</h4>,
+            width: '20%',
         },
         {
             title: 'Email',
             dataIndex: 'email',
             key: 'email',
-        },
-        {
-            title: 'Điện thoại',
-            dataIndex: 'phone',
-            key: 'phone',
+            render: (text) => <h4>{text}</h4>,
+            width: '20%',
         },
         {
             title: 'Vai trò',
@@ -59,30 +67,21 @@ const ManageUsers = () => {
                 { text: 'Người dùng', value: ROLE.USER },
             ],
             render: (role) => (
-                <span className={cn({ ['text-red']: role === ROLE.ADMIN, ['text-green-500']: role === ROLE.USER })}>
-                    {role === ROLE.ADMIN && 'Quản trị viên'} {role === ROLE.USER && 'Người dùng'}
+                <span
+                    className={cn({
+                        ['text-red']: role === ROLE.ADMIN,
+                        ['text-green-500']: role === ROLE.USER,
+                    })}
+                >
+                    {role === ROLE.ADMIN && 'Quản trị viên'}{' '}
+                    {role === ROLE.USER && 'Người dùng'}
                 </span>
-            ),
-        },
-
-        {
-            title: 'Thao tác',
-            dataIndex: 'action',
-            key: 'action',
-            render: (_, record) => (
-                <Space size={'middle'}>
-                    <Tooltip title='Cập nhật'>
-                        <Link to={`${ADMIN_ROUTES.USERS_EDIT}/${record._id}`} className='text-blue-500'>
-                            <EditOutlined className='rounded-full bg-blue-100 p-2' style={{ fontSize: '1rem' }} />
-                        </Link>
-                    </Tooltip>
-                </Space>
             ),
         },
     ];
 
     return (
-        <WrapperPageAdmin title='Quản lý người dùng'>
+        <WrapperPageAdmin title="Danh sách người dùng">
             <TableDisplay<IUser>
                 onFilter={onFilter}
                 columns={columns}
@@ -95,4 +94,4 @@ const ManageUsers = () => {
     );
 };
 
-export default ManageUsers;
+export default ManageUser;

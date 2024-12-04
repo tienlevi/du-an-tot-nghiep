@@ -27,6 +27,7 @@ export const handleInsertData = async (req, res) => {
     const user = await User.create({
       email: "tuan@gmail.com",
       name: "tuan",
+      isActive: true,
       password: "11222212",
       phone: "123456789",
       role: ROLE.ADMIN,

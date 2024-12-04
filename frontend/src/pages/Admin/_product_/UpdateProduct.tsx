@@ -63,6 +63,7 @@ const UpdateProduct = () => {
 
     useEffect(() => {
         if (targetProduct && colors?.data.colors && sizes?.data.sizes) {
+            console.log('hello');
             const { variants, ...rest } = targetProduct;
 
             let newVariantFile: UploadFile<any>[][] = [];
@@ -74,7 +75,7 @@ const UpdateProduct = () => {
                 }) as UploadFile<any>[];
                 newVariantFile = [...newVariantFile];
                 newVariantFile[i] = image;
-                setVariantFile((prev) => [...prev, image]);
+
                 const newVaria: any = {
                     ...varia,
                     size: varia.size._id,
@@ -83,6 +84,7 @@ const UpdateProduct = () => {
                 };
                 return newVaria;
             });
+            setVariantFile(newVariantFile);
 
             const initial: any = {
                 variants: variaConverts,

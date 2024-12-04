@@ -39,6 +39,13 @@ const userService = {
         );
         return res.data;
     },
+    async changePassword(data: { password: string; newPassword: string }) {
+        const res = await instance.patch<IAxiosResponse<null>>(
+            `${USER_ENDPOINT.CHANGE_PASSWORD}`,
+            data,
+        );
+        return res.data;
+    },
 };
 
 export default userService;

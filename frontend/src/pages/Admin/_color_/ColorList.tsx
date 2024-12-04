@@ -27,6 +27,20 @@ const ColorList = () => {
             ...getColumnSearchProps('name'),
             width: '20%',
         },
+        {
+            title: 'Mã hex',
+            dataIndex: 'hex',
+            key: 'hex',
+            render: (text) => (
+                <h4
+                    style={{ color: text }}
+                    className="inline-block bg-slate-50"
+                >
+                    {text}
+                </h4>
+            ),
+            width: '20%',
+        },
 
         {
             title: 'Thao tác',

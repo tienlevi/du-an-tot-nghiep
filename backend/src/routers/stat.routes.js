@@ -1,18 +1,28 @@
 import { Router } from "express";
 import { statsController } from "../controllers/index.js";
 import { authenticate } from "../middleware/authenticateMiddleware.js";
+import { authorsize } from "../middleware/authorizeMiddleware.js";
+import { ROLE } from "../constants/role.js";
+
 const router = Router();
 
 
 // router.use(authenticate)
 // @Get
-router.get("/total", statsController.totalStats);
-router.get("/daily", statsController.orderByDayStats);
-router.get("/monthly", statsController.orderByMonthStats);
-router.get('/yearly', statsController.orderByYearStats);
-router.get('/dateRange', statsController.orderByDateRangeStats);
-router.get('/productStats',statsController.getProductStats)
-router.get('/topBuyers', statsController.getTop5Buyers);
+router.get("/total", authenticate,
+  authorsize(ROLE.ADMIN),statsController.totalStats);
+router.get("/daily", authenticate,
+  authorsize(ROLE.ADMIN),statsController.orderByDayStats);
+router.get("/monthly", authenticate,
+  authorsize(ROLE.ADMIN),statsController.orderByMonthStats);
+router.get('/yearly', authenticate,
+  authorsize(ROLE.ADMIN),statsController.orderByYearStats);
+router.get('/dateRange', authenticate,
+  authorsize(ROLE.ADMIN),statsController.orderByDateRangeStats);
+router.get('/productStats',authenticate,
+  authorsize(ROLE.ADMIN),statsController.getProductStats)
+router.get('/topBuyers', authenticate,
+  authorsize(ROLE.ADMIN),statsController.getTop5Buyers);
 
 
 

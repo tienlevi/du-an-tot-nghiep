@@ -1,12 +1,17 @@
 import { Router } from "express";
 import { userControllers } from "../controllers/index.js";
 import { authenticate } from "../middleware/authenticateMiddleware.js";
+import { authorsize } from "../middleware/authorizeMiddleware.js";
+import { ROLE } from "../constants/role.js";
+
 import upload from "../middleware/multerMiddleware.js";
 
 const userRouter = Router();
 
 // Get
 userRouter.get("/profile", authenticate, userControllers.getProfile);
+userRouter.get("/all", authenticate,
+  authorsize(ROLE.ADMIN), userControllers.getAllUsers);
 userRouter.get('/private/wish-list', authenticate, userControllers.getWishListByUser);
 
 
