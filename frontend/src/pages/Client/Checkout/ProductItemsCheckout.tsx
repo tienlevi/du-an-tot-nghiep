@@ -23,6 +23,7 @@ import showMessage from '@/utils/ShowMessage';
 import PolicyModal from '@/components/PolicyModal';
 import { RadioChangeEvent } from 'antd/lib';
 import { useVnPayOrder } from '@/hooks/orders/Mutations/useVnPayOrder';
+import { toast } from 'react-toastify';
 
 const { Text, Title } = Typography;
 
@@ -35,7 +36,7 @@ const ProductItemsCheckout: React.FC = () => {
     const createOrderVnPay = useVnPayOrder();
     const { description, receiverInfo, shippingAddress, tax, shippingFee } =
         useSelector((state: RootState) => state.order);
-    const userId = useTypedSelector(state=> state.auth.user?._id)
+    const userId = useTypedSelector((state) => state.auth.user?._id);
     const subTotal =
         cartItems?.reduce(
             (acc: any, item: any) => acc + +item.price * item.quantity,
@@ -70,7 +71,7 @@ const ProductItemsCheckout: React.FC = () => {
                 },
                 {
                     onSuccess: () => {
-                        navigate('/success');
+                        toast.success('Đặt hàng thành công');
                     },
                     onError: (error: any) => {
                         showMessage(error.response.data.message, 'error');
