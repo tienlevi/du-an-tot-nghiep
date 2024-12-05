@@ -1,4 +1,5 @@
 import { envConfig } from "../config/env.js";
+import mongoose from 'mongoose'; 
 import generateOrderStatusLog from "../utils/generateOrderStatusLog.js";
 import { ORDER_STATUS } from "../constants/orderStatus.js";
 import { PAYMENT_METHOD } from "../constants/paymentMethod.js";
@@ -39,9 +40,10 @@ export const vnpayReturn = async (req, res, next) => {
   const secureHash = vnp_Params["vnp_SecureHash"];
   const responseCode = vnp_Params["vnp_ResponseCode"];
   const signed = buildSigned(vnp_Params);
-
+ console.log(req.userId);
   if (secureHash === signed) {
     const order = await Order.findById(vnp_Params["vnp_TxnRef"]);
+
     if (!order) {
       return res.status(400).json({
         code: "01",
@@ -52,7 +54,7 @@ export const vnpayReturn = async (req, res, next) => {
     }
 
     if (responseCode === "00") {
-      const orderDetail = await Order.findById(vnp_Params["vnp_TxnRef"])
+      const userId = order.userId;
       const data = await Order.findByIdAndUpdate(
         vnp_Params["vnp_TxnRef"],
         {
@@ -60,26 +62,35 @@ export const vnpayReturn = async (req, res, next) => {
           orderStatus: ORDER_STATUS.CONFIRMED,
           paymentMethod: PAYMENT_METHOD.CARD,
           orderStatusLogs: generateOrderStatusLog({
-            statusChangedBy: req.userId,
+            statusChangedBy: userId,  
             orderStatus: ORDER_STATUS.CONFIRMED,
             reason: "User paid by VNPay successfully",
           }),
         },
         { new: true }
       );
-      await Promise.all(
-        orderDetail.items.map(async (product) => {
-          await Cart.findOneAndUpdate(
-            { userId: req.userId },
-            {
-              $pull: {
-                items: { product: product.productId, variant: product.variantId },
+        await Promise.all(
+          order.items.map(async (product) => {
+            console.log('Removing product:', product);
+            
+               await Cart.findOneAndUpdate(
+              { 
+                userId: userId,
+                'items.product': new mongoose.Types.ObjectId(product.productId),
+                'items.variant': new mongoose.Types.ObjectId(product.variantId)
               },
-            },
-            { new: true }
-          );
-        })
-      );
+              {
+                $pull: {
+                  items: { 
+                    product: new mongoose.Types.ObjectId(product.productId),
+                    variant: new mongoose.Types.ObjectId(product.variantId)
+                  }
+                }
+              },
+              { new: true }
+            );
+          })
+        );
       await updateStockOnCreateOrder(order.items);
       return res.status(200).json({
         code: responseCode,
