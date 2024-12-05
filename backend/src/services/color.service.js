@@ -52,9 +52,13 @@ export const getDetailedColor = async (req, res, next) => {
 
 // @Post update color
 export const updateColor = async (req, res, next) => {
-  const newColor = await Color.findOne({ _id: req.params.id }, req.body, {
-    new: true,
-  });
+  const newColor = await Color.findOneAndUpdate(
+    { _id: req.params.id },
+    req.body,
+    {
+      new: true,
+    }
+  );
 
   return res.status(StatusCodes.OK).json(
     customResponse({
