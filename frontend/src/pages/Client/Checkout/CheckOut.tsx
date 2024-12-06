@@ -9,6 +9,8 @@ import useCalculateFee from '@/hooks/shipping/useCalculateFee';
 import { setShippingFee } from '@/store/slice/orderSlice';
 import ProductItemsCheckout from './ProductItemsCheckout';
 import ReceiverCheckoutInfo from './ReceiverCheckoutInfo';
+import { useCart } from '@/hooks/_common/useCart';
+import useGetMyCart from '@/hooks/cart/Queries/useGetMyCart';
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -17,22 +19,24 @@ const Checkout: React.FC = () => {
     useDocumentTitle('Thanh toán đơn hàng');
 
     const { shippingAddress } = useSelector((state: RootState) => state.order);
-    const { serviceId, districtId, wardCode, province} = shippingAddress;
+    const { serviceId, districtId, wardCode, province } = shippingAddress;
     const { data: shippingFee } = useCalculateFee({
         serviceId,
         wardCode,
         districtId,
     });
+    const { data: cartUser } = useGetMyCart();
+    console.log(cartUser);
     const dispatch = useDispatch();
 
     useEffect(() => {
         if (shippingFee) {
             dispatch(setShippingFee(shippingFee.total));
         } else {
-            if(province.includes('Hà Nội')){
-                dispatch(setShippingFee(0))
-            }else{
-                dispatch(setShippingFee(35000))
+            if (province.includes('Hà Nội')) {
+                dispatch(setShippingFee(0));
+            } else {
+                dispatch(setShippingFee(35000));
             }
         }
     }, [shippingFee]);

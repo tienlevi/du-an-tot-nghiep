@@ -2,6 +2,8 @@ import TableDisplay from '@/components/_common/TableDisplay';
 import { ADMIN_ROUTES } from '@/constants/router';
 import useTable from '@/hooks/_common/useTable';
 import useGetCategories from '@/hooks/categories/Queries/useGetCategories';
+import useHideProduct from '@/hooks/Products/Mutations/useHideProduct';
+import useShowProduct from '@/hooks/Products/Mutations/useShowProduct';
 import useGetProducts from '@/hooks/Products/Queries/useGetProducts';
 import useGetTags from '@/hooks/Tags/Queries/useGetTags';
 import WrapperPageAdmin from '@/pages/Admin/_common/WrapperPageAdmin';
@@ -23,7 +25,8 @@ const ListAll = () => {
 
     const currentPage = Number(query.page || 1);
     const { data: allProducts } = useGetProducts(query);
-
+    const { mutate: mutateHideProduct } = useHideProduct();
+    const { mutate: mutateShowProduct } = useShowProduct();
     const { data: categories } = useGetCategories({ limit: '100000' });
     const { data: tags } = useGetTags({ limit: '100000' });
 
@@ -43,6 +46,8 @@ const ListAll = () => {
         query,
         getColumnSearchProps,
         getFilteredValue,
+        mutateHideProduct,
+        mutateShowProduct,
     }) as ColumnsType<IProduct>;
 
     return (

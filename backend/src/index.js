@@ -8,6 +8,7 @@ import errorHandler from "./errors/errorHandle.js";
 import { envConfig } from "./config/env.js";
 import { initializeApp } from "firebase/app";
 import { handleInsertData } from "./data/index.js";
+const app = express();
 
 
 // firebase

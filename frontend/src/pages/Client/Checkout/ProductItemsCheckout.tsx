@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Button,
     Card,
@@ -23,19 +23,22 @@ import showMessage from '@/utils/ShowMessage';
 import PolicyModal from '@/components/PolicyModal';
 import { RadioChangeEvent } from 'antd/lib';
 import { useVnPayOrder } from '@/hooks/orders/Mutations/useVnPayOrder';
+import useGetMyCart from '@/hooks/cart/Queries/useGetMyCart';
 
 const { Text, Title } = Typography;
 
 const ProductItemsCheckout: React.FC = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { data: cartUser, refetch } = useGetMyCart();
+
     const cartItems = useTypedSelector((state) => state.cartReducer.items);
     const [policyAgreed, setPolicyAgreed] = useState<boolean>(false);
     const [paymentMethod, setPaymentMethod] = useState<number>(0);
     const createOrderVnPay = useVnPayOrder();
     const { description, receiverInfo, shippingAddress, tax, shippingFee } =
         useSelector((state: RootState) => state.order);
-    const userId = useTypedSelector(state=> state.auth.user?._id)
+    const userId = useTypedSelector((state) => state.auth.user?._id);
     const subTotal =
         cartItems?.reduce(
             (acc: any, item: any) => acc + +item.price * item.quantity,
@@ -45,6 +48,21 @@ const ProductItemsCheckout: React.FC = () => {
     const totalPrice = subTotal + shippingFee;
 
     const createOrder = useCreateOrder();
+
+    useEffect(() => {
+        const idProductCart =
+            cartItems.map((item: any) => item.productId) || [];
+        const idProductCartCheckout =
+            cartUser?.items.map((item) => item.productId) || [];
+
+        const hasProductHide = idProductCart.some(
+            (item) => !idProductCartCheckout.includes(item),
+        );
+        if (hasProductHide) {
+            refetch();
+            navigate('/cart');
+        }
+    });
 
     const handleCheckout = () => {
         if (paymentMethod === 0) {

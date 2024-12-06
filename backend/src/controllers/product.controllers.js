@@ -82,3 +82,13 @@ export const updateProduct = asyncHandler(async (req, res) => {
     })
   );
 });
+
+
+// @PATCH: hiddenProduct
+export const hiddenProduct = asyncHandler(async (req, res, next) => {
+  return await productService.hiddenProduct(req, res, next);
+});
+// @PATCH: showProduct
+export const showProduct = asyncHandler(async (req, res, next) => {
+  return await productService.showProduct(req, res, next);
+});

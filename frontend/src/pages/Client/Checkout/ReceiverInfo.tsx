@@ -18,6 +18,7 @@ const ReceiverInfo: React.FC<ReceiverInfoProps> = ({ form }) => {
     };
     const { data: customer } = useGetProfile();
 
+    console.log(customer);
     React.useEffect(() => {
         if (customer) {
             form.setFieldsValue({
@@ -28,73 +29,102 @@ const ReceiverInfo: React.FC<ReceiverInfoProps> = ({ form }) => {
         }
     }, [customer, form]);
     return (
-        <Card className='w-full shadow-md transition-shadow duration-300 hover:shadow-lg'>
-            <Title level={4} className='mb-6'>
+        <Card className="w-full shadow-md transition-shadow duration-300 hover:shadow-lg">
+            <Title level={4} className="mb-6">
                 Thông tin khách hàng
             </Title>
             <Form.Item
-                name='customerName'
-                label='Tên khách hàng'
-                rules={[{ required: true, message: 'Vui lòng nhập tên khách hàng' }]}
+                name="customerName"
+                label="Tên khách hàng"
+                rules={[
+                    { required: true, message: 'Vui lòng nhập tên khách hàng' },
+                ]}
             >
-                <Input prefix={<UserOutlined className='text-gray-400' />} />
+                <Input prefix={<UserOutlined className="text-gray-400" />} />
             </Form.Item>
             <Form.Item
-                name='customerEmail'
-                label='Email'
+                name="customerEmail"
+                label="Email"
                 rules={[
                     { required: true, message: 'Vui lòng nhập email' },
                     { type: 'email', message: 'Email không hợp lệ' },
                 ]}
             >
-                <Input prefix={<MailOutlined className='text-gray-400' />} />
+                <Input prefix={<MailOutlined className="text-gray-400" />} />
             </Form.Item>
             <Form.Item
-                name='customerPhone'
-                label='Số điện thoại'
+                name="customerPhone"
+                label="Số điện thoại"
                 rules={[
                     { required: true, message: 'Vui lòng nhập số điện thoại' },
-                    { pattern: /^[0-9]{10}$/, message: 'Số điện thoại không hợp lệ' },
+                    {
+                        pattern: /^[0-9]{10}$/,
+                        message: 'Số điện thoại không hợp lệ',
+                    },
                 ]}
             >
-                <Input prefix={<PhoneOutlined className='text-gray-400' />} />
+                <Input prefix={<PhoneOutlined className="text-gray-400" />} />
             </Form.Item>
 
             <Divider />
 
-            <div className='mb-4 flex items-center justify-between'>
+            <div className="mb-4 flex items-center justify-between">
                 <Text strong>Giao đến người nhận khác</Text>
-                <Switch onChange={toggleReceiverInfo} checked={showReceiverInfo} />
+                <Switch
+                    onChange={toggleReceiverInfo}
+                    checked={showReceiverInfo}
+                />
             </div>
 
             {showReceiverInfo && (
                 <>
                     <Form.Item
-                        name='receiverName'
-                        label='Tên người nhận'
-                        rules={[{ required: true, message: 'Vui lòng nhập tên người nhận' }]}
+                        name="receiverName"
+                        label="Tên người nhận"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập tên người nhận',
+                            },
+                        ]}
                     >
-                        <Input prefix={<UserOutlined className='text-gray-400' />} />
+                        <Input
+                            prefix={<UserOutlined className="text-gray-400" />}
+                        />
                     </Form.Item>
                     <Form.Item
-                        name='receiverEmail'
-                        label='Email người nhận'
+                        name="receiverEmail"
+                        label="Email người nhận"
                         rules={[
-                            { required: true, message: 'Vui lòng nhập email người nhận' },
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập email người nhận',
+                            },
                             { type: 'email', message: 'Email không hợp lệ' },
                         ]}
                     >
-                        <Input prefix={<MailOutlined className='text-gray-400' />} />
+                        <Input
+                            prefix={<MailOutlined className="text-gray-400" />}
+                        />
                     </Form.Item>
                     <Form.Item
-                        name='receiverPhone'
-                        label='Số điện thoại người nhận'
+                        name="receiverPhone"
+                        label="Số điện thoại người nhận"
                         rules={[
-                            { required: true, message: 'Vui lòng nhập số điện thoại người nhận' },
-                            { pattern: /^[0-9]{10}$/, message: 'Số điện thoại không hợp lệ' },
+                            {
+                                required: true,
+                                message:
+                                    'Vui lòng nhập số điện thoại người nhận',
+                            },
+                            {
+                                pattern: /^[0-9]{10}$/,
+                                message: 'Số điện thoại không hợp lệ',
+                            },
                         ]}
                     >
-                        <Input prefix={<PhoneOutlined className='text-gray-400' />} />
+                        <Input
+                            prefix={<PhoneOutlined className="text-gray-400" />}
+                        />
                     </Form.Item>
                 </>
             )}

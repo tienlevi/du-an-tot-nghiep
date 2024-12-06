@@ -11,6 +11,7 @@ import Size from "../models/size.js";
 import Color from "../models/color.js";
 import User from "../models/user.js";
 import Order from "../models/order.js";
+import Cart from "../models/cart.js";
 import { getRandomIntegerBelow } from "../utils/getRandomIntegerBelow.js";
 import { envConfig } from "../config/env.js";
 import { generateToken } from "../services/token.service.js";
@@ -23,6 +24,7 @@ export const handleInsertData = async (req, res) => {
     await Size.deleteMany({});
     await Color.deleteMany({});
     await User.deleteMany({});
+    await Cart.deleteMany({});
 
     const user = await User.create({
       email: "tuan@gmail.com",

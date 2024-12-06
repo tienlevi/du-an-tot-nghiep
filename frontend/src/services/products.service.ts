@@ -1,3 +1,4 @@
+import { PRODUCT_ENDPOINT } from '@/constants/endpoint';
 import { Params } from '@/types/Api';
 import { IAxiosResponse } from '@/types/AxiosResponse';
 import { IProduct, IProductResponse } from '@/types/ProductNew';
@@ -50,6 +51,14 @@ export const ProductServices = {
             `/products/all`,
             { params },
         );
+        return res.data;
+    },
+    async hideProduct(id: string) {
+        const res = await instance.patch<IAxiosResponse<null>>(`${PRODUCT_ENDPOINT.HIDE}/${id}`);
+        return res.data;
+    },
+    async showProduct(id: string) {
+        const res = await instance.patch<IAxiosResponse<null>>(`${PRODUCT_ENDPOINT.SHOW}/${id}`);
         return res.data;
     },
 };

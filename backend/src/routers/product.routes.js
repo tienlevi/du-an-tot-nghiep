@@ -26,4 +26,7 @@ productRoutes.post(
   productControllers.createProduct
 );
 
+productRoutes.patch('/hide/:id', authenticate, authorsize(ROLE.ADMIN), productControllers.hiddenProduct);
+productRoutes.patch('/show/:id', authenticate, authorsize(ROLE.ADMIN), productControllers.showProduct);
+
 export default productRoutes;

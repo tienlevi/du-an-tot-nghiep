@@ -4,6 +4,7 @@ import customResponse from "../helpers/response.js";
 import Cart from "../models/cart.js";
 import Product from "../models/product.js";
 import mongoose from "mongoose";
+import { clientRequiredFields } from "../helpers/filterRequiredClient.js";
 
 // @Get cart by user
 export const getMyCart = async (req, res, next) => {
@@ -57,6 +58,7 @@ export const getMyCart = async (req, res, next) => {
   const itemsResponse = checkStock.map((item) => {
     const newItem = {
       productId: item.product._id,
+      isActive: item.product.isActive,
       variantId: item.variant,
       quantity: item.quantity,
       name: item.product.name,
@@ -67,7 +69,7 @@ export const getMyCart = async (req, res, next) => {
       ...item.variantObj,
     };
     return newItem;
-  });
+  }).filter((el) => el.isActive);
   const myCart = {
     userId: cartUser.userId,
     items: itemsResponse,

@@ -9,10 +9,6 @@ start-frontend:
 
 start-backend:
 	cd ./backend && npm run dev &
-	until curl -s http://localhost:8000/api/import-data; do \
-		echo "Waiting for backend to start..."; \
-		sleep 2; \
-	done
 
 clean:
 	@echo "Killing processes on ports 3000 and 8000..."

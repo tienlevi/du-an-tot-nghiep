@@ -17,6 +17,7 @@ export interface IVariant {
 export type IProduct = {
     _id: string;
     name: string;
+    isActive: boolean;
     category: string | { name: string; _id: string };
     discount: number;
     price: number;

@@ -17,10 +17,14 @@ export const ProductsListColumns = ({
     query,
     getColumnSearchProps,
     getFilteredValue,
+    mutateHideProduct,
+    mutateShowProduct,
 }: {
     categoriesFilter: IFilter[];
     tagsFilter?: IFilter[];
     query: Params;
+    mutateHideProduct: (id: string) => void;
+    mutateShowProduct: (id: string) => void;
     getColumnSearchProps: (dataIndex: string) => ColumnType<any>;
     getFilteredValue: (key: string) => string[] | undefined;
 }): TableProps<IProduct>['columns'] => {
@@ -144,6 +148,27 @@ export const ProductsListColumns = ({
                 );
             },
         },
+        {
+            title: 'Trạng thái',
+            key: 'isActive',
+            filteredValue: getFilteredValue('isActive'),
+            filters: [
+                { text: 'Ẩn', value: 'false' },
+                { text: 'Hiện', value: 'true' },
+            ],
+            render: (_, record) => {
+                return (
+                    <>
+                        <p className="text-red">
+                            {!record.isActive && 'Đã ẩn'}
+                        </p>
+                        <p className="text-green-400">
+                            {record.isActive && 'Đang hiển thị'}
+                        </p>
+                    </>
+                );
+            },
+        },
 
         {
             title: 'Thao tác',
@@ -161,6 +186,38 @@ export const ProductsListColumns = ({
                             Cập nhật
                         </Link>
                     </Tooltip>
+                    {record.isActive && (
+                        <Tooltip title="Ẩn sản phẩm này">
+                            <Popconfirm
+                                placement="leftBottom"
+                                title="Ấn sản phẩm khỏi người dùng?"
+                                description="Người dùng sẽ không thể thấy sản phẩm này của bạn."
+                                onConfirm={() => mutateHideProduct(record._id)}
+                                okText="Đồng ý"
+                                cancelText="Đóng"
+                            >
+                                <p className="cursor-pointer text-blue-500 transition-colors duration-500 hover:text-blue-400">
+                                    Ẩn đi
+                                </p>
+                            </Popconfirm>
+                        </Tooltip>
+                    )}
+                    {!record.isActive && (
+                        <Tooltip title="Hiện thị sản phẩm này">
+                            <Popconfirm
+                                placement="leftBottom"
+                                title="Hiện thị sản phẩm này?"
+                                description="Người dùng sẽ thầy sản phẩm này của bạn."
+                                onConfirm={() => mutateShowProduct(record._id)}
+                                okText="Đồng ý"
+                                cancelText="Đóng"
+                            >
+                                <p className="text-blue-500 transition-colors duration-500 hover:text-blue-400">
+                                    Hiển thị
+                                </p>
+                            </Popconfirm>
+                        </Tooltip>
+                    )}
                 </Space>
             ),
         },

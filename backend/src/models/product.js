@@ -12,6 +12,7 @@ const variantSchema = new mongoose.Schema({
 const productSchema = new mongoose.Schema(
   {
     name: { type: String },
+    isActive: {type: Boolean, default: true},
     category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",

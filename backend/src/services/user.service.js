@@ -5,6 +5,7 @@ import APIQuery from "../utils/APIQuery.js";
 import User from "../models/user.js";
 import bcrypt from "bcryptjs";
 import { removeUploadedFile, uploadSingleFile } from "../utils/upload.js";
+import { clientRequiredFields } from "../helpers/filterRequiredClient.js";
 
 // GET: Get all users
 // @Get: getAllUsers
@@ -150,6 +151,7 @@ export const getWishListByUser = async (req, res) => {
     .select('wishList')
     .populate({
       path: 'wishList',
+      match: clientRequiredFields,
       populate: [
         {
           path: 'variants',

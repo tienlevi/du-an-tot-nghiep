@@ -1,7 +1,10 @@
-import { BadRequestError } from "../errors/customError.js";
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import { BadRequestError, NotFoundError } from "../errors/customError.js";
 import Product from "../models/product.js";
 import APIQuery from "../utils/APIQuery.js";
 import { removeUploadedFile, uploadFiles } from "../utils/upload.js";
+import { clientRequiredFields } from "../helpers/filterRequiredClient.js";
+import customResponse from "../helpers/response.js";
 
 
 function hasDuplicates(array) {
@@ -33,7 +36,7 @@ export const getBestSellingProducts = async () => {
   return products;
 };
 export const getDiscountProducts = async () => {
-  const products = await Product.find()
+  const products = await Product.find(...clientRequiredFields)
     .populate("variants.color")
     .populate("variants.size")
     .sort({ discount: -1 })
@@ -152,7 +155,7 @@ export const updateProduct = async (
 };
 
 export const getProductById = async (productId) => {
-  const product = await Product.findById(productId)
+  const product = await Product.findOne({_id: productId, ...clientRequiredFields})
     .populate("variants.color")
     .populate("variants.size");
   if (!product)
@@ -161,4 +164,32 @@ export const getProductById = async (productId) => {
     );
 
   return product;
+};
+
+
+// @PATCH: hiddenProduct
+export const hiddenProduct = async (req, res, next) => {
+  const id = req.params.id;
+  const product = await Product.findOneAndUpdate({ _id: id, isActive: true }, { isActive: false }, { new: true });
+
+  if (!product) {
+      throw new NotFoundError(`Không tìm thấy sản phẩm này: ${id}`);
+  }
+
+  return res
+      .status(StatusCodes.OK)
+      .json(customResponse({ data: product, success: true, status: StatusCodes.OK, message: ReasonPhrases.OK }));
+};
+// @PATCH: showProduct
+export const showProduct = async (req, res, next) => {
+  const id = req.params.id;
+  const product = await Product.findOneAndUpdate({ _id: id, isActive: false }, { isActive: true }, { new: true });
+
+  if (!product) {
+      throw new NotFoundError(`${ReasonPhrases.NOT_FOUND} product with id: ${id}`);
+  }
+
+  return res
+      .status(StatusCodes.OK)
+      .json(customResponse({ data: product, success: true, status: StatusCodes.OK, message: ReasonPhrases.OK }));
 };
