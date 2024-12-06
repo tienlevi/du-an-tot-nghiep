@@ -49,6 +49,13 @@ export const ProductServices = {
     async getAll(params: any) {
         const res = await instance.get<IAxiosResponse<IAllProductResponseNew>>(
             `/products/all`,
+            { params: {...params, isActive:true} },
+        );
+        return res.data;
+    },
+    async getAllForAdmin(params: any) {
+        const res = await instance.get<IAxiosResponse<IAllProductResponseNew>>(
+            `/products/all`,
             { params },
         );
         return res.data;

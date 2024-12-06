@@ -5,6 +5,7 @@ import useGetCategories from '@/hooks/categories/Queries/useGetCategories';
 import useHideProduct from '@/hooks/Products/Mutations/useHideProduct';
 import useShowProduct from '@/hooks/Products/Mutations/useShowProduct';
 import useGetProducts from '@/hooks/Products/Queries/useGetProducts';
+import useGetProductsForAdmin from '@/hooks/Products/Queries/useGetProductsForAdmin';
 import useGetTags from '@/hooks/Tags/Queries/useGetTags';
 import WrapperPageAdmin from '@/pages/Admin/_common/WrapperPageAdmin';
 import { ProductsListColumns } from '@/pages/Admin/_product_/Helper/tableList';
@@ -24,7 +25,7 @@ const ListAll = () => {
     } = useTable<IProduct>();
 
     const currentPage = Number(query.page || 1);
-    const { data: allProducts } = useGetProducts(query);
+    const { data: allProducts } = useGetProductsForAdmin(query);
     const { mutate: mutateHideProduct } = useHideProduct();
     const { mutate: mutateShowProduct } = useShowProduct();
     const { data: categories } = useGetCategories({ limit: '100000' });

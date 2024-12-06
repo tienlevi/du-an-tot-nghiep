@@ -28,7 +28,7 @@ export const getAllProducts = async (query) => {
   return { products, totalDocs };
 };
 export const getBestSellingProducts = async () => {
-  const products = await Product.find()
+  const products = await Product.find({ ...clientRequiredFields })
     .populate("variants.color")
     .populate("variants.size")
     .sort({ sold: -1 })
@@ -36,7 +36,7 @@ export const getBestSellingProducts = async () => {
   return products;
 };
 export const getDiscountProducts = async () => {
-  const products = await Product.find(...clientRequiredFields)
+  const products = await Product.find({ ...clientRequiredFields })
     .populate("variants.color")
     .populate("variants.size")
     .sort({ discount: -1 })
