@@ -5,7 +5,7 @@ export const handleCreateProduct = (
     createProduct: (product: FormData) => void,
 ) => {
     const formData = new FormData();
-    const { name, description, variants, price, discount, tags, category } =
+    const { name, description, variants, price, discount, tags, category, isActive } =
         data;
     const firstElement = 0;
     const newVariants = [];
@@ -36,6 +36,7 @@ export const handleCreateProduct = (
     }
     /* eslint-enable */
     formData.append('name', name);
+    formData.append('isActive', isActive ? 'true' : 'false');
     formData.append('category', category);
     formData.append('price', `${price}`);
     formData.append('discount', discount ? `${discount}` : '0');

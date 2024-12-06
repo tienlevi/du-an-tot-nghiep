@@ -1,4 +1,4 @@
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import {
     Button,
     Form,
@@ -30,6 +30,7 @@ import { IProductForm } from '@/types/Product';
 
 const CreateProduct = () => {
     const [form] = Form.useForm<any>();
+    const [isActive, setIsActive] = useState<boolean>(false);
     const [attributesFile, setAttributesFile] = useState<UploadFile[][]>([]);
 
     const { data: categories } = useGetCategories({ limit: '100000' });
@@ -58,6 +59,15 @@ const CreateProduct = () => {
     const onFinish: FormProps<IProductForm>['onFinish'] = (values) => {
         handleCreateProduct(values, createPro);
     };
+    const handleSaveAndShow = () => {
+        setIsActive(true);
+        form.setFieldsValue({ isActive: true });
+    };
+
+    const handleSaveAndHide = () => {
+        setIsActive(false);
+        form.setFieldsValue({ isActive: false });
+    };
     return (
         <WrapperPageAdmin
             title="Thêm mới sản phẩm"
@@ -71,6 +81,9 @@ const CreateProduct = () => {
                 {/* <Form layout="vertical" form={form}> */}
                 <div className="grid grid-cols-1 gap-4">
                     <WrapperCard title="Thông tin cơ bản">
+                        <Form.Item name="isActive" className="hidden" hidden>
+                            <Input type="hidden" />
+                        </Form.Item>
                         <Form.Item<any>
                             label="Tên sản phẩm"
                             name="name"
@@ -293,11 +306,24 @@ const CreateProduct = () => {
                             type="default"
                             htmlType="submit"
                             className="mr-3 px-5"
-                            loading={isPending}
+                            loading={isPending && !isActive}
                             disabled={isPending}
+                            onClick={handleSaveAndHide}
                             size="large"
                         >
-                            Lưu
+                            Lưu và ẩn
+                        </Button>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            icon={<PlusSquareOutlined />}
+                            className="mr-3 px-5"
+                            loading={isPending && isActive}
+                            disabled={isPending}
+                            size="large"
+                            onClick={handleSaveAndShow}
+                        >
+                            Lưu và hiển thị
                         </Button>
                     </div>
                 </Form.Item>

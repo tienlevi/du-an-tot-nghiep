@@ -43,6 +43,7 @@ export type IProductFiles = {
 
 export type IProductForm = {
     name: string;
+    isActive: boolean;
     category: string;
     description: string;
     variants: IProductVariation[];
