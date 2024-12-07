@@ -117,7 +117,9 @@ export const addToCart = async (req, res, next) => {
     );
     const currentQuantity = productInThisCart?.quantity || 0;
     const newQuantity = currentQuantity + quantity;
-
+    if(newQuantity > item.stock){
+      throw new BadRequestError('Sản phẩm vượt quá số lượng trong kho')
+    }
     updatedCart = await Cart.findOneAndUpdate(
       { userId, "items.product": productId, "items.variant": variantId },
       {

@@ -27,7 +27,8 @@ export default function DefaultCard({ item }: { item: IProduct }) {
     const user = useSelector((state: RootState) => state.auth.user);
     const { data: allWishList } = useGetAllWishlist(query);
     const wishListIds = allWishList?.data?.wishList?.map((item) => item._id);
-    const { handleRemoveWishList, isPending: pendingRemove } = useMutationRemoveWishList();
+    const { handleRemoveWishList, isPending: pendingRemove } =
+        useMutationRemoveWishList();
     const debouncedRemove = debounce(
         (id: string) => handleRemoveWishList(id),
         500,
@@ -50,15 +51,16 @@ export default function DefaultCard({ item }: { item: IProduct }) {
         ? item.price / (1 - item.discount / 100)
         : item.price;
     return (
-        <div className="group cursor-pointer">
+        <div className="group cursor-pointer mb-2">
             <div className="w-full relative">
                 <Link to={`/products/${item._id}`}>
                     <img
-                        className="object-contain "
+                        className="w-full"
                         src={item.variants[0].image}
-                        alt=""
+                        alt={item.name}
                     />
                 </Link>
+
                 <div className="opacity-0 px-2 py-1 group-hover:opacity-100 flex items-center w-full justify-between duration-300 absolute bottom-0">
                     <DrawerAddCart
                         item={item}
@@ -66,6 +68,7 @@ export default function DefaultCard({ item }: { item: IProduct }) {
                     >
                         Thêm vào giỏ hàng
                     </DrawerAddCart>
+
                     <button
                         onClick={() => handleAddWishlist()}
                         className="w-1/6 h-[32px] bg-global hover:bg-opacity-80 duration-300 rounded-lg text-white"
@@ -80,19 +83,21 @@ export default function DefaultCard({ item }: { item: IProduct }) {
                     </button>
                 </div>
             </div>
+
             <Link to={`/products/${item._id}`} className="text-global text-sm">
                 <h3 className=" font-semibold group-hover:text-hover mt-4 w-[90%] text-ellipsis whitespace-nowrap overflow-hidden">
                     {item.name}
                 </h3>
+
                 {/* <div className="flex items-center ">
                     <Rate allowHalf value={5} disabled className="text-xs" />{' '}
                     {!item._id && (
                         <span className="text-xs text-global">( 5 )</span>
                     )}
                 </div> */}
-                <p className="font-semibold mt-1">{Currency(item.price)}</p>
-                {item.discount !== 0 ? (
-                    <div className="mt-1">
+                <div className="flex gap-2 items-center">
+                    <p className="font-semibold">{Currency(item?.price)}</p>
+                    {item.discount !== 0 && (
                         <div className="flex gap-2 items-center">
                             <span className="line-through">
                                 {Currency(originalPrice)}
@@ -101,6 +106,10 @@ export default function DefaultCard({ item }: { item: IProduct }) {
                                 {item.discount}%
                             </span>
                         </div>
+                    )}
+                </div>
+                {item.discount !== 0 ? (
+                    <div>
                         <div className="mt-2">
                             <span className="text-hover text-xs px-2  border-[1px] rounded-sm py-0.5">
                                 Giá độc quyền Online
@@ -109,11 +118,6 @@ export default function DefaultCard({ item }: { item: IProduct }) {
                     </div>
                 ) : (
                     <div className=" flex justify-end flex-col">
-                        <div className="flex opacity-0 gap-2 items-center">
-                            <span className="text-hover font-semibold">
-                                Không được giảm giá
-                            </span>
-                        </div>
                         <div className="mt-2">
                             <span className="text-hover text-xs px-2  border-[1px] rounded-sm py-0.5">
                                 Hàng chính Hãng

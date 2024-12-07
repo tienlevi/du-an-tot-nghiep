@@ -10,7 +10,6 @@ import { initializeApp } from "firebase/app";
 import { handleInsertData } from "./data/index.js";
 const app = express();
 
-
 // firebase
 initializeApp(envConfig.FIREBASE);
 
@@ -22,7 +21,8 @@ app.use(
       if (
         ["http://localhost:5173", "http://localhost:3000"].indexOf(origin) !==
           -1 ||
-        !origin || envConfig.NODE_ENV === "development"
+        !origin ||
+        envConfig.NODE_ENV === "development"
       ) {
         callback(null, true);
       } else {

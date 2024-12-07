@@ -12,6 +12,7 @@ import { inventoryService } from "./index.js";
 import { ORDER_STATUS , PAYMENT_METHOD } from "../constants/orderStatus.js";
 import { ROLE } from "../constants/role.js";
 import mongoose from "mongoose";
+import Cart from "../models/cart.js";
 
 // @GET:  Get all orders
 export const getAllOrders = async (req, res, next) => {
@@ -102,19 +103,19 @@ export const createOrder = async (req, res, next) => {
   //   Update stock
   await inventoryService.updateStockOnCreateOrder(req.body.items);
 
-  // await Promise.all(
-  //   req.body.items.map(async (product) => {
-  //     await Cart.findOneAndUpdate(
-  //       { userId: req.userId },
-  //       {
-  //         $pull: {
-  //           items: { product: product.productId, variant: product.variantId },
-  //         },
-  //       },
-  //       { new: true }
-  //     );
-  //   })
-  // );
+  await Promise.all(
+    req.body.items.map(async (product) => {
+      await Cart.findOneAndUpdate(
+        { userId: req.userId },
+        {
+          $pull: {
+            items: { product: product.productId, variant: product.variantId },
+          },
+        },
+        { new: true }
+      );
+    })
+  );
   await order.save();
   return res.status(StatusCodes.OK).json(
     customResponse({
@@ -167,7 +168,7 @@ export const cancelOrder = async (req, res, next) => {
     const template = {
       content: {
           title: `${req.role === ROLE.ADMIN ? 'Đơn hàng của bạn đã bị hủy bởi admin' : 'Đơn hàng của bạn đã bị hủy'}`,
-          description: `${req.role === ROLE.ADMIN ? `Đơn hàng của bạn đã bị hủy bởi admin với lý do ${foundedOrder.description} dưới đây là thông tin đơn hàng:` : `Bạn vừa hủy một đơn hàng với lý do ${foundedOrder.description} từ AdShop thông tin đơn hàng:`}`,
+          description: `${req.role === ROLE.ADMIN ? `Đơn hàng của bạn đã bị hủy bởi admin với lý do ${foundedOrder.description}, ${foundedOrder.isPaid? `Rất xin lỗi vì sự bất tiện này hãy liên hệ ngay với chúng tôi qua số điện thoại +84 123 456 789 để cửa hàng hoàn lại ${new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(foundedOrder.totalPrice || 0)} cho bạn `:""} dưới đây là thông tin đơn hàng:` : `Bạn vừa hủy một đơn hàng với lý do ${foundedOrder.description} từ AdShop thông tin đơn hàng:`}`,
           email:
               foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
                   ? foundedOrder.customerInfo.email
@@ -248,7 +249,7 @@ export const confirmOrder = async (req, res, next) => {
       },
       subject: '[AdShop] - Đơn hàng của bạn đã được xác nhận',
       link: {
-          linkHerf: `http://localhost:5173/my-orders/${req.body.orderId}`,
+          linkHerf: `http://localhost:3000/my-orders/${req.body.orderId}`,
           linkName: `Kiểm tra đơn hàng`,
       },
       user: {

@@ -6,7 +6,6 @@ import { removeUploadedFile, uploadFiles } from "../utils/upload.js";
 import { clientRequiredFields } from "../helpers/filterRequiredClient.js";
 import customResponse from "../helpers/response.js";
 
-
 function hasDuplicates(array) {
   return new Set(array).size !== array.length;
 }
@@ -53,23 +52,23 @@ export const createProduct = async (productData, files) => {
       files["variantImages"]
     );
     const variants = JSON.parse(productData.variantString);
-    const map = {}
-  variants.forEach(element => {
-    const key = element.size + element.color;
-  if(map[key]){
-    throw new BadRequestError("Biến thể không được trùng nhau");
-  }else{
-    map[key] = 1;
-  }
-  });
-    if(hasDuplicates(variants.map((item) => item.imageUrlRef))){
+    const map = {};
+    variants.forEach((element) => {
+      const key = element.size + element.color;
+      if (map[key]) {
+        throw new BadRequestError("Biến thể không được trùng nhau");
+      } else {
+        map[key] = 1;
+      }
+    });
+    if (hasDuplicates(variants.map((item) => item.imageUrlRef))) {
       throw new BadRequestError("File ảnh không được trùng nhau");
     }
 
     variationList = fileUrls.map((item, i) => {
       const variation = variants.find((obj) => {
         const originName = originNames[i];
-        
+
         const fileName = obj.imageUrlRef;
         return fileName === originName;
       });
@@ -104,17 +103,18 @@ export const updateProduct = async (
   const product = await Product.findById(productId);
   let newVariants = [];
   let oldVariants = [];
-  if(hasDuplicates(variants.map((item) => item.imageUrlRef))){
+  if (hasDuplicates(variants.map((item) => item.imageUrlRef))) {
     throw new BadRequestError("File ảnh không được trùng nhau");
   }
-  const map = {}
-  variants.forEach(element => {
+  const map = {};
+  variants.forEach((element) => {
     const key = element.size + element.color;
-  if(map[key]){
-    throw new BadRequestError("Biến thể không được trùng nhau");
-  }else{
-    map[key] = 1;
-  }});
+    if (map[key]) {
+      throw new BadRequestError("Biến thể không được trùng nhau");
+    } else {
+      map[key] = 1;
+    }
+  });
   if (!product)
     throw new NotFoundError(
       `${ReasonPhrases.NOT_FOUND} product with id: ${productId}`
@@ -155,7 +155,10 @@ export const updateProduct = async (
 };
 
 export const getProductById = async (productId) => {
-  const product = await Product.findOne({_id: productId, ...clientRequiredFields})
+  const product = await Product.findOne({
+    _id: productId,
+    ...clientRequiredFields,
+  })
     .populate("variants.color")
     .populate("variants.size");
   if (!product)
@@ -166,30 +169,77 @@ export const getProductById = async (productId) => {
   return product;
 };
 
-
 // @PATCH: hiddenProduct
 export const hiddenProduct = async (req, res, next) => {
   const id = req.params.id;
-  const product = await Product.findOneAndUpdate({ _id: id, isActive: true }, { isActive: false }, { new: true });
+  const product = await Product.findOneAndUpdate(
+    { _id: id, isActive: true },
+    { isActive: false },
+    { new: true }
+  );
 
   if (!product) {
-      throw new NotFoundError(`Không tìm thấy sản phẩm này: ${id}`);
+    throw new NotFoundError(`Không tìm thấy sản phẩm này: ${id}`);
   }
 
   return res
-      .status(StatusCodes.OK)
-      .json(customResponse({ data: product, success: true, status: StatusCodes.OK, message: ReasonPhrases.OK }));
+    .status(StatusCodes.OK)
+    .json(
+      customResponse({
+        data: product,
+        success: true,
+        status: StatusCodes.OK,
+        message: ReasonPhrases.OK,
+      })
+    );
 };
 // @PATCH: showProduct
 export const showProduct = async (req, res, next) => {
   const id = req.params.id;
-  const product = await Product.findOneAndUpdate({ _id: id, isActive: false }, { isActive: true }, { new: true });
+  const product = await Product.findOneAndUpdate(
+    { _id: id, isActive: false },
+    { isActive: true },
+    { new: true }
+  );
 
   if (!product) {
-      throw new NotFoundError(`${ReasonPhrases.NOT_FOUND} product with id: ${id}`);
+    throw new NotFoundError(
+      `${ReasonPhrases.NOT_FOUND} product with id: ${id}`
+    );
   }
 
   return res
-      .status(StatusCodes.OK)
-      .json(customResponse({ data: product, success: true, status: StatusCodes.OK, message: ReasonPhrases.OK }));
+    .status(StatusCodes.OK)
+    .json(
+      customResponse({
+        data: product,
+        success: true,
+        status: StatusCodes.OK,
+        message: ReasonPhrases.OK,
+      })
+    );
+};
+export const getRelatedProducts = async (req, res, next) => {
+  const product = await Product.findById(req.params.id)
+    .populate("variants.color")
+    .populate("variants.size")
+    .lean();
+
+  if (!product)
+    throw new NotFoundError(
+      `${ReasonPhrases.NOT_FOUND} product with id: ${req.params.id}`
+    );
+
+  const products = await Product.find({ tags: { $in: product.tags } }).limit(
+    10
+  );
+
+  return res.status(StatusCodes.OK).json(
+    customResponse({
+      data: products,
+      message: ReasonPhrases.OK,
+      status: StatusCodes.OK,
+      success: true,
+    })
+  );
 };

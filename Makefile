@@ -20,8 +20,6 @@ install-pkg:
 	cd ./frontend && npm install
 	cd ./backend && npm install
 
-start-dev:
+start-db:
 	docker start mongodb || docker run --name mongodb -d -p 27017:27017 mongo:latest
-	make start-frontend &
-	make start-backend &
-	wait
+

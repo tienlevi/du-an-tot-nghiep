@@ -53,17 +53,17 @@ export const ProductsListColumns = ({
                             >
                                 <div>
                                     <img
-                                        src={item.image}
+                                        src={item?.image}
                                         className="h-8 w-8 object-cover"
                                         alt={record.name + index}
                                     />
                                 </div>
                                 <div>
                                     <p className="text-[10px]">
-                                        Kích thước: {item.size.name}
+                                        Kích thước: {item?.size.name}
                                     </p>
                                     <p className="text-[10px]">
-                                        Màu sắc: {item.color.name}
+                                        Màu sắc: {item?.color.name}
                                     </p>
                                 </div>
                             </div>
@@ -93,12 +93,12 @@ export const ProductsListColumns = ({
                     <div className="flex flex-col justify-between">
                         <p className="h-14 whitespace-nowrap">
                             Tổng:{' '}
-                            {record.variants.reduce(
-                                (acc, curr) => acc + (curr.stock || 0),
+                            {record?.variants.reduce(
+                                (acc, curr) => acc + (curr?.stock || 0),
                                 0,
                             ) !== 0 ? (
-                                record.variants.reduce(
-                                    (acc, curr) => acc + (curr.stock || 0),
+                                record?.variants.reduce(
+                                    (acc, curr) => acc + (curr?.stock || 0),
                                     0,
                                 )
                             ) : (
@@ -109,7 +109,7 @@ export const ProductsListColumns = ({
                     <div className="">
                         {record.variants.map((item, index) => (
                             <p className="my-4 h-8" key={index}>
-                                {item.stock ? (
+                                {item?.stock ? (
                                     item.stock
                                 ) : (
                                     <span className="text-red">Hết hàng</span>

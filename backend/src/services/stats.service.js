@@ -125,32 +125,49 @@ export const orderByDayStats = async (req, res, next) => {
     if (req.query.month) {
         month = parseInt(req.query.month);
     }
+
+    const vietnamTZ = 'Asia/Ho_Chi_Minh';
     
-    const startDate = new Date(`${year}-${month}-01`);
-    const endDate = new Date(`${year}-${month + 1}-01`);
+    const startDate = moment.tz(`01-${month}-${year}`, 'DD-MM-YYYY', vietnamTZ)
+        .startOf('month')
+        .utc()
+        .toDate();
+    const endDate = moment.tz(`01-${month}-${year}`, 'DD-MM-YYYY', vietnamTZ)
+        .endOf('month')
+        .utc()
+        .toDate();
 
     const data = await Order.aggregate([
         {
             $match: {
                 createdAt: {
                     $gte: startDate,
-                    $lt: endDate,
+                    $lte: endDate,
                 },
             },
         },
-        
+        {
+            $addFields: {
+                createdAtVN: {
+                    $dateToString: {
+                        format: '%Y-%m-%d %H:%M:%S',
+                        date: '$createdAt',
+                        timezone: '+07:00',
+                    },
+                },
+            },
+        },
         {
             $group: {
                 _id: {
-                    day: { $dayOfMonth: '$createdAt' },
-                    month: { $month: '$createdAt' },
-                    year: { $year: '$createdAt' },
+                    day: { $dayOfMonth: { $toDate: '$createdAtVN' } },
+                    month: { $month: { $toDate: '$createdAtVN' } },
+                    year: { $year: { $toDate: '$createdAtVN' } },
                 },
                 totalOrders: { $sum: 1 },
                 totalRevenue: { $sum: '$totalPrice' },  
             },
         },
-        
         {
             $project: {
                 _id: 0,
@@ -165,7 +182,6 @@ export const orderByDayStats = async (req, res, next) => {
                 totalRevenue: 1, 
             },
         },
-        
         {
             $sort: { date: 1 },
         },
@@ -349,14 +365,14 @@ export const orderByDateRangeStats = async (req, res, next) => {
 
     if (startDate && endDate) {
         start = moment
-            .utc(startDate, 'DD-MM-YYYY')
-            .tz('Asia/Ho_Chi_Minh')
+            .tz(startDate, 'DD-MM-YYYY', 'Asia/Ho_Chi_Minh')
             .startOf('day')
+            .utc()
             .toDate();
         end = moment
-            .utc(endDate, 'DD-MM-YYYY')
-            .tz('Asia/Ho_Chi_Minh')
+            .tz(endDate, 'DD-MM-YYYY', 'Asia/Ho_Chi_Minh')
             .endOf('day')
+            .utc()
             .toDate();
     } else {
         return res.status(400).json({ message: 'Invalid date range' });
@@ -374,8 +390,8 @@ export const orderByDateRangeStats = async (req, res, next) => {
             $addFields: {
                 createdAtVN: {
                     $dateToString: {
-                        format: '%Y-%m-%d',
-                        date: { $add: ['$createdAt', 7 * 60 * 60 * 1000] },
+                        format: '%Y-%m-%d %H:%M:%S',
+                        date: '$createdAt',
                         timezone: '+07:00',
                     },
                 },
@@ -383,7 +399,13 @@ export const orderByDateRangeStats = async (req, res, next) => {
         },
         {
             $group: {
-                _id: '$createdAtVN',
+                _id: {
+                    $dateToString: {
+                        format: '%Y-%m-%d',
+                        date: '$createdAt',
+                        timezone: '+07:00',
+                    }
+                },
                 totalOrders: { $sum: 1 },
                 totalRevenue: {
                     $sum: {

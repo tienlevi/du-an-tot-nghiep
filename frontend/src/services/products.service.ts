@@ -32,6 +32,10 @@ export const ProductServices = {
         );
         return data.data;
     },
+    async getRelatedProduct(id: string){
+        const data = await instance.get<IAxiosResponse<IProduct[]>>(`/products/related/${id}`)
+        return data.data
+    },
     async createProduct(data: FormData) {
         const res = await instance.post<IAxiosResponse<null>>(
             `/products/create`,
@@ -68,4 +72,11 @@ export const ProductServices = {
         const res = await instance.patch<IAxiosResponse<null>>(`${PRODUCT_ENDPOINT.SHOW}/${id}`);
         return res.data;
     },
+    async getDiscount() {
+        const res =
+            await instance.get<IAxiosResponse<IProduct[]>>(
+                `/products/discount`,
+            );
+            return res.data}
+
 };

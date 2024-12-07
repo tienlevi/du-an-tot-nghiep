@@ -65,10 +65,17 @@ const OrderDetailPage = () => {
                             <Space align="center" direction="vertical">
                                 <h2 className="text-rose-500">
                                     Đơn hàng đã bị hủy bởi{' '}
-                                    {data?.canceledBy === 'admin' ? (
+                                    {data?.canceledBy === 'admin' && (
                                         <span>admin</span>
-                                    ) : (
+                                    )}
+                                    {data?.canceledBy === 'user' && (
                                         <span>người dùng</span>
+                                    )}
+                                     {data?.canceledBy === 'system' && (
+                                        <span>hệ thống</span>
+                                    )}
+                                    {data?.canceledBy === 'none' && (
+                                        <span>hệ thống</span>
                                     )}
                                 </h2>
                                 <p className="font-normal">

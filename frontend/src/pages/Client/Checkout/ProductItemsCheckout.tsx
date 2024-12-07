@@ -46,7 +46,6 @@ const ProductItemsCheckout: React.FC = () => {
         ) || 0;
 
     const totalPrice = subTotal + shippingFee;
-
     const createOrder = useCreateOrder();
 
     useEffect(() => {
@@ -89,7 +88,7 @@ const ProductItemsCheckout: React.FC = () => {
                 },
                 {
                     onSuccess: () => {
-                        navigate('/success');
+                        navigate('/success?vnp_ResponseCode=00');
                     },
                     onError: (error: any) => {
                         showMessage(error.response.data.message, 'error');
@@ -134,6 +133,25 @@ const ProductItemsCheckout: React.FC = () => {
     const onChangePaymentMethod = (e: RadioChangeEvent) => {
         setPaymentMethod(e.target.value);
     };
+    const { data } = useGetMyCart();
+    useEffect(() => {
+        if (data && cartItems) {
+            const isAnyItemRemoved = cartItems.some(
+                (item) =>
+                    !data.items.some(
+                        (cartDataItem) => cartDataItem._id === item._id,
+                    ),
+            );
+            if (isAnyItemRemoved) {
+                navigate('/');
+                showMessage(
+                    'Có sự thay đổi về sản phẩm vui lòng kiểm tra lại giỏ hàng',
+                    'info',
+                    3000,
+                );
+            }
+        }
+    }, [data]);
     return (
         <div className="flex h-full flex-col">
             <Title level={4} className="mb-4">
@@ -254,7 +272,9 @@ const ProductItemsCheckout: React.FC = () => {
                             block
                             onClick={handleCheckout}
                             className="h-12 text-lg font-semibold"
-                            disabled={!policyAgreed}
+                            disabled={
+                                !policyAgreed || createOrderVnPay.isSuccess
+                            }
                         >
                             Đặt hàng
                         </Button>

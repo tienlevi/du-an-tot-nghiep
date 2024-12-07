@@ -13,6 +13,7 @@ import {
 import { useAppDispatch, useTypedSelector } from '@/store/store';
 import { ICartItemsResponse } from '@/types/Cart/CartResponse';
 import { Currency } from '@/utils';
+import showMessage from '@/utils/ShowMessage';
 import { DeleteOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import {
     Button,
@@ -21,22 +22,25 @@ import {
     Form,
     Image,
     InputNumber,
+    message,
+    Popconfirm,
+    PopconfirmProps,
     Table,
 } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { TableProps } from 'antd/lib';
 import clsx from 'clsx';
 import { debounce } from 'lodash';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function CartDetail() {
     useDocumentTitle('ADSTORE - Chi tiết giỏ hàng');
     const { data: products, isLoading } = useGetMyCart();
     const { mutate: updateQuantity } = useUpdateQuantity();
-    const { handleRemoveCart } = useMutationRemoveItem();
+    const { handleRemoveCart, status, reset, isPending } = useMutationRemoveItem();
     const dispatch = useAppDispatch();
-    const navigate= useNavigate()
+    const navigate = useNavigate();
     const cartItem = useTypedSelector((state) => state.cartReducer.items);
     const totalOrderAmount = cartItem
         ? cartItem.reduce(
@@ -53,8 +57,8 @@ export default function CartDetail() {
         variantId: string;
         quantity: number;
     } | null>(null);
-    const findItemsActive = products?.items.filter((v) => v.stock > 0);
     // useEffect for redux
+    const findItemsActive = products?.items.filter((v) => v.stock > 0);
     useEffect(() => {
         if (cartItem) {
             cartItem.forEach((item) => {
@@ -73,14 +77,31 @@ export default function CartDetail() {
     //
     useEffect(() => {
         if (products) {
-            const newArr = products?.items.map(({ quantity, _id }) => ({
-                quantity,
-                id: _id,
-            }));
-            setQuantityProduct(newArr);
-            dispatch(setItemsCart(findItemsActive!));
+            if (products) {
+                const newArr = products?.items.map(({ quantity, _id }) => ({
+                    quantity,
+                    id: _id,
+                }));
+                setQuantityProduct(newArr);
+                dispatch(setItemsCart(findItemsActive!));
+            }
         }
-    }, []);
+    }, [products]);
+    const productIdArray = products?.items.map((item) => item._id);
+    const productsIdRef = useRef(productIdArray);
+    useEffect(() => {
+        const productIdArray = products?.items.map((item) => item._id);
+        console.log(status)
+        if (productIdArray?.length !== productsIdRef.current?.length &&  status === 'idle') {
+            showMessage("Có sự thay đổi về sản phẩm vui lòng kiểm tra lại giỏ hàng", "info", 3000);
+        }
+        productsIdRef.current = productIdArray;
+      }, [products]);
+      useEffect(()=>{
+        setTimeout(()=>{
+            reset()
+        },300)
+      },[status])
     const handleChangeQuantity = (
         productId: string,
         variantId: string,
@@ -140,10 +161,6 @@ export default function CartDetail() {
                 ?.quantity || 0) - 1;
         handleChangeQuantity(productId, variantId, newQuantity);
     };
-    const debouncedRemove = debounce((id: string) => {
-        handleRemoveCart(id);
-        dispatch(removeItems(id));
-    }, 500);
     /* eslint-disable */
     useEffect(() => {
         if (pendingUpdates) {
@@ -174,11 +191,16 @@ export default function CartDetail() {
                 return null;
         }
     };
-    const handleNavigateCheckout= ()=>{
-        if(cartItem.length !==0){
-            navigate(MAIN_ROUTES.SHIPPING)
+    const handleNavigateCheckout = () => {
+        if (cartItem.length !== 0) {
+            navigate(MAIN_ROUTES.SHIPPING);
         }
-    }
+    };
+    const confirm: PopconfirmProps['onConfirm'] = (id: any) => {
+        handleRemoveCart(id);
+        dispatch(removeItems(id));
+        message.success('Đã xóa sản phẩm khỏi giỏ hàng');
+    };
     const columns: TableProps<ICartItemsResponse>['columns'] = [
         {
             key: '',
@@ -298,7 +320,13 @@ export default function CartDetail() {
                                 controls={false}
                                 value={quantity}
                                 max={product.stock}
-                                onChange={(e)=> handleChangeQuantity(product.productId, product.variantId, e as number)}
+                                onChange={(e) =>
+                                    handleChangeQuantity(
+                                        product.productId,
+                                        product.variantId,
+                                        e as number,
+                                    )
+                                }
                             />
                         </ConfigProvider>
                         <Button
@@ -331,10 +359,24 @@ export default function CartDetail() {
             dataIndex: 'action',
             title: '',
             render: (_, product) => (
-                <DeleteOutlined
-                    onClickCapture={() => debouncedRemove(product._id)}
-                    className="cursor-pointer rounded-full bg-rose-200 p-2 text-rose-700 transition-colors duration-500 hover:bg-rose-300"
-                />
+                <Popconfirm
+                title="Thông báo"
+                description="Bạn có chắc là muốn xóa sản phẩm này khỏi giỏ hàng?"
+                onConfirm={() =>
+                    confirm(product._id as any)
+                }
+                placement="leftTop"
+                okText="Đồng ý"
+                cancelText="Hủy"
+            >
+                <Button
+                    loading={isPending}
+                    type="text"
+                    className="mb-20 text-indigo-600 hover:text-indigo-500"
+                >
+                    <DeleteOutlined />
+                </Button>
+            </Popconfirm>
             ),
         },
     ];
@@ -355,37 +397,33 @@ export default function CartDetail() {
                                 dataSource={products?.items}
                                 pagination={false}
                             />
-                            <div className='my-6 flex items-center justify-between'>
-                                <div className='flex gap-2'>
+                            <div className="my-6 flex items-center justify-between">
+                                <div className="flex gap-2">
                                     <Link
-                                        to='/'
-                                        className='block rounded-sm bg-global px-6 py-[0.62rem] text-center text-sm font-medium text-white transition-colors duration-300 ease-linear hover:bg-[#16bcdc]'
+                                        to="/"
+                                        className="block rounded-sm bg-global px-6 py-[0.62rem] text-center text-sm font-medium text-white transition-colors duration-300 ease-linear hover:bg-[#16bcdc]"
                                     >
                                         Tiếp tục mua hàng
                                     </Link>
                                     <Button
-                                        size='large'
+                                        size="large"
                                         onClick={() => onChangeTargetAll('ADD')}
-                                        className='block rounded-sm bg-global px-10 py-2 text-center text-sm font-medium text-white transition-colors duration-300 ease-linear hover:bg-[#16bcdc]'
+                                        className="block rounded-sm bg-global px-10 py-2 text-center text-sm font-medium text-white transition-colors duration-300 ease-linear hover:bg-[#16bcdc]"
                                     >
                                         Chọn Tất Cả Sản Phẩm
                                     </Button>
                                     {cartItem.length > 0 && (
                                         <Button
-                                            size='large'
-                                            onClick={() => onChangeTargetAll('REMOVE')}
-                                            className='block rounded-sm bg-global px-10 py-2 text-center text-sm font-medium text-white transition-colors duration-300 ease-linear hover:bg-[#16bcdc]'
+                                            size="large"
+                                            onClick={() =>
+                                                onChangeTargetAll('REMOVE')
+                                            }
+                                            className="block rounded-sm bg-global px-10 py-2 text-center text-sm font-medium text-white transition-colors duration-300 ease-linear hover:bg-[#16bcdc]"
                                         >
                                             Bỏ Chọn Tất Cả Sản Phẩm
                                         </Button>
                                     )}
                                 </div>
-                                <Button
-                                    size='large'
-                                    className='block rounded-sm bg-global px-10 py-2 text-center text-sm font-medium text-white transition-colors duration-300 ease-linear hover:bg-[#16bcdc]'
-                                >
-                                    Xóa tất cả
-                                </Button>
                             </div>
                         </div>
                         {/* <div className='mt-8'>
@@ -425,13 +463,13 @@ export default function CartDetail() {
                         )}
 
                         <div className="mt-12">
-                                <button
-                                    disabled={cartItem.length === 0}
-                                    onClick={()=> handleNavigateCheckout()}
-                                    className={`block h-[48px] w-full  rounded-[5px] bg-global px-10 py-2 text-center text-sm font-medium text-white transition-colors duration-300 ease-linear hover:bg-hover disabled:hover:bg-global`}
-                                >
-                                    Thanh Toán
-                                </button>
+                            <button
+                                disabled={cartItem.length === 0}
+                                onClick={() => handleNavigateCheckout()}
+                                className={`block h-[48px] w-full  rounded-[5px] bg-global px-10 py-2 text-center text-sm font-medium text-white transition-colors duration-300 ease-linear hover:bg-hover disabled:hover:bg-global`}
+                            >
+                                Thanh Toán
+                            </button>
                         </div>
                     </div>
                 </div>

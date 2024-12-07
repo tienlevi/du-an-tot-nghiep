@@ -30,9 +30,9 @@ export const PrivateRoutes = [
     {
         path: ADMIN_ROUTES.DASHBOARD,
         element: (
-            // <ProtectedRoute>
+            <ProtectedRoute>
             <AdminLayout />
-            // </ProtectedRoute>
+            </ProtectedRoute>
         ),
         children: [
             {

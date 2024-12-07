@@ -3,6 +3,7 @@ export const QUERY_KEY = {
     VARIANT: 'variant',
     PRODUCTS: 'products',
     HOT_PRODUCTS: 'HOT_PRODUCT',
+    DISCOUNT_PRODUCTS: 'DISCOUNT_PRODUCT',
     FILTER_BYCATE: 'products-cate',
     PRODUCTS_LAZY: 'products_lazy',
     CATEGORIES: 'categories',
