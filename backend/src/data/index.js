@@ -27,11 +27,11 @@ export const handleInsertData = async (req, res) => {
     await Cart.deleteMany({});
 
     const user = await User.create({
-      email: "tuan@gmail.com",
-      name: "tuan",
+      email: "admin@gmail.com",
+      name: "Admin",
       isActive: true,
-      password: "11222212",
-      phone: "123456789",
+      password: "admin123",
+      phone: "0976878654",
       role: ROLE.ADMIN,
     });
 

@@ -1,21 +1,28 @@
-Cấu trúc folder
+### 🌐 AD-store
 
-src/
-├── assets: Để chứa ảnh và video
-├── config: Dùng để cấu hình như axios, firebase
-├── constants: Tạo biến và function riêng
-├── components: Chứa các thành phần ở giao diện
-├── common: Chứa chung folder như hooks, lib, types
-│ ├── hooks: Để tạo hook riêng mình
-│ └── lib: Chứa tiện ích hoặc thư viện như firebase, mongodb, upload
-| └── types: Dùng để xác định kiểu dữ liệu
-├── services: Để tạo ra các logic ở phía server
-├── context: Chứa React context và provider
-├── pages: Để tạo các trang
-├── routes: Đặt tên trang và liên kết các trang
-├── styles: Tạo file css riêng
+> Account(ADMIN): admin@gmail.com - password: admin123
 
-- Lưu ý: Khi tạo file ở bên trong components khi import ở bên dashboard hoặc website thì tạo file trong folder
-  /(dashboard)/components hoặc /(website)/components luôn nhé
+![home](https://github.com/user-attachments/assets/f0573af9-3915-43f2-82ad-e291ac56eeca)
 
-- Git conventional: feat(Tính năng mới), fix(sửa lỗi), chore(việc vặt), breakingChange(Thay đổi lớn) 
+## Setup
+
+> <br/>[!NOTE]<br/> **Ensure Node.js is version <i>^18.18.0
+> || >=20.10.0.</i>**<br /><br />
+
+1. Run Frontend.
+
+```bash
+# npm
+cd frontend/
+npm install
+npm run dev
+```
+
+2. Run Backend.
+
+```bash
+# npm
+cd backend/
+npm install
+npm run dev
+```
