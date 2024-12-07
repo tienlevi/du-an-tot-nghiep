@@ -7,7 +7,7 @@ const useGetProducts = (params: Params) => {
     return useQuery({
         queryKey: [QUERY_KEY.PRODUCTS, ...Object.values(params)],
         queryFn: () => {
-            return ProductServices.getAllProducts(params);
+            return ProductServices.getAll(params);
         },
     });
 };

@@ -182,7 +182,17 @@ const ProductDetailsPage = () => {
             );
         }
     };
-    const uniqueImage = data?.variants.map((item)=> item)
+    const imageUrlsSet = new Set(data?.variants.map((item) => item.image));
+    const map: { [key: string]: number } = {};
+    const url = Array.from(imageUrlsSet);
+    const uniqueImage = [];
+    for (let i = 0; i < url.length; i++) {
+        const key = url[i].split('_____')[1];
+        if (!map[key]) {
+            map[key] = 1;
+            uniqueImage.push(url[i]);
+        }
+    }
     // wishlist
     const { query } = useFilter();
     const user = useSelector((state: RootState) => state.auth.user);
@@ -246,13 +256,13 @@ const ProductDetailsPage = () => {
                         </div>
 
                         <div className=" flex flex-col gap-2 items-center">
-                            {uniqueImage?.map((item, index) => (
+                            {uniqueImage?.map((image, index) => (
                                 <div
                                     key={index}
                                     onClick={() =>
                                         setSelectedImage({
                                             index,
-                                            image: item.image,
+                                            image: image,
                                         })
                                     }
                                     className={`${
@@ -263,7 +273,7 @@ const ProductDetailsPage = () => {
                                 >
                                     <img
                                         className="object-cover"
-                                        src={item.image}
+                                        src={image}
                                         alt=""
                                     />
                                 </div>
@@ -443,20 +453,32 @@ const ProductDetailsPage = () => {
                                             </Button>
                                             <InputNumber
                                                 onChange={onChangeInputQuantity}
-                                                onError={(e)=> console.log(e)}
+                                                onError={(e) => console.log(e)}
                                                 min={1}
                                                 max={selectedColor.stock}
                                                 className="flex h-[48px] w-[58px] items-center"
                                                 value={valueQuantity}
                                                 controls={false}
-                                                onPressEnter={(e: any)=> {
-                                                    if(e.target.value > selectedColor.stock){
-                                                        showMessage(`Số lượng tối đa là ${selectedColor.stock}`,'info')
+                                                onPressEnter={(e: any) => {
+                                                    if (
+                                                        e.target.value >
+                                                        selectedColor.stock
+                                                    ) {
+                                                        showMessage(
+                                                            `Số lượng tối đa là ${selectedColor.stock}`,
+                                                            'info',
+                                                        );
                                                     }
                                                 }}
-                                                onBlur={(e: any)=> {
-                                                    if(e.target.value > selectedColor.stock){
-                                                        showMessage(`Số lượng tối đa là ${selectedColor.stock}`,'info')
+                                                onBlur={(e: any) => {
+                                                    if (
+                                                        e.target.value >
+                                                        selectedColor.stock
+                                                    ) {
+                                                        showMessage(
+                                                            `Số lượng tối đa là ${selectedColor.stock}`,
+                                                            'info',
+                                                        );
                                                     }
                                                 }}
                                             />
@@ -596,15 +618,15 @@ const ProductDetailsPage = () => {
                     Gợi ý mua cùng
                 </div>
                 <CarouselDisplay className="mt-4">
-                        {relatedProduct &&
-                            relatedProduct.map((item, index: number) => {
-                                return (
-                                    <CarouselItem key={index}>
-                                        <DefaultCard item={item} />
-                                    </CarouselItem>
-                                );
-                            })}
-                    </CarouselDisplay>
+                    {relatedProduct &&
+                        relatedProduct.map((item, index: number) => {
+                            return (
+                                <CarouselItem key={index}>
+                                    <DefaultCard item={item} />
+                                </CarouselItem>
+                            );
+                        })}
+                </CarouselDisplay>
                 {/* <div className="flex flex-cols-4 flex-row-2">
                 {arr.map(() => {
                     return (
