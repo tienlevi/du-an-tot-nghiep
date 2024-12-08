@@ -1,4 +1,4 @@
-import { BadRequestError } from "../errors/customError.js";
+import { BadRequestError, NotFoundError } from "../errors/customError.js";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import customResponse from "../helpers/response.js";
 import APIQuery from "../utils/APIQuery.js";
@@ -13,23 +13,26 @@ export const getAllUsers = async (req, res) => {
   const page = req.query.page ? +req.query.page : 1;
   req.query.limit = String(req.query.limit || 10);
 
-  const features = new APIQuery(User.find({}).select('-password'), req.query);
+  const features = new APIQuery(User.find({}).select("-password"), req.query);
   features.filter().sort().limitFields().search().paginate();
 
-  const [data, totalDocs] = await Promise.all([features.query, features.count()]);
+  const [data, totalDocs] = await Promise.all([
+    features.query,
+    features.count(),
+  ]);
   const totalPages = Math.ceil(Number(totalDocs) / +req.query.limit);
   return res.status(StatusCodes.OK).json(
-      customResponse({
-          data: {
-              users: data,
-              page: page,
-              totalDocs: totalDocs,
-              totalPages: totalPages,
-          },
-          success: true,
-          status: StatusCodes.OK,
-          message: ReasonPhrases.OK,
-      }),
+    customResponse({
+      data: {
+        users: data,
+        page: page,
+        totalDocs: totalDocs,
+        totalPages: totalPages,
+      },
+      success: true,
+      status: StatusCodes.OK,
+      message: ReasonPhrases.OK,
+    })
   );
 };
 
@@ -118,29 +121,37 @@ export const updateProfile = async (req, res, next) => {
 export const addWishList = async (req, res) => {
   const userId = req.userId;
   const productId = req.body.productId;
-  const user = await User.findByIdAndUpdate(userId, { $addToSet: { wishList: productId } }, { new: true }).lean();
+  const user = await User.findByIdAndUpdate(
+    userId,
+    { $addToSet: { wishList: productId } },
+    { new: true }
+  ).lean();
 
   return res.status(StatusCodes.OK).json(
-      customResponse({
-          data: user,
-          success: true,
-          status: StatusCodes.OK,
-          message: ReasonPhrases.OK,
-      }),
+    customResponse({
+      data: user,
+      success: true,
+      status: StatusCodes.OK,
+      message: ReasonPhrases.OK,
+    })
   );
 };
 // @Patch: delete wishlist
 export const deleteWishList = async (req, res) => {
   const userId = req.userId;
   const productId = req.body.productId;
-  const user = await User.findByIdAndUpdate(userId, { $pull: { wishList: productId } }, { new: true }).lean();
+  const user = await User.findByIdAndUpdate(
+    userId,
+    { $pull: { wishList: productId } },
+    { new: true }
+  ).lean();
   return res.status(StatusCodes.OK).json(
-      customResponse({
-          data: user,
-          success: true,
-          status: StatusCodes.OK,
-          message: ReasonPhrases.OK,
-      }),
+    customResponse({
+      data: user,
+      success: true,
+      status: StatusCodes.OK,
+      message: ReasonPhrases.OK,
+    })
   );
 };
 // @Get: get wishlist by user
@@ -148,29 +159,33 @@ export const getWishListByUser = async (req, res) => {
   const userId = req.userId;
 
   const wishlist = await User.findById(userId)
-    .select('wishList')
+    .select("wishList")
     .populate({
-      path: 'wishList',
+      path: "wishList",
       match: clientRequiredFields,
       populate: [
         {
-          path: 'variants',
-          select: 'color size stock image imageUrlRef',
+          path: "variants",
+          select: "color size stock image imageUrlRef",
           populate: [
             {
-              path: 'color',
-              select: 'name hex'
+              path: "color",
+              select: "name hex",
             },
             {
-              path: 'size',
-              select: 'name'
-            }
-          ]
-        }
+              path: "size",
+              select: "name",
+            },
+          ],
+        },
       ],
-      select: 'name price discount variants description rating reviewCount' 
+      select: "name price discount variants description rating reviewCount",
     })
     .lean();
+
+  if (!wishlist) {
+    throw new NotFoundError("Không tìm thấy wishlist");
+  }
 
   return res.status(StatusCodes.OK).json(
     customResponse({
@@ -178,6 +193,6 @@ export const getWishListByUser = async (req, res) => {
       success: true,
       status: StatusCodes.OK,
       message: ReasonPhrases.OK,
-    }),
+    })
   );
 };

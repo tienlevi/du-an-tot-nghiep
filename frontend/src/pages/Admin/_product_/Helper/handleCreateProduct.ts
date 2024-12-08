@@ -1,5 +1,13 @@
 import { IProductForm } from '@/types/Product';
+import { v4 as uuidv4 } from "uuid";
 
+const renameFile = (file: File, uuidString:string,newName: string): File => {
+
+    return new File([file], `${uuidString}_____${newName}_____.${newName.split('.').pop()}`, {
+      type: file.type,
+      lastModified: file.lastModified,
+    });
+  };
 export const handleCreateProduct = (
     data: IProductForm,
     createProduct: (product: FormData) => void,
@@ -13,20 +21,26 @@ export const handleCreateProduct = (
     if (variants) {
         for (const [, value] of Object.entries(variants)) {
             if (value?.thumbnail?.fileList?.[firstElement]?.originFileObj) {
+                const uuidString =uuidv4()
                 formData.append(
-                    'variantImages',
+                    'variantImages',renameFile(
                     value.thumbnail?.fileList?.[firstElement]
-                        .originFileObj as File,
+                        .originFileObj as File, uuidString,value.thumbnail?.fileList[firstElement].name),
                 );
                 Object.assign(value, {
-                    imageUrlRef: value.thumbnail?.fileList[firstElement].name,
+                    imageUrlRef: `${uuidString}_____${value.thumbnail?.fileList[firstElement].name}_____.${value.thumbnail?.fileList[firstElement].name.split('.').pop()}`,
                 });
+                console.log(renameFile(
+                    value.thumbnail?.fileList?.[firstElement]
+                        .originFileObj as File, uuidString,value.thumbnail?.fileList[firstElement].name),'new');
+                        console.log(value.thumbnail?.fileList?.[firstElement]
+                            .originFileObj as File,'old');
                 // Delete thumbnail
                 const { thumbnail, ...rest } = value;
                 const { imageUrlRef, size, color, stock } = rest;
                 const variantFinal = {
                     imageUrlRef,
-                    size,
+                             size,
                     color,
                     stock,
                 };
