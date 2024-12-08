@@ -59,11 +59,11 @@ export const vnpayReturn = async (req, res, next) => {
         vnp_Params["vnp_TxnRef"],
         {
           isPaid: true,
-          orderStatus: ORDER_STATUS.CONFIRMED,
+          orderStatus: ORDER_STATUS.PENDING,
           paymentMethod: PAYMENT_METHOD.CARD,
           orderStatusLogs: generateOrderStatusLog({
             statusChangedBy: userId,  
-            orderStatus: ORDER_STATUS.CONFIRMED,
+            orderStatus: ORDER_STATUS.PENDING,
             reason: "User paid by VNPay successfully",
           }),
         },

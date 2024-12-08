@@ -25,7 +25,6 @@ const OrderStatusBar = ({ orderStatus }: Props) => {
                 return setCurrentStep(3);
             case ORDER_STATUS.DONE:
                 return setCurrentStep(4);
-
             default:
                 return 0;
         }

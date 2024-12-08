@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import type { TableColumnsType } from 'antd';
-import { Button } from 'antd';
+import { Button, Tooltip } from 'antd';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { ORDER_STATUS } from '@/constants/order';
@@ -63,6 +63,15 @@ const OrderTable = ({ ordersList, totalDocs }: Props) => {
             dataIndex: 'code',
             title: 'Mã đơn hàng',
             ...getColumnSearchProps('code'),
+            render: (text: string) => {
+                // Cắt chuỗi còn 8 ký tự đầu
+                const shortCode = text.substring(0, 8) + '...';
+                return (
+                    <Tooltip title={text}>
+                        <span>{shortCode}</span>
+                    </Tooltip>
+                );
+            }
         },
         {
             key: 'rawsearch',
