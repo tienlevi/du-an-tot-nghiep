@@ -24,7 +24,7 @@ export default function Homepage() {
             </div>
 
             <div className="my-4 max-w-screen-default default:mx-auto mx-4">
-                <div className="mt-4 lg:max-w-[1200px] 2xl:max-w-screen-default w-full default:mx-auto mx-6">
+                <div className="mt-4 lg:max-w-[1200px] 2xl:max-w-screen-default w-full default:mx-auto">
                     <h3 className="text-xl text-global font-bold">
                         Sản phẩm nổi bật
                     </h3>
@@ -43,7 +43,7 @@ export default function Homepage() {
             </div>
 
             <div className="mt-4 max-w-screen-default default:mx-auto mx-4">
-                <div className="mt-4 lg:max-w-[1200px] 2xl:max-w-screen-default w-full default:mx-auto mx-6">
+                <div className="mt-4 lg:max-w-[1200px] 2xl:max-w-screen-default w-full default:mx-auto">
                     {!bestLoading && productBest && (
                         <ShowMoreList
                             enableButton={{

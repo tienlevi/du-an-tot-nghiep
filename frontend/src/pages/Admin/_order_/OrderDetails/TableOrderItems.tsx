@@ -2,6 +2,12 @@ import { Table, Tag } from 'antd';
 import { TableProps } from 'antd/lib';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
+import {
+    CreditCardFilled,
+    DollarCircleFilled,
+    PercentageOutlined,
+    TruckFilled,
+} from '@ant-design/icons';
 
 interface OrderItem {
     productId: string;
@@ -19,10 +25,11 @@ interface OrderItem {
 }
 
 interface Props {
+    serviceInfo: any;
     orderItems: OrderItem[];
 }
 
-const TableOrderItems: React.FC<Props> = ({ orderItems }) => {
+const TableOrderItems: React.FC<Props> = ({ serviceInfo, orderItems }) => {
     const navigate = useNavigate();
 
     const formatCurrency = (amount: number) => {
@@ -32,13 +39,31 @@ const TableOrderItems: React.FC<Props> = ({ orderItems }) => {
         }).format(amount);
     };
 
+    const infoCards = [
+        {
+            icon: <TruckFilled className="text-2xl text-green-500" />,
+            label: 'Cước phí vận chuyển',
+            value: formatCurrency(serviceInfo.shippingFee),
+            className: 'from-green-50 to-emerald-50',
+        },
+        {
+            icon: <DollarCircleFilled className="text-2xl text-purple-500" />,
+            label: 'Tổng tiền',
+            value: formatCurrency(serviceInfo.totalPrice),
+            className: 'from-purple-50 to-fuchsia-50',
+        },
+    ];
+
     const columns: TableProps<OrderItem>['columns'] = [
         {
             title: 'Sản phẩm',
             key: 'product',
             width: '50%',
             render: (_, record) => (
-                <div className="flex items-center gap-19 py-3 cursor-pointer" onClick={() => navigate(`/products/${record.productId}`)}>
+                <div
+                    className="flex items-center gap-19 py-3 cursor-pointer"
+                    onClick={() => navigate(`/products/${record.productId}`)}
+                >
                     <div className="relative group">
                         <div className="overflow-hidden rounded-2xl">
                             <img
@@ -48,8 +73,8 @@ const TableOrderItems: React.FC<Props> = ({ orderItems }) => {
                             />
                         </div>
                         <div className="absolute bottom-2 left-2">
-                            <Tag 
-                                color="blue-inverse" 
+                            <Tag
+                                color="blue-inverse"
                                 className="rounded-full shadow-lg backdrop-blur-sm bg-opacity-90"
                             >
                                 {record.category}
@@ -66,14 +91,14 @@ const TableOrderItems: React.FC<Props> = ({ orderItems }) => {
                             </p>
                         </div>
                         <div className="flex items-center gap-3">
-                            <Tag 
-                                color="purple" 
+                            <Tag
+                                color="purple"
                                 className="rounded-full px-4 py-1 flex items-center gap-1 text-sm"
                             >
                                 Size: {record.size}
                             </Tag>
-                            <Tag 
-                                color="orange" 
+                            <Tag
+                                color="orange"
                                 className="rounded-full px-4 py-1 flex items-center gap-1 text-sm"
                             >
                                 {record.color}
@@ -127,7 +152,7 @@ const TableOrderItems: React.FC<Props> = ({ orderItems }) => {
                     </div>
                 </div>
             ),
-        }
+        },
     ];
 
     return (
@@ -139,6 +164,28 @@ const TableOrderItems: React.FC<Props> = ({ orderItems }) => {
                 rowKey="productId"
                 className="modern-table"
             />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-3 px-4">
+                {infoCards.map((info, index) => (
+                    <div
+                        key={index}
+                        className={`p-4 rounded-xl bg-gradient-to-r ${info.className} border border-gray-100`}
+                    >
+                        <div className="flex items-start gap-3">
+                            <div className="p-2 bg-white rounded-lg shadow-sm">
+                                {info.icon}
+                            </div>
+                            <div className="flex-1">
+                                <p className="text-sm text-gray-600 mb-1">
+                                    {info.label}
+                                </p>
+                                <p className="text-lg font-semibold text-gray-800">
+                                    {info.value}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };

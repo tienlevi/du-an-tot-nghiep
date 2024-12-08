@@ -11,7 +11,6 @@ import OrderDetailNavbar from './OrderDetailNavbar';
 const OrderDetail = () => {
     const { id } = useParams();
     const { data } = useOrderDetails(id!);
-    
 
     const orderStatus = data?.orderStatus;
 
@@ -28,13 +27,14 @@ const OrderDetail = () => {
     };
     const description = data?.description || '';
 
-    const orderItems = data?.items || [];  
-    
-    console.log(orderItems)
+    const orderItems = data?.items || [];
+
+    console.log(orderItems);
 
     return (
         <>
             <OrderDetailNavbar orderStatus={orderStatus} id={id!} />
+
             {orderStatus !== 'cancelled' ? (
                 <OrderStatusBar orderStatus={orderStatus} />
             ) : (
@@ -52,13 +52,17 @@ const OrderDetail = () => {
                     </Space>
                 </Space>
             )}
+            <ServiceInfo serviceInfo={serviceInfo} description={description} />
             <CustomerInfo
                 customerInfo={customerInfo}
                 receiverInfo={receiverInfo}
                 shippingAddress={shippingAddress}
             />
-            <ServiceInfo serviceInfo={serviceInfo} description={description} />
-            <TableOrderItems orderItems={orderItems} />
+
+            <TableOrderItems
+                serviceInfo={serviceInfo}
+                orderItems={orderItems}
+            />
         </>
     );
 };
