@@ -1,4 +1,4 @@
-import { NotFoundError } from "../errors/customError.js";
+import { BadRequestError, NotFoundError } from "../errors/customError.js";
 import Product from "../models/product.js";
 
 export const updateStockOnCreateOrder = async (dataItems) => {
@@ -12,7 +12,11 @@ export const updateStockOnCreateOrder = async (dataItems) => {
       }
       const newVariants = productTarget.variants.map((variant) => {
         if (variant._id.toString() === item.variantId.toString()) {
-          variant.stock -= item.quantity;
+          const newStock = variant.stock - item.quantity;
+          if (newStock < 0) {
+            throw new BadRequestError("Sản phẩm đã hết hàng!");
+          }
+          variant.stock = newStock;
         }
         return variant;
       });

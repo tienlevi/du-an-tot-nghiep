@@ -7,13 +7,34 @@ import { buildSigned, createVpnUrl } from "../utils/vnpayGenerator.js";
 import Order from "../models/order.js";
 import { updateStockOnCreateOrder } from "./inventory.service.js";
 import Cart from "../models/cart.js";
-
+import Product from "../models/product.js";
+import { BadRequestError, NotFoundError } from "../errors/customError.js";
 export const createPaymentUrlWithVNpay = async (req, res, next) => {
     const ipAddr = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
     const bankCode = "";
     const locale = "en";
     const totalPrice = req.body.totalPrice;
     const paymentMethod = PAYMENT_METHOD.CARD;
+    await Promise.all(
+      req.body.items.map(async (item) => {
+        const productTarget = await Product.findOne({
+          _id: item.productId,
+        });
+        if (!productTarget) {
+          throw new NotFoundError("Product not found");
+        }
+        const newVariants = productTarget.variants.map((variant) => {
+          if (variant._id.toString() === item.variantId.toString()) {
+            const newStock = variant.stock - item.quantity;
+            if (newStock < 0) {
+              throw new BadRequestError("Sản phẩm đã hết hàng!");
+            }
+            variant.stock = newStock;
+          }
+          return variant;
+        });
+      })
+    );
     const datacache = {
       ...req.body,
       paymentMethod,

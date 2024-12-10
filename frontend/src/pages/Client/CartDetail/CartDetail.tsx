@@ -268,31 +268,33 @@ export default function CartDetail() {
                                     </h3>
                                 </div>
                             )}
-                            <div className="flex flex-col">
-                                <div className="flex gap-2">
-                                    <span className="font-medium capitalize text-black">
-                                        Màu sắc:
+                            {product.stock !== 0 && (
+                                <div className="flex flex-col">
+                                    <div className="flex gap-2">
+                                        <span className="font-medium capitalize text-black">
+                                            Màu sắc:
+                                        </span>
+                                        <span>{product.color}</span>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <span className="font-medium capitalize text-black">
+                                            Kích cỡ:
+                                        </span>
+                                        <span>{product.size}</span>
+                                    </div>
+                                    <span
+                                        className={clsx(
+                                            'text-base font-semibold leading-5 text-[#222]',
+                                            // {
+                                            //     'text-red-600':
+                                            //         product.productId.discountPercentage > 0,
+                                            // }
+                                        )}
+                                    >
+                                        {Currency.format(product.price)}
                                     </span>
-                                    <span>{product.color}</span>
                                 </div>
-                                <div className="flex gap-2">
-                                    <span className="font-medium capitalize text-black">
-                                        Kích cỡ:
-                                    </span>
-                                    <span>{product.size}</span>
-                                </div>
-                                <span
-                                    className={clsx(
-                                        'text-base font-semibold leading-5 text-[#222]',
-                                        // {
-                                        //     'text-red-600':
-                                        //         product.productId.discountPercentage > 0,
-                                        // }
-                                    )}
-                                >
-                                    {Currency.format(product.price)}
-                                </span>
-                            </div>
+                            )}
                         </div>
                     </div>
                 </div>
