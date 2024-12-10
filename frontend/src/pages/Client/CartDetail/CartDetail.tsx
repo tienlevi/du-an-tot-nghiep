@@ -1,5 +1,6 @@
 import { MAIN_ROUTES } from '@/constants/router';
 import useDocumentTitle from '@/hooks/_common/useDocumentTitle';
+import { useRemoveAll } from '@/hooks/cart/Mutations/useRemoveAll';
 import { useMutationRemoveItem } from '@/hooks/cart/Mutations/useRemoveOne';
 import { useUpdateQuantity } from '@/hooks/cart/Mutations/useUpdateQuantity';
 import useGetMyCart from '@/hooks/cart/Queries/useGetMyCart';
@@ -37,8 +38,15 @@ import { Link, useNavigate } from 'react-router-dom';
 export default function CartDetail() {
     useDocumentTitle('ADSTORE - Chi tiết giỏ hàng');
     const { data: products, isLoading } = useGetMyCart();
+    const {
+        mutate: removeAllItems,
+        isPending: pendingRemoveAll,
+        reset: resetRemoveAll,
+        status: statusRemoveAll,
+    } = useRemoveAll();
     const { mutate: updateQuantity } = useUpdateQuantity();
-    const { handleRemoveCart, status, reset, isPending } = useMutationRemoveItem();
+    const { handleRemoveCart, status, reset, isPending } =
+        useMutationRemoveItem();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const cartItem = useTypedSelector((state) => state.cartReducer.items);
@@ -91,17 +99,25 @@ export default function CartDetail() {
     const productsIdRef = useRef(productIdArray);
     useEffect(() => {
         const productIdArray = products?.items.map((item) => item._id);
-        console.log(status)
-        if (productIdArray?.length !== productsIdRef.current?.length &&  status === 'idle') {
-            showMessage("Có sự thay đổi về sản phẩm vui lòng kiểm tra lại giỏ hàng", "info", 3000);
+        if (
+            productIdArray?.length !== productsIdRef.current?.length &&
+            status === 'idle' &&
+            statusRemoveAll === 'idle'
+        ) {
+            showMessage(
+                'Có sự thay đổi về sản phẩm vui lòng kiểm tra lại giỏ hàng',
+                'info',
+                3000,
+            );
         }
         productsIdRef.current = productIdArray;
-      }, [products]);
-      useEffect(()=>{
-        setTimeout(()=>{
-            reset()
-        },300)
-      },[status])
+    }, [products]);
+    useEffect(() => {
+        setTimeout(() => {
+            reset();
+            resetRemoveAll();
+        }, 300);
+    }, [status]);
     const handleChangeQuantity = (
         productId: string,
         variantId: string,
@@ -200,6 +216,9 @@ export default function CartDetail() {
         handleRemoveCart(id);
         dispatch(removeItems(id));
         message.success('Đã xóa sản phẩm khỏi giỏ hàng');
+    };
+    const handleRemoveAllItem = () => {
+        removeAllItems();
     };
     const columns: TableProps<ICartItemsResponse>['columns'] = [
         {
@@ -360,23 +379,21 @@ export default function CartDetail() {
             title: '',
             render: (_, product) => (
                 <Popconfirm
-                title="Thông báo"
-                description="Bạn có chắc là muốn xóa sản phẩm này khỏi giỏ hàng?"
-                onConfirm={() =>
-                    confirm(product._id as any)
-                }
-                placement="leftTop"
-                okText="Đồng ý"
-                cancelText="Hủy"
-            >
-                <Button
-                    loading={isPending}
-                    type="text"
-                    className="mb-20 text-indigo-600 hover:text-indigo-500"
+                    title="Thông báo"
+                    description="Bạn có chắc là muốn xóa sản phẩm này khỏi giỏ hàng?"
+                    onConfirm={() => confirm(product._id as any)}
+                    placement="leftTop"
+                    okText="Đồng ý"
+                    cancelText="Hủy"
                 >
-                    <DeleteOutlined />
-                </Button>
-            </Popconfirm>
+                    <Button
+                        loading={isPending}
+                        type="text"
+                        className="mb-20 text-indigo-600 hover:text-indigo-500"
+                    >
+                        <DeleteOutlined />
+                    </Button>
+                </Popconfirm>
             ),
         },
     ];
@@ -424,6 +441,15 @@ export default function CartDetail() {
                                         </Button>
                                     )}
                                 </div>
+                                {products && products.items.length !== 0 && (
+                                    <Button
+                                        onClick={() => handleRemoveAllItem()}
+                                        size="large"
+                                        className="block rounded-sm bg-global px-10 py-2 text-center text-sm font-medium text-white transition-colors duration-300 ease-linear hover:bg-[#16bcdc]"
+                                    >
+                                        Xóa tất cả sản phẩm
+                                    </Button>
+                                )}
                             </div>
                         </div>
                         {/* <div className='mt-8'>

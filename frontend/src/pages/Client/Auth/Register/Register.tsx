@@ -17,6 +17,7 @@ const Register = () => {
         resolver: zodResolver(registerSchema),
         defaultValues: {
             name: '',
+            phone: '',
             email: '',
             password: '',
             confirmPassword: '',
@@ -24,6 +25,7 @@ const Register = () => {
     });
     const { mutate, isPending } = useAuthRegister();
     const onSubmit = (data: RegisterFormData) => {
+        console.log(data)
         mutate(data);
     };
     return (
@@ -54,6 +56,23 @@ const Register = () => {
                                     {...field}
                                     className="h-[48px]"
                                     placeholder="Nhập tên người dùng"
+                                />
+                            )}
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        label="Số điện thoại"
+                        validateStatus={errors.phone ? 'error' : ''}
+                        help={errors.phone?.message}
+                    >
+                        <Controller
+                            name="phone"
+                            control={control}
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    className="h-[48px]"
+                                    placeholder="Nhập số điện thoại"
                                 />
                             )}
                         />

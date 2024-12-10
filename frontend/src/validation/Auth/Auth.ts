@@ -20,6 +20,9 @@ export const registerSchema = z
     password: z
       .string({ message: 'Vui lòng nhập mật khẩu!' })
       .min(5, 'Mật khẩu cần ít nhất 5 ký tự!'),
+    phone: z.string({message: 'Vui lòng nhập số điện thoại'}).regex(/^(?:\+?84|0)(?:3|5|7|8|9)\d{8}$/, {
+      message: 'Số điện thoại không hợp lệ',
+    }),
     confirmPassword: z
       .string({ message: 'Vui lòng xác nhận lại mật khẩu!' })
       .min(5, 'Mật khẩu cần ít nhất 5 ký tự!'),

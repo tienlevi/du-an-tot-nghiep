@@ -15,6 +15,7 @@ export default function ForgotPassword() {
         control,
         handleSubmit,
         formState: { errors },
+        setError
     } = useForm({
         defaultValues: {
             email: '',
@@ -22,7 +23,12 @@ export default function ForgotPassword() {
     });
     const { mutate, isPending } = useSendResetPassword();
     const onSubmit = (data: { email: string }) => {
-        mutate(data);
+        mutate(data, {onError: (err: any)=> {
+            const errObj = err.response.data
+            if(errObj.data.field){
+                setError('email', {message: errObj.data.message})
+            }
+        }});
     };
     return (
         <div className="relative flex justify-around max-w-screen-default default:mx-auto mx-12 mt-12">

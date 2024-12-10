@@ -12,7 +12,8 @@ export const useAuthRegister = ()=>{
             const payload = {
                 email: body.email,
                 name: body.name,
-                password: body.password
+                password: body.password,
+                phone: body.phone
             }
             return AuthServices.register(payload)
         },

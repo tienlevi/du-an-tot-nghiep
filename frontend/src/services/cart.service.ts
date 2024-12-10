@@ -20,7 +20,7 @@ export const cartService = {
         const res = await instance.patch(`${CART_ENDPOINT.REMOVEITEM}/${id}`);
         return res.data;
     },
-    async removeAllCart(body: { userId: string }) {
-        await instance.patch(`${CART_ENDPOINT.GET}/removeAll`, body);
+    async removeAllCart() {
+        await instance.patch(`${CART_ENDPOINT.GET}/remove-all`);
     },
 };

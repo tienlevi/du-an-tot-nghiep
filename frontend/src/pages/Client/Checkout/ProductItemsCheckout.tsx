@@ -58,7 +58,6 @@ const ProductItemsCheckout: React.FC = () => {
             (item) => !idProductCartCheckout.includes(item),
         );
         if (hasProductHide) {
-            showMessage('Sản phẩm không tồn tại', 'error');
             refetch();
             navigate('/cart');
         }

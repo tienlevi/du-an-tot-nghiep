@@ -41,17 +41,17 @@ const PublicRoutes = [
                 path: MAIN_ROUTES.VERIFY,
                 element: (
                     <Suspense>
-                        <VerifyAccountPage/>
+                        <VerifyAccountPage />
                     </Suspense>
-                )
+                ),
             },
             {
                 path: MAIN_ROUTES.FORGOT_PASSWORD,
                 element: (
                     <Suspense>
-                        <ForgotPasswordPage/>
+                        <ForgotPasswordPage />
                     </Suspense>
-                )
+                ),
             },
             {
                 path: '/login',
@@ -92,7 +92,9 @@ const PublicRoutes = [
                 path: MAIN_ROUTES.CART,
                 element: (
                     <Suspense>
-                        <CartDetailPage />
+                        <AuthProtected>
+                            <CartDetailPage />
+                        </AuthProtected>
                     </Suspense>
                 ),
             },
@@ -127,9 +129,9 @@ const PublicRoutes = [
             {
                 element: (
                     <Suspense>
-                        {/* <AuthProtected> */}
-                        <AccountLayout />
-                        {/* </AuthProtected> */}
+                        <AuthProtected>
+                            <AccountLayout />
+                        </AuthProtected>
                     </Suspense>
                 ),
                 children: [
