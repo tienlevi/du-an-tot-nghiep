@@ -19,8 +19,7 @@ export const createPaymentUrlWithVNpay = async (req, res, next) => {
       paymentMethod,
       totalPrice: totalPrice,
       orderStatus: 'cancelled',
-      description: 'Thanh toán thất bại',
-      canceledBy: 'system'
+      canceledBy: 'system',
     };
     const order = await Order.create(datacache);
     const vnpUrl = createVpnUrl({

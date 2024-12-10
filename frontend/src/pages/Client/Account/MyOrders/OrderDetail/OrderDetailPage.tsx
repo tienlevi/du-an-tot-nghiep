@@ -79,7 +79,7 @@ const OrderDetailPage = () => {
                                     )}
                                 </h2>
                                 <p className="font-normal">
-                                    {data?.description}
+                                    {data?.canceledBy === 'system' ? 'Thanh toán thất bại' : data?.description}
                                 </p>
                             </Space>
                             <Space></Space>
