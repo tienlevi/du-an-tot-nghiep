@@ -52,12 +52,12 @@ export default function DefaultCard({ item }: { item: IProduct }) {
         : item.price;
     return (
         <div className="group cursor-pointer mb-2">
-            <div className="w-full relative">
-                <Link to={`/products/${item._id}`}>
+            <div className="w-full relative h-[300px]">
+                <Link to={`/products/${item?._id}`} className="h-[300px]">
                     <img
-                        className="w-full"
-                        src={item.variants[0].image}
-                        alt={item.name}
+                        className="object-cover w-full h-[300px]"
+                        src={item.variants?.[0]?.image}
+                        alt=""
                     />
                 </Link>
 

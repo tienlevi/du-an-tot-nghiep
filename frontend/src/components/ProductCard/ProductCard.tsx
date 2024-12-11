@@ -28,7 +28,8 @@ function ProductCard({ item }: { item: IProduct }) {
     const user = useSelector((state: RootState) => state.auth.user);
     const { data: allWishList } = useGetAllWishlist(query);
     const wishListIds = allWishList?.data?.wishList?.map((item) => item._id);
-    const { handleRemoveWishList, isPending: pendingRemove } = useMutationRemoveWishList();
+    const { handleRemoveWishList, isPending: pendingRemove } =
+        useMutationRemoveWishList();
     const debouncedRemove = debounce(
         (id: string) => handleRemoveWishList(id),
         500,
@@ -52,10 +53,10 @@ function ProductCard({ item }: { item: IProduct }) {
         : item.price;
     return (
         <div className="group cursor-pointer">
-            <div className="w-full relative ">
-                <Link to={`/products/${item?._id}`}>
+            <div className="w-full relative h-[300px]">
+                <Link to={`/products/${item?._id}`} className="h-[300px]">
                     <img
-                        className="object-contain min-h-[250px] max-h-[250px]"
+                        className="object-cover w-full h-full"
                         src={item.variants?.[0]?.image}
                         alt=""
                     />
@@ -70,8 +71,11 @@ function ProductCard({ item }: { item: IProduct }) {
                             Thêm vào giỏ hàng
                         </span>
                     </DrawerAddCart>
-                    <button onClick={()=> handleAddWishlist()} className="w-1/6 h-[32px] bg-global hover:bg-opacity-80 duration-300 rounded-lg text-white">
-                    {isPending || pendingRemove ? (
+                    <button
+                        onClick={() => handleAddWishlist()}
+                        className="w-1/6 h-[32px] bg-global hover:bg-opacity-80 duration-300 rounded-lg text-white"
+                    >
+                        {isPending || pendingRemove ? (
                             <Spin />
                         ) : wishListIds?.includes(item._id) ? (
                             <HeartFilled className="text-red-500" />
