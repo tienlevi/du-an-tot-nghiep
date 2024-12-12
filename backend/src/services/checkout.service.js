@@ -11,6 +11,7 @@ import Product from "../models/product.js";
 import { BadRequestError, NotFoundError } from "../errors/customError.js";
 import { inventoryService } from "./index.js";
 export const createPaymentUrlWithVNpay = async (req, res, next) => {
+  await new Promise((resolve) => setTimeout(resolve, 2000));
   const ipAddr = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
   const bankCode = "";
   const locale = "en";
@@ -25,7 +26,8 @@ export const createPaymentUrlWithVNpay = async (req, res, next) => {
     orderStatus: "cancelled",
     canceledBy: "system",
   };
-  const order = await Order.create(datacache).session(session);
+  const order = new Order(datacache);
+  await order.save({ session });
   const vnpUrl = createVpnUrl({
     ipAddr,
     bankCode,
