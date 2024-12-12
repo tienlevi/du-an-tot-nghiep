@@ -6,12 +6,12 @@ import {
 } from "../errors/customError.js";
 import Order from "../models/order.js";
 import APIQuery from "../utils/APIQuery.js";
-import { sendMail } from '../utils/sendMail.js';
+import { sendMail } from "../utils/sendMail.js";
 import customResponse from "../helpers/response.js";
 import { inventoryService } from "./index.js";
-import { ORDER_STATUS , PAYMENT_METHOD } from "../constants/orderStatus.js";
+import { ORDER_STATUS, PAYMENT_METHOD } from "../constants/orderStatus.js";
 import { ROLE } from "../constants/role.js";
-import mongoose from "mongoose";
+import mongoose, { set } from "mongoose";
 import Cart from "../models/cart.js";
 
 // @GET:  Get all orders
@@ -100,8 +100,12 @@ export const createOrder = async (req, res, next) => {
     ...req.body,
     userId: req.userId,
   });
+
+  // Pause for 3 seconds
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  const session = req.session;
   //   Update stock
-  await inventoryService.updateStockOnCreateOrder(req.body.items);
+  await inventoryService.updateStockOnCreateOrder(req.body.items, session);
 
   await Promise.all(
     req.body.items.map(async (product) => {
@@ -113,10 +117,10 @@ export const createOrder = async (req, res, next) => {
           },
         },
         { new: true }
-      );
+      ).session(session);
     })
   );
-  await order.save();
+  await order.save({ session });
   return res.status(StatusCodes.OK).json(
     customResponse({
       data: order,
@@ -164,43 +168,46 @@ export const cancelOrder = async (req, res, next) => {
     // Update stock
     await inventoryService.updateStockOnCancelOrder(foundedOrder.items);
 
-    
     const template = {
       content: {
-          title: `${req.role === ROLE.ADMIN ? 'Đơn hàng của bạn đã bị hủy bởi admin' : 'Đơn hàng của bạn đã bị hủy'}`,
-          description: `${req.role === ROLE.ADMIN ? `Đơn hàng của bạn đã bị hủy bởi admin với lý do ${foundedOrder.description}, ${foundedOrder.isPaid? `Rất xin lỗi vì sự bất tiện này hãy liên hệ ngay với chúng tôi qua số điện thoại +84 123 456 789 để cửa hàng hoàn lại ${new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(foundedOrder.totalPrice || 0)} cho bạn `:""} dưới đây là thông tin đơn hàng:` : `Bạn vừa hủy một đơn hàng với lý do ${foundedOrder.description} từ AdShop thông tin đơn hàng:`}`,
-          email:
-              foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
-                  ? foundedOrder.customerInfo.email
-                  : foundedOrder.receiverInfo.email,
+        title: `${req.role === ROLE.ADMIN ? "Đơn hàng của bạn đã bị hủy bởi admin" : "Đơn hàng của bạn đã bị hủy"}`,
+        description: `${req.role === ROLE.ADMIN ? `Đơn hàng của bạn đã bị hủy bởi admin với lý do ${foundedOrder.description}, ${foundedOrder.isPaid ? `Rất xin lỗi vì sự bất tiện này hãy liên hệ ngay với chúng tôi qua số điện thoại +84 123 456 789 để cửa hàng hoàn lại ${new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(foundedOrder.totalPrice || 0)} cho bạn ` : ""} dưới đây là thông tin đơn hàng:` : `Bạn vừa hủy một đơn hàng với lý do ${foundedOrder.description} từ AdShop thông tin đơn hàng:`}`,
+        email:
+          foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
+            ? foundedOrder.customerInfo.email
+            : foundedOrder.receiverInfo.email,
       },
       product: {
-          items: foundedOrder.items,
-          shippingfee: foundedOrder.shippingFee,
-          totalPrice: foundedOrder.totalPrice,
+        items: foundedOrder.items,
+        shippingfee: foundedOrder.shippingFee,
+        totalPrice: foundedOrder.totalPrice,
       },
-      subject: '[AdShop] - Đơn hàng của bạn đã bị hủy',
+      subject: "[AdShop] - Đơn hàng của bạn đã bị hủy",
       link: {
-          linkHerf: `http://localhost:5173/my-orders/${req.body.orderId}`,
-          linkName: `Kiểm tra đơn hàng`,
+        linkHerf: `http://localhost:5173/my-orders/${req.body.orderId}`,
+        linkName: `Kiểm tra đơn hàng`,
       },
       user: {
-          name:
-              foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
-                  ? foundedOrder.customerInfo.name
-                  : foundedOrder.receiverInfo.name,
-          phone:
-              foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
-                  ? foundedOrder.customerInfo.phone
-                  : foundedOrder.receiverInfo.phone,
-          email:
-              foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
-                  ? foundedOrder.customerInfo.email
-                  : foundedOrder.receiverInfo.email,
-          address: `[${foundedOrder.shippingAddress.address}] -${foundedOrder.paymentMethod === PAYMENT_METHOD.CARD ? '' : ` ${foundedOrder.shippingAddress.ward}, ${foundedOrder.shippingAddress.district},`} ${foundedOrder.shippingAddress.province}, ${foundedOrder.shippingAddress.country}`,
+        name:
+          foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
+            ? foundedOrder.customerInfo.name
+            : foundedOrder.receiverInfo.name,
+        phone:
+          foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
+            ? foundedOrder.customerInfo.phone
+            : foundedOrder.receiverInfo.phone,
+        email:
+          foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
+            ? foundedOrder.customerInfo.email
+            : foundedOrder.receiverInfo.email,
+        address: `[${foundedOrder.shippingAddress.address}] -${foundedOrder.paymentMethod === PAYMENT_METHOD.CARD ? "" : ` ${foundedOrder.shippingAddress.ward}, ${foundedOrder.shippingAddress.district},`} ${foundedOrder.shippingAddress.province}, ${foundedOrder.shippingAddress.country}`,
       },
-  };
-  await sendMail({ email: foundedOrder.customerInfo.email, template, type: 'UpdateStatusOrder' });
+    };
+    await sendMail({
+      email: foundedOrder.customerInfo.email,
+      template,
+      type: "UpdateStatusOrder",
+    });
   } else {
     throw new NotAcceptableError(
       `Đơn hàng của bạn đã được giao không thể hủy đơn`
@@ -235,40 +242,44 @@ export const confirmOrder = async (req, res, next) => {
     foundedOrder.save();
     const template = {
       content: {
-          title: `Đơn hàng của bạn đã được xác nhận`,
-          description: `Chúng tôi xin thông báo rằng đơn hàng của bạn với mã đơn hàng ${req.body.orderId} đã được xác nhận thành công. Đội ngũ của chúng tôi sẽ bắt đầu xử lý đơn hàng trong thời gian sớm nhất.`,
-          email:
-              foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
-                  ? foundedOrder.customerInfo.email
-                  : foundedOrder.receiverInfo.email,
+        title: `Đơn hàng của bạn đã được xác nhận`,
+        description: `Chúng tôi xin thông báo rằng đơn hàng của bạn với mã đơn hàng ${req.body.orderId} đã được xác nhận thành công. Đội ngũ của chúng tôi sẽ bắt đầu xử lý đơn hàng trong thời gian sớm nhất.`,
+        email:
+          foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
+            ? foundedOrder.customerInfo.email
+            : foundedOrder.receiverInfo.email,
       },
       product: {
-          items: foundedOrder.items,
-          shippingfee: foundedOrder.shippingFee,
-          totalPrice: foundedOrder.totalPrice,
+        items: foundedOrder.items,
+        shippingfee: foundedOrder.shippingFee,
+        totalPrice: foundedOrder.totalPrice,
       },
-      subject: '[AdShop] - Đơn hàng của bạn đã được xác nhận',
+      subject: "[AdShop] - Đơn hàng của bạn đã được xác nhận",
       link: {
-          linkHerf: `http://localhost:3000/my-orders/${req.body.orderId}`,
-          linkName: `Kiểm tra đơn hàng`,
+        linkHerf: `http://localhost:3000/my-orders/${req.body.orderId}`,
+        linkName: `Kiểm tra đơn hàng`,
       },
       user: {
-          name:
-              foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
-                  ? foundedOrder.customerInfo.name
-                  : foundedOrder.receiverInfo.name,
-          phone:
-              foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
-                  ? foundedOrder.customerInfo.phone
-                  : foundedOrder.receiverInfo.phone,
-          email:
-              foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
-                  ? foundedOrder.customerInfo.email
-                  : foundedOrder.receiverInfo.email,
-          address: `[${foundedOrder.shippingAddress.address}] -${foundedOrder.paymentMethod === PAYMENT_METHOD.CARD ? '' : ` ${foundedOrder.shippingAddress.ward}, ${foundedOrder.shippingAddress.district},`} ${foundedOrder.shippingAddress.province}, ${foundedOrder.shippingAddress.country}`,
+        name:
+          foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
+            ? foundedOrder.customerInfo.name
+            : foundedOrder.receiverInfo.name,
+        phone:
+          foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
+            ? foundedOrder.customerInfo.phone
+            : foundedOrder.receiverInfo.phone,
+        email:
+          foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
+            ? foundedOrder.customerInfo.email
+            : foundedOrder.receiverInfo.email,
+        address: `[${foundedOrder.shippingAddress.address}] -${foundedOrder.paymentMethod === PAYMENT_METHOD.CARD ? "" : ` ${foundedOrder.shippingAddress.ward}, ${foundedOrder.shippingAddress.district},`} ${foundedOrder.shippingAddress.province}, ${foundedOrder.shippingAddress.country}`,
       },
-  };
-  await sendMail({ email: foundedOrder.customerInfo.email, template, type: 'UpdateStatusOrder' });
+    };
+    await sendMail({
+      email: foundedOrder.customerInfo.email,
+      template,
+      type: "UpdateStatusOrder",
+    });
   } else {
     throw new BadRequestError(`Your order is confirmed.`);
   }
@@ -303,40 +314,44 @@ export const shippingOrder = async (req, res, next) => {
 
     const template = {
       content: {
-          title: `Đơn hàng của bạn đang được giao`,
-          description: `Đơn hàng của đang được giao tới bạn vui lòng để ý điện thoại. Dưới đây là thông tin đơn hàng của bạn:`,
-          email:
-              foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
-                  ? foundedOrder.customerInfo.email
-                  : foundedOrder.receiverInfo.email,
+        title: `Đơn hàng của bạn đang được giao`,
+        description: `Đơn hàng của đang được giao tới bạn vui lòng để ý điện thoại. Dưới đây là thông tin đơn hàng của bạn:`,
+        email:
+          foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
+            ? foundedOrder.customerInfo.email
+            : foundedOrder.receiverInfo.email,
       },
       product: {
-          items: foundedOrder.items,
-          shippingfee: foundedOrder.shippingFee,
-          totalPrice: foundedOrder.totalPrice,
+        items: foundedOrder.items,
+        shippingfee: foundedOrder.shippingFee,
+        totalPrice: foundedOrder.totalPrice,
       },
-      subject: '[AdShop] - Đơn hàng của bạn đang được giao',
+      subject: "[AdShop] - Đơn hàng của bạn đang được giao",
       link: {
-          linkHerf: `http://localhost:5173/my-orders/${req.body.orderId}`,
-          linkName: `Kiểm tra đơn hàng`,
+        linkHerf: `http://localhost:5173/my-orders/${req.body.orderId}`,
+        linkName: `Kiểm tra đơn hàng`,
       },
       user: {
-          name:
-              foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
-                  ? foundedOrder.customerInfo.name
-                  : foundedOrder.receiverInfo.name,
-          phone:
-              foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
-                  ? foundedOrder.customerInfo.phone
-                  : foundedOrder.receiverInfo.phone,
-          email:
-              foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
-                  ? foundedOrder.customerInfo.email
-                  : foundedOrder.receiverInfo.email,
-          address: `[${foundedOrder.shippingAddress.address}] -${foundedOrder.paymentMethod === PAYMENT_METHOD.CARD ? '' : ` ${foundedOrder.shippingAddress.ward}, ${foundedOrder.shippingAddress.district},`} ${foundedOrder.shippingAddress.province}, ${foundedOrder.shippingAddress.country}`,
+        name:
+          foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
+            ? foundedOrder.customerInfo.name
+            : foundedOrder.receiverInfo.name,
+        phone:
+          foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
+            ? foundedOrder.customerInfo.phone
+            : foundedOrder.receiverInfo.phone,
+        email:
+          foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
+            ? foundedOrder.customerInfo.email
+            : foundedOrder.receiverInfo.email,
+        address: `[${foundedOrder.shippingAddress.address}] -${foundedOrder.paymentMethod === PAYMENT_METHOD.CARD ? "" : ` ${foundedOrder.shippingAddress.ward}, ${foundedOrder.shippingAddress.district},`} ${foundedOrder.shippingAddress.province}, ${foundedOrder.shippingAddress.country}`,
       },
-  };
-  await sendMail({ email: foundedOrder.customerInfo.email, template, type: 'UpdateStatusOrder' });
+    };
+    await sendMail({
+      email: foundedOrder.customerInfo.email,
+      template,
+      type: "UpdateStatusOrder",
+    });
   } else {
     throw new BadRequestError(`Your order is not confirmed.`);
   }
@@ -368,41 +383,45 @@ export const deliverOrder = async (req, res, next) => {
     foundedOrder.save();
     const template = {
       content: {
-          title: `Đơn hàng của bạn đã được giao thành công`,
-          description: `Đơn hàng của bạn đã được xác nhận là giao thành công bởi người vận chuyển. Dưới đây là thông tin đơn hàng của bạn`,
-          email:
-              foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
-                  ? foundedOrder.customerInfo.email
-                  : foundedOrder.receiverInfo.email,
-          warning: `Nếu bạn chưa nhận được hàng vui lòng liên hệ tới email của shop: adshop5785@gmail.com. Nếu đã nhận được hàng bạn vui lòng lên xác nhận lại tại trang đơn hàng của bạn. Trong trường hợp bạn đã nhận được hàng dựa theo chính sách chúng tôi sẽ cập nhật đơn hàng sang trạng thái hoàn thành sau 3 ngày!`
+        title: `Đơn hàng của bạn đã được giao thành công`,
+        description: `Đơn hàng của bạn đã được xác nhận là giao thành công bởi người vận chuyển. Dưới đây là thông tin đơn hàng của bạn`,
+        email:
+          foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
+            ? foundedOrder.customerInfo.email
+            : foundedOrder.receiverInfo.email,
+        warning: `Nếu bạn chưa nhận được hàng vui lòng liên hệ tới email của shop: adshop5785@gmail.com. Nếu đã nhận được hàng bạn vui lòng lên xác nhận lại tại trang đơn hàng của bạn. Trong trường hợp bạn đã nhận được hàng dựa theo chính sách chúng tôi sẽ cập nhật đơn hàng sang trạng thái hoàn thành sau 3 ngày!`,
       },
       product: {
-          items: foundedOrder.items,
-          shippingfee: foundedOrder.shippingFee,
-          totalPrice: foundedOrder.totalPrice,
+        items: foundedOrder.items,
+        shippingfee: foundedOrder.shippingFee,
+        totalPrice: foundedOrder.totalPrice,
       },
-      subject: '[AdShop] - Đơn hàng của bạn đã được giao thành công',
+      subject: "[AdShop] - Đơn hàng của bạn đã được giao thành công",
       link: {
-          linkHerf: `http://localhost:5173/my-orders/${req.body.orderId}`,
-          linkName: `Kiểm tra đơn hàng`,
+        linkHerf: `http://localhost:5173/my-orders/${req.body.orderId}`,
+        linkName: `Kiểm tra đơn hàng`,
       },
       user: {
-          name:
-              foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
-                  ? foundedOrder.customerInfo.name
-                  : foundedOrder.receiverInfo.name,
-          phone:
-              foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
-                  ? foundedOrder.customerInfo.phone
-                  : foundedOrder.receiverInfo.phone,
-          email:
-              foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
-                  ? foundedOrder.customerInfo.email
-                  : foundedOrder.receiverInfo.email,
-          address: `[${foundedOrder.shippingAddress.address}] -${foundedOrder.paymentMethod === PAYMENT_METHOD.CARD ? '' : ` ${foundedOrder.shippingAddress.ward}, ${foundedOrder.shippingAddress.district},`} ${foundedOrder.shippingAddress.province}, ${foundedOrder.shippingAddress.country}`,
+        name:
+          foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
+            ? foundedOrder.customerInfo.name
+            : foundedOrder.receiverInfo.name,
+        phone:
+          foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
+            ? foundedOrder.customerInfo.phone
+            : foundedOrder.receiverInfo.phone,
+        email:
+          foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
+            ? foundedOrder.customerInfo.email
+            : foundedOrder.receiverInfo.email,
+        address: `[${foundedOrder.shippingAddress.address}] -${foundedOrder.paymentMethod === PAYMENT_METHOD.CARD ? "" : ` ${foundedOrder.shippingAddress.ward}, ${foundedOrder.shippingAddress.district},`} ${foundedOrder.shippingAddress.province}, ${foundedOrder.shippingAddress.country}`,
       },
-  };
-  await sendMail({ email: foundedOrder.customerInfo.email, template, type: 'UpdateStatusOrder' });
+    };
+    await sendMail({
+      email: foundedOrder.customerInfo.email,
+      template,
+      type: "UpdateStatusOrder",
+    });
   } else {
     throw new BadRequestError(`Your order is delivered.`);
   }
@@ -431,40 +450,44 @@ export const finishOrder = async (req, res, next) => {
     foundedOrder.save();
     const template = {
       content: {
-          title: `Đơn hàng của bạn đã hoàn tất`,
-          description: `Cảm ơn bạn đã tin tưởng và lựa chọn AdShop cho nhu cầu mua sắm của mình.Nếu bạn cần hỗ trợ hoặc có bất kỳ thắc mắc nào, đừng ngần ngại liên hệ với chúng tôi`,
-          email:
-              foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
-                  ? foundedOrder.customerInfo.email
-                  : foundedOrder.receiverInfo.email,
+        title: `Đơn hàng của bạn đã hoàn tất`,
+        description: `Cảm ơn bạn đã tin tưởng và lựa chọn AdShop cho nhu cầu mua sắm của mình.Nếu bạn cần hỗ trợ hoặc có bất kỳ thắc mắc nào, đừng ngần ngại liên hệ với chúng tôi`,
+        email:
+          foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
+            ? foundedOrder.customerInfo.email
+            : foundedOrder.receiverInfo.email,
       },
       product: {
-          items: foundedOrder.items,
-          shippingfee: foundedOrder.shippingFee,
-          totalPrice: foundedOrder.totalPrice,
+        items: foundedOrder.items,
+        shippingfee: foundedOrder.shippingFee,
+        totalPrice: foundedOrder.totalPrice,
       },
-      subject: '[AdShop] - Đơn hàng của bạn đã hoàn thành',
+      subject: "[AdShop] - Đơn hàng của bạn đã hoàn thành",
       link: {
-          linkHerf: `http://localhost:5173/my-orders/${req.body.orderId}`,
-          linkName: `Kiểm tra đơn hàng`,
+        linkHerf: `http://localhost:5173/my-orders/${req.body.orderId}`,
+        linkName: `Kiểm tra đơn hàng`,
       },
       user: {
-          name:
-              foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
-                  ? foundedOrder.customerInfo.name
-                  : foundedOrder.receiverInfo.name,
-          phone:
-              foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
-                  ? foundedOrder.customerInfo.phone
-                  : foundedOrder.receiverInfo.phone,
-          email:
-              foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
-                  ? foundedOrder.customerInfo.email
-                  : foundedOrder.receiverInfo.email,
-          address: `[${foundedOrder.shippingAddress.address}] -${foundedOrder.paymentMethod === PAYMENT_METHOD.CARD ? '' : ` ${foundedOrder.shippingAddress.ward}, ${foundedOrder.shippingAddress.district},`} ${foundedOrder.shippingAddress.province}, ${foundedOrder.shippingAddress.country}`,
+        name:
+          foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
+            ? foundedOrder.customerInfo.name
+            : foundedOrder.receiverInfo.name,
+        phone:
+          foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
+            ? foundedOrder.customerInfo.phone
+            : foundedOrder.receiverInfo.phone,
+        email:
+          foundedOrder.paymentMethod === PAYMENT_METHOD.CARD
+            ? foundedOrder.customerInfo.email
+            : foundedOrder.receiverInfo.email,
+        address: `[${foundedOrder.shippingAddress.address}] -${foundedOrder.paymentMethod === PAYMENT_METHOD.CARD ? "" : ` ${foundedOrder.shippingAddress.ward}, ${foundedOrder.shippingAddress.district},`} ${foundedOrder.shippingAddress.province}, ${foundedOrder.shippingAddress.country}`,
       },
-  };
-  await sendMail({ email: foundedOrder.customerInfo.email, template, type: 'UpdateStatusOrder' });
+    };
+    await sendMail({
+      email: foundedOrder.customerInfo.email,
+      template,
+      type: "UpdateStatusOrder",
+    });
   } else {
     throw new BadRequestError(`Your order is done.`);
   }

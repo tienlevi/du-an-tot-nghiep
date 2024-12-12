@@ -34,7 +34,14 @@ export const handleInsertData = async (req, res) => {
       phone: "0976878654",
       role: ROLE.ADMIN,
     });
-
+    await User.create({
+      email: "test@gmail.com",
+      name: "Admin",
+      isActive: true,
+      password: "11222212",
+      phone: "0976878654",
+      role: ROLE.USER,
+    });
     const createdSizes = await Size.insertMany(sizes);
     const createdColors = await Color.insertMany(colors);
     const createdCategories = await Category.insertMany(categories);

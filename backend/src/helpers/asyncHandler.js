@@ -4,6 +4,10 @@ const asyncHandler = (fn) => {
       await fn(req, res, next);
     } catch (error) {
       next(error);
+    } finally {
+      if (req.session) {
+        req.session.endSession();
+      }
     }
   };
 };
