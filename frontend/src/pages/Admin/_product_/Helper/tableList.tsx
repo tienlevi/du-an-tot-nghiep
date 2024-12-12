@@ -102,7 +102,7 @@ export const ProductsListColumns = ({
                                     0,
                                 )
                             ) : (
-                                <span className="text-red">Hết hàng</span>
+                                <span className="text-red-500">Hết hàng</span>
                             )}
                         </p>
                     </div>
@@ -112,7 +112,9 @@ export const ProductsListColumns = ({
                                 {item?.stock ? (
                                     item.stock
                                 ) : (
-                                    <span className="text-red">Hết hàng</span>
+                                    <span className="text-red-500">
+                                        Hết hàng
+                                    </span>
                                 )}
                             </p>
                         ))}
@@ -159,7 +161,7 @@ export const ProductsListColumns = ({
             render: (_, record) => {
                 return (
                     <>
-                        <p className="text-red">
+                        <p className="text-red-500">
                             {!record.isActive && 'Đã ẩn'}
                         </p>
                         <p className="text-green-400">

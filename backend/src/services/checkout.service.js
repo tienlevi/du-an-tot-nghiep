@@ -1,5 +1,5 @@
 import { envConfig } from "../config/env.js";
-import mongoose from 'mongoose'; 
+import mongoose from "mongoose";
 import generateOrderStatusLog from "../utils/generateOrderStatusLog.js";
 import { ORDER_STATUS } from "../constants/orderStatus.js";
 import { PAYMENT_METHOD } from "../constants/paymentMethod.js";
@@ -9,50 +9,35 @@ import { updateStockOnCreateOrder } from "./inventory.service.js";
 import Cart from "../models/cart.js";
 import Product from "../models/product.js";
 import { BadRequestError, NotFoundError } from "../errors/customError.js";
+import { inventoryService } from "./index.js";
 export const createPaymentUrlWithVNpay = async (req, res, next) => {
-    const ipAddr = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
-    const bankCode = "";
-    const locale = "en";
-    const totalPrice = req.body.totalPrice;
-    const paymentMethod = PAYMENT_METHOD.CARD;
-    await Promise.all(
-      req.body.items.map(async (item) => {
-        const productTarget = await Product.findOne({
-          _id: item.productId,
-        });
-        if (!productTarget) {
-          throw new NotFoundError("Product not found");
-        }
-        const newVariants = productTarget.variants.map((variant) => {
-          if (variant._id.toString() === item.variantId.toString()) {
-            const newStock = variant.stock - item.quantity;
-            if (newStock < 0) {
-              throw new BadRequestError("Sản phẩm đã hết hàng!");
-            }
-            variant.stock = newStock;
-          }
-          return variant;
-        });
-      })
-    );
-    const datacache = {
-      ...req.body,
-      paymentMethod,
-      totalPrice: totalPrice,
-      orderStatus: 'cancelled',
-      canceledBy: 'system',
-    };
-    const order = await Order.create(datacache);
-    const vnpUrl = createVpnUrl({
-      ipAddr,
-      bankCode,
-      locale,
-      amount: totalPrice,
-      vnPayReturnUrl: envConfig.VN_PAY_CONFIG.vnp_ReturnUrl,
-      orderId: order._id.toString(),
-    });
-    
-    res.status(200).json({ checkout: vnpUrl });
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  const ipAddr = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+  const bankCode = "";
+  const locale = "en";
+  const totalPrice = req.body.totalPrice;
+  const paymentMethod = PAYMENT_METHOD.CARD;
+  const session = req.session;
+  await inventoryService.updateStockOnCreateOrder(req.body.items, session);
+  const datacache = {
+    ...req.body,
+    paymentMethod,
+    totalPrice: totalPrice,
+    orderStatus: "cancelled",
+    canceledBy: "system",
+  };
+  const order = new Order(datacache);
+  await order.save({ session });
+  const vnpUrl = createVpnUrl({
+    ipAddr,
+    bankCode,
+    locale,
+    amount: totalPrice,
+    vnPayReturnUrl: envConfig.VN_PAY_CONFIG.vnp_ReturnUrl,
+    orderId: order._id.toString(),
+  });
+
+  res.status(200).json({ checkout: vnpUrl });
 };
 
 export const vnpayReturn = async (req, res, next) => {
@@ -60,7 +45,7 @@ export const vnpayReturn = async (req, res, next) => {
   const secureHash = vnp_Params["vnp_SecureHash"];
   const responseCode = vnp_Params["vnp_ResponseCode"];
   const signed = buildSigned(vnp_Params);
- console.log(req.userId);
+  console.log(req.userId);
   if (secureHash === signed) {
     const order = await Order.findById(vnp_Params["vnp_TxnRef"]);
 
@@ -82,35 +67,35 @@ export const vnpayReturn = async (req, res, next) => {
           orderStatus: ORDER_STATUS.PENDING,
           paymentMethod: PAYMENT_METHOD.CARD,
           orderStatusLogs: generateOrderStatusLog({
-            statusChangedBy: userId,  
+            statusChangedBy: userId,
             orderStatus: ORDER_STATUS.PENDING,
             reason: "User paid by VNPay successfully",
           }),
         },
         { new: true }
       );
-        await Promise.all(
-          order.items.map(async (product) => {
-            console.log('Removing product:', product);
-            
-               await Cart.findOneAndUpdate(
-              { 
-                userId: userId,
-                'items.product': new mongoose.Types.ObjectId(product.productId),
-                'items.variant': new mongoose.Types.ObjectId(product.variantId)
+      await Promise.all(
+        order.items.map(async (product) => {
+          console.log("Removing product:", product);
+
+          await Cart.findOneAndUpdate(
+            {
+              userId: userId,
+              "items.product": new mongoose.Types.ObjectId(product.productId),
+              "items.variant": new mongoose.Types.ObjectId(product.variantId),
+            },
+            {
+              $pull: {
+                items: {
+                  product: new mongoose.Types.ObjectId(product.productId),
+                  variant: new mongoose.Types.ObjectId(product.variantId),
+                },
               },
-              {
-                $pull: {
-                  items: { 
-                    product: new mongoose.Types.ObjectId(product.productId),
-                    variant: new mongoose.Types.ObjectId(product.variantId)
-                  }
-                }
-              },
-              { new: true }
-            );
-          })
-        );
+            },
+            { new: true }
+          );
+        })
+      );
       await updateStockOnCreateOrder(order.items);
       return res.status(200).json({
         code: responseCode,

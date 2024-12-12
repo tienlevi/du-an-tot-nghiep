@@ -11,7 +11,7 @@ import customResponse from "../helpers/response.js";
 import { inventoryService } from "./index.js";
 import { ORDER_STATUS, PAYMENT_METHOD } from "../constants/orderStatus.js";
 import { ROLE } from "../constants/role.js";
-import mongoose from "mongoose";
+import mongoose, { set } from "mongoose";
 import Cart from "../models/cart.js";
 
 // @GET:  Get all orders
@@ -101,8 +101,12 @@ export const createOrder = async (req, res, next) => {
     ...req.body,
     userId: req.userId,
   });
+
+  // Pause for 3 seconds
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  const session = req.session;
   //   Update stock
-  await inventoryService.updateStockOnCreateOrder(req.body.items);
+  await inventoryService.updateStockOnCreateOrder(req.body.items, session);
 
   await Promise.all(
     req.body.items.map(async (product) => {
@@ -114,10 +118,10 @@ export const createOrder = async (req, res, next) => {
           },
         },
         { new: true },
-      );
+      ).session(session);
     }),
   );
-  await order.save();
+  await order.save({ session });
   return res.status(StatusCodes.OK).json(
     customResponse({
       data: order,

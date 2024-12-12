@@ -1,12 +1,12 @@
 import { BadRequestError, NotFoundError } from "../errors/customError.js";
 import Product from "../models/product.js";
 
-export const updateStockOnCreateOrder = async (dataItems) => {
+export const updateStockOnCreateOrder = async (dataItems, session) => {
   return await Promise.all(
     dataItems.map(async (item) => {
       const productTarget = await Product.findOne({
         _id: item.productId,
-      });
+      }).session(session);
       if (!productTarget) {
         throw new NotFoundError("Product not found");
       }

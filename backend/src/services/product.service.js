@@ -56,7 +56,7 @@ export const createProduct = async (productData, files) => {
     variants.forEach((element) => {
       const key = element.size + element.color;
       if (map[key]) {
-        throw new BadRequestError("Biến thể không được trùng nhau");
+        // throw new BadRequestError("Biến thể không được trùng nhau");
       } else {
         map[key] = 1;
       }
@@ -103,9 +103,9 @@ export const updateProduct = async (
   const product = await Product.findById(productId);
   let newVariants = [];
   let oldVariants = [];
-  if (hasDuplicates(variants.map((item) => item.imageUrlRef))) {
-    throw new BadRequestError("File ảnh không được trùng nhau");
-  }
+  // if (hasDuplicates(variants.map((item) => item.imageUrlRef))) {
+  //   throw new BadRequestError("File ảnh không được trùng nhau");
+  // }
   const map = {};
   variants.forEach((element) => {
     const key = element.size + element.color;
@@ -182,16 +182,14 @@ export const hiddenProduct = async (req, res, next) => {
     throw new NotFoundError(`Không tìm thấy sản phẩm này: ${id}`);
   }
 
-  return res
-    .status(StatusCodes.OK)
-    .json(
-      customResponse({
-        data: product,
-        success: true,
-        status: StatusCodes.OK,
-        message: ReasonPhrases.OK,
-      })
-    );
+  return res.status(StatusCodes.OK).json(
+    customResponse({
+      data: product,
+      success: true,
+      status: StatusCodes.OK,
+      message: ReasonPhrases.OK,
+    })
+  );
 };
 // @PATCH: showProduct
 export const showProduct = async (req, res, next) => {
@@ -208,16 +206,14 @@ export const showProduct = async (req, res, next) => {
     );
   }
 
-  return res
-    .status(StatusCodes.OK)
-    .json(
-      customResponse({
-        data: product,
-        success: true,
-        status: StatusCodes.OK,
-        message: ReasonPhrases.OK,
-      })
-    );
+  return res.status(StatusCodes.OK).json(
+    customResponse({
+      data: product,
+      success: true,
+      status: StatusCodes.OK,
+      message: ReasonPhrases.OK,
+    })
+  );
 };
 export const getRelatedProducts = async (req, res, next) => {
   const product = await Product.findById(req.params.id)
