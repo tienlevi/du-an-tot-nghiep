@@ -415,7 +415,7 @@ export default function CartDetail() {
 
     //Logic apply voucher
     const [voucherSelected, setVoucherSelected] = useState<MyVoucher>();
-    const handleApplyVoucher = (voucher: MyVoucher) => {
+    const handleApplyVoucher = (voucher?: MyVoucher) => {
         setVoucherSelected(voucher);
         setShowVoucherList(false);
         dispatch(
@@ -606,7 +606,10 @@ export default function CartDetail() {
                         <div className="mt-12">
                             <button
                                 disabled={cartItem.length === 0}
-                                onClick={() => handleNavigateCheckout()}
+                                onClick={() => {
+                                    handleNavigateCheckout()
+                                    handleApplyVoucher(voucherSelected)
+                                }}
                                 className={`block h-[48px] w-full  rounded-[5px] bg-global px-10 py-2 text-center text-sm font-medium text-white transition-colors duration-300 ease-linear hover:bg-hover disabled:hover:bg-global`}
                             >
                                 Thanh Toán
