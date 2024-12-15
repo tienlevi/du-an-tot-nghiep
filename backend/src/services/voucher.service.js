@@ -1,4 +1,5 @@
 import Voucher from "../models/voucher.js";
+import MyVoucher from "../models/my-voucher.js";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import customResponse from "../helpers/response.js";
 import handleQuery from "../utils/handleQuery.js";
@@ -124,6 +125,9 @@ export const deleteVoucher = async (req, res, next) => {
         })
       );
     }
+
+    // Xóa tài liệu liên quan trong MyVoucher
+    await MyVoucher.deleteMany({ "voucherId._id": req.params.id });
 
     return res.status(StatusCodes.OK).json(
       customResponse({
