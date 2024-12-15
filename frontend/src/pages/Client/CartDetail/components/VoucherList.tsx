@@ -22,8 +22,6 @@ const VoucherList = ({
 }) => {
     const { data, error } = useGetMyVoucher();
 
-    console.log('data', data);
-
     const myVoucher = data?.data;
 
     return (

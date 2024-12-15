@@ -35,6 +35,7 @@ export const WishlistPage = lazy(() => import('@/pages/Client/WishList'));
 export const MyVoucher = lazy(
     () => import('@/pages/Client/MyVoucher/MyVoucher'),
 );
+export const Voucher = lazy(() => import(`@/pages/Client/Voucher/Voucher`));
 // @admin page
 export const DashboardPage = lazy(() => import('../pages/Admin/_dashboard_'));
 export const ProductsListAll = lazy(() => import('@/pages/Admin/_product_'));

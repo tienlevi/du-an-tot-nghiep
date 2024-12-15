@@ -426,6 +426,17 @@ export default function CartDetail() {
         );
     };
 
+    useEffect(() => {
+        if (totalOrderAmount > 0) {
+            dispatch(
+                calculateOrderHasVoucher({
+                    voucher: voucherSelected,
+                    totalAmount: totalOrderAmount,
+                }),
+            );
+        }
+    }, [voucherSelected, totalOrderAmount]);
+
     return (
         <>
             <div className="my-16 bg-white max-w-screen-default default:mx-auto mx-4 py-8">
@@ -607,8 +618,8 @@ export default function CartDetail() {
                             <button
                                 disabled={cartItem.length === 0}
                                 onClick={() => {
-                                    handleNavigateCheckout()
-                                    handleApplyVoucher(voucherSelected)
+                                    handleNavigateCheckout();
+                                    handleApplyVoucher(voucherSelected);
                                 }}
                                 className={`block h-[48px] w-full  rounded-[5px] bg-global px-10 py-2 text-center text-sm font-medium text-white transition-colors duration-300 ease-linear hover:bg-hover disabled:hover:bg-global`}
                             >

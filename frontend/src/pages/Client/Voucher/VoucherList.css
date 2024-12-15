@@ -1,0 +1,20 @@
+.voucher-container {
+    display: flex;
+    align-items: center;
+}
+
+.voucher-icon {
+    background: #f55a00;
+    padding: 12px;
+    border-radius: 8px;
+    margin-right: 10px;
+}
+
+.voucher-content {
+    flex: 1;
+}
+
+.voucher-tag {
+    font-size: 12px;
+    margin-bottom: 5px;
+}

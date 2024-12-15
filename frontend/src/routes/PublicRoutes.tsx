@@ -23,6 +23,7 @@ import {
     ForgotPasswordPage,
     MyVoucher,
     MyVoucherList,
+    Voucher,
 } from './LazyRoutes';
 import AuthProtected from '@/layouts/Protected/AuthProtected';
 
@@ -155,6 +156,16 @@ const PublicRoutes = [
                     },
                 ],
             },
+            {
+                path: MAIN_ROUTES.VOUCHER,
+                element: (
+                    <Suspense>
+                        <AuthProtected>
+                            <Voucher />
+                        </AuthProtected>
+                    </Suspense>
+                ),
+            },
         ],
     },
     {
@@ -183,6 +194,7 @@ const PublicRoutes = [
             </Suspense>
         ),
     },
+
     { path: '/404', element: <NotFound /> },
     { path: '*', element: <Navigate to={'/404'} /> },
 ];

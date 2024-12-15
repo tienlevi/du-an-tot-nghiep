@@ -6,6 +6,7 @@ import useGetAllWishlist from '@/hooks/wishlist/Queries/useGetAllWishlist';
 import { RootState, useAppDispatch, useTypedSelector } from '@/store/store';
 import showMessage from '@/utils/ShowMessage';
 import {
+    GiftOutlined,
     HeartOutlined,
     ShoppingCartOutlined,
     UserAddOutlined,
@@ -86,15 +87,19 @@ export default function UserToolBar() {
             {isAuth && (
                 <>
                     <Link
+                        to={MAIN_ROUTES.VOUCHER}
+                        className="flex flex-col items-center justify-center"
+                    >
+                        <GiftOutlined className="text-2xl" />
+                        <span className="text-sm">Mã giảm giá</span>
+                    </Link>
+                    <Link
                         to={MAIN_ROUTES.WISH_LIST}
                         className="flex flex-col items-center justify-center"
                     >
-                         <Badge
-                                count={wishListAllItems}
-                                overflowCount={10}
-                            >
-                                 <HeartOutlined className="text-2xl" />
-                            </Badge>
+                        <Badge count={wishListAllItems} overflowCount={10}>
+                            <HeartOutlined className="text-2xl" />
+                        </Badge>
                         <span className="text-sm">Yêu thích</span>
                     </Link>
                     <Dropdown
