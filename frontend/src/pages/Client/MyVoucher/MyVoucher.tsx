@@ -45,9 +45,9 @@ const MyVoucher = () => {
                         Claim
                     </Button>
 
-                    <Text className="text-lg text-red-500">
+                    {/* <Text className="text-lg text-red-500">
                         {error?.response.data.message}
-                    </Text>
+                    </Text> */}
                 </Form.Item>
             </Form>
         </div>

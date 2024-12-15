@@ -107,6 +107,15 @@ const VoucherList = () => {
             width: '10%',
         },
         {
+            title: 'Số lượng',
+            dataIndex: 'quantity',
+            key: 'quantity',
+            render: (text) => (
+                <h4 className="inline-block bg-slate-50">{text}</h4>
+            ),
+            width: '10%',
+        },
+        {
             title: 'Thao tác',
             key: 'action',
             render: (_, record) => (

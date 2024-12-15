@@ -515,6 +515,7 @@ export default function CartDetail() {
                                     >
                                         Xem thêm &gt;
                                     </Button>
+
                                     <VoucherList
                                         open={showVoucherList}
                                         onCancel={() =>
@@ -525,7 +526,7 @@ export default function CartDetail() {
                                     />
                                 </div>
 
-                                {voucherSelected && (
+                                {voucherSelected && priceDiscount && (
                                     <>
                                         <div className=" flex items-center justify-between border-b border-gray pb-6 text-base font-semibold">
                                             <span>Giảm:</span>
@@ -555,6 +556,28 @@ export default function CartDetail() {
                                                         </>
                                                     </>
                                                 )}
+                                                <Button
+                                                    type="text"
+                                                    size="small"
+                                                    style={{ color: 'red' }}
+                                                    onClick={() => {
+                                                        setVoucherSelected(
+                                                            undefined,
+                                                        );
+                                                        dispatch(
+                                                            calculateOrderHasVoucher(
+                                                                {
+                                                                    voucher:
+                                                                        undefined,
+                                                                    totalAmount:
+                                                                        totalOrderAmount,
+                                                                },
+                                                            ),
+                                                        );
+                                                    }}
+                                                >
+                                                    Xóa giảm giá
+                                                </Button>
                                             </span>
                                         </div>
                                         <div className=" flex items-center justify-between border-b border-gray pb-6 text-base font-semibold">

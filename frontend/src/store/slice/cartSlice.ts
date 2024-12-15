@@ -7,7 +7,7 @@ type IinitialState = {
     items: ICartItemsResponse[];
     voucher?: MyVoucher;
     totalAfterDiscount: number;
-    priceDiscount: number;
+    priceDiscount?: number;
 };
 const initialState: IinitialState = {
     cartOpen: false,
@@ -52,7 +52,10 @@ const cartSlice = createSlice({
         },
         calculateOrderHasVoucher: (
             state,
-            payload: PayloadAction<{ voucher: MyVoucher; totalAmount: number }>,
+            payload: PayloadAction<{
+                voucher?: MyVoucher;
+                totalAmount: number;
+            }>,
         ) => {
             const totalAmount = payload.payload.totalAmount as any;
             const voucher = payload.payload.voucher;
@@ -60,6 +63,8 @@ const cartSlice = createSlice({
             state.voucher = voucher;
             if (!voucher) {
                 state.totalAfterDiscount = totalAmount;
+                state.priceDiscount = undefined;
+                state.voucher = undefined;
             } else {
                 const { discountType, discountValue } = voucher.voucherId;
 

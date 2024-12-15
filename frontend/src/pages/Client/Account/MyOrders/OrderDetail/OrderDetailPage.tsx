@@ -18,7 +18,7 @@ const OrderDetailPage = () => {
     const { data, isLoading } = useOrderDetails(id!);
 
     const priceDiscount = useTypedSelector(
-        (state) => state.cartReducer.priceDiscount,
+        (state) => state.cartReducer?.priceDiscount,
     );
 
     const orderStatus = data?.orderStatus;

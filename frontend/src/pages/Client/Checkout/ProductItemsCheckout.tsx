@@ -250,7 +250,7 @@ const ProductItemsCheckout: React.FC = () => {
                         <Text>{formatCurrency(shippingFee)}</Text>
                     </div>
 
-                    {voucher && (
+                    {voucher && priceDiscount && (
                         <div className="flex justify-between ">
                             <Text className="text-red-500">Giảm:</Text>
                             <Text className="text-red-500">
