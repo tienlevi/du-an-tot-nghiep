@@ -103,8 +103,8 @@ const ProductItemsCheckout: React.FC = () => {
                         //Update myvoucher
                         if (voucher?._id) {
                             updateMyVoucher({ voucherId: voucher?._id });
-                            navigate('/success?vnp_ResponseCode=00');
                         }
+                        navigate('/success?vnp_ResponseCode=00');
                     },
                     onError: (error: any) => {
                         showMessage(error.response.data.message, 'error');
