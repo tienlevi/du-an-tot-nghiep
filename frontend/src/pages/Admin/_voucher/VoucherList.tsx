@@ -197,6 +197,7 @@ const VoucherList = () => {
                         type="primary"
                         onClick={() => {
                             deleteVoucher({ id: voucherId });
+                            handleCancel()
                         }}
                     >
                         Chấp nhận

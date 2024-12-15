@@ -92,6 +92,8 @@ const UpdateVoucher = () => {
                             name="code"
                             className="font-medium text-[#08090F]"
                             rules={voucherCodeValidator}
+                            validateTrigger="onChange"
+
                         >
                             <Input placeholder="Nhập mã voucher..." />
                         </Form.Item>
@@ -136,6 +138,8 @@ const UpdateVoucher = () => {
                             name="discountValue"
                             className="font-medium text-[#08090F]"
                             rules={voucherDiscountValidator}
+                            validateTrigger="onChange"
+
                         >
                             <InputNumber
                                 placeholder="Nhập giá trị giảm giá"
@@ -144,7 +148,7 @@ const UpdateVoucher = () => {
                             />
                         </Form.Item>
                     </div>
-                    <div className="w-full rounded-lg p-2 px-4">
+                    {/* <div className="w-full rounded-lg p-2 px-4">
                         <Form.Item
                             label="Giá trị đơn hàng tối thiểu"
                             name="minOrderValue"
@@ -164,7 +168,7 @@ const UpdateVoucher = () => {
                                 className="w-full"
                             />
                         </Form.Item>
-                    </div>
+                    </div> */}
                     <div className="w-full rounded-lg p-2 px-4">
                         <Form.Item
                             label="Số lượng"
