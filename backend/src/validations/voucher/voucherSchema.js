@@ -17,12 +17,21 @@ const voucherSchema = {
       "any.only": "Loại giảm giá phải là 'percentage' hoặc 'fixed'.",
       "any.required": "Loại giảm giá là bắt buộc.",
     }),
-    discountValue: Joi.number().min(1).max(100).required().messages({
-      "number.base": "Giá trị giảm giá phải là số.",
-      "number.min": "Giá trị giảm giá phải lớn hơn hoặc bằng {#limit}.",
-      "number.max": "Giá trị giảm giá phải nhỏ hơn hoặc bằng {#limit}.",
-      "any.required": "Giá trị giảm giá là bắt buộc.",
-    }),
+    discountValue: Joi.number()
+      .min(1)
+      .max(100)
+      .when('discountType', {
+        is: 'fixed',
+        then: Joi.number().max(100000),
+        otherwise: Joi.number().max(100)
+      })
+      .required()
+      .messages({
+        "number.base": "Giá trị giảm giá phải là số.",
+        "number.min": "Giá trị giảm giá phải lớn hơn hoặc bằng {#limit}.",
+        "number.max": "Giá trị giảm giá phải nhỏ hơn hoặc bằng {#limit}.",
+        "any.required": "Giá trị giảm giá là bắt buộc.",
+      }),
     minOrderValue: Joi.number().min(0).required().messages({
       "number.base": "Giá trị đơn hàng tối thiểu phải là số.",
       "number.min": "Giá trị đơn hàng tối thiểu không được nhỏ hơn {#limit}.",
@@ -74,11 +83,21 @@ const voucherSchema = {
     discountType: Joi.string().valid("percentage", "fixed").messages({
       "any.only": "Loại giảm giá phải là 'percentage' hoặc 'fixed'.",
     }),
-    discountValue: Joi.number().min(1).max(100).messages({
-      "number.base": "Giá trị giảm giá phải là số.",
-      "number.min": "Giá trị giảm giá phải lớn hơn hoặc bằng {#limit}.",
-      "number.max": "Giá trị giảm giá phải nhỏ hơn hoặc bằng {#limit}.",
-    }),
+    discountValue: Joi.number()
+      .min(1)
+      .max(100)
+      .when('discountType', {
+        is: 'fixed',
+        then: Joi.number().max(100000),
+        otherwise: Joi.number().max(100)
+      })
+      .required()
+      .messages({
+        "number.base": "Giá trị giảm giá phải là số.",
+        "number.min": "Giá trị giảm giá phải lớn hơn hoặc bằng {#limit}.",
+        "number.max": "Giá trị giảm giá phải nhỏ hơn hoặc bằng {#limit}.",
+        "any.required": "Giá trị giảm giá là bắt buộc.",
+      }),
     minOrderValue: Joi.number().min(0).messages({
       "number.base": "Giá trị đơn hàng tối thiểu phải là số.",
       "number.min": "Giá trị đơn hàng tối thiểu không được nhỏ hơn {#limit}.",

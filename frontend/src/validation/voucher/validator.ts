@@ -41,8 +41,8 @@ export const voucherDiscountValidator = (discountType: string) => [
                 }
             } else if (discountType === 'fixed') {
                 // Kiểm tra cho kiểu giảm giá cố định
-                if (value < 1000 || value > 1000000) {
-                    return Promise.reject('Giá trị giảm giá phải từ 1,000 đến 1,000,000.');
+                if (value < 1000 || value > 100000) {
+                    return Promise.reject('Giá trị giảm giá phải từ 1,000 đến 100,000.');
                 }
             } else {
                 return Promise.reject('Loại giảm giá không hợp lệ.');
