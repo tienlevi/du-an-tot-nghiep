@@ -8,6 +8,9 @@ export const ProfilePage = lazy(() => import('@/pages/Client/Account/Profile'));
 export const MyOrdersPage = lazy(
     () => import('@/pages/Client/Account/MyOrders'),
 );
+export const MyVoucherList = lazy(
+    () => import('@/pages/Client/MyVoucher/MyVoucherList'),
+);
 export const ListUser = lazy(() => import('@/pages/Admin/_user_/ManageUsers'));
 export const MyOrderDetailsPage = lazy(
     () => import('@/pages/Client/Account/MyOrders/OrderDetail/OrderDetailPage'),

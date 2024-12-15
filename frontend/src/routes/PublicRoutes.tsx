@@ -22,6 +22,7 @@ import {
     VerifyAccountPage,
     ForgotPasswordPage,
     MyVoucher,
+    MyVoucherList,
 } from './LazyRoutes';
 import AuthProtected from '@/layouts/Protected/AuthProtected';
 
@@ -143,6 +144,10 @@ const PublicRoutes = [
                     {
                         path: `${MAIN_ROUTES.MY_ORDERS}`,
                         element: <MyOrdersPage />,
+                    },
+                    {
+                        path: `${MAIN_ROUTES.MY_VOUCHER_LIST}`,
+                        element: <MyVoucherList />,
                     },
                     {
                         path: `${MAIN_ROUTES.MY_ORDERS_DETAIL}`,

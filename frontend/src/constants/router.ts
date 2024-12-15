@@ -21,6 +21,9 @@ export const MAIN_ROUTES = {
     WISHLIST: '/wish-list',
     CART: '/cart',
     MY_VOUCHER: '/my-voucher/claim',
+    MY_VOUCHER_LIST: '/my-voucher/list'
+
+   
 };
 
 export const ADMIN_ROUTES = {

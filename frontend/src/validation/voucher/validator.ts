@@ -23,7 +23,7 @@ export const voucherCodeValidator = [
     },
 ];
 
-export const voucherDiscountValidator = [
+export const voucherDiscountValidator = (discountType: string) => [
     {
         required: true,
         message: 'Vui lòng nhập giá trị giảm giá!',
@@ -33,9 +33,21 @@ export const voucherDiscountValidator = [
             if (value === undefined || value === null) {
                 return Promise.reject('Giá trị giảm giá là bắt buộc.');
             }
-            if (value < 1 || value > 100) {
-                return Promise.reject('Giá trị giảm giá phải từ 1 đến 100.');
+
+            if (discountType === 'percentage') {
+                // Kiểm tra cho kiểu giảm giá theo phần trăm
+                if (value < 1 || value > 100) {
+                    return Promise.reject('Giá trị giảm giá phải từ 1 đến 100%.');
+                }
+            } else if (discountType === 'fixed') {
+                // Kiểm tra cho kiểu giảm giá cố định
+                if (value < 1000 || value > 1000000) {
+                    return Promise.reject('Giá trị giảm giá phải từ 1,000 đến 1,000,000.');
+                }
+            } else {
+                return Promise.reject('Loại giảm giá không hợp lệ.');
             }
+
             return Promise.resolve();
         },
     },

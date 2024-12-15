@@ -6,7 +6,7 @@ import showMessage from '@/utils/ShowMessage';
 const menus = [
     { name: 'Tài khoản', path: MAIN_ROUTES.PROFILE },
     { name: 'Đơn hàng', path: MAIN_ROUTES.MY_ORDERS },
-    // { name: 'My Address', path: MAIN_ROUTES.MY_ADDRESS },
+    { name: 'Voucher của bạn', path: MAIN_ROUTES.MY_VOUCHER_LIST },
 ];
 
 const MenuAccount = ({ isAdmin }: { isAdmin: boolean }) => {

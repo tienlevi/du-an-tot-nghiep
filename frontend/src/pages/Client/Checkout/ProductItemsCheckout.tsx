@@ -102,9 +102,16 @@ const ProductItemsCheckout: React.FC = () => {
                     onSuccess: () => {
                         //Update myvoucher
                         if (voucher?._id) {
-                            updateMyVoucher({ voucherId: voucher?._id });
+                            updateMyVoucher({ voucherId: voucher?._id }, {
+                                onSuccess: () => {
+                                    navigate('/success?vnp_ResponseCode=00')
+
+                                }
+                            })
+                        } else {
+                            navigate('/success?vnp_ResponseCode=00');
+
                         }
-                        navigate('/success?vnp_ResponseCode=00');
                     },
                     onError: (error: any) => {
                         showMessage(error.response.data.message, 'error');
@@ -139,7 +146,15 @@ const ProductItemsCheckout: React.FC = () => {
                     onSuccess: () => {
                         //Update myvoucher
                         if (voucher?._id) {
-                            updateMyVoucher({ voucherId: voucher?._id });
+                            updateMyVoucher({ voucherId: voucher?._id }, {
+                                onSuccess: () => {
+                                    navigate('/success?vnp_ResponseCode=00')
+
+                                }
+                            })
+                        } else {
+                            navigate('/success?vnp_ResponseCode=00');
+
                         }
                     },
                 },

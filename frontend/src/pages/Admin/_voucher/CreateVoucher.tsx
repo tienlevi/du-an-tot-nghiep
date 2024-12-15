@@ -114,8 +114,20 @@ const CreateVoucher = () => {
                         <Form.Item
                             label="Giá trị giảm giá"
                             name="discountValue"
+                            dependencies={['discountType']}
                             className="font-medium text-[#08090F]"
-                            rules={voucherDiscountValidator}
+                            rules={[
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        const discountType = getFieldValue('discountType');
+                                        const validatorRule = voucherDiscountValidator(discountType)[1];
+                                        
+                                        if (validatorRule && typeof validatorRule.validator === 'function') {
+                                            return validatorRule.validator(_, value);
+                                        }
+                                    },
+                                }),
+                            ]}
                             validateTrigger="onChange"
 
                         >
