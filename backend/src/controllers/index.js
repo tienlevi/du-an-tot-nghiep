@@ -11,3 +11,5 @@ export * as tagControllers from "./tag.controllers.js";
 export * as userControllers from "./user.controllers.js";
 export * as shippingController from './shipping.controllers.js';
 export * as statsController from './stat.controllers.js'
+export * as voucherControllers from './voucher.controllers.js'
+export * as myVoucherControllers from './my-voucher.controllers.js'

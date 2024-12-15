@@ -21,6 +21,7 @@ import {
     OrderErrorPage,
     VerifyAccountPage,
     ForgotPasswordPage,
+    MyVoucher,
 } from './LazyRoutes';
 import AuthProtected from '@/layouts/Protected/AuthProtected';
 
@@ -164,6 +165,16 @@ const PublicRoutes = [
         element: (
             <Suspense>
                 <OrderErrorPage />
+            </Suspense>
+        ),
+    },
+    {
+        path: MAIN_ROUTES.MY_VOUCHER,
+        element: (
+            <Suspense>
+                <AuthProtected>
+                    <MyVoucher />
+                </AuthProtected>
             </Suspense>
         ),
     },

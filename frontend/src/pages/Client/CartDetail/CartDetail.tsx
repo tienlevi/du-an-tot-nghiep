@@ -10,6 +10,7 @@ import {
     removeItems,
     setItemsCart,
     updateItemsCart,
+    calculateOrderHasVoucher,
 } from '@/store/slice/cartSlice';
 import { useAppDispatch, useTypedSelector } from '@/store/store';
 import { ICartItemsResponse } from '@/types/Cart/CartResponse';
@@ -22,6 +23,7 @@ import {
     ConfigProvider,
     Form,
     Image,
+    Input,
     InputNumber,
     message,
     Popconfirm,
@@ -29,14 +31,17 @@ import {
     Table,
 } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
-import { TableProps } from 'antd/lib';
+import { TableProps, Typography } from 'antd/lib';
 import clsx from 'clsx';
 import { debounce } from 'lodash';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import VoucherList from './components/VoucherList';
+import { MyVoucher } from '@/types/MyVoucher';
 
 export default function CartDetail() {
     useDocumentTitle('ADSTORE - Chi tiết giỏ hàng');
+    const [showVoucherList, setShowVoucherList] = useState(false);
     const { data: products, isLoading } = useGetMyCart();
     const {
         mutate: removeAllItems,
@@ -50,6 +55,14 @@ export default function CartDetail() {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const cartItem = useTypedSelector((state) => state.cartReducer.items);
+    const totalAfterDiscount = useTypedSelector(
+        (state) => state.cartReducer.totalAfterDiscount,
+    );
+
+    const priceDiscount = useTypedSelector(
+        (state) => state.cartReducer.priceDiscount,
+    );
+
     const totalOrderAmount = cartItem
         ? cartItem.reduce(
               (total: number, product) =>
@@ -400,6 +413,19 @@ export default function CartDetail() {
         },
     ];
 
+    //Logic apply voucher
+    const [voucherSelected, setVoucherSelected] = useState<MyVoucher>();
+    const handleApplyVoucher = (voucher: MyVoucher) => {
+        setVoucherSelected(voucher);
+        setShowVoucherList(false);
+        dispatch(
+            calculateOrderHasVoucher({
+                voucher,
+                totalAmount: totalOrderAmount,
+            }),
+        );
+    };
+
     return (
         <>
             <div className="my-16 bg-white max-w-screen-default default:mx-auto mx-4 py-8">
@@ -478,6 +504,70 @@ export default function CartDetail() {
                                         {Currency.format(totalOrderAmount)}
                                     </span>
                                 </div>
+
+                                <div className="mt-4 flex items-center justify-between border-b border-gray pb-6 text-base font-semibold">
+                                    <span>Mã giảm giá (nếu có)</span>
+                                    <Button
+                                        type="text"
+                                        size="small"
+                                        style={{ color: 'red' }}
+                                        onClick={() => setShowVoucherList(true)}
+                                    >
+                                        Xem thêm &gt;
+                                    </Button>
+                                    <VoucherList
+                                        open={showVoucherList}
+                                        onCancel={() =>
+                                            setShowVoucherList(false)
+                                        }
+                                        onSelectVoucher={handleApplyVoucher}
+                                        voucherSelected={voucherSelected}
+                                    />
+                                </div>
+
+                                {voucherSelected && (
+                                    <>
+                                        <div className=" flex items-center justify-between border-b border-gray pb-6 text-base font-semibold">
+                                            <span>Giảm:</span>
+                                            <span className="text-lg text-red-500">
+                                                {voucherSelected.voucherId
+                                                    .discountType ===
+                                                'fixed' ? (
+                                                    <>
+                                                        {Currency.format(
+                                                            priceDiscount,
+                                                        )}
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        {Currency.format(
+                                                            priceDiscount,
+                                                        )}
+                                                        <>
+                                                            {' '}
+                                                            (
+                                                            {
+                                                                voucherSelected
+                                                                    .voucherId
+                                                                    .discountValue
+                                                            }
+                                                            %)
+                                                        </>
+                                                    </>
+                                                )}
+                                            </span>
+                                        </div>
+                                        <div className=" flex items-center justify-between border-b border-gray pb-6 text-base font-semibold">
+                                            <span>Tổng tiền đã giảm:</span>
+                                            <span className="text-lg text-red-500">
+                                                {Currency.format(
+                                                    totalAfterDiscount,
+                                                )}
+                                            </span>
+                                        </div>
+                                    </>
+                                )}
+
                                 <p className="my-4 opacity-90">
                                     Phí vận chuyển sẽ được tính khi thanh toán.
                                 </p>

@@ -13,3 +13,6 @@ export * as tagServices from "./tag.service.js";
 export * as userServices from "./user.service.js";
 export * as shippingService from './shipping.service.js';
 export * as statsService from './stats.service.js'
+export * as voucherServices from './voucher.service.js'
+export * as myVoucherServices from './my-voucher.service.js'
+

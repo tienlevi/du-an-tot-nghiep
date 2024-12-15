@@ -107,6 +107,18 @@ const orderSchema = new mongoose.Schema(
       default: ORDER_STATUS.PENDING,
       enum: Object.values(ORDER_STATUS),
     },
+    // voucherCode: {
+    //   type: String, // Lưu mã voucher đã được sử dụng
+    //   default: null,
+    // },
+    // voucherDiscount: {
+    //   type: Number, // Giá trị giảm giá áp dụng cho đơn hàng
+    //   default: 0,
+    // },
+    // totalPriceAfterDiscount: {
+    //   type: Number,
+    //   required: true,
+    // },
   },
   {
     versionKey: false,

@@ -9,6 +9,7 @@ interface Props {
         tax: number;
         totalPrice: number;
         isPaid: boolean;
+        priceDiscount?: number;
     };
     totalQuantity: number;
 }
@@ -70,13 +71,22 @@ export default function ServicesDetail({ services, totalQuantity }: Props) {
             ),
         },
         {
-            key: 'Payment Status',
+            key: 'Total Quantity',
             label: (
                 <span className="font-semibold capitalize">Tổng sản phẩm:</span>
             ),
             children: <p>{totalQuantity}</p>,
         },
     ];
+
+    // Add Discount item if priceDiscount exists
+    if (services.priceDiscount) {
+        items.splice(1, 0, {
+            key: 'Discount',
+            label: <span className="font-semibold capitalize">Giảm giá:</span>,
+            children: <p>{Currency.format(Number(services.priceDiscount))}</p>,
+        });
+    }
 
     return (
         <Space

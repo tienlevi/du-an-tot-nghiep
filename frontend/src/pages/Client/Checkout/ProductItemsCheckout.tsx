@@ -24,6 +24,7 @@ import PolicyModal from '@/components/PolicyModal';
 import { RadioChangeEvent } from 'antd/lib';
 import { useVnPayOrder } from '@/hooks/orders/Mutations/useVnPayOrder';
 import useGetMyCart from '@/hooks/cart/Queries/useGetMyCart';
+import { useMutationUpdateVoucher } from '@/hooks/MyVoucher/Mutations/useUpdateVoucher';
 
 const { Text, Title } = Typography;
 
@@ -33,6 +34,14 @@ const ProductItemsCheckout: React.FC = () => {
     const { data: cartUser, refetch } = useGetMyCart();
 
     const cartItems = useTypedSelector((state) => state.cartReducer.items);
+    const totalAfterDiscount = useTypedSelector(
+        (state) => state.cartReducer.totalAfterDiscount,
+    );
+    const voucher = useTypedSelector((state) => state.cartReducer.voucher);
+    const priceDiscount = useTypedSelector(
+        (state) => state.cartReducer.priceDiscount,
+    );
+
     const [policyAgreed, setPolicyAgreed] = useState<boolean>(false);
     const [paymentMethod, setPaymentMethod] = useState<number>(0);
     const createOrderVnPay = useVnPayOrder();
@@ -45,8 +54,10 @@ const ProductItemsCheckout: React.FC = () => {
             0,
         ) || 0;
 
-    const totalPrice = subTotal + shippingFee;
+    const totalPrice = totalAfterDiscount + shippingFee;
     const createOrder = useCreateOrder();
+
+    const { mutate: updateMyVoucher } = useMutationUpdateVoucher();
 
     useEffect(() => {
         const idProductCart =
@@ -81,13 +92,19 @@ const ProductItemsCheckout: React.FC = () => {
                         wardCode: shippingAddress.wardCode,
                     },
                     totalPrice,
+                    totalAfterDiscount,
                     tax,
                     shippingFee,
                     paymentMethod: 'cash',
+                    voucher,
                 },
                 {
                     onSuccess: () => {
-                        navigate('/success?vnp_ResponseCode=00');
+                        //Update myvoucher
+                        if (voucher?._id) {
+                            updateMyVoucher({ voucherId: voucher?._id });
+                            navigate('/success?vnp_ResponseCode=00');
+                        }
                     },
                     onError: (error: any) => {
                         showMessage(error.response.data.message, 'error');
@@ -95,26 +112,38 @@ const ProductItemsCheckout: React.FC = () => {
                 },
             );
         } else if (paymentMethod === 1) {
-            createOrderVnPay.mutate({
-                userId: userId,
-                items: cartItems as [],
-                customerInfo: receiverInfo.customer,
-                receiverInfo: receiverInfo.addReceiver,
-                description: description ?? '',
-                shippingAddress: {
-                    province: shippingAddress.province,
-                    district: shippingAddress.district,
-                    ward: shippingAddress.ward,
-                    address: shippingAddress.address,
-                    provinceId: shippingAddress.provinceId!,
-                    districtId: shippingAddress.districtId!,
-                    wardCode: shippingAddress.wardCode,
+            createOrderVnPay.mutate(
+                {
+                    userId: userId,
+                    items: cartItems as [],
+                    customerInfo: receiverInfo.customer,
+                    receiverInfo: receiverInfo.addReceiver,
+                    description: description ?? '',
+                    shippingAddress: {
+                        province: shippingAddress.province,
+                        district: shippingAddress.district,
+                        ward: shippingAddress.ward,
+                        address: shippingAddress.address,
+                        provinceId: shippingAddress.provinceId!,
+                        districtId: shippingAddress.districtId!,
+                        wardCode: shippingAddress.wardCode,
+                    },
+                    totalPrice,
+                    totalAfterDiscount,
+                    tax,
+                    shippingFee,
+                    paymentMethod: 'card',
+                    voucher,
                 },
-                totalPrice,
-                tax,
-                shippingFee,
-                paymentMethod: 'card',
-            });
+                {
+                    onSuccess: () => {
+                        //Update myvoucher
+                        if (voucher?._id) {
+                            updateMyVoucher({ voucherId: voucher?._id });
+                        }
+                    },
+                },
+            );
         } else {
             showMessage('Vui lòng chọn phương thức thanh toán', 'warning');
         }
@@ -220,6 +249,28 @@ const ProductItemsCheckout: React.FC = () => {
                         <Text>Phí vận chuyển:</Text>
                         <Text>{formatCurrency(shippingFee)}</Text>
                     </div>
+
+                    {voucher && (
+                        <div className="flex justify-between ">
+                            <Text className="text-red-500">Giảm:</Text>
+                            <Text className="text-red-500">
+                                {' '}
+                                -
+                                {voucher.voucherId.discountType === 'fixed' ? (
+                                    <>{formatCurrency(priceDiscount)}</>
+                                ) : (
+                                    <>
+                                        {formatCurrency(priceDiscount)}
+                                        <>
+                                            {' '}
+                                            ({voucher.voucherId.discountValue}
+                                            %)
+                                        </>
+                                    </>
+                                )}
+                            </Text>
+                        </div>
+                    )}
 
                     <div className="mt-2">
                         <h3 className="text-lg font-semibold">

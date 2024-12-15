@@ -28,6 +28,10 @@ export const CheckoutPage = lazy(
     () => import('@/pages/Client/Checkout/CheckOut'),
 );
 export const WishlistPage = lazy(() => import('@/pages/Client/WishList'));
+
+export const MyVoucher = lazy(
+    () => import('@/pages/Client/MyVoucher/MyVoucher'),
+);
 // @admin page
 export const DashboardPage = lazy(() => import('../pages/Admin/_dashboard_'));
 export const ProductsListAll = lazy(() => import('@/pages/Admin/_product_'));
@@ -78,6 +82,14 @@ export const UpdateSize = lazy(() => import('@/pages/Admin/_size_/UpdateSize'));
 export const TagList = lazy(() => import('@/pages/Admin/_tag_/'));
 export const CreateTag = lazy(() => import('@/pages/Admin/_tag_/CreateTag'));
 export const UpdateTag = lazy(() => import('@/pages/Admin/_tag_/UpdateTag'));
+
+export const VoucherList = lazy(() => import('@/pages/Admin/_voucher'));
+export const CreateVoucher = lazy(
+    () => import('@/pages/Admin/_voucher/CreateVoucher'),
+);
+export const UpdateVoucher = lazy(
+    () => import('@/pages/Admin/_voucher/UpdateVoucher'),
+);
 
 // @suspense
 export const Suspense = ({ children }: { children: React.ReactNode }) => {

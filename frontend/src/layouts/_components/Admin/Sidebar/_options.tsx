@@ -8,6 +8,7 @@ import {
     ShoppingOutlined,
     StarOutlined,
     TagsOutlined,
+    QrcodeOutlined,
 } from '@ant-design/icons';
 import { ADMIN_ROUTES } from '@/constants/router';
 
@@ -67,5 +68,9 @@ export const menuGroups: IMenuItem[] = [
             { label: 'Thẻ phân loại', route: ADMIN_ROUTES.TAGS },
         ],
     },
-  
+    {
+        icon: <QrcodeOutlined />,
+        label: 'Quản lý voucher',
+        children: [{ label: 'Tất cả voucher', route: ADMIN_ROUTES.VOUCHER }],
+    },
 ];

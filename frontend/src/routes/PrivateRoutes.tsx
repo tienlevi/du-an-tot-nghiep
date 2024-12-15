@@ -20,6 +20,9 @@ import {
     ManageOrders,
     OrdersDetails,
     ListUser,
+    VoucherList,
+    CreateVoucher,
+    UpdateVoucher,
     // UpdateProduct,
 } from './LazyRoutes';
 import { ADMIN_ROUTES } from '@/constants/router';
@@ -31,7 +34,7 @@ export const PrivateRoutes = [
         path: ADMIN_ROUTES.DASHBOARD,
         element: (
             <ProtectedRoute>
-            <AdminLayout />
+                <AdminLayout />
             </ProtectedRoute>
         ),
         children: [
@@ -270,6 +273,49 @@ export const PrivateRoutes = [
                         <OrdersDetails />
                     </Suspense>
                 ),
+            },
+            // @Color
+            {
+                path: ADMIN_ROUTES.VOUCHER,
+                element: (
+                    <Suspense>
+                        <Outlet />
+                    </Suspense>
+                ),
+                children: [
+                    {
+                        index: true,
+                        element: (
+                            <Suspense>
+                                <VoucherList />
+                            </Suspense>
+                        ),
+                    },
+                    {
+                        path: 'list',
+                        element: (
+                            <Suspense>
+                                <VoucherList />
+                            </Suspense>
+                        ),
+                    },
+                    {
+                        path: 'create',
+                        element: (
+                            <Suspense>
+                                <CreateVoucher />
+                            </Suspense>
+                        ),
+                    },
+                    {
+                        path: 'edit/:id',
+                        element: (
+                            <Suspense>
+                                <UpdateVoucher />
+                            </Suspense>
+                        ),
+                    },
+                ],
             },
         ],
     },

@@ -81,8 +81,6 @@ export const ORDER_ENDPOINT = {
     DISABLED_REVIEW: '/orders/disabled-review',
 };
 
-
-
 export const STATS_ENDPOINT = {
     TOTAL: '/stats/total',
     DAILY_STATS: '/stats/daily',
@@ -127,4 +125,18 @@ export const SHIPPING_ENDPOINT = {
     GET_DISTRICT: '/shipping/get-district',
     GET_WARD: '/shipping/get-ward',
     CALCULATE_FEE: '/shipping/calculate-shipping-fee',
+};
+
+export const VOUCHER_ENDPOINT = {
+    ALL: '/voucher/all',
+    DETAIL: '/voucher',
+    CREATE: '/voucher',
+    UPDATE: '/voucher',
+    DELETE: '/voucher',
+};
+
+export const MY_VOUCHER_ENDPOINT = {
+    ALL: '/my-voucher/all',
+    CLAIM: '/my-voucher/claim',
+    UPDATE: '/my-voucher',
 };

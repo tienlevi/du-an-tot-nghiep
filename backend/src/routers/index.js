@@ -12,6 +12,9 @@ import tagRouter from "./tag.routes.js";
 import userRouter from "./user.routes.js";
 import shippingRouter from './shipping.routes.js';
 import statsRouter from './stat.routes.js'
+import voucherRouter from './voucher.routes.js'
+import myVoucherRouter from './my-voucher.routes.js'
+
 const router = Router();
 
 router.use("/categories", categoryRouter);
@@ -26,7 +29,11 @@ router.use('/shipping', shippingRouter);
 router.use("/reviews", reviewRouter);
 router.use("/tags", tagRouter);
 router.use("/users", userRouter);
-router.use("/stats",statsRouter)
+router.use("/stats", statsRouter)
+router.use("/voucher", voucherRouter)
+router.use("/my-voucher", myVoucherRouter)
+
+
 
 
 export default router;

@@ -11,10 +11,15 @@ import ServicesDetail from '@/pages/Client/Account/MyOrders/OrderDetail/_Compone
 import TableDetailOrder from '@/pages/Client/Account/MyOrders/OrderDetail/_Components/TableDetailOrder';
 import { IOrderItem } from '@/types/Order';
 import { formatDate } from '@/utils/formatDate';
+import { useTypedSelector } from '@/store/store';
 
 const OrderDetailPage = () => {
     const { id } = useParams();
     const { data, isLoading } = useOrderDetails(id!);
+
+    const priceDiscount = useTypedSelector(
+        (state) => state.cartReducer.priceDiscount,
+    );
 
     const orderStatus = data?.orderStatus;
 
@@ -30,6 +35,7 @@ const OrderDetailPage = () => {
         tax: data?.tax || '',
         totalPrice: data?.totalPrice || '',
         isPaid: data?.isPaid || '',
+        priceDiscount: priceDiscount || undefined,
     };
 
     const orderItems = data?.items || [];
@@ -71,7 +77,7 @@ const OrderDetailPage = () => {
                                     {data?.canceledBy === 'user' && (
                                         <span>người dùng</span>
                                     )}
-                                     {data?.canceledBy === 'system' && (
+                                    {data?.canceledBy === 'system' && (
                                         <span>hệ thống</span>
                                     )}
                                     {data?.canceledBy === 'none' && (
@@ -79,7 +85,9 @@ const OrderDetailPage = () => {
                                     )}
                                 </h2>
                                 <p className="font-normal">
-                                    {data?.canceledBy === 'system' ? 'Thanh toán thất bại' : data?.description}
+                                    {data?.canceledBy === 'system'
+                                        ? 'Thanh toán thất bại'
+                                        : data?.description}
                                 </p>
                             </Space>
                             <Space></Space>

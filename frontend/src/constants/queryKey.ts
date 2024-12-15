@@ -45,4 +45,6 @@ export const QUERY_KEY = {
         ADD: 'add',
         REMOVE: 'remove',
     },
+    VOUCHER: 'VOUCHER',
+    MY_VOUCHER: 'MY-VOUCHER',
 };

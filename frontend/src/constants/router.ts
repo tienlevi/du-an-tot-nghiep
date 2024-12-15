@@ -20,6 +20,7 @@ export const MAIN_ROUTES = {
     VERIFY_ORDER: '/verify-order',
     WISHLIST: '/wish-list',
     CART: '/cart',
+    MY_VOUCHER: '/my-voucher/claim',
 };
 
 export const ADMIN_ROUTES = {
@@ -61,4 +62,9 @@ export const ADMIN_ROUTES = {
     // SHOP
     SHOP: '/admin/shop',
     SHOP_SETTINGS: '/admin/shop',
+
+    // VOUCHER
+    VOUCHER: '/admin/voucher',
+    VOUCHER_CREATE: '/admin/voucher/create',
+    VOUCHER_EDIT: '/admin/voucher/edit', // @id
 };
