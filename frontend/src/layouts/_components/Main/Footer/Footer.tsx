@@ -48,8 +48,8 @@ export default function Footer() {
                         </h3>
                         <ul className="text-global mt-4 flex flex-col gap-4 font-medium">
                             <li>
-                                <Link to={'/'} className="hover:text-red-500">
-                                    <p className="text-sm">Liên lạc</p>
+                                <Link to={'/my-voucher/claim'} className="hover:text-red-500">
+                                    <p className="text-sm">Claim Voucher</p>
                                 </Link>
                             </li>
                             <li>
