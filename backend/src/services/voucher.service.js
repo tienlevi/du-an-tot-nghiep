@@ -127,7 +127,7 @@ export const deleteVoucher = async (req, res, next) => {
     }
 
     // Xóa tài liệu liên quan trong MyVoucher
-    await MyVoucher.deleteMany({ "voucherId._id": req.params.id });
+    await MyVoucher.deleteMany({ voucherId: req.params.id });
 
     return res.status(StatusCodes.OK).json(
       customResponse({

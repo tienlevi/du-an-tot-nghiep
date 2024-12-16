@@ -33,7 +33,14 @@ const Voucher = () => {
     const queryKeys = Object.keys(query);
     let isResetFilter = false;
 
-    const { data, isLoading: isVoucherLoading } = useGetVoucher(query);
+    const {
+        data,
+        isLoading: isVoucherLoading,
+        refetch,
+    } = useGetVoucher({
+        ...query,
+        status: 'active',
+    });
 
     const vouchers = data?.data.vouchers;
 
@@ -73,7 +80,14 @@ const Voucher = () => {
     const { mutate, isPending } = useMutationClaimVoucher();
 
     const claimVoucher = (voucherCode: string) => {
-        mutate({ voucherCode });
+        mutate(
+            { voucherCode },
+            {
+                onSuccess: () => {
+                    refetch();
+                },
+            },
+        );
     };
 
     return (
