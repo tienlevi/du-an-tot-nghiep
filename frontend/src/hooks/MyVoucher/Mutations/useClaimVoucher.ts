@@ -16,8 +16,10 @@ export const useMutationClaimVoucher = () => {
             showMessage('Claim voucher thành công!', 'success');
             queryClient.refetchQueries({
                 predicate: (query) =>
-                    query.queryKey.some((element) =>
-                        [QUERY_KEY.MY_VOUCHER].includes(element as string),
+                    query.queryKey.some(
+                        (element) =>
+                            [QUERY_KEY.MY_VOUCHER].includes(element as string),
+                        [QUERY_KEY.VOUCHER],
                     ),
             });
         },
