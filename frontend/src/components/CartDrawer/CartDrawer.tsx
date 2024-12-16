@@ -135,13 +135,13 @@ const CartDrawer = ({ data, isFetching, children }: PropsType) => {
     // };
 
     useEffect(() => {
-        if (!data.items.length) {
+        if (!data?.items?.length) {
             calculateOrderHasVoucher({
                 voucher: undefined,
                 totalAmount: 0,
             });
         }
-    }, [data.items.length]);
+    }, [data?.items?.length]);
 
     return (
         <motion.div
