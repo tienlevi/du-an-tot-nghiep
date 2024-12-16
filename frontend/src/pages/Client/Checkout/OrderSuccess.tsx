@@ -1,5 +1,7 @@
 import { MAIN_ROUTES } from '@/constants/router';
+import { useMutationUpdateVoucher } from '@/hooks/MyVoucher/Mutations/useUpdateVoucher';
 import UseVNPayReturn from '@/hooks/orders/Queries/useVnPayReturn';
+import { useTypedSelector } from '@/store/store';
 import { Button, Result, Watermark } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,10 +9,19 @@ export default function OrderSuccess() {
     const navigate = useNavigate();
     const params = new URLSearchParams(window.location.search);
     const isSuccess = params.get('vnp_ResponseCode') == '00';
+
+    const voucher = useTypedSelector((state) => state.cartReducer.voucher);
+
+    const { mutate: updateMyVoucher } = useMutationUpdateVoucher();
+
     UseVNPayReturn(params);
     if (!isSuccess) {
         navigate(MAIN_ROUTES.ERROR_ORDER);
         return null;
+    }
+
+    if (voucher?._id) {
+        updateMyVoucher({ voucherId: voucher?._id });
     }
     return (
         <Watermark content={['ADSTORE', 'Thank you!']}>

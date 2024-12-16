@@ -24,7 +24,6 @@ import PolicyModal from '@/components/PolicyModal';
 import { RadioChangeEvent } from 'antd/lib';
 import { useVnPayOrder } from '@/hooks/orders/Mutations/useVnPayOrder';
 import useGetMyCart from '@/hooks/cart/Queries/useGetMyCart';
-import { useMutationUpdateVoucher } from '@/hooks/MyVoucher/Mutations/useUpdateVoucher';
 
 const { Text, Title } = Typography;
 
@@ -56,8 +55,6 @@ const ProductItemsCheckout: React.FC = () => {
 
     const totalPrice = totalAfterDiscount + shippingFee;
     const createOrder = useCreateOrder();
-
-    const { mutate: updateMyVoucher } = useMutationUpdateVoucher();
 
     useEffect(() => {
         const idProductCart =
@@ -105,21 +102,7 @@ const ProductItemsCheckout: React.FC = () => {
                 },
                 {
                     onSuccess: () => {
-                        //Update myvoucher
-                        if (voucher?._id) {
-                            updateMyVoucher(
-                                { voucherId: voucher?._id },
-                                {
-                                    onSuccess: () => {
-                                        navigate(
-                                            '/success?vnp_ResponseCode=00',
-                                        );
-                                    },
-                                },
-                            );
-                        } else {
-                            navigate('/success?vnp_ResponseCode=00');
-                        }
+                        navigate('/success?vnp_ResponseCode=00');
                     },
                     onError: (error: any) => {
                         showMessage(error.response.data.message, 'error');
@@ -127,54 +110,33 @@ const ProductItemsCheckout: React.FC = () => {
                 },
             );
         } else if (paymentMethod === 1) {
-            createOrderVnPay.mutate(
-                {
-                    userId: userId,
-                    items: cartItems as [],
-                    customerInfo: receiverInfo.customer,
-                    receiverInfo: receiverInfo.addReceiver,
-                    description: description ?? '',
-                    shippingAddress: {
-                        province: shippingAddress.province,
-                        district: shippingAddress.district,
-                        ward: shippingAddress.ward,
-                        address: shippingAddress.address,
-                        provinceId: shippingAddress.provinceId!,
-                        districtId: shippingAddress.districtId!,
-                        wardCode: shippingAddress.wardCode,
-                    },
-                    totalPrice,
-                    totalAfterDiscount,
-                    tax,
-                    shippingFee,
-                    paymentMethod: 'card',
-                    voucher: {
-                        code: voucher?.voucherId.code,
-                        discountType: voucher?.voucherId.discountType,
-                        discountValue: voucher?.voucherId.discountValue,
-                        quantity: voucher?.quantity,
-                    },
+            createOrderVnPay.mutate({
+                userId: userId,
+                items: cartItems as [],
+                customerInfo: receiverInfo.customer,
+                receiverInfo: receiverInfo.addReceiver,
+                description: description ?? '',
+                shippingAddress: {
+                    province: shippingAddress.province,
+                    district: shippingAddress.district,
+                    ward: shippingAddress.ward,
+                    address: shippingAddress.address,
+                    provinceId: shippingAddress.provinceId!,
+                    districtId: shippingAddress.districtId!,
+                    wardCode: shippingAddress.wardCode,
                 },
-                {
-                    onSuccess: () => {
-                        //Update myvoucher
-                        if (voucher?._id) {
-                            updateMyVoucher(
-                                { voucherId: voucher?._id },
-                                {
-                                    onSuccess: () => {
-                                        navigate(
-                                            '/success?vnp_ResponseCode=00',
-                                        );
-                                    },
-                                },
-                            );
-                        } else {
-                            navigate('/success?vnp_ResponseCode=00');
-                        }
-                    },
+                totalPrice,
+                totalAfterDiscount,
+                tax,
+                shippingFee,
+                paymentMethod: 'card',
+                voucher: {
+                    code: voucher?.voucherId.code,
+                    discountType: voucher?.voucherId.discountType,
+                    discountValue: voucher?.voucherId.discountValue,
+                    quantity: voucher?.quantity,
                 },
-            );
+            });
         } else {
             showMessage('Vui lòng chọn phương thức thanh toán', 'warning');
         }
