@@ -55,6 +55,7 @@ export default function CartDetail() {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const cartItem = useTypedSelector((state) => state.cartReducer.items);
+    const voucher = useTypedSelector((state) => state.cartReducer.voucher);
     const totalAfterDiscount = useTypedSelector(
         (state) => state.cartReducer.totalAfterDiscount,
     );
@@ -435,7 +436,10 @@ export default function CartDetail() {
                 }),
             );
         }
-    }, [voucherSelected, totalOrderAmount]);
+        if (voucher) {
+            setVoucherSelected(voucher);
+        }
+    }, [voucherSelected, totalOrderAmount, voucher]);
 
     return (
         <>
