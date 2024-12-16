@@ -2,6 +2,7 @@ import { MAIN_ROUTES } from '@/constants/router';
 import { useCart } from '@/hooks/_common/useCart';
 import { useMutationRemoveItem } from '@/hooks/cart/Mutations/useRemoveOne';
 import { useUpdateQuantity } from '@/hooks/cart/Mutations/useUpdateQuantity';
+import useGetMyCart from '@/hooks/cart/Queries/useGetMyCart';
 import { calculateOrderHasVoucher } from '@/store/slice/cartSlice';
 import { useTypedSelector } from '@/store/store';
 import { Product } from '@/types/Product';
@@ -38,6 +39,8 @@ const CartDrawer = ({ data, isFetching, children }: PropsType) => {
     const { cart, handleOpenCart, onClose } = useCart();
     const [isOpenConfirm, setIsOpenConfirm] = useState<boolean>(false);
     const { handleRemoveCart, isPending } = useMutationRemoveItem();
+
+    const { data: myCart } = useGetMyCart();
     const voucher = useTypedSelector((state) => state.cartReducer.voucher);
 
     const { mutate: updateQuantity } = useUpdateQuantity();
@@ -137,13 +140,13 @@ const CartDrawer = ({ data, isFetching, children }: PropsType) => {
     //     console.log(e);
     // };
     useEffect(() => {
-        if (voucher && data?.items?.length === 0) {
+        if (voucher && !myCart?.items.length) {
             calculateOrderHasVoucher({
                 voucher: undefined,
                 totalAmount: 0,
             });
         }
-    }, [data?.items, voucher]);
+    }, [myCart?.items.length, voucher]);
 
     return (
         <motion.div

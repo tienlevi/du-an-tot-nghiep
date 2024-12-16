@@ -449,8 +449,6 @@ export default function CartDetail() {
         }
     }, [voucherSelected, totalOrderAmount, voucher, products?.items.length]);
 
-    console.log('products?.items', products?.items);
-
     return (
         <>
             <div className="my-16 bg-white max-w-screen-default default:mx-auto mx-4 py-8">
