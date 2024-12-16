@@ -11,15 +11,14 @@ import ServicesDetail from '@/pages/Client/Account/MyOrders/OrderDetail/_Compone
 import TableDetailOrder from '@/pages/Client/Account/MyOrders/OrderDetail/_Components/TableDetailOrder';
 import { IOrderItem } from '@/types/Order';
 import { formatDate } from '@/utils/formatDate';
-import { useTypedSelector } from '@/store/store';
 
 const OrderDetailPage = () => {
     const { id } = useParams();
     const { data, isLoading } = useOrderDetails(id!);
 
-    const priceDiscount = useTypedSelector(
-        (state) => state.cartReducer?.priceDiscount,
-    );
+    // const priceDiscount = useTypedSelector(
+    //     (state) => state.cartReducer?.priceDiscount,
+    // );
 
     const orderStatus = data?.orderStatus;
 
@@ -29,11 +28,18 @@ const OrderDetailPage = () => {
             : data?.receiverInfo;
     const shippingAddress = data && data?.shippingAddress;
 
+    const priceDiscount =
+        data?.voucher?.discountType === 'fixed'
+            ? data?.voucher?.discountValue
+            : data?.totalPrice * (data?.voucher?.discountValue / 100);
+
     const serviceInfo = {
         paymentMethod: data?.paymentMethod || '',
         shippingFee: data?.shippingFee || '',
         tax: data?.tax || '',
-        totalPrice: data?.totalPrice || '',
+        totalPrice: data?.voucher
+            ? data?.totalAfterDiscount
+            : data?.totalPrice || '',
         isPaid: data?.isPaid || '',
         priceDiscount: priceDiscount || undefined,
     };

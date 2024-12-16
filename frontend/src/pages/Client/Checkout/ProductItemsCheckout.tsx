@@ -96,21 +96,29 @@ const ProductItemsCheckout: React.FC = () => {
                     tax,
                     shippingFee,
                     paymentMethod: 'cash',
-                    voucher,
+                    voucher: {
+                        code: voucher?.voucherId.code,
+                        discountType: voucher?.voucherId.discountType,
+                        discountValue: voucher?.voucherId.discountValue,
+                        quantity: voucher?.quantity,
+                    },
                 },
                 {
                     onSuccess: () => {
                         //Update myvoucher
                         if (voucher?._id) {
-                            updateMyVoucher({ voucherId: voucher?._id }, {
-                                onSuccess: () => {
-                                    navigate('/success?vnp_ResponseCode=00')
-
-                                }
-                            })
+                            updateMyVoucher(
+                                { voucherId: voucher?._id },
+                                {
+                                    onSuccess: () => {
+                                        navigate(
+                                            '/success?vnp_ResponseCode=00',
+                                        );
+                                    },
+                                },
+                            );
                         } else {
                             navigate('/success?vnp_ResponseCode=00');
-
                         }
                     },
                     onError: (error: any) => {
@@ -140,21 +148,29 @@ const ProductItemsCheckout: React.FC = () => {
                     tax,
                     shippingFee,
                     paymentMethod: 'card',
-                    voucher,
+                    voucher: {
+                        code: voucher?.voucherId.code,
+                        discountType: voucher?.voucherId.discountType,
+                        discountValue: voucher?.voucherId.discountValue,
+                        quantity: voucher?.quantity,
+                    },
                 },
                 {
                     onSuccess: () => {
                         //Update myvoucher
                         if (voucher?._id) {
-                            updateMyVoucher({ voucherId: voucher?._id }, {
-                                onSuccess: () => {
-                                    navigate('/success?vnp_ResponseCode=00')
-
-                                }
-                            })
+                            updateMyVoucher(
+                                { voucherId: voucher?._id },
+                                {
+                                    onSuccess: () => {
+                                        navigate(
+                                            '/success?vnp_ResponseCode=00',
+                                        );
+                                    },
+                                },
+                            );
                         } else {
                             navigate('/success?vnp_ResponseCode=00');
-
                         }
                     },
                 },

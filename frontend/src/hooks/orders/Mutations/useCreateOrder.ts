@@ -37,7 +37,12 @@ export type DataType = {
     };
     totalPrice: number;
     totalAfterDiscount: number;
-    voucher?: MyVoucher;
+    voucher?: {
+        code?: string;
+        discountType?: string;
+        discountValue?: number;
+        quantity?: number;
+    };
     tax: number;
     paymentMethod: string;
     coupon?: string;
