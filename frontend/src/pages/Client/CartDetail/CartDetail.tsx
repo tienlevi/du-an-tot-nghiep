@@ -439,7 +439,17 @@ export default function CartDetail() {
         if (voucher) {
             setVoucherSelected(voucher);
         }
-    }, [voucherSelected, totalOrderAmount, voucher]);
+        if (!products?.items.length) {
+            dispatch(
+                calculateOrderHasVoucher({
+                    voucher: undefined,
+                    totalAmount: 0,
+                }),
+            );
+        }
+    }, [voucherSelected, totalOrderAmount, voucher, products?.items.length]);
+
+    console.log('products?.items', products?.items);
 
     return (
         <>
