@@ -2,6 +2,7 @@ import { MAIN_ROUTES } from '@/constants/router';
 import { useCart } from '@/hooks/_common/useCart';
 import { useMutationRemoveItem } from '@/hooks/cart/Mutations/useRemoveOne';
 import { useUpdateQuantity } from '@/hooks/cart/Mutations/useUpdateQuantity';
+import { calculateOrderHasVoucher } from '@/store/slice/cartSlice';
 import { Product } from '@/types/Product';
 import { Currency } from '@/utils/FormatCurreny';
 import {
@@ -132,6 +133,15 @@ const CartDrawer = ({ data, isFetching, children }: PropsType) => {
     // const cancel: PopconfirmProps['onCancel'] = (e) => {
     //     console.log(e);
     // };
+
+    useEffect(() => {
+        if (!data.items.length) {
+            calculateOrderHasVoucher({
+                voucher: undefined,
+                totalAmount: 0,
+            });
+        }
+    }, [data.items.length]);
 
     return (
         <motion.div
