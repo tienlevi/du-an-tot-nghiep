@@ -31,13 +31,6 @@ const ServiceInfo: React.FC<Props> = ({ serviceInfo, description }) => {
                     : 'Thanh toán Online',
             className: 'from-blue-50 to-indigo-50',
         },
-
-        {
-            icon: <PercentageOutlined className="text-2xl text-yellow-500" />,
-            label: 'Thuế',
-            value: `${Number(serviceInfo.tax) * 100}% VAT`,
-            className: 'from-yellow-50 to-amber-50',
-        },
     ];
 
     return (

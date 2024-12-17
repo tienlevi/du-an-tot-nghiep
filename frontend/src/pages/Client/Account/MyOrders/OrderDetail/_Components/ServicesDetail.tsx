@@ -45,14 +45,14 @@ export default function ServicesDetail({ services, totalQuantity }: Props) {
             ),
             children: <p>{Currency.format(Number(services.shippingFee))}</p>,
         },
-        {
-            key: 'Tax',
-            label: <span className="font-semibold capitalize">Thuế:</span>,
-            children: <p>{`${Number(services.tax) * 100}% VAT `}</p>,
-        },
+
         {
             key: 'Total Price',
-            label: <span className="font-semibold capitalize">Tổng Tiền:</span>,
+            label: (
+                <span className="font-semibold capitalize">
+                    Tổng Tiền Thanh Toán:
+                </span>
+            ),
             children: <p>{Currency.format(services.totalPrice)}</p>,
         },
         {
