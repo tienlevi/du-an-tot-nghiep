@@ -37,9 +37,7 @@ const OrderDetailPage = () => {
         paymentMethod: data?.paymentMethod || '',
         shippingFee: data?.shippingFee || '',
         tax: data?.tax || '',
-        totalPrice: data?.voucher
-            ? data?.totalAfterDiscount
-            : data?.totalPrice || '',
+        totalPrice: data?.totalPrice,
         isPaid: data?.isPaid || '',
         priceDiscount: priceDiscount || undefined,
     };
