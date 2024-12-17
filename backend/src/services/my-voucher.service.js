@@ -133,10 +133,11 @@ export const getUserVouchers = async (req, res) => {
       );
     }
 
-    const myVouchers = await MyVoucher.find({ userId, status: "active" })
-      .populate("voucherId")
-      .exec();
-
+    const myVouchers = await MyVoucher.find({ userId, status: "active", quantity: { $gt: 0 } })
+    .populate("voucherId")
+    .exec();
+  
+    
     return res.status(StatusCodes.OK).json(
       customResponse({
         data: myVouchers,

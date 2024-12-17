@@ -1,5 +1,6 @@
 import { QUERY_KEY } from '@/constants/queryKey';
 import myVoucherService from '@/services/my-voucher.service';
+import { errorResponse } from '@/types/ErrorResponse';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useMutationUpdateVoucher = () => {
@@ -17,6 +18,8 @@ export const useMutationUpdateVoucher = () => {
                     ),
             });
         },
-        onError: () => {},
+        onError: (error: errorResponse) => {
+            // showMessage(error.response.data.message, 'error');
+        },
     });
 };

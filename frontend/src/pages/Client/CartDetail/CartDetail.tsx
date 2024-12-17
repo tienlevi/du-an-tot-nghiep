@@ -417,6 +417,7 @@ export default function CartDetail() {
     //Logic apply voucher
     const [voucherSelected, setVoucherSelected] = useState<MyVoucher>();
     const handleApplyVoucher = (voucher?: MyVoucher) => {
+        console.log('voucher', voucher);
         setVoucherSelected(voucher);
         setShowVoucherList(false);
         dispatch(
