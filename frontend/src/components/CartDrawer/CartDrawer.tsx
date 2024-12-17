@@ -4,7 +4,7 @@ import { useMutationRemoveItem } from '@/hooks/cart/Mutations/useRemoveOne';
 import { useUpdateQuantity } from '@/hooks/cart/Mutations/useUpdateQuantity';
 import useGetMyCart from '@/hooks/cart/Queries/useGetMyCart';
 import { calculateOrderHasVoucher } from '@/store/slice/cartSlice';
-import { useTypedSelector } from '@/store/store';
+import { useAppDispatch, useTypedSelector } from '@/store/store';
 import { Product } from '@/types/Product';
 import { Currency } from '@/utils/FormatCurreny';
 import {
@@ -36,6 +36,7 @@ type PropsType = {
     isFetching: boolean;
 };
 const CartDrawer = ({ data, isFetching, children }: PropsType) => {
+    const dispatch = useAppDispatch();
     const { cart, handleOpenCart, onClose } = useCart();
     const [isOpenConfirm, setIsOpenConfirm] = useState<boolean>(false);
     const { handleRemoveCart, isPending } = useMutationRemoveItem();
@@ -54,7 +55,6 @@ const CartDrawer = ({ data, isFetching, children }: PropsType) => {
     } | null>(null);
     useEffect(() => {
         if (data && !isFetching) {
-            console.log('setState');
             const newArr = data.items.map(({ quantity, variantId }: any) => ({
                 quantity,
                 id: variantId,
@@ -62,6 +62,7 @@ const CartDrawer = ({ data, isFetching, children }: PropsType) => {
             setQuantityProduct(newArr);
         }
     }, [data, isFetching]);
+
     const handleChangeQuantity = (
         productId: string,
         variantId: string,
@@ -139,14 +140,6 @@ const CartDrawer = ({ data, isFetching, children }: PropsType) => {
     // const cancel: PopconfirmProps['onCancel'] = (e) => {
     //     console.log(e);
     // };
-    useEffect(() => {
-        if (voucher && !myCart?.items.length) {
-            calculateOrderHasVoucher({
-                voucher: undefined,
-                totalAmount: 0,
-            });
-        }
-    }, [myCart?.items.length, voucher]);
 
     return (
         <motion.div
@@ -320,9 +313,24 @@ const CartDrawer = ({ data, isFetching, children }: PropsType) => {
                                             <Popconfirm
                                                 title="Thông báo"
                                                 description="Bạn có chắc là muốn xóa sản phẩm này khỏi giỏ hàng?"
-                                                onConfirm={() =>
-                                                    confirm(product.variantId)
-                                                }
+                                                onConfirm={async () => {
+                                                    confirm(product.variantId);
+                                                    if (
+                                                        voucher &&
+                                                        myCart?.items
+                                                            ?.length === 1
+                                                    ) {
+                                                        dispatch(
+                                                            calculateOrderHasVoucher(
+                                                                {
+                                                                    voucher:
+                                                                        undefined,
+                                                                    totalAmount: 0,
+                                                                },
+                                                            ),
+                                                        );
+                                                    }
+                                                }}
                                                 placement="leftTop"
                                                 okText="Đồng ý"
                                                 cancelText="Hủy"
