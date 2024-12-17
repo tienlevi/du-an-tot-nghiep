@@ -12,11 +12,18 @@ const OrderDetail = () => {
     const { id } = useParams();
     const { data } = useOrderDetails(id!);
 
+    console.log('data', data);
+
     const orderStatus = data?.orderStatus;
 
     const customerInfo = data && data?.customerInfo;
     const receiverInfo = data && data?.receiverInfo;
     const shippingAddress = data && data?.shippingAddress;
+
+    const priceDiscount =
+        data?.voucher?.discountType === 'fixed'
+            ? data?.voucher?.discountValue
+            : data?.totalPrice * (data?.voucher?.discountValue / 100);
 
     const serviceInfo = {
         paymentMethod: data?.paymentMethod || '',
@@ -24,6 +31,7 @@ const OrderDetail = () => {
         tax: data?.tax || '',
         totalPrice: data?.totalPrice || '',
         isPaid: data?.isPaid || '',
+        priceDiscount: priceDiscount || undefined,
     };
     const description = data?.description || '';
 

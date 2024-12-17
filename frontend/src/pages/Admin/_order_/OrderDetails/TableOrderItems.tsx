@@ -7,6 +7,7 @@ import {
     DollarCircleFilled,
     PercentageOutlined,
     TruckFilled,
+    GiftOutlined,
 } from '@ant-design/icons';
 
 interface OrderItem {
@@ -39,13 +40,14 @@ const TableOrderItems: React.FC<Props> = ({ serviceInfo, orderItems }) => {
         }).format(amount);
     };
 
-    const infoCards = [
+    let infoCards = [
         {
             icon: <TruckFilled className="text-2xl text-green-500" />,
             label: 'Cước phí vận chuyển',
             value: formatCurrency(serviceInfo.shippingFee),
             className: 'from-green-50 to-emerald-50',
         },
+
         {
             icon: <DollarCircleFilled className="text-2xl text-purple-500" />,
             label: 'Tổng tiền',
@@ -53,6 +55,18 @@ const TableOrderItems: React.FC<Props> = ({ serviceInfo, orderItems }) => {
             className: 'from-purple-50 to-fuchsia-50',
         },
     ];
+
+    if (serviceInfo.priceDiscount) {
+        infoCards = [
+            {
+                icon: <GiftOutlined className="text-2xl text-red-500" />,
+                label: 'Giảm giá',
+                value: formatCurrency(serviceInfo.priceDiscount),
+                className: 'from-red-50 to-emerald-50',
+            },
+            ...infoCards,
+        ];
+    }
 
     const columns: TableProps<OrderItem>['columns'] = [
         {
