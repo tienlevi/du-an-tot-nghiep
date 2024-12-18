@@ -101,7 +101,7 @@ export const createOrder = async (req, res, next) => {
     ...req.body,
     userId: req.userId,
   });
-
+ 
   // Pause for 3 seconds
   await new Promise((resolve) => setTimeout(resolve, 2000));
   const session = req.session;
@@ -122,6 +122,46 @@ export const createOrder = async (req, res, next) => {
     }),
   );
   await order.save({ session });
+  const template = {
+    content: {
+      title: `Bạn có đơn hàng mới`,
+      description: `Chúng tôi xin thông báo rằng bạn đã đặt một đơn hàng mới. Đội ngũ của chúng tôi sẽ bắt đầu xử lý đơn hàng trong thời gian sớm nhất.`,
+      email:
+        req.body.paymentMethod === PAYMENT_METHOD.CARD ?
+        req.body.customerInfo.email
+        : req.body.receiverInfo.email,
+    },
+    product: {
+      items: req.body.items,
+      shippingfee:  req.body.shippingFee,
+      totalPrice:  req.body.totalPrice,
+    },
+    subject: "[AdShop] - Bạn vừa đặt một đơn hàng mới",
+    link: {
+      linkHerf: `http://localhost:3000/my-orders/${order._id}`,
+      linkName: `Kiểm tra đơn hàng`,
+    },
+    user: {
+      name:
+      req.body.paymentMethod === PAYMENT_METHOD.CARD ?
+      req.body.customerInfo.name
+        : req.body.receiverInfo.name,
+      phone:
+      req.body.paymentMethod === PAYMENT_METHOD.CARD ?
+      req.body.customerInfo.phone
+        : req.body.receiverInfo.phone,
+      email:
+      req.body.paymentMethod === PAYMENT_METHOD.CARD ?
+      req.body.customerInfo.email
+        : req.body.receiverInfo.email,
+      address: `[${req.body.shippingAddress.address}] -${ req.body.paymentMethod === PAYMENT_METHOD.CARD ? "" : ` ${req.body.shippingAddress.ward}, ${req.body.shippingAddress.district},`} ${req.body.shippingAddress.province}, Việt Nam`,
+    },
+  };
+  await sendMail({
+    email: req.body.customerInfo.email,
+    template,
+    type: "UpdateStatusOrder",
+  });
   return res.status(StatusCodes.OK).json(
     customResponse({
       data: order,

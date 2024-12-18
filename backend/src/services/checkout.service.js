@@ -10,6 +10,7 @@ import Cart from "../models/cart.js";
 import Product from "../models/product.js";
 import { BadRequestError, NotFoundError } from "../errors/customError.js";
 import { inventoryService } from "./index.js";
+import { sendMail } from "../utils/sendMail.js";
 export const createPaymentUrlWithVNpay = async (req, res, next) => {
   await new Promise((resolve) => setTimeout(resolve, 2000));
   const ipAddr = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
@@ -97,6 +98,46 @@ export const vnpayReturn = async (req, res, next) => {
         })
       );
       await updateStockOnCreateOrder(order.items);
+      const template = {
+          content: {
+            title: `Bạn có đơn hàng mới`,
+            description: `Chúng tôi xin thông báo rằng bạn đã đặt một đơn hàng mới. Đội ngũ của chúng tôi sẽ bắt đầu xử lý đơn hàng trong thời gian sớm nhất.`,
+            email:
+            order.paymentMethod === PAYMENT_METHOD.CARD ?
+            order.customerInfo.email
+              : order.receiverInfo.email,
+          },
+          product: {
+            items: order.items,
+            shippingfee:  order.shippingFee,
+            totalPrice:  order.totalPrice,
+          },
+          subject: "[AdShop] - Bạn vừa đặt một đơn hàng mới",
+          link: {
+            linkHerf: `http://localhost:3000/my-orders/${order._id}`,
+            linkName: `Kiểm tra đơn hàng`,
+          },
+          user: {
+            name:
+            order.paymentMethod === PAYMENT_METHOD.CARD ?
+            order.customerInfo.name
+              : order.receiverInfo.name,
+            phone:
+            order.paymentMethod === PAYMENT_METHOD.CARD ?
+            order.customerInfo.phone
+              : order.receiverInfo.phone,
+            email:
+            order.paymentMethod === PAYMENT_METHOD.CARD ?
+            order.customerInfo.email
+              : order.receiverInfo.email,
+            address: `[${order.shippingAddress.address}] -${order.paymentMethod === PAYMENT_METHOD.CARD ? "" : ` ${order.shippingAddress.ward}, ${order.shippingAddress.district},`} ${order.shippingAddress.province}, Việt Nam`,
+          },
+        };
+        await sendMail({
+          email: order.customerInfo.email,
+          template,
+          type: "UpdateStatusOrder",
+        });
       return res.status(200).json({
         code: responseCode,
         message: "Payment successful",

@@ -9,6 +9,7 @@ const UseVNPayReturn = (params: URLSearchParams) => {
         staleTime: 0,
         refetchOnMount: true,
         refetchOnReconnect: true,
+        refetchOnWindowFocus: false,
     });
 };
 
