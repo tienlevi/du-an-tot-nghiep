@@ -52,7 +52,7 @@ export const getMyCart = async (req, res, next) => {
   await Cart.findOneAndUpdate(
     { userId: new mongoose.Types.ObjectId(userId) },
     { items: checkStock },
-    { new: true }
+    { new: true },
   );
 
   const itemsResponse = checkStock
@@ -115,7 +115,7 @@ export const addToCart = async (req, res, next) => {
 
   if (currentCart && currentCart.items.length > 0) {
     const productInThisCart = currentCart.items.find((item) =>
-      item.variant.equals(variantId)
+      item.variant.equals(variantId),
     );
     const currentQuantity = productInThisCart?.quantity || 0;
     const newQuantity = currentQuantity + quantity;
@@ -130,7 +130,7 @@ export const addToCart = async (req, res, next) => {
             newQuantity > item.stock ? item.stock : newQuantity,
         },
       },
-      { new: true, upsert: false }
+      { new: true, upsert: false },
     );
   }
 
@@ -140,7 +140,7 @@ export const addToCart = async (req, res, next) => {
       {
         $push: { items: { product: productId, variant: variantId, quantity } },
       },
-      { new: true, upsert: true }
+      { new: true, upsert: true },
     );
   }
 
@@ -153,7 +153,7 @@ export const removeCartItem = async (req, res, next) => {
   const updatedCart = await Cart.findOneAndUpdate(
     { userId: new mongoose.Types.ObjectId(userId) },
     { $pull: { items: { variant: req.params.variantId } } },
-    { new: true }
+    { new: true },
   );
   if (!updatedCart)
     throw new BadRequestError(`Not found cart with userId: ${req.body.userId}`);
@@ -166,7 +166,7 @@ export const removeAllCartItems = async (req, res, next) => {
   const cart = await Cart.findOneAndUpdate(
     { userId },
     { items: [] },
-    { new: true }
+    { new: true },
   ).lean();
 
   if (!cart)
@@ -187,8 +187,13 @@ export const updateCartItemQuantity = async (req, res, next) => {
   if (req.body.quantity <= 0) {
     req.body.quantity = 1;
   }
-  if (req.body.quantity > product.variants[0].stock) {
-    throw new BadRequestError("Sản phẩm vượt quá số lượng trong kho");
+  if (
+    req.body.quantity >
+    product.variants.find((el) => el._id.equals(req.body.variantId)).stock
+  ) {
+    req.body.quantity = product.variants.find((el) =>
+      el._id.equals(req.body.variantId),
+    ).stock;
   }
 
   const updatedQuantity = await Cart.findOneAndUpdate(
@@ -198,11 +203,11 @@ export const updateCartItemQuantity = async (req, res, next) => {
       "items.variant": new mongoose.Types.ObjectId(req.body.variantId),
     },
     { $set: { "items.$.quantity": req.body.quantity } },
-    { new: true }
+    { new: true },
   );
   if (!updatedQuantity)
     throw new BadRequestError(
-      `Not found product with Id: ${req.body.productId} inside this cart or cart not found`
+      `Not found product with Id: ${req.body.productId} inside this cart or cart not found`,
     );
 
   return null;
