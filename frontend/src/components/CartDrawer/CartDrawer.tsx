@@ -4,6 +4,7 @@ import { useMutationRemoveItem } from '@/hooks/cart/Mutations/useRemoveOne';
 import { useUpdateQuantity } from '@/hooks/cart/Mutations/useUpdateQuantity';
 import { Product } from '@/types/Product';
 import { Currency } from '@/utils/FormatCurreny';
+import showMessage from '@/utils/ShowMessage';
 import {
     CloseOutlined,
     DeleteOutlined,
@@ -261,12 +262,55 @@ const CartDrawer = ({ data, isFetching, children }: PropsType) => {
                                                                             min={
                                                                                 1
                                                                             }
-                                                                            disabled={
-                                                                                true
-                                                                            }
-                                                                            className=""
                                                                             value={
                                                                                 quantity
+                                                                            }
+                                                                            controls={
+                                                                                false
+                                                                            }
+                                                                            max={
+                                                                                product.stock
+                                                                            }
+                                                                            onPressEnter={(
+                                                                                e: any,
+                                                                            ) => {
+                                                                                if (
+                                                                                    quantity &&
+                                                                                    +e
+                                                                                        .target
+                                                                                        .value >
+                                                                                        product.stock
+                                                                                ) {
+                                                                                    showMessage(
+                                                                                        `Số lượng tối đa là ${product.stock}`,
+                                                                                        'info',
+                                                                                    );
+                                                                                }
+                                                                            }}
+                                                                            onBlur={(
+                                                                                e: any,
+                                                                            ) => {
+                                                                                if (
+                                                                                    quantity &&
+                                                                                    +e
+                                                                                        .target
+                                                                                        .value >
+                                                                                        product.stock
+                                                                                ) {
+                                                                                    showMessage(
+                                                                                        `Số lượng tối đa là ${product.stock}`,
+                                                                                        'info',
+                                                                                    );
+                                                                                }
+                                                                            }}
+                                                                            onChange={(
+                                                                                e,
+                                                                            ) =>
+                                                                                handleChangeQuantity(
+                                                                                    product.productId,
+                                                                                    product.variantId,
+                                                                                    e as number,
+                                                                                )
                                                                             }
                                                                         />
                                                                     </ConfigProvider>
