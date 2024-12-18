@@ -55,21 +55,23 @@ export const getMyCart = async (req, res, next) => {
     { new: true }
   );
 
-  const itemsResponse = checkStock.map((item) => {
-    const newItem = {
-      productId: item.product._id,
-      isActive: item.product.isActive,
-      variantId: item.variant,
-      quantity: item.quantity,
-      name: item.product.name,
-      price: item.product.price,
-      image: item.product.variants[0].image,
-      description: item.product.description,
-      discount: item.product.discount,
-      ...item.variantObj,
-    };
-    return newItem;
-  }).filter((el) => el.isActive);
+  const itemsResponse = checkStock
+    .map((item) => {
+      const newItem = {
+        productId: item.product._id,
+        isActive: item.product.isActive,
+        variantId: item.variant,
+        quantity: item.quantity,
+        name: item.product.name,
+        price: item.product.price,
+        image: item.product.variants[0].image,
+        description: item.product.description,
+        discount: item.product.discount,
+        ...item.variantObj,
+      };
+      return newItem;
+    })
+    .filter((el) => el.isActive);
   const myCart = {
     userId: cartUser.userId,
     items: itemsResponse,
@@ -117,8 +119,8 @@ export const addToCart = async (req, res, next) => {
     );
     const currentQuantity = productInThisCart?.quantity || 0;
     const newQuantity = currentQuantity + quantity;
-    if(newQuantity > item.stock){
-      throw new BadRequestError('Sản phẩm vượt quá số lượng trong kho')
+    if (newQuantity > item.stock) {
+      throw new BadRequestError("Sản phẩm vượt quá số lượng trong kho");
     }
     updatedCart = await Cart.findOneAndUpdate(
       { userId, "items.product": productId, "items.variant": variantId },
@@ -185,8 +187,15 @@ export const updateCartItemQuantity = async (req, res, next) => {
   if (req.body.quantity <= 0) {
     req.body.quantity = 1;
   }
-  if (req.body.quantity > product.variants[0].stock)
-    req.body.quantity = product.variants[0].stock;
+  console.log(object);
+  if (
+    req.body.quantity >
+    product.variants.find((el) => el._id.equals(req.body.variantId)).stock
+  ) {
+    req.body.quantity = product.variants.find((el) =>
+      el._id.equals(req.body.variantId)
+    ).stock;
+  }
 
   const updatedQuantity = await Cart.findOneAndUpdate(
     {

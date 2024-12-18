@@ -5,9 +5,7 @@ export const authorsize = (...allowedRoles) => {
     if (req.role && allowedRoles.includes(req.role)) {
       return next();
     } else {
-      return next(
-        new UnAuthorizedError("No permission to access!        tesst")
-      );
+      return next(new UnAuthorizedError("No permission to access!"));
     }
   };
 };
