@@ -33,11 +33,11 @@ const OrderDetailNavbar = ({ orderStatus, id }: Props) => {
                     <CancelOrderModal status={orderStatus} orderId={id!} />
                 </Space>
             )}
-            {/* {orderStatus === ORDER_STATUS.DELIVERED && (
+            {orderStatus === ORDER_STATUS.DELIVERED && (
                 <>
                     <PopConfirmFinishOrder orderId={id} />
                 </>
-            )} */}
+            )}
         </Space>
     );
 };
