@@ -4,6 +4,7 @@ import {
     Form,
     Input,
     InputNumber,
+    message,
     Select,
     UploadFile,
     UploadProps,
@@ -27,6 +28,7 @@ import { FormProps } from 'antd/lib';
 import { handleCreateProduct } from '@/pages/Admin/_product_/Helper/handleCreateProduct';
 import useCreateProduct from '@/hooks/Products/Mutations/useCreateProduct';
 import { IProductForm } from '@/types/Product';
+import showMessage from '@/utils/ShowMessage';
 
 const CreateProduct = () => {
     const [form] = Form.useForm<any>();
@@ -248,41 +250,34 @@ const CreateProduct = () => {
                         >
                             {(fields, { add, remove }, { errors }) => (
                                 <>
-                                    {fields.map(
-                                        (
-                                            { key, name, ...restField },
-                                            index,
-                                        ) => {
-                                            return (
-                                                <VariationItem
-                                                    key={key}
-                                                    colors={
-                                                        colors?.data.colors ||
-                                                        []
-                                                    }
-                                                    handleChangeThumbnail={
-                                                        handleChangeAttributeThumbnail
-                                                    }
-                                                    variantFile={attributesFile}
-                                                    handleRemoveThumbnail={
-                                                        handleRemoveAttributeThumbnail
-                                                    }
-                                                    sizes={
-                                                        sizes?.data.sizes || []
-                                                    }
-                                                    index={index}
-                                                    fieldName={name}
-                                                    restField={restField}
-                                                    removeVariation={remove}
-                                                />
-                                            );
-                                        },
-                                    )}
+                                    {fields.map(({ key, name, ...restField }, index) => (
+                                        <VariationItem
+                                            key={key}
+                                            colors={colors?.data.colors || []}
+                                            handleChangeThumbnail={handleChangeAttributeThumbnail}
+                                            variantFile={attributesFile}
+                                            handleRemoveThumbnail={handleRemoveAttributeThumbnail}
+                                            sizes={sizes?.data.sizes || []}
+                                            index={index}
+                                            fieldName={name}
+                                            restField={restField}
+                                            removeVariation={remove}
+                                        />
+                                    ))}
                                     <Form.Item>
                                         <Button
                                             type="dashed"
                                             htmlType="button"
-                                            onClick={() => add()}
+                                            onClick={() => {
+                                                if (fields.length >= 15) {
+                                                    showMessage(
+                                                        'Bạn chỉ có thể thêm tối đa 15 biến thể !',
+                                                        'warning',
+                                                    );
+                                                } else {
+                                                    add();
+                                                }
+                                            }}
                                             block
                                             icon={<PlusOutlined />}
                                         >
@@ -290,10 +285,7 @@ const CreateProduct = () => {
                                         </Button>
                                     </Form.Item>
                                     {errors && (
-                                        <Form.ErrorList
-                                            errors={errors}
-                                            className="text-red-600"
-                                        />
+                                        <Form.ErrorList errors={errors} className="text-red-600" />
                                     )}
                                 </>
                             )}
