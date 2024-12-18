@@ -28,6 +28,7 @@ import { useGetDetailProduct } from '@/hooks/Products/Queries/useGetDetailProduc
 import convertApiResponseToFileList from '@/pages/Admin/_product_/Helper/convertImageUrlToFileList';
 import useUpdateProduct from '@/hooks/Products/Mutations/useUpdateProduct';
 import { handleEditProduct } from '@/pages/Admin/_product_/Helper/handleEditProduct';
+import showMessage from '@/utils/ShowMessage';
 
 const UpdateProduct = () => {
     const [form] = Form.useForm<any>();
@@ -304,7 +305,16 @@ const UpdateProduct = () => {
                                         <Button
                                             type="dashed"
                                             htmlType="button"
-                                            onClick={() => add()}
+                                            onClick={() => {
+                                                if (fields.length >= 15) {
+                                                    showMessage(
+                                                        'Bạn chỉ có thể thêm tối đa 15 biến thể !',
+                                                        'warning',
+                                                    );
+                                                } else {
+                                                    add();
+                                                }
+                                            }}
                                             block
                                             icon={<PlusOutlined />}
                                         >

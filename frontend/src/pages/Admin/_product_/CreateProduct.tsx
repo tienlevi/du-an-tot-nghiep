@@ -27,6 +27,7 @@ import { FormProps } from 'antd/lib';
 import { handleCreateProduct } from '@/pages/Admin/_product_/Helper/handleCreateProduct';
 import useCreateProduct from '@/hooks/Products/Mutations/useCreateProduct';
 import { IProductForm } from '@/types/Product';
+import showMessage from '@/utils/ShowMessage';
 
 const CreateProduct = () => {
     const [form] = Form.useForm<any>();
@@ -282,7 +283,16 @@ const CreateProduct = () => {
                                         <Button
                                             type="dashed"
                                             htmlType="button"
-                                            onClick={() => add()}
+                                            onClick={() => {
+                                                if (fields.length >= 15) {
+                                                    showMessage(
+                                                        'Bạn chỉ có thể thêm tối đa 15 biến thể !',
+                                                        'warning',
+                                                    );
+                                                } else {
+                                                    add();
+                                                }
+                                            }}
                                             block
                                             icon={<PlusOutlined />}
                                         >
