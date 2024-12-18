@@ -70,8 +70,8 @@ const UpdateProduct = () => {
             let newVariantFile: UploadFile<any>[][] = [];
             const variaConverts = variants.map((varia, i) => {
                 const image = convertApiResponseToFileList({
-                    url: varia.image!,
-                    urlRef: varia.imageUrlRef,
+                    url: varia?.image!,
+                    urlRef: varia?.imageUrlRef,
                     isArr: true,
                 }) as UploadFile<any>[];
                 newVariantFile = [...newVariantFile];
@@ -79,8 +79,8 @@ const UpdateProduct = () => {
 
                 const newVaria: any = {
                     ...varia,
-                    size: varia.size._id,
-                    color: varia.color._id,
+                    size: varia?.size._id,
+                    color: varia?.color._id,
                     thumbnail: image,
                 };
                 return newVaria;
