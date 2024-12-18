@@ -27,19 +27,17 @@ import { FormProps } from 'antd/lib';
 import { handleCreateProduct } from '@/pages/Admin/_product_/Helper/handleCreateProduct';
 import useCreateProduct from '@/hooks/Products/Mutations/useCreateProduct';
 import { IProductForm } from '@/types/Product';
+import showMessage from '@/utils/ShowMessage';
 
 const CreateProduct = () => {
     const [form] = Form.useForm<any>();
     const [isActive, setIsActive] = useState<boolean>(false);
     const [attributesFile, setAttributesFile] = useState<UploadFile[][]>([]);
-
     const { data: categories } = useGetCategories({ limit: '100000' });
     const { data: tags } = useGetTags({ limit: '100000' });
     const { data: sizes } = useGetSizes({ limit: '100000' });
     const { data: colors } = useGetColors({ limit: '100000' });
-
     const { mutate: createPro, isPending } = useCreateProduct();
-
     const handleChangeAttributeThumbnail = (
         index: number,
     ): UploadProps['onChange'] => {
@@ -52,10 +50,8 @@ const CreateProduct = () => {
     const handleRemoveAttributeThumbnail = (index: number) => {
         const newAttributesFile = [...attributesFile];
         newAttributesFile.splice(index, 1);
-
         setAttributesFile(newAttributesFile);
     };
-
     const onFinish: FormProps<IProductForm>['onFinish'] = (values) => {
         handleCreateProduct(values, createPro);
     };
@@ -63,7 +59,6 @@ const CreateProduct = () => {
         setIsActive(true);
         form.setFieldsValue({ isActive: true });
     };
-
     const handleSaveAndHide = () => {
         setIsActive(false);
         form.setFieldsValue({ isActive: false });
@@ -214,7 +209,6 @@ const CreateProduct = () => {
                                 }))}
                             />
                         </Form.Item>
-
                         <Form.Item<any>
                             label="Mô tả"
                             name="description"
@@ -233,7 +227,6 @@ const CreateProduct = () => {
                             />
                         </Form.Item>
                     </WrapperCard>
-
                     <WrapperCard
                         // isLoading={isAttributeLoading}
                         title="Thông tin bán hàng"
@@ -282,7 +275,16 @@ const CreateProduct = () => {
                                         <Button
                                             type="dashed"
                                             htmlType="button"
-                                            onClick={() => add()}
+                                            onClick={() => {
+                                                if (fields.length >= 15) {
+                                                    showMessage(
+                                                        'Bạn chỉ có thể thêm tối đa 15 biến thể !',
+                                                        'warning',
+                                                    );
+                                                } else {
+                                                    add();
+                                                }
+                                            }}
                                             block
                                             icon={<PlusOutlined />}
                                         >

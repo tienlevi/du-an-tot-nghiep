@@ -28,6 +28,7 @@ import { useGetDetailProduct } from '@/hooks/Products/Queries/useGetDetailProduc
 import convertApiResponseToFileList from '@/pages/Admin/_product_/Helper/convertImageUrlToFileList';
 import useUpdateProduct from '@/hooks/Products/Mutations/useUpdateProduct';
 import { handleEditProduct } from '@/pages/Admin/_product_/Helper/handleEditProduct';
+import showMessage from '@/utils/ShowMessage';
 
 const UpdateProduct = () => {
     const [form] = Form.useForm<any>();
@@ -40,7 +41,6 @@ const UpdateProduct = () => {
     const { data: colors } = useGetColors({ limit: '100000' });
     const { mutate: updateProduct, isPending } = useUpdateProduct();
     const { data: targetProduct } = useGetDetailProduct(id as string);
-
     const onFinish: FormProps<any>['onFinish'] = (values) => {
         console.log(values, 'values');
         handleEditProduct(values, id as string, updateProduct);
@@ -57,20 +57,17 @@ const UpdateProduct = () => {
     const handleRemoveAttributeThumbnail = (index: number) => {
         const newAttributesFile = [...variantFile];
         newAttributesFile.splice(index, 1);
-
         setVariantFile(newAttributesFile);
     };
-
     useEffect(() => {
         if (targetProduct && colors?.data.colors && sizes?.data.sizes) {
             console.log('hello');
             const { variants, ...rest } = targetProduct;
-
             let newVariantFile: UploadFile<any>[][] = [];
             const variaConverts = variants.map((varia, i) => {
                 const image = convertApiResponseToFileList({
-                    url: varia.image!,
-                    urlRef: varia.imageUrlRef,
+                    url: varia?.image!,
+                    urlRef: varia?.imageUrlRef,
                     isArr: true,
                 }) as UploadFile<any>[];
                 newVariantFile = [...newVariantFile];
@@ -78,14 +75,13 @@ const UpdateProduct = () => {
 
                 const newVaria: any = {
                     ...varia,
-                    size: varia.size._id,
-                    color: varia.color._id,
+                    size: varia?.size._id,
+                    color: varia?.color._id,
                     thumbnail: image,
                 };
                 return newVaria;
             });
             setVariantFile(newVariantFile);
-
             const initial: any = {
                 variants: variaConverts,
                 ...rest,
@@ -95,7 +91,6 @@ const UpdateProduct = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [targetProduct, id, colors, sizes]);
-
     return (
         <WrapperPageAdmin
             title="Cập nhật mới sản phẩm"
@@ -236,7 +231,6 @@ const UpdateProduct = () => {
                                 }))}
                             />
                         </Form.Item>
-
                         <Form.Item<any>
                             label="Mô tả"
                             name="description"
@@ -255,7 +249,6 @@ const UpdateProduct = () => {
                             />
                         </Form.Item>
                     </WrapperCard>
-
                     <WrapperCard
                         // isLoading={isAttributeLoading}
                         title="Thông tin bán hàng"
@@ -304,7 +297,16 @@ const UpdateProduct = () => {
                                         <Button
                                             type="dashed"
                                             htmlType="button"
-                                            onClick={() => add()}
+                                            onClick={() => {
+                                                if (fields.length >= 15) {
+                                                    showMessage(
+                                                        'Bạn chỉ có thể thêm tối đa 15 biến thể !',
+                                                        'warning',
+                                                    );
+                                                } else {
+                                                    add();
+                                                }
+                                            }}
                                             block
                                             icon={<PlusOutlined />}
                                         >

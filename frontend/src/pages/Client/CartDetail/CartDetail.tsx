@@ -341,6 +341,28 @@ export default function CartDetail() {
                                 controls={false}
                                 value={quantity}
                                 max={product.stock}
+                                onPressEnter={(e: any) => {
+                                    if (
+                                        quantity &&
+                                        +e.target.value > product.stock
+                                    ) {
+                                        showMessage(
+                                            `Số lượng tối đa là ${product.stock}`,
+                                            'info',
+                                        );
+                                    }
+                                }}
+                                onBlur={(e: any) => {
+                                    if (
+                                        quantity &&
+                                        +e.target.value > product.stock
+                                    ) {
+                                        showMessage(
+                                            `Số lượng tối đa là ${product.stock}`,
+                                            'info',
+                                        );
+                                    }
+                                }}
                                 onChange={(e) =>
                                     handleChangeQuantity(
                                         product.productId,
