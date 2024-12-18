@@ -348,6 +348,28 @@ export default function CartDetail() {
                                         e as number,
                                     )
                                 }
+                                onPressEnter={(e: any) => {
+                                    if (
+                                        quantity &&
+                                        +e.target.value > product.stock
+                                    ) {
+                                        showMessage(
+                                            `Số lượng tối đa là ${product.stock}`,
+                                            'info',
+                                        );
+                                    }
+                                }}
+                                onBlur={(e: any) => {
+                                    if (
+                                        quantity &&
+                                        +e.target.value > product.stock
+                                    ) {
+                                        showMessage(
+                                            `Số lượng tối đa là ${product.stock}`,
+                                            'info',
+                                        );
+                                    }
+                                }}
                             />
                         </ConfigProvider>
                         <Button
