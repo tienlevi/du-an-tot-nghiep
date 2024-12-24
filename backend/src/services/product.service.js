@@ -16,7 +16,7 @@ export const getAllProducts = async (query) => {
       .populate("variants.size")
       .populate("category")
       .populate("tags"),
-    query
+    query,
   );
   features.filter().sort().limitFields().search().paginate();
 
@@ -43,49 +43,11 @@ export const getDiscountProducts = async () => {
   return products;
 };
 
-export const createProduct = async (productData, files) => {
-  let variationList;
-
-  // @upload images
-  if (files && files["variantImages"]) {
-    const { fileUrls, fileUrlRefs, originNames } = await uploadFiles(
-      files["variantImages"]
-    );
-    const variants = JSON.parse(productData.variantString);
-    const map = {};
-    variants.forEach((element) => {
-      const key = element.size + element.color;
-      if (map[key]) {
-        // throw new BadRequestError("Biến thể không được trùng nhau");
-      } else {
-        map[key] = 1;
-      }
-    });
-    if (hasDuplicates(variants.map((item) => item.imageUrlRef))) {
-      throw new BadRequestError("File ảnh không được trùng nhau");
-    }
-
-    variationList = fileUrls.map((item, i) => {
-      const variation = variants.find((obj) => {
-        const originName = originNames[i];
-
-        const fileName = obj.imageUrlRef;
-        return fileName === originName;
-      });
-      if (variation) {
-        return { ...variation, image: item, imageUrlRef: fileUrlRefs[i] };
-      }
-    });
-  }
-
-  delete productData.variantImages;
-  delete productData.variantString;
-
+export const createProduct = async (productData) => {
   // @add variants to product
   const newProduct = new Product({
     ...productData,
-    tags: productData.tags ? productData.tags.split(",") : [],
-    variants: variationList,
+    tags: productData.tags,
   });
 
   await newProduct.save();
@@ -98,7 +60,7 @@ export const updateProduct = async (
   oldImageUrlRefs,
   files,
   variants,
-  productNew
+  productNew,
 ) => {
   const product = await Product.findById(productId);
   let newVariants = [];
@@ -117,13 +79,13 @@ export const updateProduct = async (
   });
   if (!product)
     throw new NotFoundError(
-      `${ReasonPhrases.NOT_FOUND} product with id: ${productId}`
+      `${ReasonPhrases.NOT_FOUND} product with id: ${productId}`,
     );
 
   // @upload images
   if (files && files["variantImages"]) {
     const { fileUrls, fileUrlRefs, originNames } = await uploadFiles(
-      files["variantImages"]
+      files["variantImages"],
     );
     // @map new images to variants
     newVariants = fileUrls.map((item, i) => {
@@ -163,7 +125,7 @@ export const getProductById = async (productId) => {
     .populate("variants.size");
   if (!product)
     throw new NotFoundError(
-      `${ReasonPhrases.NOT_FOUND} product with id: ${productId}`
+      `${ReasonPhrases.NOT_FOUND} product with id: ${productId}`,
     );
 
   return product;
@@ -175,7 +137,7 @@ export const hiddenProduct = async (req, res, next) => {
   const product = await Product.findOneAndUpdate(
     { _id: id, isActive: true },
     { isActive: false },
-    { new: true }
+    { new: true },
   );
 
   if (!product) {
@@ -188,7 +150,7 @@ export const hiddenProduct = async (req, res, next) => {
       success: true,
       status: StatusCodes.OK,
       message: ReasonPhrases.OK,
-    })
+    }),
   );
 };
 // @PATCH: showProduct
@@ -197,12 +159,12 @@ export const showProduct = async (req, res, next) => {
   const product = await Product.findOneAndUpdate(
     { _id: id, isActive: false },
     { isActive: true },
-    { new: true }
+    { new: true },
   );
 
   if (!product) {
     throw new NotFoundError(
-      `${ReasonPhrases.NOT_FOUND} product with id: ${id}`
+      `${ReasonPhrases.NOT_FOUND} product with id: ${id}`,
     );
   }
 
@@ -212,7 +174,7 @@ export const showProduct = async (req, res, next) => {
       success: true,
       status: StatusCodes.OK,
       message: ReasonPhrases.OK,
-    })
+    }),
   );
 };
 export const getRelatedProducts = async (req, res, next) => {
@@ -223,11 +185,11 @@ export const getRelatedProducts = async (req, res, next) => {
 
   if (!product)
     throw new NotFoundError(
-      `${ReasonPhrases.NOT_FOUND} product with id: ${req.params.id}`
+      `${ReasonPhrases.NOT_FOUND} product with id: ${req.params.id}`,
     );
 
   const products = await Product.find({ tags: { $in: product.tags } }).limit(
-    10
+    10,
   );
 
   return res.status(StatusCodes.OK).json(
@@ -236,6 +198,6 @@ export const getRelatedProducts = async (req, res, next) => {
       message: ReasonPhrases.OK,
       status: StatusCodes.OK,
       success: true,
-    })
+    }),
   );
 };

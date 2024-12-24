@@ -8,12 +8,10 @@ import {
     UploadFile,
     UploadProps,
 } from 'antd';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import TextArea from 'antd/es/input/TextArea';
-import { Link } from 'react-router-dom';
-import {
-    nameValidator,
-    variationsValidator,
-} from '@/validation/Products/validators';
+import { Link, useNavigate } from 'react-router-dom';
+import { variationsValidator } from '@/validation/Products/validators';
 import WrapperCard from './_component/WrapperCard';
 import { ADMIN_ROUTES } from '@/constants/router';
 import WrapperPageAdmin from '@/pages/Admin/_common/WrapperPageAdmin';
@@ -24,20 +22,67 @@ import useGetColors from '@/hooks/Colors/Queries/useGetColors';
 import useGetSizes from '@/hooks/Sizes/Queries/useGetSizes';
 import { useState } from 'react';
 import { FormProps } from 'antd/lib';
-import { handleCreateProduct } from '@/pages/Admin/_product_/Helper/handleCreateProduct';
-import useCreateProduct from '@/hooks/Products/Mutations/useCreateProduct';
-import { IProductForm } from '@/types/Product';
 import showMessage from '@/utils/ShowMessage';
+import UploadImages from '@/utils/cloudinary';
+import { ProductServices } from '@/services/products.service';
+import { QUERY_KEY } from '@/constants/queryKey';
+import Variant from '@/types/Variant';
 
 const CreateProduct = () => {
     const [form] = Form.useForm<any>();
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
     const [isActive, setIsActive] = useState<boolean>(false);
     const [attributesFile, setAttributesFile] = useState<UploadFile[][]>([]);
     const { data: categories } = useGetCategories({ limit: '100000' });
     const { data: tags } = useGetTags({ limit: '100000' });
     const { data: sizes } = useGetSizes({ limit: '100000' });
     const { data: colors } = useGetColors({ limit: '100000' });
-    const { mutate: createPro, isPending } = useCreateProduct();
+    const { mutate: createProduct, isPending } = useMutation<any>({
+        mutationFn: async (data: any) => {
+            const listImages = data.variants.map(async (item: any) => {
+                const images = await UploadImages(item.thumbnail?.file);
+                return images;
+            });
+            const images = await Promise.all(listImages);
+            const variants: any = [];
+            let hasDuplicate = false;
+            data.variants.forEach((variant: Variant, index: number) => {
+                const existingVariant = variants.find(
+                    (v: any) =>
+                        v.color === variant.color && v.size === variant.size,
+                );
+
+                if (existingVariant) {
+                    hasDuplicate = true;
+                } else {
+                    variants.push({
+                        ...variant,
+                        image: images[index].secure_url,
+                        imageUrlRef: `${images[index].public_id}.${images[index].format}`,
+                    });
+                }
+            });
+
+            hasDuplicate
+                ? showMessage('Biến thể không được trùng nhau', 'warning')
+                : ProductServices.createProduct({
+                      ...data,
+                      variants: variants,
+                  });
+        },
+        onSuccess: () => {
+            queryClient.refetchQueries({
+                predicate: (query) =>
+                    query.queryKey.includes(QUERY_KEY.PRODUCTS),
+            });
+            showMessage('Thêm mới sản phẩm thành công!', 'success');
+            navigate(ADMIN_ROUTES.PRODUCTS);
+        },
+        onError: (error: any) => {
+            showMessage(error.response.data.message, 'error');
+        },
+    });
     const handleChangeAttributeThumbnail = (
         index: number,
     ): UploadProps['onChange'] => {
@@ -52,8 +97,8 @@ const CreateProduct = () => {
         newAttributesFile.splice(index, 1);
         setAttributesFile(newAttributesFile);
     };
-    const onFinish: FormProps<IProductForm>['onFinish'] = (values) => {
-        handleCreateProduct(values, createPro);
+    const onFinish: FormProps<any>['onFinish'] = (values) => {
+        createProduct(values);
     };
     const handleSaveAndShow = () => {
         setIsActive(true);

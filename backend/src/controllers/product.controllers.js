@@ -11,7 +11,7 @@ export const getAllProducts = asyncHandler(async (req, res) => {
       success: true,
       status: StatusCodes.OK,
       message: ReasonPhrases.OK,
-    })
+    }),
   );
 });
 export const getBestSellingProducts = asyncHandler(async (req, res) => {
@@ -22,7 +22,7 @@ export const getBestSellingProducts = asyncHandler(async (req, res) => {
       success: true,
       status: StatusCodes.OK,
       message: ReasonPhrases.OK,
-    })
+    }),
   );
 });
 export const getDiscountProducts = asyncHandler(async (req, res) => {
@@ -33,7 +33,7 @@ export const getDiscountProducts = asyncHandler(async (req, res) => {
       success: true,
       status: StatusCodes.OK,
       message: ReasonPhrases.OK,
-    })
+    }),
   );
 });
 export const getProductById = asyncHandler(async (req, res) => {
@@ -44,7 +44,7 @@ export const getProductById = asyncHandler(async (req, res) => {
       success: true,
       status: StatusCodes.OK,
       message: ReasonPhrases.OK,
-    })
+    }),
   );
 });
 
@@ -53,14 +53,14 @@ export const getRelatedProducts = asyncHandler(async (req, res) => {
 });
 
 export const createProduct = asyncHandler(async (req, res) => {
-  const pro = await productService.createProduct(req.body, req.files);
+  const pro = await productService.createProduct(req.body);
   return res.status(StatusCodes.OK).json(
     customResponse({
       data: pro,
       success: true,
       status: StatusCodes.OK,
       message: ReasonPhrases.OK,
-    })
+    }),
   );
 });
 
@@ -76,7 +76,7 @@ export const updateProduct = asyncHandler(async (req, res) => {
     oldImageUrlRefs,
     files,
     variants,
-    productNew
+    productNew,
   );
   return res.status(StatusCodes.OK).json(
     customResponse({
@@ -84,10 +84,9 @@ export const updateProduct = asyncHandler(async (req, res) => {
       success: true,
       status: StatusCodes.OK,
       message: ReasonPhrases.OK,
-    })
+    }),
   );
 });
-
 
 // @PATCH: hiddenProduct
 export const hiddenProduct = asyncHandler(async (req, res, next) => {
