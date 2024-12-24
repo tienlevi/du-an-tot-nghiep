@@ -26,7 +26,7 @@ import showMessage from '@/utils/ShowMessage';
 import UploadImages from '@/utils/cloudinary';
 import { ProductServices } from '@/services/products.service';
 import { QUERY_KEY } from '@/constants/queryKey';
-import Variant from '@/types/Variant';
+import { IVariant } from '@/types/ProductNew';
 
 const CreateProduct = () => {
     const [form] = Form.useForm<any>();
@@ -47,7 +47,7 @@ const CreateProduct = () => {
             const images = await Promise.all(listImages);
             const variants: any = [];
             let hasDuplicate = false;
-            data.variants.forEach((variant: Variant, index: number) => {
+            data.variants.forEach((variant: IVariant, index: number) => {
                 const existingVariant = variants.find(
                     (v: any) =>
                         v.color === variant.color && v.size === variant.size,
@@ -75,6 +75,7 @@ const CreateProduct = () => {
             queryClient.refetchQueries({
                 predicate: (query) =>
                     query.queryKey.includes(QUERY_KEY.PRODUCTS),
+                queryKey: [QUERY_KEY.PRODUCTS],
             });
             showMessage('Thêm mới sản phẩm thành công!', 'success');
             navigate(ADMIN_ROUTES.PRODUCTS);
