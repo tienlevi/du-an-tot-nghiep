@@ -32,7 +32,7 @@ export const getAllUsers = async (req, res) => {
       success: true,
       status: StatusCodes.OK,
       message: ReasonPhrases.OK,
-    })
+    }),
   );
 };
 
@@ -56,7 +56,7 @@ export const changePassword = async (req, res, next) => {
       message: ReasonPhrases.OK,
       status: StatusCodes.OK,
       success: true,
-    })
+    }),
   );
 };
 // @Patch forgot password
@@ -71,7 +71,7 @@ export const forgotPassword = async (req, res, next) => {
       message: ReasonPhrases.OK,
       status: StatusCodes.OK,
       success: true,
-    })
+    }),
   );
 };
 
@@ -85,7 +85,7 @@ export const getProfile = async (req, res, next) => {
       message: ReasonPhrases.OK,
       status: StatusCodes.OK,
       success: true,
-    })
+    }),
   );
 };
 
@@ -93,17 +93,6 @@ export const getProfile = async (req, res, next) => {
 export const updateProfile = async (req, res, next) => {
   const user = await User.findById(req.userId);
 
-  if (req.files["avatar"]) {
-    const { downloadURL, imageUrlRef } = await uploadSingleFile(
-      ...req.files["avatar"]
-    );
-    user.avatar = downloadURL;
-    user.imageUrlRef = imageUrlRef;
-
-    if (user.imageUrlRef) {
-      removeUploadedFile(user.imageUrlRef);
-    }
-  }
   user.set(req.body);
   await user.save();
 
@@ -113,7 +102,7 @@ export const updateProfile = async (req, res, next) => {
       message: ReasonPhrases.OK,
       status: StatusCodes.OK,
       success: true,
-    })
+    }),
   );
 };
 
@@ -124,7 +113,7 @@ export const addWishList = async (req, res) => {
   const user = await User.findByIdAndUpdate(
     userId,
     { $addToSet: { wishList: productId } },
-    { new: true }
+    { new: true },
   ).lean();
 
   return res.status(StatusCodes.OK).json(
@@ -133,7 +122,7 @@ export const addWishList = async (req, res) => {
       success: true,
       status: StatusCodes.OK,
       message: ReasonPhrases.OK,
-    })
+    }),
   );
 };
 // @Patch: delete wishlist
@@ -143,7 +132,7 @@ export const deleteWishList = async (req, res) => {
   const user = await User.findByIdAndUpdate(
     userId,
     { $pull: { wishList: productId } },
-    { new: true }
+    { new: true },
   ).lean();
   return res.status(StatusCodes.OK).json(
     customResponse({
@@ -151,7 +140,7 @@ export const deleteWishList = async (req, res) => {
       success: true,
       status: StatusCodes.OK,
       message: ReasonPhrases.OK,
-    })
+    }),
   );
 };
 // @Get: get wishlist by user
@@ -193,6 +182,6 @@ export const getWishListByUser = async (req, res) => {
       success: true,
       status: StatusCodes.OK,
       message: ReasonPhrases.OK,
-    })
+    }),
   );
 };

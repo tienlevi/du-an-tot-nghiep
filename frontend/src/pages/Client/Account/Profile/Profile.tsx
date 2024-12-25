@@ -20,7 +20,7 @@ import {
     UploadProps,
 } from 'antd';
 import { useEffect, useState } from 'react';
-// import { useMutationUpdateProfle } from '@/hooks/profile/Mutations/useUpdateProfile';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useGetProfile from '@/hooks/profile/Queries/useGetProfile';
 import {
     ACCEPT_FILE_TYPE,
@@ -32,9 +32,12 @@ import convertApiResponseToFileList from '@/pages/Admin/_product_/Helper/convert
 import { IProductFiles, IThumbnailAntd } from '@/types/Product';
 import { errorMessage } from '@/validation/Products/Product';
 import useSendResetPassword from '@/hooks/Auth/Mutation/useSendResetPassword';
-import { useMutationUpdateProfle } from '@/hooks/profile/Mutations/useUpdateProfile';
 import useChangePassword from '@/hooks/users/Mutations/useChangePassword';
 import { ErrorMessage } from '@/validation/Message';
+import userService from '@/services/user.service';
+import { QUERY_KEY } from '@/constants/queryKey';
+import showMessage from '@/utils/ShowMessage';
+import UploadImages from '@/utils/cloudinary';
 
 type ChangePassword = {
     password: string;
@@ -43,9 +46,8 @@ type ChangePassword = {
 };
 
 const Profile = () => {
+    const queryClient = useQueryClient();
     const [loading, setLoading] = useState(false);
-
-    const { mutate: updateProfile, isPending } = useMutationUpdateProfle();
     const { mutate: changePassword, isPending: isChangePasswordPending } =
         useChangePassword();
 
@@ -93,18 +95,25 @@ const Profile = () => {
         avatar?: IProductFiles;
     };
 
+    const { mutate: updateProfile, isPending } = useMutation({
+        mutationKey: [QUERY_KEY.USERS],
+        mutationFn: async (data: any) => {
+            const image = await UploadImages(thumbnailFile[0].originFileObj);
+            return userService.updateProfile({
+                ...data,
+                avatar: image.secure_url,
+            });
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEY.USERS_PROFILE, QUERY_KEY.USERS],
+            });
+            showMessage('Tài khoản của bạn đã được cập nhật', 'success');
+        },
+    });
+
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-        const formDataUpdateProfile = new FormData();
-
-        formDataUpdateProfile.append('name', values.name);
-        formDataUpdateProfile.append('email', values.email);
-        formDataUpdateProfile.append('phone', values.phone);
-        formDataUpdateProfile.append(
-            'avatar',
-            (values.avatar?.fileList[0] as IThumbnailAntd)?.originFileObj,
-        );
-
-        updateProfile(formDataUpdateProfile);
+        updateProfile(values);
     };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
