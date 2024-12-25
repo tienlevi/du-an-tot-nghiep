@@ -68,16 +68,8 @@ export const updateProduct = asyncHandler(async (req, res) => {
   let { variantString, oldImageUrlRefs, ...productNew } = req.body;
   console.log(req.body, "productNew");
   oldImageUrlRefs = oldImageUrlRefs ? JSON.parse(oldImageUrlRefs) : [];
-  const variants = variantString ? JSON.parse(variantString) : [];
   const productId = req.params.id;
-  const files = req.files;
-  const pro = await productService.updateProduct(
-    productId,
-    oldImageUrlRefs,
-    files,
-    variants,
-    productNew,
-  );
+  const pro = await productService.updateProduct(productId, productNew);
   return res.status(StatusCodes.OK).json(
     customResponse({
       data: pro,

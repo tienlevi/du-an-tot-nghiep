@@ -57,62 +57,13 @@ export const createProduct = async (productData) => {
 // @PUT: updateProduct
 export const updateProduct = async (
   productId,
-  oldImageUrlRefs,
-  files,
-  variants,
+
   productNew,
 ) => {
   const product = await Product.findById(productId);
-  let newVariants = [];
-  let oldVariants = [];
-  // if (hasDuplicates(variants.map((item) => item.imageUrlRef))) {
-  //   throw new BadRequestError("File ảnh không được trùng nhau");
-  // }
-  const map = {};
-  variants.forEach((element) => {
-    const key = element.size + element.color;
-    if (map[key]) {
-      throw new BadRequestError("Biến thể không được trùng nhau");
-    } else {
-      map[key] = 1;
-    }
-  });
-  if (!product)
-    throw new NotFoundError(
-      `${ReasonPhrases.NOT_FOUND} product with id: ${productId}`,
-    );
-
-  // @upload images
-  if (files && files["variantImages"]) {
-    const { fileUrls, fileUrlRefs, originNames } = await uploadFiles(
-      files["variantImages"],
-    );
-    // @map new images to variants
-    newVariants = fileUrls.map((item, i) => {
-      const variation = variants.find((obj) => {
-        const originName = originNames[i];
-        const fileName = obj.imageUrlRef;
-        return fileName === originName;
-      });
-      if (variation) {
-        return { ...variation, image: item, imageUrlRef: fileUrlRefs[i] };
-      } else {
-        return variants[i];
-      }
-    });
-    oldVariants = variants.filter((item) => item.image);
-  } else {
-    newVariants = variants;
-  }
-
-  const tags = productNew.tags ? productNew.tags.split(",") : product.tags;
 
   // @update product
-  product.set({
-    ...productNew,
-    variants: [...newVariants, ...oldVariants],
-    tags,
-  });
+  product.set(productNew);
   return await product.save();
 };
 

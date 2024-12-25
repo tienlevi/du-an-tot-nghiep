@@ -63,13 +63,16 @@ const CreateProduct = () => {
                     });
                 }
             });
-
-            hasDuplicate
-                ? showMessage('Biến thể không được trùng nhau', 'warning')
-                : ProductServices.createProduct({
-                      ...data,
-                      variants: variants,
-                  });
+            if (hasDuplicate) {
+                showMessage('Biến thể không được trùng nhau', 'warning');
+                return;
+            }
+            showMessage('Thêm mới sản phẩm thành công!', 'success');
+            navigate(ADMIN_ROUTES.PRODUCTS);
+            return ProductServices.createProduct({
+                ...data,
+                variants: variants,
+            });
         },
         onSuccess: () => {
             queryClient.refetchQueries({
@@ -77,8 +80,7 @@ const CreateProduct = () => {
                     query.queryKey.includes(QUERY_KEY.PRODUCTS),
                 queryKey: [QUERY_KEY.PRODUCTS],
             });
-            showMessage('Thêm mới sản phẩm thành công!', 'success');
-            navigate(ADMIN_ROUTES.PRODUCTS);
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY.PRODUCTS] });
         },
         onError: (error: any) => {
             showMessage(error.response.data.message, 'error');

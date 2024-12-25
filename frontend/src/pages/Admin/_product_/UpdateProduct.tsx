@@ -9,11 +9,9 @@ import {
     UploadProps,
 } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
-import { Link, useParams } from 'react-router-dom';
-import {
-    nameValidator,
-    variationsValidator,
-} from '@/validation/Products/validators';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { variationsValidator } from '@/validation/Products/validators';
 import WrapperCard from './_component/WrapperCard';
 import { ADMIN_ROUTES } from '@/constants/router';
 import WrapperPageAdmin from '@/pages/Admin/_common/WrapperPageAdmin';
@@ -26,24 +24,87 @@ import { useEffect, useState } from 'react';
 import { FormProps } from 'antd/lib';
 import { useGetDetailProduct } from '@/hooks/Products/Queries/useGetDetailProduct';
 import convertApiResponseToFileList from '@/pages/Admin/_product_/Helper/convertImageUrlToFileList';
-import useUpdateProduct from '@/hooks/Products/Mutations/useUpdateProduct';
-import { handleEditProduct } from '@/pages/Admin/_product_/Helper/handleEditProduct';
 import showMessage from '@/utils/ShowMessage';
+import { ProductServices } from '@/services/products.service';
+import { QUERY_KEY } from '@/constants/queryKey';
+import UploadImages from '@/utils/cloudinary';
+import { IVariant } from '@/types/ProductNew';
 
 const UpdateProduct = () => {
     const [form] = Form.useForm<any>();
     const { id } = useParams();
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
     const [variantFile, setVariantFile] = useState<UploadFile[][]>([]);
+
     // @Query
     const { data: categories } = useGetCategories({ limit: '100000' });
     const { data: tags } = useGetTags({ limit: '100000' });
     const { data: sizes } = useGetSizes({ limit: '100000' });
     const { data: colors } = useGetColors({ limit: '100000' });
-    const { mutate: updateProduct, isPending } = useUpdateProduct();
     const { data: targetProduct } = useGetDetailProduct(id as string);
+
+    const { mutate: updateProduct, isPending } = useMutation({
+        mutationFn: async (data: any) => {
+            const listImages = data.variants.map(async (item: any) => {
+                if (item.thumbnail?.file) {
+                    return await UploadImages(item.thumbnail.file);
+                }
+                return null;
+            });
+            const images = await Promise.all(listImages);
+            const variants: any = [];
+            let hasDuplicate = false;
+
+            data.variants.forEach((variant: IVariant, index: number) => {
+                const existingVariant = variants.find(
+                    (v: any) =>
+                        v.color === variant.color && v.size === variant.size,
+                );
+
+                if (existingVariant) {
+                    hasDuplicate = true;
+                } else {
+                    const newImage = images[index];
+                    variants.push({
+                        ...variant,
+                        image: newImage ? newImage.secure_url : variant.image,
+                        imageUrlRef: newImage
+                            ? `${newImage.public_id}.${newImage.format}`
+                            : variant.imageUrlRef,
+                    });
+                }
+            });
+
+            if (hasDuplicate) {
+                showMessage('Biến thể không được trùng nhau', 'warning');
+                return;
+            }
+            showMessage('Cập nhật sản phẩm thành công!', 'success');
+            navigate(ADMIN_ROUTES.PRODUCTS);
+            return ProductServices.updateProduct(
+                {
+                    ...data,
+                    variants: variants,
+                },
+                id!,
+            );
+        },
+        onSuccess: () => {
+            queryClient.refetchQueries({
+                predicate: (query) =>
+                    query.queryKey.includes(QUERY_KEY.PRODUCTS),
+                queryKey: [QUERY_KEY.PRODUCTS],
+            });
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY.PRODUCTS] });
+        },
+        onError: (error: any) => {
+            showMessage(error.response.data.message, 'error');
+        },
+    });
+
     const onFinish: FormProps<any>['onFinish'] = (values) => {
-        console.log(values, 'values');
-        handleEditProduct(values, id as string, updateProduct);
+        updateProduct(values);
     };
     const handleChangeAttributeThumbnail = (
         index: number,
